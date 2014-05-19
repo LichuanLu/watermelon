@@ -1,0 +1,23 @@
+{>basicLayout/}
+{<breadcrumbsHolder}
+<div id="breadcrumb" class="clearfix">
+<!-- #breadcrumb-inside -->
+<div id="breadcrumb-inside" class="main-content-padding clearfix">
+	<span class="sub-text">当前位置：</span>
+	<ol class="breadcrumb">
+		<li>
+			<a href="/">主页</a>
+		</li>
+		<li class="active">诊断报告</li>
+	</ol>
+</div>
+<!-- EOF: #breadcrumb-inside -->
+</div>
+{/breadcrumbsHolder}
+{<contentHolder}
+<div id="report-template-content" class="main-content-padding">
+	<div class="content-wrapper row">
+		<h6>检查报告单</h6>
+	</div>
+</div>
+{/contentHolder}

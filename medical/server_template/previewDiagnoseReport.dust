@@ -1,0 +1,79 @@
+{>basicLayout/}
+{<breadcrumbsHolder}
+<div id="breadcrumb" class="clearfix">
+<!-- #breadcrumb-inside -->
+<div id="breadcrumb-inside" class="main-content-padding clearfix">
+	<span class="sub-text">当前位置：</span>
+	<ol class="breadcrumb">
+		<li>
+			<a href="/">主页</a>
+		</li>
+		<li class="active">预览诊断报告</li>
+	</ol>
+</div>
+<!-- EOF: #breadcrumb-inside -->
+</div>
+{/breadcrumbsHolder}
+{<contentHolder}
+<div id="preview-report-content" class="main-content-padding" data-report-id="1128">
+<div class="content-wrapper row">
+	<div class="col-md-12" style="position:relative;">
+		<h6 class="title">检查报告单</h6>
+		<a href="#" class="download-link">下载报告</a>
+		<div class="mark">
+			<h6>检查日期：2014-03-14</h4>
+			<h6>影像号：245230045</h4>
+		</div>
+		<hr style=""/>
+		<div class="patient-info">
+			<span>张催化</span>
+			<span>男</span>
+			<span>62岁</span>
+		</div>
+		<hr style=""/>
+		<div class="report-content-wrapper">
+			<div class="description">
+				<h6>部位：头部平扫</h6>
+			</div>
+			<div class="report-content" id="imageDes">
+				<h6>影像描述：</h6>
+				<p>
+					左尺桡骨形态，骨密度正常，未见明确骨质增生及破坏，左尺桡骨形态，骨密度正常，未见明确骨质增生及破坏，左尺桡骨形态。骨密度正
+			        常，未见明确骨质增生及破坏，左尺桡骨形态，骨密度正常，未见明确骨质增生及破坏，左尺桡骨形态，骨密度正常，未见明确骨质增生及
+			         破坏，左尺桡骨形态，骨密度正常，未见明确骨质增生及破坏
+				</p>
+			</div>
+			<div class="report-content" id="diagnoseResult">
+				<h6>诊断意见：</h6>
+				<P>
+					1.左尺桡骨形态，骨密度正常，未见明确骨质增生及破坏，左尺桡骨形态
+			        2.骨密度正常，未见明确骨质增生及破坏，左尺桡骨形态。
+			        3.骨密度正常，未见明确骨质增生及破坏
+				</P>
+			</div>
+
+			<div class="report-content" id="auditResult">
+
+				<h6>审核意见：</h6>
+				<P>
+					左尺桡骨形态，骨密度正常，未见明确骨质增生及破坏，左尺桡骨形态，骨密度正常，未见明确骨质增生及破坏，左尺桡骨形态。骨密度正
+				        常，未见明确骨质增生及破坏。
+				</P>
+			</div>
+		</div>
+		<div class="sign">
+			<span>
+				诊断医师：
+				<a href="#">张名2</a>
+			</span>
+			<span>
+				审核医师：
+				<a href="#">李响3</a>
+			</span>
+		</div>
+
+	</div>
+
+</div>
+</div>
+{/contentHolder}

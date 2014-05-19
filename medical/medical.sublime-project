@@ -1,0 +1,17 @@
+{
+	"folders":
+	[
+		{
+			"path": "/dev_lic/medical"
+		}
+	],
+	"settings":
+	{
+		"less2css":
+		{
+			"autoCompile": false,
+			"minify": false,
+			"outputDir": "./static/stylesheet/atc"
+		}
+	}
+}

@@ -1,0 +1,26 @@
+{
+	"name": "Pomegranate",
+	"version": "0.1.0",
+	"dependencies": {
+		 "requirejs": "latest",
+		 "underscore": "latest",
+		 "jquery-110": "http://code.jquery.com/jquery-1.10.2.min.js",
+		 "jquery": "latest",
+		 "lodash": "2.4.1",
+		 "backbone": "1.1.0",
+		 "backbone.marionette": "1.4.1",
+		 "backbone.wreqr": "0.2.0",
+		 "backbone.eventbinder": "1.0.2",
+		 "backbone.babysitter": "0.0.6",
+		 "bootstrap": "latest",
+		 "lodash-amd":"2.2.1",
+		 "blueimp-tmpl": ">=2.5.3",
+	     "blueimp-load-image": ">=1.11.0",
+	     "blueimp-canvas-to-blob": ">=2.1.0",
+	     "underscore.string":"latest",
+	     "messenger":"latest",
+	     "bootstrap-select":"latest",
+	     "bootstrap-treeview":"latest"
+
+	}
+}

@@ -1,0 +1,22 @@
+{
+  "name": "Pomegranate",
+  "description": "ctt-front-end-code",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "express": "3.x",
+    "dustjs-linkedin": "latest",
+    "dustjs-helpers": "latest",
+    "consolidate": "latest",
+    "watch": "latest"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-watch": "~0.5.1",
+    "grunt-contrib-concat": "~0.3.0",
+    "grunt-contrib-cssmin": "~0.6.1",
+    "grunt-contrib-less": "~0.7.0",
+    "grunt-contrib-requirejs":"latest",
+    "grunt-sync":"latest"
+  }
+}
