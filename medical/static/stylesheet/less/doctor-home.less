@@ -1,7 +1,16 @@
 @import "variables";
+@import "message";
 
 #doctorhome-content{
 	margin-bottom: 50px;
+	.side-title{
+		font-weight: 500;
+		font-size: 17px;
+		width: 100%;
+		text-align: center;
+		display: inline-block;
+		margin-bottom: 10px;
+	}
 
 	#new-diagnose-wrapper,#new-audit-wrapper{
 		.header{
@@ -64,18 +73,45 @@
 		.content{
 			position: relative;
 			//border-bottom: 1px solid #eaeaea;
+			.patient-info{
+				border-bottom: 1px solid #eaeaea;
+				padding-bottom: 20px;
+				>div{
+					line-height: 2.4;
+					span{
+						color: #808080;
+						&.head{
+							color: #000000;
+							font-weight: 700;
+							margin-right: 5px;
+						}
+					}
+					p{
+						color: #808080;
+						margin: 0;
+						font-size: 13px;
+						display: inline-block;
+					}
+				}
+			}
+			.tree-top{
+				position: relative;
+				margin-top: 20px;
+				height: 30px;
+			}
 			.tree-title{
 				font-size: 14px;
 				position: absolute;
-				left: 20px;
+				left: 0px;
 				top: 0px;
 			}
 			.load-template-btn{
 				position: absolute;
-				left: 190px;
+				right: 0;
+				top: -2px;
 			}
 			#tree{
-				margin-top: 30px;
+				margin-top: 0px;
 			}
 			
 			#imageDes{
@@ -105,6 +141,9 @@
 		padding: 20px 0 0 20px;
 		h6{
 			margin: 0;
+			i{
+				margin-right: 10px;
+			}
 		}
 	}
 	.left-menu{
@@ -177,8 +216,23 @@
 			margin-bottom: 20px;
 			margin-top: 20px;
 			.form-group{
+				margin-right: 10px;
+				.select{
+					.btn{
+						width: 120px;
+					}
+				}
 				label{
 					margin-right: 10px;
+				}
+				.input-wrapper{
+					display: inline-block;
+					width: 150px;
+					.input-group{
+						.btn{
+							padding-top: 7px;
+						}
+					}
 				}
 			}
 			.submit-btn{

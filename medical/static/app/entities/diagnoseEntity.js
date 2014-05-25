@@ -46,11 +46,14 @@ define(["backbone", "marionette", "config/base/constant", "utils/reqcmd"], funct
 			}
 			var diagnoseCollection = new DiagnoseCollection();
 			diagnoseCollection.url = "/diagnose/list";
+			if(typeof params === 'object'){
+				params = $.param(params);
+			}
 			diagnoseCollection.fetch({
 				success: function() {
 					console.log("fetch success");
 				},
-				data: $.param(params)
+				data: params
 			});
 
 			return diagnoseCollection

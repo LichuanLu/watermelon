@@ -1,0 +1,15 @@
+<li>
+	<a href="{url}">
+		<div class="icon">
+			<img alt="" src="/static/assets/Icons/PNG/clipboard.png"></div>
+		<div class="top-wrapper">
+			<span class="title">{type}</span>
+			<div class="right-content">
+				<span class="date">{date}</span>
+			</div>
+		</div>
+		<div class="message-content-wrapper">
+			<p>{content}</p>
+		</div>
+	</a>
+</li>

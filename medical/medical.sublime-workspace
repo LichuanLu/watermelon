@@ -4,16 +4,92 @@
 		"selected_items":
 		[
 			[
-				"2nd",
-				"2ndLanguageInput"
+				"mar",
+				"margin"
 			],
 			[
-				"mar",
-				"margin-top"
+				"text",
+				"text-align"
+			],
+			[
+				"bor",
+				"border"
+			],
+			[
+				"pad",
+				"padding"
+			],
+			[
+				"op",
+				"option	Tag"
+			],
+			[
+				"font",
+				"font-size"
+			],
+			[
+				"requ",
+				"require"
+			],
+			[
+				"doctor",
+				"doctorname"
+			],
+			[
+				"pa",
+				"padding-left"
+			],
+			[
+				"page",
+				"pageNumber"
+			],
+			[
+				"reu",
+				"require"
+			],
+			[
+				"req",
+				"require"
+			],
+			[
+				"collect",
+				"collection"
+			],
+			[
+				"e",
+				"extend"
+			],
+			[
+				"mc",
+				"Marionette.CompositeView"
+			],
+			[
+				"bak",
+				"background-color"
+			],
+			[
+				"mi",
+				"Marionette.ItemView"
+			],
+			[
+				"Mc",
+				"Marionette.CollectionView"
 			],
 			[
 				"min",
-				"min-width"
+				"min-height"
+			],
+			[
+				"list-s",
+				"list-style"
+			],
+			[
+				"tex",
+				"text-align"
+			],
+			[
+				"2nd",
+				"2ndLanguageInput"
 			],
 			[
 				"inline",
@@ -24,20 +100,8 @@
 				"overflow"
 			],
 			[
-				"pad",
-				"padding-right"
-			],
-			[
 				"back",
 				"background-color"
-			],
-			[
-				"tex",
-				"text-decoration"
-			],
-			[
-				"bor",
-				"border"
 			],
 			[
 				"z-i",
@@ -52,28 +116,8 @@
 				"inline-block"
 			],
 			[
-				"text",
-				"text-decoration"
-			],
-			[
-				"pa",
-				"padding-bottom"
-			],
-			[
 				"margin",
 				"margin-right"
-			],
-			[
-				"e",
-				"escape"
-			],
-			[
-				"req",
-				"request"
-			],
-			[
-				"requ",
-				"require"
 			],
 			[
 				"Col",
@@ -82,10 +126,6 @@
 			[
 				"user",
 				"userActivityEntity"
-			],
-			[
-				"font",
-				"font-size"
 			],
 			[
 				"ri",
@@ -275,15 +315,43 @@
 	},
 	"buffers":
 	[
+		{
+			"file": "server_template/applyDiagnose.dust",
+			"settings":
+			{
+				"buffer_size": 15950,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "static/app/diagnose/apply/apply_view.js",
+			"settings":
+			{
+				"buffer_size": 10913,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "static/stylesheet/less/apply-diagnose.less",
+			"settings":
+			{
+				"buffer_size": 3899,
+				"line_ending": "Unix"
+			}
+		}
 	],
 	"build_system": "",
 	"command_palette":
 	{
-		"height": 227.0,
+		"height": 167.0,
 		"selected_items":
 		[
 			[
 				"for",
+				"Tag: Auto-Format Tags on Document"
+			],
+			[
+				"f",
 				"Format: Javascript"
 			],
 			[
@@ -331,10 +399,6 @@
 				"CSSLint: Run CSSLint"
 			],
 			[
-				"f",
-				"Format: Javascript"
-			],
-			[
 				"form",
 				"Format: Javascript"
 			],
@@ -363,7 +427,7 @@
 				"Package Control: Install Package"
 			]
 		],
-		"width": 512.0
+		"width": 575.0
 	},
 	"console":
 	{
@@ -380,6 +444,103 @@
 	},
 	"file_history":
 	[
+		"/dev_lic/medical/static/app/doctorList/show/show_controller.js",
+		"/dev_lic/medical/static/app/doctorList/show/show_view.js",
+		"/dev_lic/medical/static/app/app.js",
+		"/dev_lic/medical/server_template/doctorList.dust",
+		"/dev_lic/medical/static/stylesheet/less/doctor-list.less",
+		"/dev_lic/medical/server.js",
+		"/dev_lic/medical/server_template/head.dust",
+		"/dev_lic/medical/static/stylesheet/less/global.less",
+		"/dev_lic/medical/static/assets/Icons/SVG/retina.svg",
+		"/dev_lic/medical/static/app/homepage/show/show_view.js",
+		"/dev_lic/medical/server_template/previewDiagnoseReport.dust",
+		"/dev_lic/medical/static/stylesheet/less/report.less",
+		"/dev_lic/medical/server_template/applyDiagnose.dust",
+		"/dev_lic/medical/static/app/diagnose/apply/apply_view.js",
+		"/dev_lic/medical/server_template/selectDoctorModal.dust",
+		"/dev_lic/medical/static/app/diagnose/templates_raw/selectDoctorList.dust",
+		"/dev_lic/medical/static/app/config/dust/cus_helpers.js",
+		"/dev_lic/medical/server_template/home.dust",
+		"/dev_lic/medical/server_template/header.dust",
+		"/dev_lic/medical/static/app/doctorList/doctorList_app.js",
+		"/dev_lic/medical/static/app/diagnose/templates_raw/selectDoctorItem.dust",
+		"/dev_lic/medical/static/stylesheet/less/home.less",
+		"/dev_lic/medical/static/app/login/login_app.js",
+		"/dev_lic/medical/static/app/report/show/show_view.js",
+		"/dev_lic/medical/static/stylesheet/less/register.less",
+		"/dev_lic/medical/static/stylesheet/less/patient-home.less",
+		"/dev_lic/medical/static/app/report/report_app.js",
+		"/dev_lic/medical/static/app/report/show/show_controller.js",
+		"/dev_lic/medical/server_template/reportTemplate.dust",
+		"/dev_lic/medical/static/app/lib/jquery-uploader/jquery.fileupload-ui.js",
+		"/dev_lic/medical/static/stylesheet/less/apply-diagnose.less",
+		"/dev_lic/medical/static/app/config/validator/config.js",
+		"/dev_lic/medical/static/app/config/jquery/flat_ui_custom.js",
+		"/dev_lic/medical/static/app/main.js",
+		"/dev_lic/medical/static/app/lib/jquery-uploader/jquery.fileupload.js",
+		"/dev_lic/medical/server_template/loginModal.dust",
+		"/dev_lic/medical/static/stylesheet/less/doctor-home.less",
+		"/dev_lic/medical/server_template/doctorHome.dust",
+		"/dev_lic/medical/static/app/doctorHome/show/show_controller.js",
+		"/dev_lic/medical/static/app/doctorHome/show/show_view.js",
+		"/dev_lic/medical/static/app/doctorHome/templates_raw/doctorAccountManageLayout.dust",
+		"/dev_lic/medical/static/app/patientHome/show/show_view.js",
+		"/dev_lic/medical/server_template/patientHome.dust",
+		"/dev_lic/medical/static/app/patientHome/templates_raw/diagnoseLayout.dust",
+		"/dev_lic/medical/static/app/patientHome/templates_raw/patientAccountManageLayout.dust",
+		"/dev_lic/medical/static/app/patientHome/templates_raw/diagnoseItem.dust",
+		"/dev_lic/medical/duster.json",
+		"/dev_lic/medical/static/app/doctorHome/templates_raw/doctorDiagnoseItem.dust",
+		"/dev_lic/medical/static/app/templates.js",
+		"/dev_lic/medical/static/app/config/controllers/_base_controller.js",
+		"/dev_lic/medical/static/app/entities/diagnoseEntity.js",
+		"/dev_lic/medical/static/app/entities/doctorEntity.js",
+		"/dev_lic/medical/static/app/doctorHome/templates_raw/newDiagnoseLayout.dust",
+		"/dev_lic/medical/server_template/footer.dust",
+		"/dev_lic/medical/static/stylesheet/less/modules/tables.less",
+		"/dev_lic/medical/static/app/doctorhome/templates_raw/newAuditLayout.dust",
+		"/dev_lic/medical/static/stylesheet/less/variables.less",
+		"/dev_lic/medical/static/app/lib/bootstrap-treeview/src/js/bootstrap-treeview.js",
+		"/dev_lic/medical/bower.json",
+		"/dev_lic/medical/static/app/doctorHome/templates_raw/doctorDiagnoseLayout.dust",
+		"/dev_lic/medical/static/app/doctorhome/templates_raw/newDiagnoseLayout.dust",
+		"/dev_lic/medical/static/app/patientHome/show/show_controller.js",
+		"/dev_lic/medical/static/app/diagnose/apply/apply_controller.js",
+		"/dev_lic/medical/node_modules/grunt-contrib-concat/test/expected/custom_options",
+		"/dev_lic/medical/static/app/register/patient/show_view.js",
+		"/dev_lic/medical/server_template/patientRegister.dust",
+		"/dev_lic/medical/static/app/patienthome/templates_raw/patientAccountManageLayout.dust",
+		"/dev_lic/medical/static/app/patienthome/templates_raw/diagnoseLayout.dust",
+		"/dev_lic/medical/server_template/patientAccountSetting.dust",
+		"/dev_lic/medical/static/app/diagnose/templates_raw/diagnoseItem.dust",
+		"/dev_lic/medical/server_template/diagnoseList.dust",
+		"/dev_lic/medical/node_modules/grunt/lib/grunt/template.js",
+		"/dev_lic/medical/server_template/doctorRegister.dust",
+		"/dev_lic/medical/server_template/messageList.dust",
+		"/dev_lic/medical/server_template/iconSearch.dust",
+		"/dev_lic/medical/server_template/basicLayout.dust",
+		"/dev_lic/medical/static/app/patientHome/patient_home_app.js",
+		"/dev_lic/medical/static/app/doctorHome/doctor_home_app.js",
+		"/dev_lic/medical/static/app/register/patient/show_controller.js",
+		"/dev_lic/medical/static/app/register/register_app.js",
+		"/dev_lic/medical/static/app/register/doctor/show_controller.js",
+		"/dev_lic/medical/static/app/register/doctor/show_view.js",
+		"/dev_lic/medical/static/app/dignose/apply/apply_view.js",
+		"/dev_lic/medical/static/app/dignose/dignose_app.js",
+		"/dev_lic/medical/static/app/dignose/apply/apply_controller.js",
+		"/dev_lic/medical/static/app/diagnose/diagnose_app.js",
+		"/dev_lic/medical/static/app/homepage/show/show_controller.js",
+		"/dev_lic/medical/static/stylesheet/less/flat-ui.less",
+		"/dev_lic/medical/static/stylesheet/atc/flat-ui.css",
+		"/dev_lic/medical/static/app/lib/elastiSlide/jquery.elastislide.js",
+		"/dev_lic/medical/static/app/project_manage/project_manage_app.js",
+		"/dev_lic/medical/static/app/lib/elastiSlide/_main.js",
+		"/dev_lic/medical/static/stylesheet/lib/elastislide.css",
+		"/dev_lic/medical/static/app/lib/elastislide/.placeholder",
+		"/dev_lic/medical/static/app/lib/elastislide/_main.js",
+		"/dev_lic/medical/static/app/homepage/homepage_app.js",
+		"/dev_lic/medical/medical.sublime-project",
 		"/dev_lic/Pomegranate/server_template/userfollowers.dust",
 		"/dev_lic/Pomegranate/static/stylesheet/less/userhome.less",
 		"/dev_lic/Pomegranate/static/app/app.js",
@@ -410,104 +571,7 @@
 		"/Users/lichuan/Downloads/stage-community.translate.corp.adobe.com-feb2011.crt",
 		"/dev_lic/Pomegranate/static/app/lib/bootstrap-multiselect.js",
 		"/dev_lic/Pomegranate/static/app/utils/followbtn-non-require.js",
-		"/dev_lic/Pomegranate/static/app/translate/show/show_view.js",
-		"/dev_lic/Pomegranate/static/app/project_manage/manage/manage_view.js",
-		"/dev_lic/Pomegranate/static/app/entities/localeEntity.js",
-		"/dev_lic/Pomegranate/static/app/admin/show/show_view.js",
-		"/dev_lic/Pomegranate/static/app/admin/show/show_controller.js",
-		"/dev_lic/Pomegranate/static/app/translate/show/show_controller.js",
-		"/dev_lic/Pomegranate/server_template/setupProduct.dust",
-		"/dev_lic/Pomegranate/node_modules/blueimp-file-upload-node/server.js",
-		"/dev_lic/Pomegranate/static/app/lib/jquery-uploader/jquery.fileupload.js",
-		"/dev_lic/Pomegranate/server_template/userhome.dust",
-		"/dev_lic/Pomegranate/static/app/homepage/home.js",
-		"/dev_lic/Pomegranate/static/app/lib/bootstrap/dist/js/bootstrap.js",
-		"/dev_lic/Pomegranate/static/stylesheet/less/modules/breadcrumbs.less",
-		"/dev_lic/Pomegranate/static/app/lib/bootstrap/less/breadcrumbs.less",
-		"/dev_lic/Pomegranate/static/stylesheet/less/variables.less",
-		"/dev_lic/Pomegranate/static/app/lib/bootstrap/less/variables.less",
-		"/dev_lic/Pomegranate/server_template/basicLayout.dust",
-		"/dev_lic/Pomegranate/duster.json",
-		"/dev_lic/Pomegranate/static/app/translate/templates_raw/suggestionList.dust",
-		"/dev_lic/Pomegranate/static/app/translate/templates_raw/stringDetail.dust",
-		"/dev_lic/Pomegranate/static/index-translate.html",
-		"/dev_lic/Pomegranate/static/stylesheet/less/manage-product.less",
-		"/dev_lic/Pomegranate/static/app/project_manage/templates_raw/manageProductDetail.dust",
-		"/dev_lic/Pomegranate/server_template/manageProductDetail.html",
-		"/dev_lic/Pomegranate/static/stylesheet/less/flat-ui.less",
-		"/dev_lic/Pomegranate/static/stylesheet/less/modules/forms.less",
-		"/dev_lic/Pomegranate/server_template/breadcrumbs.dust",
-		"/dev_lic/Pomegranate/static/app/lib/bootstrap/less/forms.less",
-		"/dev_lic/Pomegranate/static/app/project_manage/show/show_view.js",
-		"/dev_lic/Pomegranate/static/app/project_manage/templates_raw/activedProducts.dust",
-		"/dev_lic/Pomegranate/server_template/edituserprofile.dust",
-		"/dev_lic/Pomegranate/static/app/lib/jquery-uploader/jquery.fileupload-image.js",
-		"/dev_lic/Pomegranate/static/app/lib/jquery-uploader/jquery.fileupload-ui.js",
-		"/dev_lic/Pomegranate/static/app/lib/blueimp-tmpl/js/tmpl.js",
-		"/dev_lic/Pomegranate/server_template/head.dust",
-		"/dev_lic/Pomegranate/static/stylesheet/less/setup-product.less",
-		"/dev_lic/Pomegranate/static/app/lib/jquery-uploader/jquery.fileupload-process.js",
-		"/dev_lic/Pomegranate/node_modules/watch/main.js",
-		"/dev_lic/Pomegranate/static/app/userhome/show/show_view.js",
-		"/dev_lic/Pomegranate/static/app/userhome/templates_raw/userActivityItem.dust",
-		"/dev_lic/Pomegranate/static/app/userhome/show/show_controller.js",
-		"/dev_lic/Pomegranate/static/app/entities/userActivityEntity.js",
-		"/dev_lic/Pomegranate/static/app/templates.js",
-		"/dev_lic/Pomegranate/static/stylesheet/less/edituserprofile.less",
-		"/dev_lic/Pomegranate/static/app/entities/activityEntity",
-		"/dev_lic/Pomegranate/static/app/project_manage/templates_raw/productItem.dust",
-		"/dev_lic/Pomegranate/static/app/lib/jquery/jquery.js",
-		"/dev_lic/Pomegranate/static/app/project_manage/templates_raw/retiredProducts.dust",
-		"/dev_lic/Pomegranate/static/app/lib/bootstrap/js/transition.js",
-		"/dev_lic/Pomegranate/server_template/manageProduct.dust",
-		"/dev_lic/Pomegranate/static/app/project_manage/templates_raw/manageProductMain.dust",
-		"/dev_lic/Pomegranate/static/stylesheet/less/login.less",
-		"/dev_lic/Pomegranate/server_template/header.dust",
-		"/dev_lic/Pomegranate/static/app/lib/bootstrap/less/mixins.less",
-		"/dev_lic/Pomegranate/static/stylesheet/atc/flat-ui.css",
-		"/dev_lic/Pomegranate/static/stylesheet/less/modules/navbar.less",
-		"/dev_lic/Pomegranate/static/stylesheet/atc/homepage.css",
-		"/dev_lic/Pomegranate/static/stylesheet/atc/translate.css",
-		"/dev_lic/Pomegranate/static/app/translate/templates_raw/stringListItem.dust",
-		"/dev_lic/Pomegranate/Pomegranate.sublime-workspace",
-		"/dev_lic/Pomegranate/static/index-home.html",
-		"/dev_lic/Pomegranate/static/index-userhome.html",
-		"/dev_lic/Pomegranate/server_template/scripts.dust",
-		"/dev_lic/Pomegranate/server_template/footer.dust",
-		"/dev_lic/Pomegranate/static/index-admin.html",
-		"/dev_lic/Pomegranate/static/stylesheet/atc/global.css",
-		"/dev_lic/Pomegranate/static/assets/Icons/ctt/.placehoder",
-		"/dev_lic/Pomegranate/static/index-flat.html",
-		"/dev_lic/Pomegranate/Pomegranate.sublime-project",
-		"/dev_lic/Pomegranate/static/stylesheet/less/modules/file-input.less",
-		"/Users/lichuan/Downloads/css-ellipses/multiline-ellipsis.scss",
-		"/dev_lic/Pomegranate/static/test.html",
-		"/dev_lic/Pomegranate/static/app/entities/translateEntity.js",
-		"/dev_lic/Pomegranate/static/app/config/validator/config.js",
-		"/dev_lic/Pomegranate/static/app/login/show/show_view.js",
-		"/Users/lichuan/Desktop/scipyinstall.sh",
-		"/Users/lichuan/Downloads/∑¢∏¯¬Ω¿Ë¥®/DicomDAO.py",
-		"/Applications/MAMP/htdocs/jqplot/examples/barLineAnimated.php",
-		"/Users/lichuan/Desktop/share/SlicerSharing/useful_link",
-		"/Users/lichuan/Desktop/test.jsp",
-		"/Users/lichuan/Downloads/download (5)",
-		"/Users/lichuan/Downloads/download",
-		"/dev_lic/js_ws/todomvc/labs/dependency-examples/backbone_marionette_require/js/bower_component/.placeholder",
-		"/dev_lic/js_ws/todomvc/labs/dependency-examples/backbone_marionette_require/js/templates/todoListCompositeView.dust",
-		"/dev_lic/js_ws/todomvc/labs/dependency-examples/backbone_marionette_require/js/templates/header.dust",
-		"/dev_lic/js_ws/todomvc/labs/dependency-examples/backbone_marionette_require/js/templates/footer.dust",
-		"/dev_lic/js_ws/todomvc/labs/dependency-examples/backbone_marionette_require/preinit.sh",
-		"/dev_lic/js_ws/todomvc/labs/dependency-examples/backbone_marionette_require/js/templates/todoItemView.dust",
-		"/dev_lic/js_ws/todomvc/labs/dependency-examples/backbone_marionette_require/js/bower_component",
-		"/dev_lic/js_ws/todomvc/labs/dependency-examples/backbone_marionette_require/.bowerrc",
-		"/dev_lic/js_ws/sc02-loading-views/sc02-loading-views-after/app/assets/javascripts/backbone/app.js.coffee",
-		"/dev_lic/js_ws/todomvc/labs/dependency-examples/backbone_marionette_require/js/views/Footer.js",
-		"/dev_lic/js_ws/todomvc/labs/dependency-examples/backbone_marionette_require/js/main.js",
-		"/dev_lic/js_ws/todomvc/labs/dependency-examples/backbone_marionette_require/js/views/Header.js",
-		"/dev_lic/js_ws/todomvc/labs/dependency-examples/backbone_marionette_require/js/views/TodoItemView.js",
-		"/dev_lic/js_ws/todomvc/labs/dependency-examples/backbone_marionette_require/js/views/TodoListCompositeView.js",
-		"/dev_lic/js_ws/todomvc/labs/dependency-examples/backbone_marionette_require/js/templates.js",
-		"/dev_lic/js_ws/todomvc/labs/dependency-examples/backbone_marionette_require/js/views/ActiveCount.js"
+		"/dev_lic/Pomegranate/static/app/translate/show/show_view.js"
 	],
 	"find":
 	{
@@ -518,6 +582,15 @@
 		"height": 0.0,
 		"where_history":
 		[
+			"<open folders>",
+			"/dev_lic/medical/static/app/diagnose",
+			"/dev_lic/medical/static/app/patienthome",
+			"/dev_lic/medical/static/app/doctorhome",
+			"<open folders>",
+			"<open folders>,*.less",
+			"<open folders>",
+			"<open folders>,*.js",
+			"/dev_lic/medical/static",
 			"",
 			"*.less",
 			"",
@@ -542,6 +615,91 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"col",
+			"label",
+			"patientLocationSelect",
+			"@",
+			"user-message-link",
+			"Empty file upload result",
+			"empty",
+			"from-2",
+			"USER",
+			"radio",
+			"formPanel",
+			"-15",
+			"doctor-action-content",
+			"target",
+			"NewAuditLayoutView",
+			"undefined",
+			"this.model",
+			"submit-btn",
+			"_render",
+			"treeview",
+			"nodeSelected",
+			"doctor-action-header",
+			"height",
+			"api",
+			"getDoctorHomePageLayoutView",
+			"patient",
+			"ReqCmd.command",
+			"getRecommandedDoctorModel",
+			"recommandedDoctor",
+			"getDoctorPageModel",
+			"search-btn",
+			"getDoctorListView",
+			"all-doctor-wrapper",
+			"doctorListRegion",
+			"ReqCmd.reqres",
+			"doctors/list.json",
+			"searchDoctorHandler",
+			"modal",
+			"select-doctor-modal",
+			"doctor-preview",
+			"submit",
+			"affix-wrapper",
+			"submit-patient-info-wrapper",
+			"reqCmd.req",
+			"right-content-wrapper",
+			"diagnoseList",
+			"病人",
+			"dropdown",
+			"main-content-title",
+			"logo",
+			"progress",
+			"divide",
+			"h-divider",
+			"inName",
+			"inName'",
+			"inName",
+			"login",
+			"vertical",
+			"height",
+			"unlogin-group",
+			"login-wrap",
+			"panel-heading",
+			"dicom",
+			"birthdateinput",
+			"jquery-ui",
+			"datepicker",
+			"date",
+			"locationinput",
+			"doctor-preview-des",
+			"center",
+			"margin",
+			"logo",
+			"right",
+			"../fonts/",
+			"navbar-default",
+			".navbar-default",
+			"nav.png",
+			"nav.png ",
+			"modernizr.custom.17475",
+			"<?php print base_path() . drupal_get_path('theme', 'bootstrap_business') ;?>\n					/images/large/",
+			"<?php print base_path() . drupal_get_path('theme', 'bootstrap_business') ;?>/images/large/",
+			"<?php print base_path() . drupal_get_path('theme', 'bootstrap_business') ;?>/images/large/4.jpg",
+			"$carouselEl",
+			"$preview",
+			"header",
 			"nativeLanguageInput",
 			"submitLanguageForm",
 			"reLocation",
@@ -584,92 +742,7 @@
 			"port",
 			"fileupload",
 			"jquery.uploader.main",
-			"fileupload",
-			"file",
-			"selectUI",
-			"sort-selector",
-			"stringListParams",
-			"radio",
-			"multiple",
-			"selectedIndex",
-			"createOptionValue",
-			"buildDropdown",
-			"createOptionValue",
-			"selected",
-			"buildButton",
-			"selected",
-			"selectAllValue",
-			"buttonText",
-			"updateButtonText",
-			"buttonText",
-			"buildContainer",
-			"nonSelectedText",
-			"this.options.multiple",
-			"breadcrumb-active-color",
-			"action-bar",
-			"action-bar、",
-			"+",
-			"hrep",
-			"span",
-			"product-list",
-			"user-avatar",
-			"Jacklyn Fang",
-			"currentpage",
-			"loading-status",
-			"maxpage",
-			"loading-status",
-			"locale",
-			"flex-table",
-			"feedback-label",
-			"index-home",
-			"follow-btn",
-			"button",
-			"min-height",
-			"font-size",
-			"number",
-			"input-border-radius",
-			"border-radius-small",
-			"input-sm",
-			"border",
-			"z-index",
-			"toggleBtn",
-			"mproduct-detail-view",
-			"setup-product-btn",
-			"success",
-			"min-height",
-			"edituserprofilepage-content",
-			"submit-btn",
-			".form-group",
-			"enableFiltering",
-			"user-follower-header-wrapper",
-			"upload",
-			"jquery.fileupload",
-			"jquery.uploader.main",
-			"}",
-			"{",
-			"disableImageResize",
-			"fileupload",
-			"upload",
-			"blueimp.fileupload",
-			"tmpl",
-			"uploadTemplateId",
-			"template-upload",
-			"tmpl",
-			"uploadTemplateId",
-			"template-download",
-			"userHomeLayoutView:attached",
-			"ajax",
-			"Selectpicker",
-			"showStringListTemplateView",
-			"brand-secondary",
-			"brand-success",
-			"mtText",
-			"stringDetailLayoutView:showFetched",
-			"phrase-header",
-			"loading-img-suggestion",
-			"stringDetai",
-			"StringDetailItemView",
-			"action-btn-group"
+			"fileupload"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -677,6 +750,13 @@
 		"regex": false,
 		"replace_history":
 		[
+			"doctor",
+			"就诊人",
+			"/static/assets/resource/fonts/",
+			"/static/assets/image/",
+			"/static/assets/image/4.jpg",
+			"this.ui.carouselEl",
+			"this.ui.preview",
 			"second",
 			"\\}",
 			"\\{",
@@ -695,8 +775,93 @@
 	"groups":
 	[
 		{
+			"selected": 2,
 			"sheets":
 			[
+				{
+					"buffer": 0,
+					"file": "server_template/applyDiagnose.dust",
+					"settings":
+					{
+						"buffer_size": 15950,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								5772,
+								5777
+							]
+						],
+						"settings":
+						{
+							"color_scheme": "Packages/User/Color Highlighter/Monokai.tmTheme",
+							"syntax": "Packages/Dust.js/Syntaxes/DustJS.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 3415.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "static/app/diagnose/apply/apply_view.js",
+					"settings":
+					{
+						"buffer_size": 10913,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3472,
+								3472
+							]
+						],
+						"settings":
+						{
+							"color_scheme": "Packages/User/Color Highlighter/Monokai.tmTheme",
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1292.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "static/stylesheet/less/apply-diagnose.less",
+					"settings":
+					{
+						"buffer_size": 3899,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2508,
+								2508
+							]
+						],
+						"settings":
+						{
+							"color_scheme": "Packages/User/Color Highlighter/Monokai.tmTheme",
+							"syntax": "Packages/LESS/LESS.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1873.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
 			]
 		}
 	],
@@ -737,7 +902,7 @@
 	},
 	"output.exec":
 	{
-		"height": 201.0
+		"height": 172.0
 	},
 	"replace":
 	{
@@ -750,28 +915,152 @@
 		"selected_items":
 		[
 			[
-				"global",
-				"static/stylesheet/less/global.less"
+				"app",
+				"static/stylesheet/less/apply-diagnose.less"
+			],
+			[
+				"apply_v",
+				"static/app/diagnose/apply/apply_view.js"
+			],
+			[
+				"apply",
+				"static/stylesheet/less/apply-diagnose.less"
+			],
+			[
+				"reti",
+				"static/assets/Icons/SVG/retina.svg"
 			],
 			[
 				"gl",
 				"static/stylesheet/less/global.less"
 			],
 			[
-				"user",
-				"static/stylesheet/less/userhome.less"
+				"head",
+				"server_template/head.dust"
+			],
+			[
+				"global",
+				"static/stylesheet/less/global.less"
+			],
+			[
+				"dust_",
+				"static/app/config/dust/cus_helpers.js"
+			],
+			[
+				"log",
+				"static/app/login/login_app.js"
+			],
+			[
+				"globa",
+				"static/stylesheet/less/global.less"
+			],
+			[
+				"home",
+				"static/stylesheet/less/home.less"
+			],
+			[
+				"login",
+				"server_template/loginModal.dust"
+			],
+			[
+				"fileup",
+				"static/app/lib/jquery-uploader/jquery.fileupload.js"
+			],
+			[
+				"glo",
+				"static/stylesheet/less/global.less"
 			],
 			[
 				"main",
 				"static/app/main.js"
 			],
 			[
-				"edit",
-				"server_template/usereditprofile.dust"
+				"flat",
+				"static/app/config/jquery/flat_ui_custom.js"
 			],
 			[
-				"app",
-				"static/app/app.js"
+				"va",
+				"static/stylesheet/less/variables.less"
+			],
+			[
+				"base",
+				"static/app/config/controllers/_base_controller.js"
+			],
+			[
+				"tem",
+				"static/app/templates.js"
+			],
+			[
+				"ser",
+				"server.js"
+			],
+			[
+				"doctor",
+				"static/stylesheet/less/doctor-home.less"
+			],
+			[
+				"mai",
+				"static/app/main.js"
+			],
+			[
+				"vara",
+				"static/stylesheet/less/variables.less"
+			],
+			[
+				"path",
+				"static/stylesheet/less/patient-home.less"
+			],
+			[
+				"cus_he",
+				"static/app/config/dust/cus_helpers.js"
+			],
+			[
+				"cus",
+				"node_modules/grunt-contrib-concat/test/expected/custom_options"
+			],
+			[
+				"diagno",
+				"static/stylesheet/less/apply-diagnose.less"
+			],
+			[
+				"templ",
+				"static/app/templates.js"
+			],
+			[
+				"tempate",
+				"node_modules/grunt/lib/grunt/template.js"
+			],
+			[
+				"regis",
+				"static/stylesheet/less/register.less"
+			],
+			[
+				"glob",
+				"static/stylesheet/less/global.less"
+			],
+			[
+				"temp",
+				"static/app/templates.js"
+			],
+			[
+				"jque",
+				"static/app/lib/elastiSlide/jquery.elastislide.js"
+			],
+			[
+				"gbal",
+				"static/stylesheet/less/global.less"
+			],
+			[
+				"show",
+				"static/app/homepage/show/show_view.js"
+			],
+			[
+				"user",
+				"static/stylesheet/less/userhome.less"
+			],
+			[
+				"edit",
+				"server_template/usereditprofile.dust"
 			],
 			[
 				"userhome",
@@ -780,14 +1069,6 @@
 			[
 				"follow",
 				"server_template/userfollowers.dust"
-			],
-			[
-				"home",
-				"static/stylesheet/less/homepage.less"
-			],
-			[
-				"glo",
-				"static/stylesheet/less/global.less"
 			],
 			[
 				"",
@@ -806,16 +1087,8 @@
 				"static/app/config/jquery/ajax_setup.js"
 			],
 			[
-				"globa",
-				"static/stylesheet/less/global.less"
-			],
-			[
 				"tra",
 				"static/stylesheet/less/translate.less"
-			],
-			[
-				"fileup",
-				"static/app/lib/jquery-uploader/jquery.fileupload.js"
 			],
 			[
 				"multise",
@@ -828,10 +1101,6 @@
 			[
 				"mult",
 				"static/app/lib/bootstrap-multiselect.js"
-			],
-			[
-				"va",
-				"static/stylesheet/less/variables.less"
 			],
 			[
 				"bread",
@@ -900,6 +1169,6 @@
 	"show_open_files": false,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 260.0,
+	"side_bar_width": 300.0,
 	"status_bar_visible": true
 }

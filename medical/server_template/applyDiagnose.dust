@@ -165,11 +165,11 @@
 
 						<form role="form" class="form-inline">
 							<div class="form-group">
-								<label for="patientlocationinput">
+								<label for="patientlocation">
 									诊断部位：
 									<span class="required-text">（必填）</span>
 								</label>
-								<div class="patientlocation-wrapper">
+								<!-- <div class="patientlocation-wrapper">
 
 									<div class="checkbox-wrapper">
 										<label class="checkbox" for="checkbox1">
@@ -226,8 +226,39 @@
 										<div class="ball"></div>
 									</div>
 									<p class="side-description">就诊人姓名须与诊断书和影像数据上姓名相符就诊人姓名须与诊断书和影像数据上姓名相符</p>
+								</div> -->
+								<div class="patientlocation-wrapper">
+									<select id="patientLocationSelect" name="patientlocation" class="multiselect" multiple="multiple">
+									  <option value="1">头部</option>
+									  <option value="2">颈部</option>
+									</select>
+									<!-- <div class="line-area">
+										<div class="line"></div>
+										<div class="ball"></div>
+									</div>
+									<p class="side-description">就诊人姓名须与诊断书和影像数据上姓名相符就诊人姓名须与诊断书和影像数据上姓名相符</p> -->
 								</div>
+							</div>
+							<div class="form-group">
+								<label for="dicomtype">
+									影像类型：
+									<span class="required-text">（必填）</span>
+								</label>
+								<div class="">
+									<label class="radio">
+										<span class="icons">
+											<span class="first-icon fui-radio-unchecked"></span>
+											<span class="second-icon fui-radio-checked"></span>
+										</span>
+										<input type="radio" name="dicomtype" value="1" data-toggle="radio">CT</label>
 
+									<label class="radio">
+										<span class="icons">
+											<span class="first-icon fui-radio-unchecked"></span>
+											<span class="second-icon fui-radio-checked"></span>
+										</span>
+										<input type="radio" name="dicomtype" value="2" data-toggle="radio">核磁共振(MR)</label>
+								</div>
 							</div>
 							<div class="form-group" id="dicomfileupload">
 								<label for="dicomfileinput">

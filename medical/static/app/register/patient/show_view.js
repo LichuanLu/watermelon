@@ -20,7 +20,6 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'dust', 'dustMarion
 		},
 
 		submitForm: function(e) {
-			// body...
 			e.preventDefault();
 			// if ($('#register-form').valid()) {
 			var data = this.validate();

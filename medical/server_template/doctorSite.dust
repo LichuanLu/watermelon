@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+	{>head/}
+<body class="doctor-site">
+	<div id="header-region" class="full-width">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-8 col-lg-8 no-right-padding">
+					<a class="logo" href="" title="Home" rel="home"></a>
+				</div>
+				<div class="col-md-4 col-lg-4 nopadding login-wrap">
+					<!-- <div class="login-group">
+					<span>您好</span>
+					<span class="username">liclu628</span>
+					<a id="usercenter-link" href="#">
+						<span class="fui-user"></span>
+						<span>个人中心</span>
+					</a>
+					<a id="user-message-link" href="#">
+						<span class="visible-md visible-lg message-icon-wrap">
+							<span class="fui-mail">
+								<span class="iconbar-unread">1</span>
+							</span>
+						</span>
+						消息
+					</a>
+					<a id="logout_link" href="/user/logout">退出</a>
+				</div>
+				-->
+				<div class="unlogin-group">
+					<a id="login-link" href="#" data-toggle="modal" data-target=".login-modal">
+						<span>登陆</span>
+					</a>
+					<div class="bullet"></div>
+					<a id="register-link" href="#" data-toggle="modal" data-target=".register-modal">
+						<span>注册</span>
+					</a>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>
+<div class="container">
+	<div class="main-block full-height">
+		<div id="main-region">
+			<div id="doctorsite-content" class="main-content-padding" data-userid="5">
+				<div class="content-wrapper row">
+					<div class="col-md-12">
+						<div class="row header-wrapper">
+							<div class="col-md-9">
+								<div class="avatar-wrapper">
+									<img src="/static/assets/image/doc-unknow-l.png">
+								</div>
+								<div class="profile-wrapper">
+									<h6>
+										<span class='name'>李笑夏</span>
+										<span class='title label label-primary'>主任医师／教授</span>
+										<a class="btn btn-info btn-xs" href="#fakelink">
+										    <span class="fui-heart"></span>
+										      加入收藏
+										</a>
+									</h6>
+									<div class="sub-info">
+										<h6>所在医院／科室</h6>
+										<a href="#">西安西京医院 影像科</a>
+									</div>
+									<div class="sub-info">
+										<h6>擅长方向</h6>
+										<p>胶质肿瘤</p>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="stat-wrapper">
+									<p>125 诊断</p>
+									<p>25 好评</p>
+								</div>
+							</div>
+						</div>
+						<div class="row content-wrapper">
+							
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<footer id="footer-region" class="footer full-width">
+		    <table class="full-width">
+		        <tbody>
+		            <tr class="footer-content">
+			             <td>
+			                    <!-- <a href="http://adobe.com" class="adobe－logo">
+			                    <img alt="Adobe" class="adobe-logo" src="/static/assets/icons/ctt/adobe-logo.png"></a>
+			                -->
+
+
+			            </td>
+		            <td class="copyright-text">
+		                <span>
+		                    © 2011-2014版权所有. 浙ICP备12034511号
+		                </span>
+		                <!-- <div class="breadcrumb-text">
+		                    <p>
+		                        <a href="#">关于我们</a>
+		                        <a href="#">医院合作</a>
+		                        <a href="#">免责条款</a>
+		                        <a href="#">联系我们</a>
+		                        <a href="#">网站地图</a>
+		                    </p>
+		                </div> -->
+		            </td>
+		        </tr>
+		    </tbody>
+		</table>
+		</footer>
+	</div>
+</div>
+{>scripts/}
+</body>
+</html>

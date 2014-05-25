@@ -93,6 +93,9 @@ app.configure(function() {
   app.get('/doctor/list', function(req, res) {
     res.render('doctorList', {});
   });
+   app.get('/doctor/site', function(req, res) {
+    res.render('doctorSite', {});
+  });
 
 
 
@@ -107,6 +110,7 @@ app.configure(function() {
 
     var data = [{
         id: 1,
+        diagnosenumber:'35423',
         doctorName: '张名',
         patientName: "李冰",
         date: "2014-10-29",
@@ -115,6 +119,7 @@ app.configure(function() {
         statusId: "5"
       }, {
         id: 2,
+        diagnosenumber:'35443',
         doctorName: '张名1',
         patientName: "李冰1",
         date: "2014-11-29",
@@ -123,13 +128,23 @@ app.configure(function() {
         statusId: "6"
       }, {
         id: 3,
+        diagnosenumber:'35413',
         doctorName: '张名2',
         patientName: "李冰2",
         date: "2013-10-29",
         section: "颈部",
         status: "待诊断",
         statusId: "4"
-      },
+      },{
+        id: 4,
+        diagnosenumber:'35413',
+        doctorName: '张名2',
+        patientName: "李冰2",
+        date: "2013-10-29",
+        section: "颈部",
+        status: "需要更新",
+        statusId: "7"
+      }
 
     ];
     res.send({
@@ -142,6 +157,16 @@ app.configure(function() {
 
 
   app.post('/register/patient.json', function(req, res) {
+    console.log(req.body);
+    var result = {
+      code: 0,
+      message: "success"
+    };
+    res.send(result);
+
+  });
+
+  app.post('/register/doctor.json', function(req, res) {
     console.log(req.body);
     var result = {
       code: 0,
@@ -343,7 +368,32 @@ app.configure(function() {
       data:data
     });
 
-  })
+  });
+
+
+  app.get('/message/list', function(req, res) {
+    console.dir(req.query);
+    var data = [{
+      id: 1,
+      url:"/test",
+      type:"未读消息",
+      date:"2013-12-12 13:00",
+      content:"您有一条新的诊断申请。诊断号：34556 ｜ 诊断类型：MR ｜ 诊断部位：头部，颈部 ｜ 患者：李响"
+    },{
+      id: 2,
+      url:"/test",
+      type:"未读消息",
+      date:"2013-11-12 13:00",
+      content:"您收到一条新的咨询。咨询人：李响 ｜ 内容：Asda大是大事Asda是大事"
+
+    }];
+     res.send({
+      code: 0,
+      message: "",
+      data:data
+    });
+
+  });
 
 
 

@@ -1,4 +1,4 @@
-define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.main', 'entities/doctorEntity', 'dust', 'dustMarionette', "bootstrap", 'typeahead', 'flatui.checkbox', 'flatui.radio', 'jquery-ui', 'bootstrap.select', 'flat_ui_custom', 'dust_cus_helpers', 'config/validator/config'], function(ReqCmd, Lodash, Marionette, Templates, FileUploaderMain, DoctorEntity) {
+define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.main', 'entities/doctorEntity', 'dust', 'dustMarionette', "bootstrap", 'typeahead', 'flatui.checkbox', 'flatui.radio', 'jquery-ui', 'bootstrap.select', 'flat_ui_custom', 'dust_cus_helpers', 'config/validator/config','bootstrap.multiselect'], function(ReqCmd, Lodash, Marionette, Templates, FileUploaderMain, DoctorEntity) {
 	// body...
 	"use strict";
 	var ApplyDiagnosePageLayoutView = Marionette.Layout.extend({
@@ -99,12 +99,22 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 				}
 			});
 			//init select
-			$("select").selectpicker({
+			$("select").not('#patientLocationSelect').selectpicker({
 				style: 'btn-sm btn-primary'
 			});
 
 			//radio
 			$(':radio').radio();
+
+			//multi select
+
+			$("#patientLocationSelect").multiselect({
+				numberDisplayed: 4,
+				enableFiltering: true,
+				filterPlaceholder:"搜索",
+				nonSelectedText:"没有选中"
+				// buttonWidth: '300px'
+			});
 
 			$('.patient-radio-wrapper :radio').on('toggle', function() {
 				var $this = $(this);

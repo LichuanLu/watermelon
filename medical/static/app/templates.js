@@ -23,7 +23,16 @@ define(function(require) {
 		doctorDiagnoseItem:require('doctorHome/templates/doctorDiagnoseItem'),
 		doctorDiagnoseLayout:require('doctorHome/templates/doctorDiagnoseLayout'),
 		newDiagnoseLayout:require('doctorHome/templates/newDiagnoseLayout'),
-		newAuditLayout:require('doctorHome/templates/newAuditLayout')
+		newAuditLayout:require('doctorHome/templates/newAuditLayout'),
+		doctorMessageLayout:require('doctorHome/templates/doctorMessageLayout'),
+		doctorConsultLayout:require('doctorHome/templates/doctorConsultLayout'),
+
+
+
+		messageItem:require('message/templates/messageItem')
+
+
+		
 
 		
 
