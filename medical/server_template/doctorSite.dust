@@ -78,8 +78,56 @@
 								</div>
 							</div>
 						</div>
-						<div class="row content-wrapper">
-							
+						<div class="row main-wrapper">
+							<div class="tab-wrapper">
+								<a class="active" href="#">首页</a>
+								<a href="#">医生分享</a>
+								<a href="#">咨询</a>
+								<a href="#">就诊反馈</a>
+							</div>
+							<div id="main-region" class="home-page">
+								<div class="col-md-3">
+									<div class="basic-info-wrapper">
+										<div class="panel panel-default">
+											<div class="panel-heading">李笑夏大夫基本信息
+											</div>
+											<div class="panel-body">
+												<span>科室</span>
+												<a href="#">西安西京医院 放射科</a>
+												<span>简历</span>
+												<p>你好你好你好</p>
+												<span>荣誉</span>
+												<p>你好你好你好</p>
+												<span>职位</span>
+												<p>你好你好你好</p>
+											</div>
+										</div>
+										<div class="panel panel-default">
+											<div class="panel-heading">统计信息
+											</div>
+											<div class="panel-body">
+												<span>你好</span>
+												<p>你好你好你好</p>
+												<span>荣誉</span>
+												<p>你好你好你好</p>
+												<span>职位</span>
+												<p>你好你好你好</p>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-9">
+									<div class="highlight-info-wrapper">
+										<h6>大夫介绍</h6>
+									</div>
+									<div class="sharing-wrapper">
+										<h6>经验分享</h6>
+									</div>
+									<div class="thanks-wrapper">
+										<h6>感谢信</h6>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
