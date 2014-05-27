@@ -96,6 +96,9 @@ app.configure(function() {
    app.get('/doctor/site', function(req, res) {
     res.render('doctorSite', {});
   });
+  app.get('/admin/fenzhen', function(req, res) {
+    res.render('adminFenzhen', {});
+  });
 
 
 
