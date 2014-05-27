@@ -230,7 +230,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'dust', 'dustMarion
 					dataType: 'json',
 					type: 'POST',
 					success: function(data) {
-						if (data.code != 0) {
+						if (data.status != 0) {
 							this.onError(data);
 
 						} else {
@@ -244,9 +244,9 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'dust', 'dustMarion
 					onError: function(res) {
 						this.resetForm();
 						//var error = jQuery.parseJSON(data);
-						if (typeof res.message !== 'undefined') {
+						if (typeof res.msg !== 'undefined') {
 							Messenger().post({
-								message: "%ERROR_MESSAGE:" + res.message,
+								message: "%ERROR_MESSAGE:" + res.msg,
 								type: 'error',
 								showCloseButton: true
 							});
@@ -283,7 +283,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'dust', 'dustMarion
 					dataType: 'json',
 					type: 'GET',
 					success: function(data) {
-						if (data.code != 0) {
+						if (data.status != 0) {
 							this.onError(data);
 
 						} else {
@@ -299,9 +299,9 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'dust', 'dustMarion
 					onError: function(res) {
 						this.resetForm();
 						//var error = jQuery.parseJSON(data);
-						if (typeof res.message !== 'undefined') {
+						if (typeof res.msg !== 'undefined') {
 							Messenger().post({
-								message: "%ERROR_MESSAGE:" + res.message,
+								message: "%ERROR_MESSAGE:" + res.msg,
 								type: 'error',
 								showCloseButton: true
 							});
@@ -435,7 +435,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'dust', 'dustMarion
 					dataType: 'json',
 					type: 'POST',
 					success: function(data) {
-						if (data.code != 0) {
+						if (data.status != 0) {
 							this.onError(data);
 
 						} else {
@@ -449,9 +449,9 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'dust', 'dustMarion
 					onError: function(res) {
 						this.resetForm();
 						//var error = jQuery.parseJSON(data);
-						if (typeof res.message !== 'undefined') {
+						if (typeof res.msg !== 'undefined') {
 							Messenger().post({
-								message: "%ERROR_MESSAGE:" + res.message,
+								message: "%ERROR_MESSAGE:" + res.msg,
 								type: 'error',
 								showCloseButton: true
 							});
