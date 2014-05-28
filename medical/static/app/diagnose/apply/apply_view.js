@@ -1,4 +1,4 @@
-define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.main', 'entities/doctorEntity', 'dust', 'dustMarionette', "bootstrap", 'typeahead', 'flatui.checkbox', 'flatui.radio', 'jquery-ui', 'bootstrap.select', 'flat_ui_custom', 'dust_cus_helpers', 'config/validator/config','bootstrap.multiselect'], function(ReqCmd, Lodash, Marionette, Templates, FileUploaderMain, DoctorEntity) {
+define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.main', 'entities/doctorEntity', 'dust', 'dustMarionette', "bootstrap", 'typeahead', 'flatui.checkbox', 'flatui.radio', 'jquery-ui', 'bootstrap.select', 'flat_ui_custom', 'dust_cus_helpers', 'config/validator/config', 'bootstrap.multiselect'], function(ReqCmd, Lodash, Marionette, Templates, FileUploaderMain, DoctorEntity) {
 	// body...
 	"use strict";
 	var ApplyDiagnosePageLayoutView = Marionette.Layout.extend({
@@ -7,17 +7,25 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 			this.bindUIElements();
 		},
 		regions: {
-			"recommandedDoctorRegion": "#recommandedDoctor"
+			"recommandedDoctorRegion": "#recommandedDoctor",
+			"patientProfileRegion": "#patient-already-profile-region",
+			"dicomInfoRegion": "#dicom-already-info-region",
+			"historyAlreadyExistsSelect":"#history-already-exists-select",
+			"dicomAlreadyExistsSelect":"#dicom-already-exists-select"
+
 		},
 		el: "#applydignose-content",
 		ui: {
 			"formPanel": ".submit-patient-info-wrapper .panel",
 			"submitBtns": ".btn-wrapper .submit-btn",
-			"forms": ".submit-patient-info-wrapper .panel form"
-
+			"forms": ".submit-patient-info-wrapper .panel form",
+			"patientAlreadyExistsSelect": "#patient-already-exists select",
+			"dicomAlreadyExistsSelect": "#dicom-already-exists select"
 		},
 		events: {
-			'click @ui.submitBtns': "submitHandler"
+			'click @ui.submitBtns': "submitHandler",
+			'change @ui.patientAlreadyExistsSelect': "changePatientAlreadyExists",
+			'change @ui.dicomAlreadyExistsSelect': "changeDicomAlreadyExists"
 		},
 		attachEndHandler: function() {
 			//init flatui
@@ -100,7 +108,8 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 			});
 			//init select
 			$("select").not('#patientLocationSelect').selectpicker({
-				style: 'btn-sm btn-primary'
+				style: 'btn-sm btn-primary',
+				title:"没有纪录"
 			});
 
 			//radio
@@ -111,12 +120,12 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 			$("#patientLocationSelect").multiselect({
 				numberDisplayed: 4,
 				enableFiltering: true,
-				filterPlaceholder:"搜索",
-				nonSelectedText:"没有选中"
+				filterPlaceholder: "搜索",
+				nonSelectedText: "没有选中"
 				// buttonWidth: '300px'
 			});
 
-			$('.patient-radio-wrapper :radio').on('toggle', function() {
+			$('#patient-profile-radio :radio').on('toggle', function() {
 				var $this = $(this);
 				var value = $this.val();
 				if (value == 1) {
@@ -126,6 +135,30 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 				} else if (value == 2) {
 					$('#patient-already-exists').hide();
 					$('#new-patient-form').show();
+				}
+			});
+			$('#patient-dicom-radio :radio').on('toggle', function() {
+				var $this = $(this);
+				var value = $this.val();
+				if (value == 1) {
+					$('#dicom-already-exists').show();
+					$('#new-dicom-form').hide();
+
+				} else if (value == 2) {
+					$('#dicom-already-exists').hide();
+					$('#new-dicom-form').show();
+				}
+			});
+			$('#patient-history-radio :radio').on('toggle', function() {
+				var $this = $(this);
+				var value = $this.val();
+				if (value == 1) {
+					$('#history-already-exists').show();
+					$('#new-history-form').hide();
+
+				} else if (value == 2) {
+					$('#history-already-exists').hide();
+					$('#new-history-form').show();
 				}
 			});
 
@@ -195,8 +228,39 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 				});
 			});
 
+			ReqCmd.reqres.request("ApplyDiagnosePageLayoutView:getRecommandedDoctor");
 
 
+
+		},
+		//in form3 , change exist dicom from select
+		changeDicomAlreadyExists: function() {
+			this.initDicomInfo();
+		},
+		initDicomInfo: function() {
+			var params = $('#dicom-already-exists').serialize();
+			console.log('initDicomInfo params:' + params);
+			ReqCmd.commands.execute('initDicomInfo:ApplyDiagnosePageLayoutView', params);
+
+		},
+
+		//in form2 , change exist patient from select
+		changePatientAlreadyExists: function() {
+			this.initPatientProfile();
+		},
+
+		initPatientProfile: function() {
+			var params = $('#patient-already-exists').serialize();
+			console.log('initPatientProfile params:' + params);
+			ReqCmd.commands.execute('initPatientProfile:ApplyDiagnosePageLayoutView', params);
+			this.initPathologySelect(params);
+
+
+		},
+		//after select user ,get Pathology Select data
+		//params contains patientId
+		initPathologySelect: function(params) {
+			ReqCmd.commands.execute('initPathologySelect:ApplyDiagnosePageLayoutView', params);
 		},
 		showForm: function(id) {
 
@@ -260,10 +324,10 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 		validate: function($form, formId) {
 			var data;
 			console.log($form.valid());
-			if (formId == 3) {
+			if (formId == 1) {
 				console.dir(this.ui.recommandedDoctor);
 				data = "doctorId=" + $('#recommandedDoctor .doctor-preview').data('doctor-id');
-			} else if (formId == 2) {
+			} else if (formId == 3) {
 				console.dir($('#dicomfileupload #downloadFile'));
 				var fileurl = encodeURIComponent($("#downloadFile a:first").attr('href'));
 				data = $form.serialize() + "&fileurl=" + fileurl;
@@ -276,8 +340,12 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 		},
 		refreshForm: function(data) {
 			if (typeof data.data.formId !== 'undefined') {
-				if (data.data.formId == 3) {
+				if (data.data.formId == 1) {
 					ReqCmd.reqres.request("ApplyDiagnosePageLayoutView:getRecommandedDoctor");
+				} else if (data.data.formId == 2) {
+					this.initPatientProfile();
+				} else if (data.data.formId == 3) {
+					this.initDicomInfo();
 				}
 				this.showForm(data.data.formId);
 			}
@@ -354,20 +422,20 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 			var $target = $(e.target);
 			var $li = $target.closest('li');
 			var $currentLi = $('.pagination-plain li.active');
-			if($li.is('.previous')){
-				if(this.currentPage > 1){
+			if ($li.is('.previous')) {
+				if (this.currentPage > 1) {
 					$currentLi.prev().addClass('active');
 					$currentLi.removeClass('active');
 					this.currentPage--;
 				}
 
-			}else if($li.is('.next')){
-				if(this.currentPage < this.model.get('pageNumber')){
+			} else if ($li.is('.next')) {
+				if (this.currentPage < this.model.get('pageNumber')) {
 					$currentLi.next().addClass('active');
 					$currentLi.removeClass('active');
 					this.currentPage++;
 				}
-			}else {
+			} else {
 				$li.addClass('active');
 				$currentLi.removeClass('active');
 				this.currentPage = $li.find('a').text();
@@ -410,11 +478,98 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 		}
 	});
 
+	var PatientProfileView = Marionette.ItemView.extend({
+		initialize: function() {
+			console.log("init PatientProfileView");
+			this.listenTo(this.model, 'change', this.render, this);
+		},
+		template: "patientProfile",
+		onRender: function() {
+			console.log("item render");
+			// get rid of that pesky wrapping-div
+			// assumes 1 child element			
+			// this.$el = this.$el.children();
+			// this.setElement(this.$el);
+		},
+		ui: {},
+		events: {},
+
+		onShow: function() {
+			console.log("PatientProfileView onShow");
+		}
+	});
+
+	var DicomInfoView = Marionette.ItemView.extend({
+		initialize: function() {
+			console.log("init DicomInfoView");
+			this.listenTo(this.model, 'change', this.render, this);
+		},
+		template: "dicomInfo",
+		onRender: function() {
+			console.log("item render");
+			// get rid of that pesky wrapping-div
+			// assumes 1 child element			
+			// this.$el = this.$el.children();
+			// this.setElement(this.$el);
+		},
+		ui: {},
+		events: {},
+
+		onShow: function() {
+			console.log("DicomInfoView onShow");
+		}
+	});
+
+
+	var PathologyCollectionView = Marionette.CollectionView.extend({
+		initialize: function() {
+
+		},
+		onRender: function() {
+			console.log("PathologyCollectionView render");
+
+
+		},
+		onAfterItemAdded: function(itemView) {
+
+		},
+		onShow: function() {
+			console.log("PathologyCollectionView onShow");
+			//init the modal onshow
+		},
+		itemViewOptions: function() {}
+	});
+
+	var PathologyItemView = Marionette.ItemView.extend({
+		initialize: function() {
+			console.log("init PathologyItemView");
+			this.listenTo(this.model, 'change', this.render, this);
+		},
+		template: "pathologyItem",
+		onRender: function() {
+			console.log("item render");
+			// get rid of that pesky wrapping-div
+			// assumes 1 child element			
+			this.$el = this.$el.children();
+			this.setElement(this.$el);
+		},
+		ui: {},
+		events: {},
+		onShow: function() {
+			console.log("PathologyItemView onShow");
+		}
+	});
+
 
 	return {
 		ApplyDiagnosePageLayoutView: ApplyDiagnosePageLayoutView,
 		SelectDoctorModalView: SelectDoctorModalView,
 		SelectDoctorListView: SelectDoctorListView,
-		SelectDoctorItemView: SelectDoctorItemView
+		SelectDoctorItemView: SelectDoctorItemView,
+		PatientProfileView: PatientProfileView,
+		DicomInfoView: DicomInfoView,
+		PathologyCollectionView: PathologyCollectionView,
+		PathologyItemView: PathologyItemView
+
 	}
 });

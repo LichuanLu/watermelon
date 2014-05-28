@@ -151,8 +151,8 @@ app.configure(function() {
 
     ];
     res.send({
-      code: 0,
-      message: "",
+      status: 0,
+      msg: "",
       data: data
     });
   });
@@ -162,8 +162,8 @@ app.configure(function() {
   app.post('/register/patient.json', function(req, res) {
     console.log(req.body);
     var result = {
-      code: 0,
-      message: "success"
+      status: 0,
+      msg: "success"
     };
     res.send(result);
 
@@ -172,8 +172,8 @@ app.configure(function() {
   app.post('/register/doctor.json', function(req, res) {
     console.log(req.body);
     var result = {
-      code: 0,
-      message: "success"
+      status: 0,
+      msg: "success"
     };
     res.send(result);
 
@@ -181,8 +181,8 @@ app.configure(function() {
   app.post('/login.json', function(req, res) {
     console.log(req.body);
     var result = {
-      code: 0,
-      message: "success"
+      status: 0,
+      msg: "success"
     };
     res.send(result);
 
@@ -193,32 +193,32 @@ app.configure(function() {
     var result;
     if (formid == 1) {
       result = {
-        code: 0,
-        message: "success",
+        status: 0,
+        msg: "success",
         data: {
           formId: 2
         }
       };
     } else if (formid == 2) {
       result = {
-        code: 0,
-        message: "success",
+        status: 0,
+        msg: "success",
         data: {
           formId: 3
         }
       };
     } else if (formid == 3) {
       result = {
-        code: 0,
-        message: "success",
+        status: 0,
+        msg: "success",
         data: {
           formId: 4
         }
       };
     } else {
       result = {
-        code: 0,
-        message: "success",
+        status: 0,
+        msg: "success",
         data: ""
       };
     }
@@ -286,8 +286,8 @@ app.configure(function() {
       };
     }
     res.send({
-      code: 0,
-      message: "",
+      status: 0,
+      msg: "",
       data: data
     });
   });
@@ -309,8 +309,8 @@ app.configure(function() {
 
 
     res.send({
-      code: 0,
-      message: "",
+      status: 0,
+      msg: "",
       data: data
     });
   });
@@ -327,8 +327,8 @@ app.configure(function() {
     };
 
     res.send({
-      code: 0,
-      message: "",
+      status: 0,
+      msg: "",
       data: data
     });
   });
@@ -336,16 +336,16 @@ app.configure(function() {
   app.post('/doctor/diagnose/create', function(req, res) {
     console.dir(req.query);
     res.send({
-      code: 0,
-      message: ""
+      status: 0,
+      msg: ""
     });
   });
 
  app.post('/doctor/audit/create', function(req, res) {
     console.dir(req.query);
     res.send({
-      code: 0,
-      message: ""
+      status: 0,
+      msg: ""
     });
   });
 
@@ -366,8 +366,8 @@ app.configure(function() {
       section: "头部，颈部，胸部"
     };
      res.send({
-      code: 0,
-      message: "",
+      status: 0,
+      msg: "",
       data:data
     });
 
@@ -391,12 +391,66 @@ app.configure(function() {
 
     }];
      res.send({
-      code: 0,
-      message: "",
+      status: 0,
+      msg: "",
       data:data
     });
 
   });
+
+    app.get('/patient/profile.json', function(req, res) {
+    console.dir(req.query);
+    var data = {
+      id: 1,
+      name:"利好",
+      gender:"男",
+      birthdate:"2013-12-12",
+      identitynumber:"610103***********0818",
+      phonenumber:"152****4567",
+      location:"陕西，西安"
+    };
+     res.send({
+      status: 0,
+      msg: "",
+      data:data
+    });
+
+  });
+
+  app.get('/pathlogy/dicominfo.json', function(req, res) {
+    console.dir(req.query);
+    var data = {
+      id: 1,
+      position:"头部，颈部",
+      type:"MT（核磁共振）",
+      dicomUrl:"http://test",
+      dicomFile:"bl2345-2014-03-24"
+    };
+     res.send({
+      status: 0,
+      msg: "",
+      data:data
+    });
+
+  });
+
+   app.get('/pathlogy/list.json', function(req, res) {
+    console.dir(req.query);
+    var data = [{
+      id: 1,
+      name:"bl2435-2014-04-03"
+    },{
+      id: 2,
+      name:"bl2435-2014-04-06"
+    }];
+     res.send({
+      status: 0,
+      msg: "",
+      data:data
+    });
+
+  });
+
 
 
 

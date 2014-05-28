@@ -200,3 +200,25 @@
 #applydignose-content .submit-patient-info-wrapper #patient-already-exists {
   padding-top: 20px;
 }
+#applydignose-content .submit-patient-info-wrapper .patient-info {
+  border-bottom: 1px solid #eaeaea;
+  padding-bottom: 20px;
+  padding-left: 10px;
+}
+#applydignose-content .submit-patient-info-wrapper .patient-info > div {
+  line-height: 2.4;
+}
+#applydignose-content .submit-patient-info-wrapper .patient-info > div span {
+  color: #808080;
+}
+#applydignose-content .submit-patient-info-wrapper .patient-info > div span.head {
+  color: #000000;
+  font-weight: 700;
+  margin-right: 5px;
+}
+#applydignose-content .submit-patient-info-wrapper .patient-info > div p {
+  color: #808080;
+  margin: 0;
+  font-size: 13px;
+  display: inline-block;
+}

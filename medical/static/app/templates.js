@@ -18,6 +18,9 @@ define(function(require) {
 		patientAccountManageLayout:require('patientHome/templates/patientAccountManageLayout'),
 		selectDoctorItem:require('diagnose/templates/selectDoctorItem'),
 		selectDoctorList:require('diagnose/templates/selectDoctorList'),
+		patientProfile:require('diagnose/templates/patientProfile'),
+		dicomInfo:require('diagnose/templates/dicomInfo'),
+		pathologyItem:require('diagnose/templates/pathologyItem'),
 
 		doctorAccountManageLayout:require('doctorHome/templates/doctorAccountManageLayout'),
 		doctorDiagnoseItem:require('doctorHome/templates/doctorDiagnoseItem'),
