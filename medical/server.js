@@ -452,6 +452,109 @@ app.configure(function() {
   });
 
 
+  app.get('/admin/diagnose/list/all', function(req, res) {
+    console.log(req.query.type);
+
+    var data = [{
+        id: 1,
+        diagnosenumber:'35423',
+        doctorName: '张名',
+        patientName: "李冰",
+        date: "2014-10-29",
+        positionName: "头部，颈部",
+        status: "待分诊",
+        hispital:"西安西京医院",
+        statusId: "3"
+      }, {
+        id: 2,
+        diagnosenumber:'35443',
+        doctorName: '张名1',
+        patientName: "李冰1",
+        date: "2014-11-29",
+        positionName: "头部，颈部，胸部",
+        status: "待分诊",
+        hispital:"西安西京医院2",
+        statusId: "3"
+      }
+    ];
+    res.send({
+      status: 0,
+      msg: "",
+      data: data
+    });
+  });
+
+  app.get('/admin/diagnose/list/my', function(req, res) {
+    console.log(req.query.status);
+    if(req.query.status == 1){
+      var data = [{
+        id: 1,
+        diagnosenumber:'35443',
+        doctorName: '张名1',
+        patientName: "李冰1",
+        date: "2014-11-29",
+        positionName: "头部，颈部，胸部",
+        status: "分诊中",
+        hispital:"西安西京医院2",
+        statusId: "4",
+        dicomUrl:"test"
+      }, {
+        id: 2,
+        diagnosenumber:'35433',
+        doctorName: '张名2',
+        patientName: "李冰2",
+        date: "2014-11-28",
+        positionName: "头部，颈部，胸部",
+        status: "待诊断",
+        hispital:"西安西京医院2",
+        statusId: "5",
+        dicomUrl:"Test"
+      }
+    ];
+  }else{
+    var data = [{
+        id: 3,
+        diagnosenumber:'35443',
+        doctorName: '张名4',
+        patientName: "李冰4",
+        date: "2014-11-29",
+        positionName: "头部，颈部，胸部",
+        status: "分诊中",
+        hispital:"西安西京医院2",
+        statusId: "4",
+        dicomUrl:"Test"
+      }, {
+        id: 4,
+        diagnosenumber:'35433',
+        doctorName: '张名3',
+        patientName: "李冰3",
+        date: "2014-11-28",
+        positionName: "头部，颈部，胸部",
+        status: "待诊断",
+        hispital:"西安西京医院2",
+        statusId: "5",
+        dicomUrl:"test"
+      }
+    ];
+  }
+    
+    res.send({
+      status: 0,
+      msg: "",
+      data: data
+    });
+  });
+
+  app.post('/admin/diagnose/update', function(req, res) {
+    console.dir(req.query);
+     res.send({
+      status: 0,
+      msg: "",
+      data:""
+    });
+
+  });
+
 
 
   http.createServer(app).listen(app.get('port'), function() {

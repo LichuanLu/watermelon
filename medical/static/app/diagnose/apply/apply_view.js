@@ -118,7 +118,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 			//multi select
 
 			$("#patientLocationSelect").multiselect({
-				numberDisplayed: 4,
+				numberDisplayed: 2,
 				enableFiltering: true,
 				filterPlaceholder: "搜索",
 				nonSelectedText: "没有选中"

@@ -22,6 +22,11 @@ define(function(require) {
 		dicomInfo:require('diagnose/templates/dicomInfo'),
 		pathologyItem:require('diagnose/templates/pathologyItem'),
 
+		//template for fenzhen
+		allDiagnoseItem:require('admin/fenzhen/templates/allDiagnoseItem'),
+		myDiagnoseItem:require('admin/fenzhen/templates/myDiagnoseItem'),
+
+
 		doctorAccountManageLayout:require('doctorHome/templates/doctorAccountManageLayout'),
 		doctorDiagnoseItem:require('doctorHome/templates/doctorDiagnoseItem'),
 		doctorDiagnoseLayout:require('doctorHome/templates/doctorDiagnoseLayout'),

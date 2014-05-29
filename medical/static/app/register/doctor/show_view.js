@@ -36,6 +36,8 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'dust', 'dustMarion
 
 						} else {
 							// this.resetForm();
+							console.log("msg:"+data.msg);
+							this.reLocation(data.msg);
 							Messenger().post({
 								message: 'SUCCESS. Product import started. Check back periodically.',
 								type: 'success',
@@ -60,7 +62,15 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'dust', 'dustMarion
 
 						//allowSubmit = true;
 					},
-					resetForm: function(leaveInputData) {}
+					resetForm: function(leaveInputData) {},
+					reLocation: function(locationData) {
+
+						if (locationData != null) {
+							window.location.replace(locationData);
+						} else {
+							window.location.reload();
+						}
+					}
 				});
 
 			}

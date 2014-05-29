@@ -14,14 +14,15 @@ define([], function() {
 				$.ajax({
 					url: '/login.json',
 					data: data,
-					dataType: 'json',
+					dataType: 'JSON',
 					type: 'POST',
 					success: function(data) {
 						if (data.status != 0) {
 							this.onError(data);
-
 						} else {
 							// this.resetForm();
+							console.log("msg:"+data.msg);
+							this.reLocation(data.msg);
 							Messenger().post({
 								message: 'SUCCESS. Product import started. Check back periodically.',
 								type: 'success',
@@ -45,6 +46,14 @@ define([], function() {
 					resetForm: function(leaveInputData) {
 
 					}
+					reLocation: function(locationData) {
+
+						if (locationData != null) {
+							window.location.replace(locationData);
+						} else {
+							window.location.reload();
+						}
+					}
 				});
 
 			}
@@ -55,6 +64,6 @@ define([], function() {
 		return data;
 	};
 	return {
-		loginAction:loginAction
+		loginAction: loginAction
 	}
 });

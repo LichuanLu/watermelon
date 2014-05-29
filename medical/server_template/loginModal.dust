@@ -8,7 +8,7 @@
                 <div class="modal-body">
                     <!-- UPDATE url -->
 
-                    <form id="loginForm" role="form" action="/user?destination=node" method="post">
+                    <form id="loginForm" role="form" action="/login.json" method="POST">
                       <div class="form-group">
                         <input class="form-control" id="inputUsername" placeholder="邮箱地址／手机号码" name="name">
                       </div>
