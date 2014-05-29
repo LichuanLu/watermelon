@@ -33,7 +33,6 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'dust', 'dustMarion
 					success: function(data) {
 						if (data.status != 0) {
 							this.onError(data);
-
 						} else {
 							// this.resetForm();
 							console.log("msg:"+data.msg);

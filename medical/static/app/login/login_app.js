@@ -45,7 +45,7 @@ define([], function() {
 					},
 					resetForm: function(leaveInputData) {
 
-					}
+					},
 					reLocation: function(locationData) {
 
 						if (locationData != null) {
