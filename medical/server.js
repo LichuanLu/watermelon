@@ -93,14 +93,12 @@ app.configure(function() {
   app.get('/doctor/list', function(req, res) {
     res.render('doctorList', {});
   });
-   app.get('/doctor/site', function(req, res) {
+  app.get('/doctor/site', function(req, res) {
     res.render('doctorSite', {});
   });
   app.get('/admin/fenzhen', function(req, res) {
     res.render('adminFenzhen', {});
   });
-
-
 
 
 
@@ -113,7 +111,7 @@ app.configure(function() {
 
     var data = [{
         id: 1,
-        diagnosenumber:'35423',
+        diagnosenumber: '35423',
         doctorName: '张名',
         patientName: "李冰",
         date: "2014-10-29",
@@ -122,7 +120,7 @@ app.configure(function() {
         statusId: "5"
       }, {
         id: 2,
-        diagnosenumber:'35443',
+        diagnosenumber: '35443',
         doctorName: '张名1',
         patientName: "李冰1",
         date: "2014-11-29",
@@ -131,16 +129,16 @@ app.configure(function() {
         statusId: "6"
       }, {
         id: 3,
-        diagnosenumber:'35413',
+        diagnosenumber: '35413',
         doctorName: '张名2',
         patientName: "李冰2",
         date: "2013-10-29",
         section: "颈部",
         status: "待诊断",
         statusId: "4"
-      },{
+      }, {
         id: 4,
-        diagnosenumber:'35413',
+        diagnosenumber: '35413',
         doctorName: '张名2',
         patientName: "李冰2",
         date: "2013-10-29",
@@ -341,7 +339,7 @@ app.configure(function() {
     });
   });
 
- app.post('/doctor/audit/create', function(req, res) {
+  app.post('/doctor/audit/create', function(req, res) {
     console.dir(req.query);
     res.send({
       status: 0,
@@ -358,17 +356,17 @@ app.configure(function() {
       imageDes: '左尺桡骨形态，骨密度正常，未见明确骨质增生及破坏，左尺桡骨形态，骨密度正常，未见明确骨质增生及破坏，左尺桡骨形态，骨密度正常，未见明确骨质增生及破坏',
       diagnoseResult: "左桡骨未见异常",
       techDes: "",
-      diagnoseDoctorName:"张小",
-      diagnoseDoctorTitle:"主任医师",
-      diagnoseDoctorId:"122",
+      diagnoseDoctorName: "张小",
+      diagnoseDoctorTitle: "主任医师",
+      diagnoseDoctorId: "122",
       patientName: "李冰1",
       date: "2014-11-29",
       section: "头部，颈部，胸部"
     };
-     res.send({
+    res.send({
       status: 0,
       msg: "",
-      data:data
+      data: data
     });
 
   });
@@ -378,41 +376,48 @@ app.configure(function() {
     console.dir(req.query);
     var data = [{
       id: 1,
-      url:"/test",
-      type:"未读消息",
-      date:"2013-12-12 13:00",
-      content:"您有一条新的诊断申请。诊断号：34556 ｜ 诊断类型：MR ｜ 诊断部位：头部，颈部 ｜ 患者：李响"
-    },{
+      url: "/test",
+      title:"诊断申请",
+      type: "未读消息",
+      createTime: "2013-12-12 13:00",
+      content: "您有一条新的诊断申请。诊断号：34556 ｜ 诊断类型：MR ｜ 诊断部位：头部，颈部 ｜ 患者：李响"
+    }, {
       id: 2,
-      url:"/test",
-      type:"未读消息",
-      date:"2013-11-12 13:00",
-      content:"您收到一条新的咨询。咨询人：李响 ｜ 内容：Asda大是大事Asda是大事"
+      url: "/test",
+      title:"诊断申请",
+      type: "未读消息",
+      createTime: "2013-12-12 13:00",
+      content: "您有一条新的诊断申请。诊断号：34556 ｜ 诊断类型：MR ｜ 诊断部位：头部，颈部 ｜ 患者：李响"
 
     }];
-     res.send({
+    res.send({
       status: 0,
       msg: "",
-      data:data
+      data: data
     });
 
   });
 
-    app.get('/patient/profile.json', function(req, res) {
+
+
+
+
+
+  app.get('/patient/profile.json', function(req, res) {
     console.dir(req.query);
     var data = {
       id: 1,
-      name:"利好",
-      gender:"男",
-      birthdate:"2013-12-12",
-      identitynumber:"610103***********0818",
-      phonenumber:"152****4567",
-      location:"陕西，西安"
+      name: "利好",
+      gender: "男",
+      birthdate: "2013-12-12",
+      identitynumber: "610103***********0818",
+      phonenumber: "152****4567",
+      location: "陕西，西安"
     };
-     res.send({
+    res.send({
       status: 0,
       msg: "",
-      data:data
+      data: data
     });
 
   });
@@ -421,32 +426,32 @@ app.configure(function() {
     console.dir(req.query);
     var data = {
       id: 1,
-      position:"头部，颈部",
-      type:"MT（核磁共振）",
-      dicomUrl:"http://test",
-      dicomFile:"bl2345-2014-03-24"
+      position: "头部，颈部",
+      type: "MT（核磁共振）",
+      dicomUrl: "http://test",
+      dicomFile: "bl2345-2014-03-24"
     };
-     res.send({
+    res.send({
       status: 0,
       msg: "",
-      data:data
+      data: data
     });
 
   });
 
-   app.get('/pathlogy/list.json', function(req, res) {
+  app.get('/pathlogy/list.json', function(req, res) {
     console.dir(req.query);
     var data = [{
       id: 1,
-      name:"bl2435-2014-04-03"
-    },{
+      name: "bl2435-2014-04-03"
+    }, {
       id: 2,
-      name:"bl2435-2014-04-06"
+      name: "bl2435-2014-04-06"
     }];
-     res.send({
+    res.send({
       status: 0,
       msg: "",
-      data:data
+      data: data
     });
 
   });
@@ -456,27 +461,26 @@ app.configure(function() {
     console.log(req.query.type);
 
     var data = [{
-        id: 1,
-        diagnosenumber:'35423',
-        doctorName: '张名',
-        patientName: "李冰",
-        date: "2014-10-29",
-        positionName: "头部，颈部",
-        status: "待分诊",
-        hispital:"西安西京医院",
-        statusId: "3"
-      }, {
-        id: 2,
-        diagnosenumber:'35443',
-        doctorName: '张名1',
-        patientName: "李冰1",
-        date: "2014-11-29",
-        positionName: "头部，颈部，胸部",
-        status: "待分诊",
-        hispital:"西安西京医院2",
-        statusId: "3"
-      }
-    ];
+      id: 1,
+      diagnosenumber: '35423',
+      doctorName: '张名',
+      patientName: "李冰",
+      date: "2014-10-29",
+      positionName: "头部，颈部",
+      status: "待分诊",
+      hispital: "西安西京医院",
+      statusId: "3"
+    }, {
+      id: 2,
+      diagnosenumber: '35443',
+      doctorName: '张名1',
+      patientName: "李冰1",
+      date: "2014-11-29",
+      positionName: "头部，颈部，胸部",
+      status: "待分诊",
+      hispital: "西安西京医院2",
+      statusId: "3"
+    }];
     res.send({
       status: 0,
       msg: "",
@@ -486,58 +490,56 @@ app.configure(function() {
 
   app.get('/admin/diagnose/list/my', function(req, res) {
     console.log(req.query.status);
-    if(req.query.status == 1){
+    if (req.query.status == 1) {
       var data = [{
         id: 1,
-        diagnosenumber:'35443',
+        diagnosenumber: '35443',
         doctorName: '张名1',
         patientName: "李冰1",
         date: "2014-11-29",
         positionName: "头部，颈部，胸部",
         status: "分诊中",
-        hispital:"西安西京医院2",
+        hispital: "西安西京医院2",
         statusId: "4",
-        dicomUrl:"test"
+        dicomUrl: "test"
       }, {
         id: 2,
-        diagnosenumber:'35433',
+        diagnosenumber: '35433',
         doctorName: '张名2',
         patientName: "李冰2",
         date: "2014-11-28",
         positionName: "头部，颈部，胸部",
         status: "待诊断",
-        hispital:"西安西京医院2",
+        hispital: "西安西京医院2",
         statusId: "5",
-        dicomUrl:"Test"
-      }
-    ];
-  }else{
-    var data = [{
+        dicomUrl: "Test"
+      }];
+    } else {
+      var data = [{
         id: 3,
-        diagnosenumber:'35443',
+        diagnosenumber: '35443',
         doctorName: '张名4',
         patientName: "李冰4",
         date: "2014-11-29",
         positionName: "头部，颈部，胸部",
         status: "分诊中",
-        hispital:"西安西京医院2",
+        hispital: "西安西京医院2",
         statusId: "4",
-        dicomUrl:"Test"
+        dicomUrl: "Test"
       }, {
         id: 4,
-        diagnosenumber:'35433',
+        diagnosenumber: '35433',
         doctorName: '张名3',
         patientName: "李冰3",
         date: "2014-11-28",
         positionName: "头部，颈部，胸部",
         status: "待诊断",
-        hispital:"西安西京医院2",
+        hispital: "西安西京医院2",
         statusId: "5",
-        dicomUrl:"test"
-      }
-    ];
-  }
-    
+        dicomUrl: "test"
+      }];
+    }
+
     res.send({
       status: 0,
       msg: "",
@@ -547,13 +549,70 @@ app.configure(function() {
 
   app.post('/admin/diagnose/update', function(req, res) {
     console.dir(req.query);
-     res.send({
+    res.send({
       status: 0,
       msg: "",
-      data:""
+      data: ""
     });
 
   });
+
+  app.get('/diagnose/reportdetail', function(req, res) {
+    console.dir(req.query);
+    var data = {
+      id: 1,
+      patientName: "李冰1",
+      gender: "男",
+      birthDate: "1985-06-24",
+      date: "2014-11-29",
+      positionName: "头部，颈部，胸部",
+      diagnoseType: "MR",
+      dicomUrl: "test",
+      hospitalHistory: "西安西京医院",
+      hospitalId: "1",
+      caseHistory: "测试",
+      docUrl: ["test", "test2"],
+      techDes: "cesghi",
+      imageDes: "tdasdsa",
+      diagnoseResult: "tete",
+      reportId: "3"
+    };
+    res.send({
+      status: 0,
+      msg: "",
+      data: data
+    });
+  });
+
+
+
+  app.get('/diagnoseTemplate/postionList', function(req, res) {
+    console.dir(req.query);
+    var data = ["呼吸系统","骨关节病变"];
+    res.send({
+      status: 0,
+      msg: "",
+      data: data
+    });
+  });
+
+  app.get('/diagnoseTemplate/diagnoseAndImageDesc', function(req, res) {
+    console.dir(req.query);
+    var data = [{
+      imageDesc:"左尺桡骨形态，骨密度正常，未见明确骨质增生及破坏，左尺桡骨形态，骨密度正常，未见明确骨质增生及破坏，左尺桡骨形态，骨密度正常，未见明确骨质增生及破坏",
+      diagnoseDesc:"心肺未见异常"
+    },{
+      imageDesc:"左尺桡骨形态，骨密度正常，未见明确骨质增生及破坏，左尺桡骨形态，骨密度正常，未见明确骨质增生及破坏，左尺桡骨形态，骨密度正常，未见明确骨质增生及破坏",
+      diagnoseDesc:"心肺未见异常"
+    }];
+    res.send({
+      status: 0,
+      msg: "",
+      data: data
+    });
+  });
+
+
 
 
 

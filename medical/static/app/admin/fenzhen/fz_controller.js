@@ -81,10 +81,13 @@ define(['lodash', 'config/base/constant', 'config/controllers/_base_controller',
 				console.log("DiagnoseTableItemView actionHandler");
 				var statusId = model.get('statusId');
 				if (statusId == 4) {
+					this.detailModel = DiagnoseEntity.API.getDiagnoseDetail({
+						diagnoseId:model.get('id')
+					});
 					if (typeof this.diagnoseActionView !== 'undefined') {
 						this.diagnoseActionView.close();
 					}
-					this.diagnoseActionView = this.getNewDiagnoseLayoutView(model);
+					this.diagnoseActionView = this.getNewDiagnoseLayoutView(this.detailModel);
 
 				} 
 				this.show(this.diagnoseActionView, {
@@ -123,7 +126,9 @@ define(['lodash', 'config/base/constant', 'config/controllers/_base_controller',
 		},
 		getNewDiagnoseLayoutView: function(model) {
 			return new DoctorHomeShowView.NewDiagnoseLayoutView({
-				model: model
+				model: model,
+				typeID:0
+
 			});
 		}
 
