@@ -1,5 +1,4 @@
 {>basicLayout/}
-
 {<breadcrumbsHolder}
 <div id="breadcrumb" class="clearfix">
 <!-- #breadcrumb-inside -->

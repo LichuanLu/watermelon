@@ -234,6 +234,7 @@ app.configure(function() {
       console.log("test");
       data = {
         pageNumber: 3,
+        currentPage: 1,
         doctor: [{
           id: 1,
           doctorname: '张22名',
@@ -249,6 +250,7 @@ app.configure(function() {
     } else {
       data = {
         pageNumber: 6,
+        currentPage: 3,
         doctor: [{
             id: 1,
             doctorname: '张名',
