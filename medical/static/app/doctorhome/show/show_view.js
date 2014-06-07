@@ -252,7 +252,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'dust', 'dustMarion
 								window.open ('/diagnose/'+that.model.get('id')+'/pdf','_blank');
 							}
 							Messenger().post({
-								message: 'SUCCESS. Product import started. Check back periodically.',
+								message: 'SUCCESS.Create diagnose',
 								type: 'success',
 								showCloseButton: true
 							});

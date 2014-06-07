@@ -20,7 +20,9 @@
 	     "underscore.string":"latest",
 	     "messenger":"latest",
 	     "bootstrap-select":"latest",
-	     "bootstrap-treeview":"latest"
+	     "bootstrap-treeview":"latest",
+	     "ladda-bootstrap":"latest"
+
 
 	}
 }

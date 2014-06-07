@@ -10,36 +10,6 @@
 	<div id='content' class="tab-content">
 		<div class="tab-pane active" id="unread-message-wrapper">
 			<ul class="message-list stylenone" id="unread-message-region">
-				<li>
-					<a href="#">
-						<div class="icon">
-							<img alt="" src="/static/assets/Icons/PNG/clipboard.png"></div>
-						<div class="top-wrapper">
-							<span class="title">未读消息</span>
-							<div class="right-content">
-								<span class="date">2013-07-06 12:30</span>
-							</div>
-						</div>
-						<div class="message-content-wrapper">
-							<p>您有一条新的诊断申请。诊断号：34556 ｜ 诊断类型：MR ｜ 诊断部位：头部，颈部 ｜ 患者：李响</p>
-						</div>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<div class="icon">
-							<img alt="" src="/static/assets/Icons/PNG/clipboard.png"></div>
-						<div class="top-wrapper">
-							<span class="title">未读消息</span>
-							<div class="right-content">
-								<span class="date">2013-07-06 12:30</span>
-							</div>
-						</div>
-						<div class="message-content-wrapper">
-							<p>您收到一条新的咨询。咨询人：李响 ｜ 内容：Asda大是大事Asda是大事</p>
-						</div>
-					</a>
-				</li>
 			</ul>
 		</div>
 

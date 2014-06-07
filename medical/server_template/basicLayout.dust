@@ -34,6 +34,8 @@
         </div> 
         {+ModalHolder}
         {/ModalHolder}
+        <div id="modalRegion" class="modal">
+        </div>
         {+scriptsHolder}
         {>scripts/} 
         {/scriptsHolder}    

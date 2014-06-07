@@ -168,7 +168,13 @@
 								<span class="required-text">（必填）</span>
 							</label>
 							<div class="input-wrapper location-wrapper">
-								<input type="text" id="locationinput" class="form-control" name="location" data-provide="typeahead" />
+								<!-- <input type="text" id="locationinput" class="form-control" name="location" data-provide="typeahead" /> -->
+								<select id="locationinput" name="locationId" class="multiselect">
+ 									<option value="0">未选中</option>
+									<option value="1">陕西，西安</option>
+									<option value="2">陕西，汉中</option>
+									<option value="－1">其他</option>
+								</select>
 								<div class="line-area">
 									<div class="line"></div>
 									<div class="ball"></div>
@@ -334,8 +340,15 @@
 							<span class="required-text">（必填）</span>
 						</label>
 						<div class="input-wrapper location-wrapper">
-							<input type="text" id="hospitalinput" name="diagnoseHistory" class="form-control" data-provide="typeahead" />
+<!-- 							<input type="text" id="hospitalinput" name="hospitalId" class="form-control" data-provide="typeahead" />
+ -->
+ 							<select id="hospitalinput" name="hospitalId" class="multiselect">
+ 								<option value="0">未选中</option>
+								<option value="1">西安西京医院</option>
+								<option value="2">301医院</option>
+								<option value="－1">其他</option>
 
+							</select>
 							<div class="line-area">
 								<div class="line"></div>
 								<div class="ball"></div>

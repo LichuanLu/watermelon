@@ -24,9 +24,17 @@ body.doctor-site > .container {
 }
 #doctorsite-content .content-wrapper .header-wrapper .avatar-wrapper {
   float: left;
-  margin-right: 20px;
   height: 150px;
-  width: 150px;
+  width: 170px;
+}
+#doctorsite-content .content-wrapper .header-wrapper .avatar-wrapper .number {
+  display: inline-block;
+  vertical-align: middle;
+  margin-top: 10px;
+  margin-right: 5px;
+}
+#doctorsite-content .content-wrapper .header-wrapper .avatar-wrapper a {
+  margin: 10px 0 0 10px;
 }
 #doctorsite-content .content-wrapper .header-wrapper .profile-wrapper > h6 {
   margin-top: 5px;
@@ -39,11 +47,6 @@ body.doctor-site > .container {
 }
 #doctorsite-content .content-wrapper .header-wrapper .profile-wrapper > h6 .title {
   margin-left: 50px;
-}
-#doctorsite-content .content-wrapper .header-wrapper .profile-wrapper > h6 a {
-  position: absolute;
-  right: 20px;
-  top: 5px;
 }
 #doctorsite-content .content-wrapper .header-wrapper .profile-wrapper .sub-info {
   margin: 10px 0;
@@ -93,4 +96,88 @@ body.doctor-site > .container {
 }
 #doctorsite-content .content-wrapper .main-wrapper .tab-wrapper a:hover {
   background: #fff;
+}
+#doctorsite-content .content-wrapper .main-wrapper .side-panel {
+  padding-top: 0;
+}
+#doctorsite-content .content-wrapper .main-wrapper .side-panel h6 {
+  font-size: 14px;
+  font-weight: 700;
+}
+#doctorsite-content .content-wrapper .main-wrapper .side-panel p {
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+#doctorsite-content .content-wrapper .main-wrapper .tab-content {
+  border: none;
+  height: 100%;
+  overflow: hidden;
+  padding: 0;
+}
+#doctorsite-content .content-wrapper .main-wrapper .tab-content .tab-pane {
+  padding: 0 10px;
+}
+#doctorsite-content .content-wrapper .main-wrapper .tab-content .tab-pane .content-title {
+  margin-top: 0;
+  padding: 6px 10px;
+  position: relative;
+  border-bottom: 1px solid #d7d7d7;
+  color: #333;
+  font-size: 18px;
+  font-weight: normal;
+  line-height: 20px;
+}
+#doctorsite-content .content-wrapper .main-wrapper .tab-content .tab-pane .content-title .action-link {
+  position: absolute;
+  right: 10px;
+  font-size: 14px;
+  top: 10px;
+}
+#doctorsite-content .content-wrapper .main-wrapper .tab-content .tab-pane .content-title .action-link:hover {
+  text-decoration: underline;
+}
+#doctorsite-content .content-wrapper .main-wrapper .tab-content .tab-pane p {
+  text-indent: 2em;
+  font-size: 14px;
+}
+#doctorsite-content .content-wrapper .main-wrapper .tab-content .tab-pane .feedback-wrapper {
+  padding: 10px 10px 0;
+}
+#doctorsite-content .content-wrapper .main-wrapper .tab-content .tab-pane .btn-wrapper {
+  text-align: center;
+}
+#doctorsite-content .content-wrapper .main-wrapper .tab-content .tab-pane .thanks-wrapper textarea {
+  border-width: 1px;
+}
+#doctorsite-content .content-wrapper .main-wrapper .tab-content .tab-pane .thanks-wrapper .right-wrapper {
+  padding: 5px 0 10px;
+  text-align: right;
+  border-bottom: 1px dashed #e2e2e2;
+}
+#doctorsite-content .content-wrapper .thanks-list-wrapper .thanks-list-item {
+  border-bottom: 1px dashed #e2e2e2;
+  padding: 15px 0;
+}
+#doctorsite-content .content-wrapper .thanks-list-wrapper .thanks-list-item .image {
+  width: 60px;
+  height: 60px;
+  display: inline-block;
+  float: left;
+  text-align: center;
+  margin: 5px 10px 0 0;
+}
+#doctorsite-content .content-wrapper .thanks-list-wrapper .thanks-list-item .image img {
+  width: 60px;
+  height: 60px;
+}
+#doctorsite-content .content-wrapper .thanks-list-wrapper .thanks-list-item .summary span {
+  color: #666666;
+  font-weight: 700;
+}
+#doctorsite-content .content-wrapper .thanks-list-wrapper .thanks-list-item .summary .time {
+  float: right;
+}
+#doctorsite-content .content-wrapper .thanks-list-wrapper .thanks-list-item .content p {
+  margin: 0;
+  text-indent: 0;
 }

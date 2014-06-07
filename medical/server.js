@@ -376,14 +376,14 @@ app.configure(function() {
     console.dir(req.query);
     var data = [{
       id: 1,
-      url: "/test",
+      url: "diagnoseLink",
       title:"诊断申请",
       type: "未读消息",
       createTime: "2013-12-12 13:00",
       content: "您有一条新的诊断申请。诊断号：34556 ｜ 诊断类型：MR ｜ 诊断部位：头部，颈部 ｜ 患者：李响"
     }, {
       id: 2,
-      url: "/test",
+      url: "diagnoseLink",
       title:"诊断申请",
       type: "未读消息",
       createTime: "2013-12-12 13:00",
@@ -613,6 +613,79 @@ app.configure(function() {
   });
 
 
+  app.post('/message/:messageId/remark.json', function(req, res) {
+    console.dir(req.query);
+    console.log(req.params.messageId);
+    res.send({
+      status: 0,
+      msg: "",
+      data: ""
+    });
+  });
+
+ app.post('/addDiagnoseComment.json', function(req, res) {
+    console.dir(req.query);
+    res.send({
+      status: 0,
+      msg: "",
+      data: ""
+    });
+
+  });
+
+
+  app.get('/userFavorties/:userId/list', function(req, res) {
+    console.dir(req.params.userId);
+    var data = [{
+        id:123,
+        uid:23,
+        name:"王一分",
+        content:"复旦大学附属华山医院-皮肤科"
+
+     
+    },{
+        id:124,
+        uid:33,
+        name:"力一分",
+        content:"复旦大学附属华山医院-影像"
+    
+    }];
+    res.send({
+      status: 0,
+      msg: "",
+      data: data
+    });
+  });
+
+  app.post('/userFavorties/:id/cancel', function(req, res) {
+    console.dir(req.params.id);
+    res.send({
+      status: 0,
+      msg: "",
+      data: ""
+    });
+
+  });
+
+
+
+  app.post('/userFavorties/add', function(req, res) {
+    res.send({
+      status: 0,
+      msg: "",
+      data: ""
+    });
+
+  });
+
+ app.post('/gratitude/create', function(req, res) {
+    res.send({
+      status: 0,
+      msg: "",
+      data: ""
+    });
+
+  });
 
 
 

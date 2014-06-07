@@ -1,5 +1,5 @@
-<li data-id="{id}">
-	<a href="{url}">
+<li class="message-item" data-id="{id}">
+	<a href="{url}" class="message-link">
 		<div class="icon">
 			<img alt="" src="/static/assets/Icons/PNG/clipboard.png"></div>
 		<div class="top-wrapper">
