@@ -360,7 +360,7 @@ app.configure(function() {
     });
   });
 
-  app.post('/doctor/diagnose/create', function(req, res) {
+  app.post('/doctor/report/update', function(req, res) {
     console.dir(req.query);
     res.send({
       status: 0,
