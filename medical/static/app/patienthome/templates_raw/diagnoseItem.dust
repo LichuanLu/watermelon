@@ -29,4 +29,10 @@
 			<a href="#" class="sharing-link">评价</a>
 		{/if}
 	</td>
+	<td class="detail-wrapper">
+		<a href="#">
+			详细
+			<span class="fui-arrow-right"></span>
+		</a>
+	</td>
 </tr>

@@ -7,7 +7,8 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'dust', 'dustMarion
 			this.bindUIElements();
 		},
 		regions: {
-			"contentRegion": "#contentRegion"
+			"contentRegion": "#contentRegion",
+			"diagnoseDetailTrackRegion":"#diagnose-detail-track-wrapper"
 		},
 		el: "#patienthome-content",
 		ui: {
@@ -47,6 +48,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'dust', 'dustMarion
 		}
 
 
+
 	});
 
 
@@ -64,7 +66,8 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'dust', 'dustMarion
 		},
 		ui: {
 			"submitBtn": "#patient-action-content .submit-btn",
-			"typeSelect": "#patient-action-content select"
+			"typeSelect": "#patient-action-content select",
+			"diagnoseAllWrapper":"#diagnose-all-wrapper"
 		},
 		events: {
 			"click @ui.submitBtn": "searchDiagnose"
@@ -79,6 +82,9 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'dust', 'dustMarion
 			return {
 				parentsInstance: this
 			};
+		},
+		hideView: function() {
+			this.$el.hide();
 		}
 
 	});
@@ -90,10 +96,12 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'dust', 'dustMarion
 		},
 		template: "diagnoseItem",
 		ui: {
-			"actionLinks": ".action-group a"
+			"actionLinks": ".action-group a",
+			"detailLinks": ".detail-wrapper a"
 		},
 		events: {
-			"click @ui.actionLinks": "actionLinkHandler"
+			"click @ui.actionLinks": "actionLinkHandler",
+			"click @ui.detailLinks": "detailLinksHandler"
 		},
 		actionLinkHandler: function(e) {
 			e.preventDefault();
@@ -108,6 +116,11 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'dust', 'dustMarion
 				this.parentsInstance.appInstance.modalRegion.show(sharingModalView);
 
 			}
+		},
+		detailLinksHandler: function(e) {
+			e.preventDefault();
+			ReqCmd.commands.execute("detailLinksHandler:DiagnoseTableItemView", this.model);
+
 		},
 		onRender: function() {
 			//console.log("item render");
@@ -239,6 +252,8 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'dust', 'dustMarion
 		}
 	});
 
+
+
 	var FavoriteCollectionView = Marionette.CollectionView.extend({
 		initialize: function() {
 			console.log("FavoriteCollectionView init");
@@ -277,7 +292,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'dust', 'dustMarion
 			console.log(id);
 			var model = this.model;
 			var cancelFavoriteModalView = new CancelFavoriteModalView({
-				model:model
+				model: model
 			});
 
 			this.parentsInstance.appInstance.modalRegion.show(cancelFavoriteModalView);
@@ -301,8 +316,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'dust', 'dustMarion
 			this.setElement(this.$el);
 
 		},
-		onShow: function() {
-		},
+		onShow: function() {},
 		ui: {
 			"saveBtn": "button[name=save]"
 		},
@@ -314,6 +328,19 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'dust', 'dustMarion
 			ReqCmd.commands.execute("removeFavorite:CancelFavoriteModalView", this.model);
 		}
 
+	});
+
+	var DetailTrackLayoutView = Marionette.Layout.extend({
+		initialize: function() {
+			console.log("DetailTrackLayoutView init");
+
+		},
+		regions: {},
+		template: "detailTrackLayout",
+		ui: {},
+		events: {},
+		onRender: function() {},
+		onShow: function() {}	
 	});
 
 
@@ -328,6 +355,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'dust', 'dustMarion
 		MessageLayoutView: MessageLayoutView,
 		FavoriteLayoutView: FavoriteLayoutView,
 		FavoriteCollectionView: FavoriteCollectionView,
-		FavoriteItemView: FavoriteItemView
+		FavoriteItemView: FavoriteItemView,
+		DetailTrackLayoutView: DetailTrackLayoutView
 	}
 });

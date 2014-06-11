@@ -159,6 +159,21 @@ define(['lodash', 'config/base/constant', 'config/controllers/_base_controller',
 
 			}, this));
 
+			//click detail at diagnose list item
+			ReqCmd.commands.setHandler("detailLinksHandler:DiagnoseTableItemView", Lodash.bind(function(model) {
+				this.contentView.hideView();
+				// $('#diagnose-detail-track-wrapper').show();
+				this.diagnoseDetailTrackLayoutView = this.getDetailTrackLayoutView();
+				this.show(this.diagnoseDetailTrackLayoutView, {
+						region: this.layoutView.diagnoseDetailTrackRegion,
+						client: true
+				});
+
+
+			}, this));
+		
+
+
 			console.log('show controller init end');
 
 		},
@@ -211,6 +226,10 @@ define(['lodash', 'config/base/constant', 'config/controllers/_base_controller',
 				itemView: View.FavoriteItemView
 			});
 			return view;
+		},
+		getDetailTrackLayoutView: function() {
+			return new View.DetailTrackLayoutView();
+
 		}
 
 	});

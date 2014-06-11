@@ -26,6 +26,7 @@
                       <div class="remember-wrapper">
                       </div>
                     </form>
+                    <div class="clearfix error-container login-error" style="display: none"></div>
                 </div>
                 <div class="modal-footer">
                     <span>新用户还没有帐号？</span>

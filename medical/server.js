@@ -100,7 +100,9 @@ app.configure(function() {
     res.render('adminFenzhen', {});
   });
 
-
+  app.get('/login', function(req, res) {
+    res.render('loginPage', {});
+  });
 
   app.configure('development', function() {
     app.use(express.errorHandler());
