@@ -42,21 +42,35 @@ define(["backbone", "marionette", "config/base/constant", "utils/reqcmd"], funct
 
 
 	var API = {
-		getDiagnoseList: function(params) {
+		getDiagnoseList: function(params,collection) {
 			if (!params) {
 				params = {};
 			}
-			var diagnoseCollection = new DiagnoseCollection();
-			diagnoseCollection.url = "/diagnose/list";
-			if (typeof params === 'object') {
-				params = $.param(params);
+			if(collection){
+				collection.reset();
+				collection.fetch({
+					success: function() {
+						console.log("fetch success");
+					},
+					data: params
+				});
+				var diagnoseCollection = collection;
+
+			}else{
+				var diagnoseCollection = new DiagnoseCollection();
+				diagnoseCollection.url = "/diagnose/list";
+				if (typeof params === 'object') {
+					params = $.param(params);
+				}
+				diagnoseCollection.fetch({
+					success: function() {
+						console.log("fetch success");
+					},
+					data: params
+				});
+
 			}
-			diagnoseCollection.fetch({
-				success: function() {
-					console.log("fetch success");
-				},
-				data: params
-			});
+			
 
 			return diagnoseCollection
 		},

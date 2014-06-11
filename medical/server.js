@@ -110,8 +110,30 @@ app.configure(function() {
 
   app.get('/diagnose/list', function(req, res) {
     console.log(req.query.type);
+    if(req.query.type == 0){
+      var data = [{
+        id: 1,
+        diagnosenumber: '35423',
+        doctorName: '张名',
+        patientName: "李冰",
+        date: "2014-10-29",
+        section: "头部，颈部",
+        status: "待审核",
+        statusId: "5"
 
-    var data = [{
+      },{
+         id: 2,
+        diagnosenumber: '35443',
+        doctorName: '张名1',
+        patientName: "李冰1",
+        date: "2014-11-29",
+        section: "头部，颈部，胸部",
+        status: "诊断完成",
+        statusId: "6"
+
+      }]
+    }else{
+       var data = [{
         id: 1,
         diagnosenumber: '35423',
         doctorName: '张名',
@@ -150,6 +172,9 @@ app.configure(function() {
       }
 
     ];
+
+    }
+   
     res.send({
       status: 0,
       msg: "",
