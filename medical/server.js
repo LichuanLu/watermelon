@@ -103,6 +103,9 @@ app.configure(function() {
   app.get('/login', function(req, res) {
     res.render('loginPage', {});
   });
+   app.get('/hospital/user', function(req, res) {
+    res.render('hospitalUser', {});
+  });
 
   app.configure('development', function() {
     app.use(express.errorHandler());
@@ -110,7 +113,7 @@ app.configure(function() {
 
   app.get('/diagnose/list', function(req, res) {
     console.log(req.query.type);
-    if(req.query.type == 0){
+    if(req.query.type == ""){
       var data = [{
         id: 1,
         diagnosenumber: '35423',

@@ -62,7 +62,7 @@ define(["backbone", "marionette", "config/base/constant", "utils/reqcmd"], funct
 		getDiagnoseList: function(params, collection) {
 			if (!params) {
 				params = {
-					type: 0
+					type: ""
 				};
 			}
 			if (typeof params === 'object') {
