@@ -10,17 +10,16 @@
 		<td>{status}</td>
 	{/if}
 	<td class="action-group">
-		{@if cond="'{statusId}' == '1'"}
+		{@if cond="'{statusId}' == '0'"}
 			<a href="#">修改</a>
-			<a href="#">撤销</a>
+			<a href="#">删除</a>
 		{/if}
 		{@if cond="'{statusId}' == '7'"}
 			<a href="#">查看原因</a>
 			<a href="#">撤销</a>
 		{/if}
 		{@if cond="'{statusId}' == '2'"}
-			<a href="#">付费</a>
-			<a href="#">修改</a>
+			<a href="#">联系客服</a>
 			<a href="#">撤销</a>
 		{/if}
 		{@if cond="'{statusId}' == '6'"}
@@ -30,9 +29,11 @@
 		{/if}
 	</td>
 	<td class="detail-wrapper">
-		<a href="#">
-			详细
-			<span class="fui-arrow-right"></span>
-		</a>
+		{@if cond="'{statusId}' != '0'"}
+			<a href="#">
+				详细
+				<span class="fui-arrow-right"></span>
+			</a>
+		{/if}
 	</td>
 </tr>

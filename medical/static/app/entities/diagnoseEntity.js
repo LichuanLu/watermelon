@@ -40,13 +40,35 @@ define(["backbone", "marionette", "config/base/constant", "utils/reqcmd"], funct
 	});
 
 
+	var DiagnosePatientDetailModel = Backbone.Model.extend({
+		success: function(data, textStatus, jqXHR) {
+			// body...
+			console.dir(data);
+		},
+		onError: function(data) {
+			// body...
+			console.dir(data);
+		},
+		parse: function(resp) {
+			// body...
+			console.dir(resp.data);
+			return resp.data
+		}
+	});
+
+
 
 	var API = {
-		getDiagnoseList: function(params,collection) {
+		getDiagnoseList: function(params, collection) {
 			if (!params) {
-				params = {};
+				params = {
+					type: 0
+				};
 			}
-			if(collection){
+			if (typeof params === 'object') {
+				params = $.param(params);
+			}
+			if (collection) {
 				collection.reset();
 				collection.fetch({
 					success: function() {
@@ -56,12 +78,9 @@ define(["backbone", "marionette", "config/base/constant", "utils/reqcmd"], funct
 				});
 				var diagnoseCollection = collection;
 
-			}else{
+			} else {
 				var diagnoseCollection = new DiagnoseCollection();
 				diagnoseCollection.url = "/diagnose/list";
-				if (typeof params === 'object') {
-					params = $.param(params);
-				}
 				diagnoseCollection.fetch({
 					success: function() {
 						console.log("fetch success");
@@ -70,7 +89,7 @@ define(["backbone", "marionette", "config/base/constant", "utils/reqcmd"], funct
 				});
 
 			}
-			
+
 
 			return diagnoseCollection
 		},
@@ -160,6 +179,21 @@ define(["backbone", "marionette", "config/base/constant", "utils/reqcmd"], funct
 					console.log("getDiagnoseDetail fetch success");
 				},
 				data: $.param(params)
+			});
+
+			return diagnoseModel
+		},
+		getDiagnosePatientDetail: function(params) {
+			if (!params) {
+				params = {};
+			}
+			var diagnoseModel = new DiagnosePatientDetailModel();
+			diagnoseModel.url = "/diagnose/actions";
+			diagnoseModel.fetch({
+				success: function() {
+					console.log("getDiagnosePatientDetail fetch success");
+				},
+				data: params
 			});
 
 			return diagnoseModel

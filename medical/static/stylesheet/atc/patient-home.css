@@ -193,6 +193,7 @@ ul.message-list li .message-content-wrapper p {
 }
 #patienthome-content #diagnose-detail-track-wrapper .detail-content-wrapper > div .right-side .bottom-wrapper .comments {
   position: relative;
+  padding-bottom: 20px;
 }
 #patienthome-content #diagnose-detail-track-wrapper .detail-content-wrapper > div .right-side .bottom-wrapper .comments .popover {
   margin-left: 50px;

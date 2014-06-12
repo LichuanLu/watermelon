@@ -717,6 +717,44 @@ app.configure(function() {
   });
 
 
+  app.get('/diagnose/actions', function(req, res) {
+    console.dir(req.query);
+    var data = {
+      diagnoseStatus:7,
+      diagnosenumber:"34332",
+      applyTime: "2013-03-30",
+      doctorName:"李响",
+      patientName:"xuyan",
+      gender:"nan",
+      birthDate:"1999-09-09",
+      positionName:"头部，颈部，胸部",
+      diagnoseType:"mri",
+      dicomUrl:"http://test.com",
+      hospitalId:"123",
+      hospitalHistory:"dsadasdasdasda",
+      caseHistory:"dadasdasd",
+      docUrl:"http://123.com",
+      isFeedback: false,
+      actions:[{
+        time: "2013-02-03",
+           title: "分诊医生 李响 需要就诊人更新申请信息",
+           comments: "dasd啊是大事",
+           name: "李响"
+      },{
+        time: "2013-02-04",
+        title: "分诊医生 李1响 需要就诊人更新申请信息",
+
+      }
+      ]
+    };  
+    res.send({
+      status: 0,
+      msg: "",
+      data: data
+    });
+  });
+
+
 
   http.createServer(app).listen(app.get('port'), function() {
     console.log("Express server listening on port " + app.get('port'));

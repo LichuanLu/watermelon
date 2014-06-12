@@ -34,7 +34,12 @@ define(['lodash', 'config/base/constant', 'config/controllers/_base_controller',
 					type: type
 				};
 				console.dir(params);
-				this.diagnoseCollection = DiagnoseEntity.API.getDiagnoseList(params);
+				if (this.diagnoseCollection) {
+					DiagnoseEntity.API.getDiagnoseList(params, this.diagnoseCollection);
+
+				} else {
+					this.diagnoseCollection = DiagnoseEntity.API.getDiagnoseList(params);
+				}
 			}, this));
 
 			//show message list after layout show
@@ -163,21 +168,34 @@ define(['lodash', 'config/base/constant', 'config/controllers/_base_controller',
 			ReqCmd.commands.setHandler("detailLinksHandler:DiagnoseTableItemView", Lodash.bind(function(model) {
 				this.contentView.hideView();
 				// $('#diagnose-detail-track-wrapper').show();
-				this.diagnoseDetailTrackLayoutView = this.getDetailTrackLayoutView();
+				var params = "diagnoseId="+model.get('id');
+				var diagnosePatientDetailModel = DiagnoseEntity.API.getDiagnosePatientDetail(params);
+
+				this.diagnoseDetailTrackLayoutView = this.getDetailTrackLayoutView(diagnosePatientDetailModel);
 				this.show(this.diagnoseDetailTrackLayoutView, {
-						region: this.layoutView.diagnoseDetailTrackRegion,
-						client: true
+					region: this.layoutView.diagnoseDetailTrackRegion,
+					client: true
 				});
 
 
 			}, this));
-		
+
+			//click back link ,back to diagnose list from detail page
+			ReqCmd.reqres.setHandler("backLinkHandler:DetailTrackLayoutView", Lodash.bind(function() {
+				this.layoutView.diagnoseDetailTrackRegion.close();
+				this.contentView.showAndRefreshView();
+
+			}, this));
+
+
 
 
 			console.log('show controller init end');
 
 		},
 		changeContentView: function(viewName) {
+			this.layoutView.diagnoseDetailTrackRegion.close();
+
 			if (viewName === 'diagnoseLink') {
 				this.diagnoseCollection = DiagnoseEntity.API.getDiagnoseList();
 				this.contentView = this.getDiagnoseListView(this.diagnoseCollection);
@@ -227,8 +245,10 @@ define(['lodash', 'config/base/constant', 'config/controllers/_base_controller',
 			});
 			return view;
 		},
-		getDetailTrackLayoutView: function() {
-			return new View.DetailTrackLayoutView();
+		getDetailTrackLayoutView: function(model) {
+			return new View.DetailTrackLayoutView({
+				model: model
+			});
 
 		}
 

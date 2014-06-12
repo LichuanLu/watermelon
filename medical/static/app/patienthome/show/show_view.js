@@ -8,7 +8,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'dust', 'dustMarion
 		},
 		regions: {
 			"contentRegion": "#contentRegion",
-			"diagnoseDetailTrackRegion":"#diagnose-detail-track-wrapper"
+			"diagnoseDetailTrackRegion": "#diagnose-detail-track-wrapper"
 		},
 		el: "#patienthome-content",
 		ui: {
@@ -67,7 +67,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'dust', 'dustMarion
 		ui: {
 			"submitBtn": "#patient-action-content .submit-btn",
 			"typeSelect": "#patient-action-content select",
-			"diagnoseAllWrapper":"#diagnose-all-wrapper"
+			"diagnoseAllWrapper": "#diagnose-all-wrapper"
 		},
 		events: {
 			"click @ui.submitBtn": "searchDiagnose"
@@ -85,6 +85,12 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'dust', 'dustMarion
 		},
 		hideView: function() {
 			this.$el.hide();
+		},
+		showAndRefreshView: function() {
+			this.$el.show();
+			ReqCmd.commands.execute("DiagnoseListView:searchDiagnose", this.ui.typeSelect.val());
+
+
 		}
 
 	});
@@ -333,14 +339,34 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'dust', 'dustMarion
 	var DetailTrackLayoutView = Marionette.Layout.extend({
 		initialize: function() {
 			console.log("DetailTrackLayoutView init");
+			this.listenTo(this.model, 'change', this.render, this);
+
 
 		},
 		regions: {},
 		template: "detailTrackLayout",
-		ui: {},
-		events: {},
-		onRender: function() {},
-		onShow: function() {}	
+		ui: {
+			"backLink": ".back-link-wrapper > a"
+		},
+		events: {
+			"click @ui.backLink": "backLinkHandler"
+		},
+		onRender: function() {
+			console.log("DetailTrackLayoutView on render");
+			var $activeDiv = $('.bs-wizard .bs-wizard-step.active');
+			if($activeDiv){
+				$activeDiv.prevAll().removeClass("disabled").addClass("complete");
+			}
+		
+		},
+		onShow: function() {
+			console.log("DetailTrackLayoutView on show");
+			
+
+		},
+		backLinkHandler: function(e) {
+			ReqCmd.reqres.request("backLinkHandler:DetailTrackLayoutView");
+		}
 	});
 
 
