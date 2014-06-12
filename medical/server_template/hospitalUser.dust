@@ -1,0 +1,25 @@
+{>basicLayout/}
+{<breadcrumbsHolder}
+<div id="breadcrumb" class="clearfix">
+<!-- #breadcrumb-inside -->
+<div id="breadcrumb-inside" class="main-content-padding clearfix">
+	<span class="sub-text">当前位置：</span>
+	<ol class="breadcrumb">
+		<li>
+			<a href="/">主页</a>
+		</li>
+		<li class="active">医院用户中心</li>
+	</ol>
+</div>
+<!-- EOF: #breadcrumb-inside -->
+</div>
+{/breadcrumbsHolder}
+{<contentHolder}
+<div id="hospital-user-content" class="main-content-padding">
+<div class="row">
+	<div class="col-md-12">
+		
+	</div>
+</div>
+</div>
+{/contentHolder}

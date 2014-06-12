@@ -403,7 +403,8 @@ app.configure(function() {
 
   app.get('/message/list', function(req, res) {
     console.dir(req.query);
-    var data = [{
+    if(req.query.status == 1){
+      var data = [{
       id: 1,
       url: "diagnoseLink",
       title:"诊断申请",
@@ -419,6 +420,17 @@ app.configure(function() {
       content: "您有一条新的诊断申请。诊断号：34556 ｜ 诊断类型：MR ｜ 诊断部位：头部，颈部 ｜ 患者：李响"
 
     }];
+  }else{
+    var data = [{
+      id: 1,
+      url: "diagnoseLink",
+      title:"诊断申请",
+      type: "未读消息",
+      createTime: "2013-12-12 13:00",
+      content: "您有一条新的诊断申请。诊断号：34556 ｜ 诊断类型：MR ｜ 诊断部位：头部，颈部 ｜ 患者：李响"
+    }];
+  }
+    
     res.send({
       status: 0,
       msg: "",
@@ -519,7 +531,7 @@ app.configure(function() {
 
   app.get('/admin/diagnose/list/my', function(req, res) {
     console.log(req.query.status);
-    if (req.query.status == 1) {
+    if (req.query.status == 0) {
       var data = [{
         id: 1,
         diagnosenumber: '35443',

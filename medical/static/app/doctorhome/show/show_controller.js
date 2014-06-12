@@ -93,7 +93,7 @@ define(['lodash', 'config/base/constant', 'config/controllers/_base_controller',
 				});
 
 				this.readMessageCollection = MessageEntity.API.getMessageList({
-					status:1
+					status:2
 				});
 				this.readMessageCollectionView = this.getMessageListView(this.readMessageCollection);
 				this.show(this.readMessageCollectionView, {
