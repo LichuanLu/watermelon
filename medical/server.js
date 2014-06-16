@@ -770,6 +770,100 @@ app.configure(function() {
   });
 
 
+  app.get('/hospital/user/list/unfinish', function(req, res) {
+    console.log(req.query.status);
+      var data = [{
+        id: 1,
+        diagnosenumber: '35443',
+        doctorName: '张名1',
+        patientName: "李冰1",
+        date: "2014-11-29",
+        positionName: "头部，颈部，胸部",
+        status: "分诊中",
+        hispital: "西安西京医院2",
+        statusId: "7",
+        hasDicom:true,
+        dicomFileName:"test",
+        dicomUrl: "test"
+      }, {
+        id: 2,
+        diagnosenumber: '35433',
+        doctorName: '张名2',
+        patientName: "李冰2",
+        date: "2014-11-28",
+        positionName: "头部，颈部，胸部",
+        status: "待诊断",
+        hispital: "西安西京医院2",
+        statusId: "1",
+        hasDicom:false
+      }];
+  
+
+    res.send({
+      status: 0,
+      msg: "",
+      data: data
+    });
+  });
+
+
+  app.get('/hospital/user/list/all', function(req, res) {
+    console.log(req.query.status);
+       if (req.query.status == 0) {
+      var data = [{
+        id: 1,
+        diagnosenumber: '35443',
+        doctorName: '张名1',
+        patientName: "李冰1",
+        date: "2014-11-29",
+        positionName: "头部，颈部，胸部",
+        status: "分诊中",
+        hispital: "西安西京医院2",
+        statusId: "4"
+      }, {
+        id: 2,
+        diagnosenumber: '35433',
+        doctorName: '张名2',
+        patientName: "李冰2",
+        date: "2014-11-28",
+        positionName: "头部，颈部，胸部",
+        status: "待诊断",
+        hispital: "西安西京医院2",
+        statusId: "5"
+      }];
+    } else {
+      var data = [{
+        id: 3,
+        diagnosenumber: '35443',
+        doctorName: '张名4',
+        patientName: "李冰4",
+        date: "2014-11-29",
+        positionName: "头部，颈部，胸部",
+        status: "分诊中",
+        hispital: "西安西京医院2",
+        statusId: "4"
+      }, {
+        id: 4,
+        diagnosenumber: '35433',
+        doctorName: '张名3',
+        patientName: "李冰3",
+        date: "2014-11-28",
+        positionName: "头部，颈部，胸部",
+        status: "待诊断",
+        hispital: "西安西京医院2",
+        statusId: "5"
+      }];
+    }
+  
+
+    res.send({
+      status: 0,
+      msg: "",
+      data: data
+    });
+  });
+
+
 
   http.createServer(app).listen(app.get('port'), function() {
     console.log("Express server listening on port " + app.get('port'));
