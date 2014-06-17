@@ -5,9 +5,11 @@
 			<span>诊断日期：{date}</span>
 			<!-- <span>就诊者：{patientName}</span>
 			<span>部位：{section}</span> -->
-
-			<a href="#">下载DICOM软件<span class="fui-alert"></span></a>
-			<a href="#" class="close-link">关闭</a>
+			<div class="right">
+				<a id="rollback-link" href="#">打回诊断<span class="fui-alert"></span></a>
+				<a href="#">下载DICOM软件<span class="fui-alert"></span></a>
+				<a href="#" class="close-link">关闭</a>
+			</div>
 		</div>
 		<!-- <div class="alert alert-warning">
 		<button type="button" class="close fui-cross" data-dismiss="alert"></button>

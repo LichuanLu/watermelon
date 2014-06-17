@@ -35,6 +35,7 @@ define(function(require) {
 		//template for fenzhen
 		allDiagnoseItem:require('admin/fenzhen/templates/allDiagnoseItem'),
 		myDiagnoseItem:require('admin/fenzhen/templates/myDiagnoseItem'),
+		rollbackDiagnoseModal:require('admin/fenzhen/templates/rollbackDiagnoseModal'),
 
 
 		doctorAccountManageLayout:require('doctorHome/templates/doctorAccountManageLayout'),

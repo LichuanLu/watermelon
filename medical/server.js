@@ -863,6 +863,30 @@ app.configure(function() {
     });
   });
 
+  app.post('/diagnose/rollback/:id', function(req, res) {
+    console.dir(req.params.id);
+    res.send({
+      status: 0,
+      msg: "",
+      data: ""
+    });
+
+  });
+
+
+  app.post('/diagnose/delete/:id', function(req, res) {
+    console.dir(req.params.id);
+    res.send({
+      status: 0,
+      msg: "",
+      data: ""
+    });
+
+  });
+
+
+
+
 
 
   http.createServer(app).listen(app.get('port'), function() {

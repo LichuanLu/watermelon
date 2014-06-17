@@ -1,4 +1,6 @@
-	#new-diagnose-wrapper,#new-audit-wrapper{
+@import "variables";
+	
+#new-diagnose-wrapper,#new-audit-wrapper{
 		.header{
 			>div{
 				position: relative;
@@ -13,15 +15,24 @@
 
 					}
 				}
-				a{
-					&.close-link{
-						right: 20px;
-					}
+				// a{
+				// 	&.close-link{
+				// 		right: 20px;
+				// 	}
 
+				// 	position: absolute;
+				// 	right: 70px;
+				// 	top: 6px;
 
+				// }
+				.right{
+					display: inline-block;
 					position: absolute;
-					right: 70px;
+					right: 20px;
 					top: 6px;
+					#rollback-link{
+						color: @brand-danger;
+					}
 
 				}
 			}

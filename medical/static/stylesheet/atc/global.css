@@ -481,6 +481,15 @@ body .container.full-width-page .main-block {
   height: 280px;
   margin-top: 12px;
 }
+#modalRegion #rollback-form .form-group span.form-text {
+  font-size: 15px;
+  margin-top: 12px;
+  display: inline-block;
+}
+#modalRegion #rollback-form .form-group textarea {
+  height: 280px;
+  margin-top: 12px;
+}
 .sharing-list-wrapper.detail-wrapper ul li {
   height: auto !important;
 }

@@ -5,6 +5,8 @@ define(['lodash', 'config/base/constant', 'config/controllers/_base_controller',
 		initialize: function() {
 
 			this.layoutView = this.getFzPageLayoutView();
+			this.appInstance = require('app');
+
 
 			this.show(this.layoutView, {
 				name: "fenzhenPageLayoutView",
@@ -82,14 +84,14 @@ define(['lodash', 'config/base/constant', 'config/controllers/_base_controller',
 				var statusId = model.get('statusId');
 				if (statusId == 4) {
 					this.detailModel = DiagnoseEntity.API.getDiagnoseDetail({
-						diagnoseId:model.get('id')
+						diagnoseId: model.get('id')
 					});
 					if (typeof this.diagnoseActionView !== 'undefined') {
 						this.diagnoseActionView.close();
 					}
 					this.diagnoseActionView = this.getNewDiagnoseLayoutView(this.detailModel);
 
-				} 
+				}
 				this.show(this.diagnoseActionView, {
 					region: this.layoutView.newDiagnoseRegion,
 					client: true
@@ -102,7 +104,63 @@ define(['lodash', 'config/base/constant', 'config/controllers/_base_controller',
 			//close diagnose region
 			ReqCmd.reqres.setHandler("NewDiagnoseLayoutView:closeRegion", Lodash.bind(function() {
 				this.layoutView.newDiagnoseRegion.close();
+				this.layoutView.initMyDiagnoseView();
 			}, this));
+
+
+			//fenzhen click rollback
+			ReqCmd.commands.setHandler("rollbackDiagnose:NewDiagnoseLayoutView", Lodash.bind(function(model) {
+				console.log("rollbackDiagnose");
+
+				var rollbackModalView = this.getRollbackModalView(model);
+				this.appInstance.modalRegion.show(rollbackModalView);
+
+			}, this));
+
+
+			//click submit on roll back diagnose modal
+			ReqCmd.commands.setHandler("rollbackDiagnose:RollbackModalView", Lodash.bind(function(diagnoseId,params) {
+				console.log("rollbackDiagnose RollbackModalView");
+				var that = this;
+				if(diagnoseId){
+					$.ajax({
+						url: '/diagnose/rollback/'+diagnoseId,
+						data: params,
+						dataType: 'json',
+						type: 'POST',
+						success: function(data) {
+							if (data.status != 0) {
+								this.onError(data);
+
+							} else {
+								that.appInstance.modalRegion.close();
+								Messenger().post({
+									message: 'SUCCESS.Roll back.',
+									type: 'success',
+									showCloseButton: true
+								});
+							}
+						},
+						onError: function(res) {
+							//var error = jQuery.parseJSON(data);
+							if (typeof res.msg !== 'undefined') {
+								Messenger().post({
+									message: "%ERROR_MESSAGE:" + res.msg,
+									type: 'error',
+									showCloseButton: true
+								});
+							}
+
+						}
+					});
+				}
+				
+
+			}, this));
+
+
+
+
 
 
 
@@ -127,9 +185,15 @@ define(['lodash', 'config/base/constant', 'config/controllers/_base_controller',
 		getNewDiagnoseLayoutView: function(model) {
 			return new DoctorHomeShowView.NewDiagnoseLayoutView({
 				model: model,
-				typeID:0
+				typeID: 0
 
 			});
+		},
+		getRollbackModalView: function(model) {
+			var view = new DoctorHomeShowView.RollbackModalView({
+				model:model
+			});
+			return view;
 		}
 
 	});

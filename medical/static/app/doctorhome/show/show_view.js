@@ -93,6 +93,9 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'dust', 'dustMarion
 		itemViewContainer: "#diagnose-tbody",
 		searchDiagnose: function(e) {
 			e.preventDefault();
+			this.initDiagnoseListView();
+		},
+		initDiagnoseListView: function() {
 			ReqCmd.commands.execute("DiagnoseListView:searchDiagnose", $('#doctor-action-content').find('.form-inline').serialize());
 		}
 
@@ -203,15 +206,21 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'dust', 'dustMarion
 			"diagnoseResultTextArea": "#diagnoseResult",
 			"closeLink": ".close-link",
 			"submitDiagnoseBtn": '.submit-btn',
-			"techDesTextArea": "#techDes"
+			"techDesTextArea": "#techDes",
+			"rollbackLink": "#rollback-link"
 		},
 		events: {
 			"click @ui.loadTemplateBtn": "loadTemplate",
 			"click @ui.closeLink": "closeRegion",
-			"click @ui.submitDiagnoseBtn": "submitDiagnose"
+			"click @ui.submitDiagnoseBtn": "submitDiagnose",
+			"click @ui.rollbackLink": "rollbackDiagnose"
 		},
 		editFormHandler: function(e) {
 
+		},
+		rollbackDiagnose: function(e) {
+			e.preventDefault();
+			ReqCmd.commands.execute('rollbackDiagnose:NewDiagnoseLayoutView', this.model);
 		},
 		submitDiagnose: function(e) {
 			e.preventDefault();
@@ -238,11 +247,11 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'dust', 'dustMarion
 					data += "&type=" + type;
 				}
 				var url;
-				if(window.location.href.indexOf('fenzhen') > -1){
+				if (window.location.href.indexOf('fenzhen') > -1) {
 					console.log('admin fenzhen page');
 					url = '/admin/report/addOrUpate';
 
-				}else{
+				} else {
 					url = '/doctor/report/update';
 
 				}
@@ -257,8 +266,8 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'dust', 'dustMarion
 							this.onError(data);
 
 						} else {
-							if(targetId === 'previewDiagnoseBtn'){
-								window.open ('/diagnose/'+that.model.get('id')+'/pdf','_blank');
+							if (targetId === 'previewDiagnoseBtn') {
+								window.open('/diagnose/' + that.model.get('id') + '/pdf', '_blank');
 							}
 							Messenger().post({
 								message: 'SUCCESS.Create diagnose',
@@ -658,6 +667,38 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'dust', 'dustMarion
 		}
 	});
 
+	var RollbackModalView = Marionette.ItemView.extend({
+		template: "rollbackDiagnoseModal",
+		initialize: function() {
+			console.log("RollbackModalView init");
+
+		},
+		onRender: function() {
+			console.log("RollbackModalView render");
+			// get rid of that pesky wrapping-div
+			// assumes 1 child element			
+			this.$el = this.$el.children();
+			this.setElement(this.$el);
+
+		},
+		onShow: function() {},
+		ui: {
+			"saveBtn": "button[name=save]",
+			"rollbackForm": "#rollback-form"
+		},
+		events: {
+			"click @ui.saveBtn": "rollbackDiagnose"
+		},
+		rollbackDiagnose: function(e) {
+			var diagnoseId = this.ui.rollbackForm.data('id');
+			// var comments = this.ui.rollbackForm.find('textarea').val().trim();
+			var data = this.ui.rollbackForm.serialize() + "&status=7";
+			ReqCmd.commands.execute("rollbackDiagnose:RollbackModalView", diagnoseId,data);
+
+		}
+
+	});
+
 	return {
 		DoctorHomePageLayoutView: DoctorHomePageLayoutView,
 		DiagnoseListView: DiagnoseListView,
@@ -666,6 +707,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'dust', 'dustMarion
 		NewDiagnoseLayoutView: NewDiagnoseLayoutView,
 		NewAuditLayoutView: NewAuditLayoutView,
 		MessageLayoutView: MessageLayoutView,
-		ConsultLayoutView: ConsultLayoutView
+		ConsultLayoutView: ConsultLayoutView,
+		RollbackModalView: RollbackModalView
 	}
 });

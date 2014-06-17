@@ -223,6 +223,9 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'dust', 'dustMarion
 
 	});
 
+	
+
+
 	return {
 		FzPageLayoutView: FzPageLayoutView,
 		AdminAllDiagnoseCollectionView: AdminAllDiagnoseCollectionView,

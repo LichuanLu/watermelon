@@ -8,6 +8,7 @@ define([], function() {
 			var $this = $(this),
 				$atext = $(this).find('.a-text'),
 				uid = $this.data('uid'),
+				followid = $this.data('id'),
 				type = $this.data('type'),
 				options = typeof option == 'object' && option,
 				url,
@@ -37,7 +38,7 @@ define([], function() {
 
 
 					if ($this.is('.following')) {
-						url = "/userFavorties/"+uid+"/cancel";
+						url = "/userFavorties/"+followid+"/cancel";
 						isRemove = true;
 
 					} else {

@@ -76,6 +76,8 @@ define(['lodash', 'config/base/constant', 'config/controllers/_base_controller',
 			//close diagnose region
 			ReqCmd.reqres.setHandler("NewDiagnoseLayoutView:closeRegion", Lodash.bind(function() {
 				this.layoutView.newDiagnoseRegion.close();
+				this.contentView.initDiagnoseListView();
+
 			}, this));
 
 
