@@ -1,4 +1,4 @@
-define([], function() {
+define(['crypto-sha256'], function() {
 	// body...
 	"use strict";
 	var loginAction = function() {
@@ -61,6 +61,8 @@ define([], function() {
 	};
 	var validate = function($from) {
 		var data = $from.serialize();
+		// var name = $('#inputUsername').val();
+		// var data = "name="+name+"&password="+CryptoJS.SHA256($('#inputUserPassword').val());
 		return data;
 	};
 	return {

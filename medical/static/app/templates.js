@@ -22,6 +22,7 @@ define(function(require) {
 		favoriteItem:require('patienthome/templates/favoriteItem'),
 		cancelFavoriteModalView:require('patienthome/templates/cancelFavoriteModalView'),
 		detailTrackLayout:require('patienthome/templates/detailTrackLayout'),
+		deleteDiagnoseModal:require('patienthome/templates/deleteDiagnoseModal'),
 
 
 

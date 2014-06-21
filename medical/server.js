@@ -66,7 +66,8 @@ app.configure(function() {
   });
 
   app.get('/applyDiagnose', function(req, res) {
-    res.render('applyDiagnose');
+    res.render('applyDiagnose',{
+    });
   });
 
   app.get('/register/patient', function(req, res) {
@@ -107,6 +108,9 @@ app.configure(function() {
     res.render('hospitalUser', {});
   });
 
+  app.get('/error/404', function(req, res) {
+    res.render('errorpage', {});
+  });
   app.configure('development', function() {
     app.use(express.errorHandler());
   });
@@ -133,6 +137,17 @@ app.configure(function() {
         section: "头部，颈部，胸部",
         status: "诊断完成",
         statusId: "6"
+
+      },
+      {
+        id: 3,
+        diagnosenumber: '35443',
+        doctorName: '张名1',
+        patientName: "李冰1",
+        date: "2014-11-29",
+        section: "头部，颈部，胸部",
+        status: "诊断完成",
+        statusId: "0"
 
       }]
     }else{

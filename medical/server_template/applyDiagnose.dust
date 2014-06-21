@@ -8,7 +8,11 @@
 		<li>
 			<a href="/">主页</a>
 		</li>
+		{@if cond="'{edit}' == 'true'"}
+		<li class="active">更新会诊资料</li>
+		{:else}
 		<li class="active">申请诊断</li>
+		{/if}
 	</ol>
 </div>
 <!-- EOF: #breadcrumb-inside -->
@@ -16,15 +20,18 @@
 {/breadcrumbsHolder}
 {<contentHolder}
 <div id="applydignose-content" class="main-content-padding">
-
+{@if cond="'{edit}' == 'true'"}
+<h4 class="main-content-title">更新申请资料</h4>
+{:else}
 <h4 class="main-content-title">申请会诊</h4>
+{/if}
 
 <div class="submit-patient-info-wrapper">
 	<div class="row">
 		<div class="col-md-9" role="main">
-			<div class="panel panel-default" data-form-id='1'>
+			<div class="panel panel-default" data-form-id='1' id="first-panel">
 				<div class="panel-heading">
-					专家和套餐
+					挑选专家
 					<span>第一部分／总共四部分</span>
 				</div>
 				<div class="panel-body">
@@ -47,7 +54,7 @@
 
 				</div>
 			</div>
-			<div class="panel panel-default" data-form-id='2'>
+			<div class="panel panel-default" data-form-id='2' id="second-panel">
 				<div class="panel-heading">
 					就诊人基本信息
 					<span>第二部分／总共四部分</span>
@@ -192,7 +199,7 @@
 				</form>
 
 			</div>
-			<div class="panel panel-default" data-form-id='3'>
+			<div class="panel panel-default" data-form-id='3' id="third-panel">
 				<div class="panel-heading">
 					影像信息
 					<span>第三部分／总共四部分</span>
@@ -306,7 +313,7 @@
 			</div>
 		</div>
 
-		<div class="panel panel-default" data-form-id='4'>
+		<div class="panel panel-default" data-form-id='4' id="fourth-panel">
 			<div class="panel-heading">
 				额外参考信息
 				<span>第四部分／总共四部分</span>
@@ -360,7 +367,7 @@
 					<div class="form-group">
 						<label for="illhistory">
 							病史信息：
-							<span class="required-text"></span>
+							<span class="required-text">（必填）</span>
 						</label>
 						<div class="illhistory-wrapper">
 							<textarea id="illhistory" name="illnessHistory" class="form-control" placeholder="病史"></textarea>
@@ -420,43 +427,40 @@
 
 	<div class="col-md-3">
 		<div id="affix-wrapper" class="pi-title-sidebar affix-top" data-spy="affix" data-offset-top="150" data-offset-bottom="200" style="">
-			<h4>就诊人基本信息</h4>
-			<ul class="active nav">
+			<h4 class="first-nav">挑选专家</h4>
+			<ul class="nav first-nav">
 				<li class="">
-					<a href="#patientnameinput">姓名</a>
-				</li>
-				<li class="">
-					<a>性别</a>
-				</li>
-				<li class="">
-					<a>出生年月</a>
-				</li>
-				<li class="">
-					<a>手机</a>
-				</li>
-				<li class="">
-					<a>城市</a>
+					<a href="#first-panel">诊断专家</a>
 				</li>
 			</ul>
-			<h4>影像信息</h4>
-			<ul class="nav">
+			<h4 class="second-nav" style="display:none;">就诊人基本信息</h4>
+			<ul class="active nav second-nav" style="display:none;">
 				<li class="">
-					<a>诊断部位</a>
-				</li>
-				<li class="">
-					<a>dicom影像文件</a>
+					<a href="#second-panel">基本信息</a>
 				</li>
 			</ul>
-			<h4>影像信息</h4>
-			<ul class="nav">
+			<h4 class="third-nav" style="display:none;">影像信息</h4>
+			<ul class="nav third-nav" style="display:none;">
 				<li class="">
-					<a>诊断参考信息</a>
+					<a href="#third-panel">诊断部位</a>
 				</li>
 				<li class="">
-					<a>病史信息</a>
+					<a href="#third-panel">影响类型</a>
 				</li>
 				<li class="">
-					<a>诊断书</a>
+					<a href="#third-panel">DICOM影像文件</a>
+				</li>
+			</ul>
+			<h4 class="fourth-nav" style="display:none;">额外参考信息</h4>
+			<ul class="nav fourth-nav" style="display:none;">
+				<li class="">
+					<a href="#fourth-panel">就诊医院</a>
+				</li>
+				<li class="">
+					<a href="#fourth-panel">病史信息</a>
+				</li>
+				<li class="">
+					<a href="#fourth-panel">诊断书</a>
 				</li>
 			</ul>
 		</div>

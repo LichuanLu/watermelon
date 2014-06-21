@@ -5,6 +5,8 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 	var ApplyDiagnosePageLayoutView = Marionette.Layout.extend({
 		initialize: function() {
 			console.log("init ApplyDiagnosePageLayoutView");
+			this.isEdit = $.getUrlVar('edit');
+			this.diagnoseId = $.getUrlVar('diagnoseid');
 			this.bindUIElements();
 		},
 		regions: {
@@ -181,6 +183,11 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 
 			//init form
 			this.showForm(1);
+			if (this.isEdit === 'true') {
+				this.showForm(2);
+				this.showForm(3);
+				this.showForm(4);
+			}
 
 			//modal show function
 			// $('#select-doctor-modal').on('shown.bs.modal', function (e) {
@@ -245,9 +252,15 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 				});
 			});
 
+
+			this.initDiagnoseForms();
+
+		},
+		// we need this to do init work for forms
+		initDiagnoseForms: function() {
 			ReqCmd.reqres.request("ApplyDiagnosePageLayoutView:getRecommandedDoctor");
-
-
+			this.initPatientProfile();
+			this.initDicomInfo();
 
 		},
 		//in form3 , change exist dicom from select
@@ -287,6 +300,22 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 				return $(this).data("form-id") == id
 			});
 			$form.addClass("visible");
+			if(id == 1){
+				$('.first-nav').show();
+
+			}else if(id == 2){
+				$('.second-nav').show();
+
+
+			}else if(id == 3){
+				$('.third-nav').show();
+
+
+			}else if(id == 4){
+								$('.fourth-nav').show();
+
+
+			}
 		},
 		submitHandler: function(e) {
 			e.preventDefault();
@@ -297,6 +326,10 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 			var data = this.validate($form, formId);
 			console.dir(data);
 			if (data) {
+				//when edit , add diagnose id for the request
+				if (this.isEdit === 'true' && this.diagnoseId) {
+					data += "&diagnoseId=" + this.diagnoseId;
+				}
 				var that = this;
 				$.ajax({
 					url: '/save/diagnose/' + formId,
@@ -357,11 +390,17 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 		refreshForm: function(data) {
 			if (typeof data.data.formId !== 'undefined') {
 				if (data.data.formId == 1) {
-					ReqCmd.reqres.request("ApplyDiagnosePageLayoutView:getRecommandedDoctor");
+					if(this.isEdit !== 'true'){
+						ReqCmd.reqres.request("ApplyDiagnosePageLayoutView:getRecommandedDoctor");
+					}
 				} else if (data.data.formId == 2) {
-					this.initPatientProfile();
+					if(this.isEdit !== 'true'){
+						this.initPatientProfile();
+					}
 				} else if (data.data.formId == 3) {
-					this.initDicomInfo();
+					if(this.isEdit !== 'true'){
+						this.initDicomInfo();
+					}
 				}
 				this.showForm(data.data.formId);
 			}
@@ -464,7 +503,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 			console.log($('#select-doctor-modal form').serialize());
 			var data = $('#select-doctor-modal form').serialize();
 			if (data) {
-				data += '&pageNumber='+this.currentPage+'&pageSize=6';
+				data += '&pageNumber=' + this.currentPage + '&pageSize=6';
 				ReqCmd.commands.execute("SelectDoctorModalView:searchDoctorHandler", data);
 			}
 		}
