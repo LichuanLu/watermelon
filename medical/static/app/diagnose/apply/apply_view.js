@@ -401,11 +401,17 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 				data = "doctorId=" + $('#recommandedDoctor .doctor-preview').data('doctor-id');
 			} else if (formId == 3) {
 				console.dir($('#dicomfileupload #downloadFile'));
-				var fileurl = encodeURIComponent($("#downloadFile a:first").attr('href'));
+				var fileurl = encodeURIComponent($("#new-dicom-form .downloadFileLink").attr('href'));
 				data = $form.serialize() + "&fileurl=" + fileurl;
 
 			} else {
 				data = $form.serialize();
+				var filelinks = $("#new-history-form").find('.downloadFileLink');
+				var fileurl;
+				filelinks.each(function(index,element){
+					fileurl+="&fileurl="+encodeURIComponent(element.attr('href'));
+				})
+				data += fileurl;
 			}
 
 			return data;

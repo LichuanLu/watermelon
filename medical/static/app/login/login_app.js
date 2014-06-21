@@ -1,4 +1,4 @@
-define(['crypto-sha256'], function() {
+define(['ladda-bootstrap','crypto-sha256'], function(ladda) {
 	// body...
 	"use strict";
 	var loginAction = function(returnuri) {
@@ -7,6 +7,8 @@ define(['crypto-sha256'], function() {
 		$loginBtn.click(function(e) {
 			e.preventDefault();
 			// if ($('#register-form').valid()) {
+			var l = ladda.create(document.querySelector('#submit'));
+
 			var data = validate($form);
 			if(returnuri){
 				data+= "&returnuri="+returnuri;
@@ -14,6 +16,7 @@ define(['crypto-sha256'], function() {
 			console.dir(data);
 			if (data) {
 				var that = this;
+				l.start();
 				$.ajax({
 					url: '/login.json',
 					data: data,
@@ -45,6 +48,10 @@ define(['crypto-sha256'], function() {
 							});
 						}
 
+					},
+					complete: function(status,request) {
+
+						l.stop();
 					},
 					resetForm: function(leaveInputData) {
 

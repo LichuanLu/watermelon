@@ -37,7 +37,9 @@
 									<input type="hidden" name="form_id" value="user_login">
 									<div class="form-group submit-group">
 										<div class="col-md-offset-2">
-											<button type="submit" nams="op" class="btn btn-info login-btn">登录</button>
+											<button id="submit" type="submit" nams="op" class="btn btn-info login-btn ladda-button" data-style="expand-right">
+							                    <span class="ladda-label">登陆</span>
+							                </button>
 											<input id="rememberCheck" name="isRemember" type="checkbox" class="no_indent" value="1">
 											<span>自动登陆</span>
 											<a href="#">

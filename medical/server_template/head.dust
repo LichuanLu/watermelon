@@ -46,6 +46,8 @@
         <link rel="stylesheet" href="/static/stylesheet/lib/jquery.fileupload-ui-noscript.css">
     </noscript>
     <link href="/static/stylesheet/lib/bootstrap-multiselect.css" rel="stylesheet">
+    <link href="/static/stylesheet/lib/ladda-themeless.min.css" rel="stylesheet">
+
     <!-- setup product end-->
 
     
