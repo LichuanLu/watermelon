@@ -1,13 +1,16 @@
 define(['crypto-sha256'], function() {
 	// body...
 	"use strict";
-	var loginAction = function() {
+	var loginAction = function(returnuri) {
 		var $form = $('#loginForm');
 		var $loginBtn = $form.find('.login-btn');
 		$loginBtn.click(function(e) {
 			e.preventDefault();
 			// if ($('#register-form').valid()) {
 			var data = validate($form);
+			if(returnuri){
+				data+= "&returnuri="+returnuri;
+			}
 			console.dir(data);
 			if (data) {
 				var that = this;

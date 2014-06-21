@@ -200,6 +200,7 @@
 
 			</div>
 			<div class="panel panel-default" data-form-id='3' id="third-panel">
+				<input id="diagnose-id-input" style="dislay:none;">
 				<div class="panel-heading">
 					影像信息
 					<span>第三部分／总共四部分</span>
@@ -430,37 +431,37 @@
 			<h4 class="first-nav">挑选专家</h4>
 			<ul class="nav first-nav">
 				<li class="">
-					<a href="#first-panel">诊断专家</a>
+					<a>诊断专家</a>
 				</li>
 			</ul>
 			<h4 class="second-nav" style="display:none;">就诊人基本信息</h4>
 			<ul class="active nav second-nav" style="display:none;">
 				<li class="">
-					<a href="#second-panel">基本信息</a>
+					<a>基本信息</a>
 				</li>
 			</ul>
 			<h4 class="third-nav" style="display:none;">影像信息</h4>
 			<ul class="nav third-nav" style="display:none;">
 				<li class="">
-					<a href="#third-panel">诊断部位</a>
+					<a>诊断部位</a>
 				</li>
 				<li class="">
-					<a href="#third-panel">影响类型</a>
+					<a>影响类型</a>
 				</li>
 				<li class="">
-					<a href="#third-panel">DICOM影像文件</a>
+					<a>DICOM影像文件</a>
 				</li>
 			</ul>
 			<h4 class="fourth-nav" style="display:none;">额外参考信息</h4>
 			<ul class="nav fourth-nav" style="display:none;">
 				<li class="">
-					<a href="#fourth-panel">就诊医院</a>
+					<a>就诊医院</a>
 				</li>
 				<li class="">
-					<a href="#fourth-panel">病史信息</a>
+					<a>病史信息</a>
 				</li>
 				<li class="">
-					<a href="#fourth-panel">诊断书</a>
+					<a>诊断书</a>
 				</li>
 			</ul>
 		</div>

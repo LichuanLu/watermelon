@@ -7,6 +7,11 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 			console.log("init ApplyDiagnosePageLayoutView");
 			this.isEdit = $.getUrlVar('edit');
 			this.diagnoseId = $.getUrlVar('diagnoseid');
+			this.isHospitalUser = $.getUrlVar('type');
+			this.appInstance = require('app');
+			if(this.diagnoseId){
+				$('#diagnose-id-input').val(this.diagnoseId);
+			}
 			this.bindUIElements();
 		},
 		regions: {
@@ -77,7 +82,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 			});
 
 			//init file uploader
-			$('#dicomfileupload').fileupload({
+			var temp = $('#dicomfileupload').fileupload({
 				disableImageResize: false,
 				maxFileSize: 2000000,
 				// acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
@@ -89,6 +94,15 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 				uploadTemplateId: FileUploaderMain.uploadTemplateStr,
 				downloadTemplateId: FileUploaderMain.downloadTemplateStr
 
+			}).bind('fileuploadsubmit', function (e, data) {
+			    // The example input, doesn't have to be part of the upload form:
+			    var input = $('#diagnose-id-input');
+			    data.formData = {diagnoseId: input.val()};
+			    // if (!data.formData.diagnoseId) {
+			    //   data.context.find('button').prop('disabled', false);
+			    //   input.focus();
+			    //   return false;
+			    // }
 			});
 			$('#patient-medical-report-fileupload').fileupload({
 				disableImageResize: false,
@@ -102,6 +116,15 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 				uploadTemplateId: FileUploaderMain.uploadTemplateStr,
 				downloadTemplateId: FileUploaderMain.downloadTemplateStr
 
+			}).bind('fileuploadsubmit', function (e, data) {
+			    // The example input, doesn't have to be part of the upload form:
+			    var input = $('#diagnose-id-input');
+			    data.formData = {diagnoseId: input.val()};
+			    // if (!data.formData.diagnoseId) {
+			    //   data.context.find('button').prop('disabled', false);
+			    //   input.focus();
+			    //   return false;
+			    // }
 			});
 
 			//init affix
@@ -300,19 +323,19 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 				return $(this).data("form-id") == id
 			});
 			$form.addClass("visible");
-			if(id == 1){
+			if (id == 1) {
 				$('.first-nav').show();
 
-			}else if(id == 2){
+			} else if (id == 2) {
 				$('.second-nav').show();
 
 
-			}else if(id == 3){
+			} else if (id == 3) {
 				$('.third-nav').show();
 
 
-			}else if(id == 4){
-								$('.fourth-nav').show();
+			} else if (id == 4) {
+				$('.fourth-nav').show();
 
 
 			}
@@ -390,19 +413,35 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 		refreshForm: function(data) {
 			if (typeof data.data.formId !== 'undefined') {
 				if (data.data.formId == 1) {
-					if(this.isEdit !== 'true'){
+					if (this.isEdit !== 'true') {
 						ReqCmd.reqres.request("ApplyDiagnosePageLayoutView:getRecommandedDoctor");
 					}
 				} else if (data.data.formId == 2) {
-					if(this.isEdit !== 'true'){
+					if (this.isEdit !== 'true') {
 						this.initPatientProfile();
 					}
 				} else if (data.data.formId == 3) {
-					if(this.isEdit !== 'true'){
+					if (this.isEdit !== 'true') {
 						this.initDicomInfo();
+					}
+					if(data.data.diagnoseId){
+						$('#diagnose-id-input').val(data.data.diagnoseId);			
 					}
 				}
 				this.showForm(data.data.formId);
+			}
+			if (data.data.isFinal) {
+
+				var ModalModel = Backbone.Model.extend({
+
+				});
+				var model = new ModalModel();
+				model.set('isHospitalUser',this.isHospitalUser);
+				var successSubmitDiagnoseModalView = new SuccessSubmitDiagnoseModalView({
+					model:model
+				});
+				this.appInstance.modalRegion.show(successSubmitDiagnoseModalView);
+
 			}
 
 
@@ -624,6 +663,31 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 		onShow: function() {
 			console.log("PathologyItemView onShow");
 		}
+	});
+
+
+	var SuccessSubmitDiagnoseModalView = Marionette.ItemView.extend({
+		template: "successSubmitDiagnoseModal",
+		initialize: function() {
+			console.log("SuccessSubmitDiagnoseModalView init");
+
+		},
+		onRender: function() {
+			console.log("SuccessSubmitDiagnoseModalView render");
+			// get rid of that pesky wrapping-div
+			// assumes 1 child element			
+			this.$el = this.$el.children();
+			this.setElement(this.$el);
+
+		},
+		onShow: function() {
+
+		},
+		ui: {
+		},
+		events: {
+		}
+
 	});
 
 

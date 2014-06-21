@@ -262,7 +262,9 @@ app.configure(function() {
       result = {
         status: 0,
         msg: "success",
-        data: ""
+        data: {
+          isFinal:true
+        }
       };
     }
 

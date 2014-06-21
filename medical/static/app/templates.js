@@ -32,6 +32,7 @@ define(function(require) {
 		patientProfile:require('diagnose/templates/patientProfile'),
 		dicomInfo:require('diagnose/templates/dicomInfo'),
 		pathologyItem:require('diagnose/templates/pathologyItem'),
+		successSubmitDiagnoseModal:require('diagnose/templates/successSubmitDiagnoseModal'),
 
 		//template for fenzhen
 		allDiagnoseItem:require('admin/fenzhen/templates/allDiagnoseItem'),
