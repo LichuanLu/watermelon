@@ -1,0 +1,30 @@
+{>basicLayout/}
+{<breadcrumbsHolder}
+<div id="breadcrumb" class="clearfix">
+<!-- #breadcrumb-inside -->
+<div id="breadcrumb-inside" class="main-content-padding clearfix">
+  <span class="sub-text">当前位置：</span>
+  <ol class="breadcrumb">
+    <li>
+      <a href="/">主页</a>
+    </li>
+    <li class="active">帮助中心</li>
+  </ol>
+</div>
+<!-- EOF: #breadcrumb-inside -->
+</div>
+{/breadcrumbsHolder}
+{<contentHolder}
+<div id="helppage-content" class="main-content-padding">
+	<div class="row">
+    
+
+	</div>
+</div>
+{/contentHolder}
+{<scriptsHolder}
+<script type="text/javascript" src="/static/app/lib/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="/static/app/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/static/app/help/helpCenterApp.js"></script>
+
+{/scriptsHolder}

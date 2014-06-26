@@ -1,7 +1,21 @@
 {>basicLayout/}
+{<breadcrumbsHolder}
+<div id="breadcrumb" class="clearfix">
+<!-- #breadcrumb-inside -->
+<div id="breadcrumb-inside" class="main-content-padding clearfix">
+  <span class="sub-text">当前位置：</span>
+  <ol class="breadcrumb">
+    <li>
+      <a href="/">主页</a>
+    </li>
+    <li class="active">常用问题解答</li>
+  </ol>
+</div>
+<!-- EOF: #breadcrumb-inside -->
+</div>
+{/breadcrumbsHolder}
 {<contentHolder}
 <div id="helppage-content" class="main-content-padding">
-	<h4 class="main-content-title">Adobe® Translation Help Center</h4>
 	<div class="row">
 		<div class="col-md-3">
 			<ul class="nav nav-list nav-list-vivid" id="help-tab">
@@ -56,7 +70,7 @@
 </div>
 {/contentHolder}
 {<scriptsHolder}
-<script type="text/javascript" src="/static/app/lib/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript" src="/static/app/lib/jquery/jquery.min.js"></script>
 <script type="text/javascript" src="/static/app/lib/bootstrap/dist/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/static/app/help/helpapp.js"></script>
 

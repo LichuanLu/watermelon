@@ -265,15 +265,15 @@
 						<span>
                    			 © 2014版权所有. 陕ICP备14005509号
 		                </span>
-		               <!--  <div class="breadcrumb-text">
+		                <div class="breadcrumb-text">
 		                    <p>
 		                        <a href="#">关于我们</a>
-		                        <a href="#">医院合作</a>
+		                        <!-- <a href="#">医院合作</a> -->
 		                        <a href="#">免责条款</a>
 		                        <a href="#">联系我们</a>
-		                        <a href="#">网站地图</a>
+		                        <!-- <a href="#">网站地图</a> -->
 		                    </p>
-		                </div> -->
+		                </div>
 					</td>
 			</tr>
 		</tbody>

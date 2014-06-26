@@ -84,7 +84,7 @@
 			<ul id="carousel" class="elastislide-list">
 				<li data-preview="/static/assets/image/9.jpg">
 					<a href="#">
-						<img src="/static/assets/image/9-small.jpg" alt="image01" />
+						<img src="/static/assets/image/9.jpg" alt="image01" />
 						<div class="doctor-des">
 							<h6>任志强 <span>副主任医师</span></h6>
 							<p class="hospital">西安西京医院</p>
