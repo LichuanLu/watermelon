@@ -32,6 +32,6 @@
 	</div>
 </div>
 <div class="col-md-2 doctor-action">
-	<button class="btn btn-primary btn-sm apply-btn">请求诊断</button>
+	<a class="btn btn-primary btn-sm apply-btn" href="/applyDiagnose?doctorid={id}" target="_blank">请求诊断</a>
 </div>
 </li>
