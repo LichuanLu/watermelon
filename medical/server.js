@@ -144,7 +144,7 @@ app.configure(function() {
         section: "头部，颈部，胸部",
         status: "诊断完成",
         statusId: "6",
-        isFeedback:true
+        isFeedback:false
 
       },
       {

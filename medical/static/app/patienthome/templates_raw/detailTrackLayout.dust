@@ -189,7 +189,7 @@
 							<span>您可以：<a href="#">写感谢信</a><a href="#">在线查看</a><a href="#">下载</a></span>
 							{/if}
 						{/if}
-						
+
 					</div>
 					<h6 class="second-title">诊断跟踪：</h6>
 					<div class="bottom-wrapper">
