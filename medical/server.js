@@ -67,6 +67,7 @@ app.configure(function() {
 
   app.get('/applyDiagnose', function(req, res) {
     res.render('applyDiagnose',{
+      edit:true
     });
   });
 
@@ -99,6 +100,12 @@ app.configure(function() {
   });
   app.get('/admin/fenzhen', function(req, res) {
     res.render('adminFenzhen', {});
+  });
+  app.get('/admin/kefu', function(req, res) {
+    res.render('adminKefu', {});
+  });
+  app.get('/help/doc', function(req, res) {
+    res.render('helpdoc', {});
   });
 
   app.get('/login', function(req, res) {
@@ -136,7 +143,8 @@ app.configure(function() {
         date: "2014-11-29",
         section: "头部，颈部，胸部",
         status: "诊断完成",
-        statusId: "6"
+        statusId: "6",
+        isFeedback:"false"
 
       },
       {
@@ -902,6 +910,32 @@ app.configure(function() {
   });
 
 
+  app.post('/doctor/register/confirm', function(req, res) {
+    console.dir(req.query);
+    res.send({
+      status: 0,
+      msg: "",
+      data: ""
+    });
+
+  });
+
+
+
+  app.get('/diagnose/paylink', function(req, res) {
+    console.log(req.query);
+      var data = {
+        id: 1,
+        paylink:"http://test"
+      };
+  
+
+    res.send({
+      status: 0,
+      msg: "",
+      data: data
+    });
+  });
 
 
 

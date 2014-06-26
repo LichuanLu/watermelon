@@ -1,0 +1,63 @@
+{>basicLayout/}
+{<contentHolder}
+<div id="helppage-content" class="main-content-padding">
+	<h4 class="main-content-title">Adobe® Translation Help Center</h4>
+	<div class="row">
+		<div class="col-md-3">
+			<ul class="nav nav-list nav-list-vivid" id="help-tab">
+            <li class="active">
+              <a href="#why">
+                Why Community Translation?
+              </a>
+            </li>
+            <li class="">
+              <a href="#faq">
+                Frequently Asked Questions
+              </a>
+            </li>
+            <li class="">
+              <a href="#ll">
+                About Language Leader
+              </a>
+            </li>
+            <li class="">
+              <a href="#dash">
+                About Dashboard
+              </a>
+            </li>
+          </ul>
+		</div>
+		<div class="col-md-9">
+			<div id='content' class="tab-content">
+
+				<div id="why" class="tab-pane active">
+					<h2>What is the Adobe Community Translation program?</h2><p>The Adobe Community Translation program enables users all over the world to contribute translations for Adobe products and services, including the user interface of Adobe software applications as well as Adobe TV episodes.</p><h2>What are the benefits of the Adobe Community Translation program?</h2><p>At Adobe, we are always looking for new ways to make our software available to as many people as possible and to connect more meaningfully with our users. Community translation helps us do both.</p><p>This platform enables users from all corners of the globe to participate in Adobe's software and content development process while collaborating with others to provide authentic translations for the languages they know best. This program provides vital feedback and support, so Adobe can create the software users want in the languages they need. And users get the chance to directly influence the development and language support of their favorite Adobe tools.</p>
+				</div>
+				<div id="faq" class="tab-pane"><ul><li><h3>Why did Adobe create the Community Translation program?</h3><p>Adobe created this program to achieve two key objectives. First, we want to provide a feedback mechanism to our user community for languages that are already supported by Adobe. In essence, we want to connect this community to our professional translators, so the quality of our translations improves over time. Second, we want to empower our user community to spearhead new product versions for languages that Adobe doesn't currently support.</p></li><li><h3>How does the Adobe Community Translation program benefit products that have already been translated?</h3><p>The translation community is the voice of the customer. This program enables the user community to provide quick, direct feedback about our products and content. We rely on the community to let us know if specific translations are contextually inaccurate or compromising the interface. These tools enable everyone, even the people within our own organization, to flag problems as quickly as possible, so we can maintain high quality standards for customers in all our markets. By combining this fast feedback loop with advanced, agile development and frequent product updates, we can improve our products and innovate faster and more effectively.</p></li><li><h3>Does Adobe promote community translation to cut translation costs?</h3><p>No. In fact, the design and the development of our community translation platform represent a sizeable initial investment and commitment from Adobe. There are also recurring costs associated with maintaining and enhancing the community translation infrastructure. In fact, the cost to initiate community translation processes and workflows are higher than the traditional translation and localization process.</p><p>Adobe's main objective is to further engage with our international customers by providing a way for them to submit feedback on our existing translations. In addition, community translation highlights the regions and languages where our community's interest is strong enough to justify additional investments.</p></li><li><h3>In the future, does Adobe plan to rely on community translation exclusively?</h3><p>No. We will continue to work with our trusted professional translators. The Adobe Community Translation program provides important support to our overall localization strategy, but it will not replace our traditional localization process. Our vision is to connect both worlds. By bringing together our professional translators and our user community, we can improve the quality of our products and make them available to more users in more places.</p></li><li><h3>Do community translators receive any monetary incentives?</h3><p>Adobe does not offer monetary compensation for community translation. This program is intended for volunteer contributors who have a passion for the languages they speak and an interest in Adobe software. Their efforts help us make better products and serve more users in more markets.</p><p>Adobe does track the contributions of all community members. We track not only the number of approved translations, but also the overall number of submissions, comments, and votes from each contributor. That way, contributors always know how much they have helped and how their contribution compares with other community members. Adobe also recognizes the most active contributors on the Translator Showcase.</p></li><li><h3>Will the Adobe Community Translation program allow the community to translate products into new language versions?</h3><p>This program will allow users to express interest in specific language versions that Adobe does not already support. This will help us gauge the interest for requested languages as well as the translation support the community can offer for those languages. If we start seeing a demand for certain locales, we will seriously consider serving that new market.</p></li><li><h3>Are all Adobe products available for community translation?</h3><p>Our ultimate goal is to make every Adobe product available for community translation, but we're not there yet. We expect the number of Adobe products available for community contributions to significantly increase over time. If you do not see your favorite product or a language you would like to contribute to, please let us know by <a href="mailto:AdobeTranslatorFeedback@adobe.com">contacting us</a>, and we will try to make it available.</p></li><li><h3>What languages can I translate into?</h3><p>Adobe intends to make all shipping product language versions available for feedback and defect reporting. Other languages may be made available for community translation. To request that a specific product be made available in a specific language, <a href="mailto:AdobeTranslatorFeedback@adobe.com">contact us</a>.</p></li><li><h3>How are the translations integrated into Adobe products?</h3><p>The servers hosting the Adobe Translation Center are connected to Adobe's internal translation server infrastructure. Proposed translations are routed to moderators for acceptance. Once a translation is accepted, it can automatically be integrated into the production cycle of the next build of the product.</p></li><li><h3>My translation has been approved. When will I see it in my favorite Adobe product?</h3><p>The release cycles of our products differ widely in length. Desktop products usually have a longer release cycle due to their complex architecture and multitude of features. Mobile applications or software services often see updates or fixes within weeks or a few months. If your translation has been approved, it can take anywhere from weeks to months for it to appear in one of our products.</p></li><li><h3>Where can I get ongoing information about the status and progress of the Adobe Community Translation program?</h3><p>There are several ways to stay up-to-date with the Adobe Community Translation program:</p><p>Follow us on <a rel="external" href="https://www.facebook.com/adobe.community.translation" target="_blank">Facebook</a>.</p><p>Follow us on Twitter <a rel="external" href="https://twitter.com/AdobeCommT9n" target="_blank">@AdobeCommT9n</a>.</p></li></ul></div>
+          <div id="ll" class="tab-pane">
+          <h2>Who can be a language leader?</h2>
+          <p>Every user who is willing to contribute to the community can apply to be a language leader.</p>
+          <h2>How to apply to be a language leader?</h2>
+          <p>In dashboard page -> Language Leads, click Apply button to open a form. Complete the form then wait. We'll approve your application if you are qualified for this role.</p>
+          <h2>What can a language leader do?</h2>
+          <p>First, A language leader can add products in his languages which are led by him/her. Second, a language leader can approve/unaprove translations.</p>
+        </div>
+         <div id="dash" class="tab-pane">
+          <h2>What's a dashboard?</h2>
+          <p>Adobe Translate Centor divedes users into multiple communities by languages, and each community is represented by a dashboard. Every dashboard has its own user activities, top contributors and products.</p>
+          <h2>What's the relation between user's native language and dashboard and translate page?</h2>
+          <p>Dashboard and translate page(http://translate.adobe.com/translate/list/language-id) are always in a same language, for example, If a user is in France dashbaord then translate page will show him/her all France products.</p>
+          <p>After a user signing in, Adobe Translate Centor will guide him/her to a dashboard which is based on his/her native language. Meantime, Users can change dashboard to other languages.</p>
+        </div>
+			</div>
+    
+		</div>
+	</div>
+</div>
+{/contentHolder}
+{<scriptsHolder}
+<script type="text/javascript" src="/static/app/lib/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript" src="/static/app/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/static/app/help/helpapp.js"></script>
+
+{/scriptsHolder}
