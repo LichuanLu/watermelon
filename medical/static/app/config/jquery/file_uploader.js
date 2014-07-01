@@ -35,9 +35,9 @@ define([], function() {
 		"</span>" +
 		"</td>" +
 		"<td>" +
-		"<p class=\"name\" id=\"downloadFile\" data-fileid=\"{%=file.id%}\">" +
+		"<p class=\"name\" id=\"downloadFile\">" +
 		"{% if (file.url) { %}" +
-		"<a href=\"{%=file.url%}\" class=\"downloadFileLink\" title=\"{%=file.name%}\" download=\"{%=file.name%}\" {%=file.thumbnailUrl?'data-gallery':''%}>{%=file.name%}</a>" +
+		"<a href=\"{%=file.url%}\" class=\"downloadFileLink\" data-fileid=\"{%=file.id%}\" title=\"{%=file.name%}\" download=\"{%=file.name%}\" {%=file.thumbnailUrl?'data-gallery':''%}>{%=file.name%}</a>" +
 		"{% } else { %}" +
 		"<span>{%=file.name%}</span>" +
 		"{% } %}" +

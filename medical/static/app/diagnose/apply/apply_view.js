@@ -423,9 +423,17 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 				console.dir(this.ui.recommandedDoctor);
 				data = "doctorId=" + $('#recommandedDoctor .doctor-preview').data('doctor-id');
 			} else if (formId == 3) {
-				console.dir($('#dicomfileupload #downloadFile'));
-				var tempstr = $("#new-dicom-form .downloadFileLink").attr('href') || $('.edit-file-wrapper .file-link').attr('href');
-				var fileId = $('#dicomfileupload #downloadFile').data('fileid') || $('.edit-file-wrapper .file-link').data('fileid');
+				var $newDicomForm = $('#new-dicom-form');
+				var $editFileWrapper = $newDicomForm.find('.edit-file-wrapper');
+				var $newFileWrapper = $newDicomForm.find('.new-file-wrapper');
+				if($editFileWrapper.is(':hidden')){
+					var tempstr = $newFileWrapper.find('.downloadFileLink').attr('href');
+					var fileId = $newFileWrapper.find('.downloadFileLink').data('fileid');
+				}else if($newFileWrapper.is(':hidden')){
+					var tempstr = $editFileWrapper.find('.file-link').attr('href');
+					var fileId = $editFileWrapper.find('.file-link').data('fileid');
+				}
+
 				var data = $form.serialize();
 				if (typeof tempstr !== 'undefined' && tempstr != 'undefined') {
 					data =  data + "&fileurl=" + encodeURIComponent(tempstr);
@@ -435,19 +443,35 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 				}
 
 			} else {
-				var filelinks = $("#new-history-form").find('.downloadFileLink');
+				var $newHistoryForm = $('#new-history-form');
+				var $editFileWrapper = $newHistoryForm.find('.edit-file-wrapper');
+				var $newFileWrapper = $newHistoryForm.find('.new-file-wrapper');
+				if($editFileWrapper.is(':hidden')){
+					var filelinks = $newFileWrapper.find('.downloadFileLink');
+				}else if($newFileWrapper.is(':hidden')){
+					var filelinks = $editFileWrapper.find('.file-link');
+				}
+				
+				data = $form.serialize();
 				var fileurl = "";
+				var fileid = "";
 				filelinks.each(function(index, element) {
 					var tempstr = $(element).attr('href');
+					var tempIdStr = $(element).data('fileid');
 					if (typeof tempstr !== 'undefined' && tempstr != 'undefined') {
 						fileurl += "&fileurl=" + encodeURIComponent(tempstr);
 					}
-				})
+					if (typeof tempIdStr !== 'undefined' && tempIdStr != 'undefined') {
+						fileid += "&fileid=" + tempIdStr;
+					}
+				});
 				if (typeof fileurl !== 'undefined') {
-					data = $form.serialize() + fileurl;
-				} else {
-					data = $form.serialize();
+					data = data + fileurl;
 				}
+				if (typeof fileid !== 'undefined') {
+					data = data + fileid;
+				}
+
 			}
 
 			return data;
