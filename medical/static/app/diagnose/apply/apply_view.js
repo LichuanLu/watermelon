@@ -213,11 +213,11 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 
 			//init form
 			this.showForm(1);
-			if (this.isEdit === 'true') {
-				this.showForm(2);
-				this.showForm(3);
-				this.showForm(4);
-			}
+			// if (this.isEdit === 'true') {
+			// 	this.showForm(2);
+			// 	this.showForm(3);
+			// 	this.showForm(4);
+			// }
 
 			//modal show function
 			// $('#select-doctor-modal').on('shown.bs.modal', function (e) {
@@ -246,18 +246,30 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 						identitynumber: {
 							required: true
 						},
-						location: {
+						locationId: {
 							required: true
 						},
 						skillId: {
 							required: true
 						},
-						diagnoseHistory: {
-							required: true
-						},
 						illnessHistory: {
 							required: true
+						},
+						patientlocation:{
+							required: true
+
+						},
+						dicomtype:{
+							required: true
+
+						},
+						hospitalId:{
+							required: true
+
 						}
+
+
+						
 
 					},
 					ignore: [],
@@ -294,7 +306,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 			}
 			ReqCmd.commands.execute("ApplyDiagnosePageLayoutView:getRecommandedDoctor",params);
 			this.initPatientProfile();
-			this.initDicomInfo();
+			// this.initDicomInfo();
 
 		},
 		//in form3 , change exist dicom from select
@@ -412,15 +424,14 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 				data = "doctorId=" + $('#recommandedDoctor .doctor-preview').data('doctor-id');
 			} else if (formId == 3) {
 				console.dir($('#dicomfileupload #downloadFile'));
-				var fileurl = "";
-				var tempstr = $("#new-dicom-form .downloadFileLink").attr('href');
+				var tempstr = $("#new-dicom-form .downloadFileLink").attr('href') || $('.edit-file-wrapper .file-link').attr('href');
+				var fileId = $('#dicomfileupload #downloadFile').data('fileid') || $('.edit-file-wrapper .file-link').data('fileid');
+				var data = $form.serialize();
 				if (typeof tempstr !== 'undefined' && tempstr != 'undefined') {
-					fileurl = "&fileurl=" + encodeURIComponent(tempstr);
+					data =  data + "&fileurl=" + encodeURIComponent(tempstr);
 				}
-				if (typeof fileurl !== 'undefined') {
-					data = $form.serialize() + fileurl;
-				} else {
-					data = $form.serialize()
+				if(typeof fileId !== 'undefined'){
+					data = data + "&fileid=" + fileId;
 				}
 
 			} else {

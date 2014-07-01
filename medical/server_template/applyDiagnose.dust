@@ -105,12 +105,12 @@
 								<span class="required-text">（必填）</span>
 							</label>
 							<div class="">
-								<label class="radio">
+								<label class="radio checked">
 									<span class="icons">
 										<span class="first-icon fui-radio-unchecked"></span>
 										<span class="second-icon fui-radio-checked"></span>
 									</span>
-									<input type="radio" name="patientsex" value="1" data-toggle="radio">男</label>
+									<input type="radio" name="patientsex" value="1" data-toggle="radio" checked>男</label>
 
 								<label class="radio">
 									<span class="icons">
@@ -177,7 +177,7 @@
 								<!-- <input type="text" id="locationinput" class="form-control" name="location" data-provide="typeahead" /> -->
 								<select id="locationinput" name="locationId" class="multiselect">
  									<option value="0">未选中</option>
-									<option value="1">陕西，西安</option>
+									<option value="1" selected>陕西，西安</option>
 									<option value="2">陕西，汉中</option>
 									<option value="－1">其他</option>
 								</select>
@@ -259,14 +259,14 @@
 									<span class="first-icon fui-radio-unchecked"></span>
 									<span class="second-icon fui-radio-checked"></span>
 								</span>
-								<input type="radio" name="dicomtype" value="1" data-toggle="radio">CT</label>
+								<input type="radio" name="dicomtype" value="ct" data-toggle="radio">CT</label>
 
 							<label class="radio">
 								<span class="icons">
 									<span class="first-icon fui-radio-unchecked"></span>
 									<span class="second-icon fui-radio-checked"></span>
 								</span>
-								<input type="radio" name="dicomtype" value="2" data-toggle="radio">核磁共振(MR)</label>
+								<input type="radio" name="dicomtype" value="mri" data-toggle="radio">核磁共振(MR)</label>
 						</div>
 					</div>
 					<div class="form-group" id="dicomfileupload">
@@ -419,7 +419,7 @@
 						<p class="">已经上传的文件列表	<a class="btn btn-warning btn-xs">全部重新上传</a></p>
 								<div class="row">
 									<div class="col-md-4">
-										<a href="#">dasdasdasdas.dicom</a>
+										<a class="file-link" data-fileid="555" href="ttt">dasdasdasdas.dicom</a>
 									</div>
 									<div class="col-md-4">
 										<span>文件大小：25M</span>

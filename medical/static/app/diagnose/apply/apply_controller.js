@@ -136,6 +136,11 @@ define(['lodash', 'config/base/constant', 'config/controllers/_base_controller',
 
 
 
+
+
+
+
+
 			this.layoutView = this.getApplyDiagnosePageLayoutView();
 			this.modalView = this.getSelectDoctorModalView();
 
@@ -151,7 +156,17 @@ define(['lodash', 'config/base/constant', 'config/controllers/_base_controller',
 				//as bindAll this,so don't need that
 				instance: this
 			});
+
+
+			//get pathology list finish , then get profile from first select
+			ReqCmd.reqres.setHandler('getPathologyList:Done',Lodash.bind(function(params) {
+				this.layoutView.initDicomInfo();
+			
+			}, this));
+
+
 			console.log('follow controller init end');
+
 
 		},
 		getApplyDiagnosePageLayoutView: function() {

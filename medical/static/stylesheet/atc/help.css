@@ -2,6 +2,9 @@
   border-bottom-color: #34495e !important;
   border-top-color: #34495e !important;
 }
+#helppage-content .help-doc-content {
+  margin-top: 20px;
+}
 #helppage-content .nav.vertical-list li a {
   font-size: 15px;
   line-height: 200%;
@@ -30,7 +33,7 @@
   border-bottom: 1px solid #16a085;
   margin: 5px 0;
   color: #666666;
-  padding-bottom: 2px;
+  padding-bottom: 10px;
 }
 #helppage-content .tab-content.vertical-tab-content h2,
 #helppage-content .tab-content.vertical-tab-content h3 {
