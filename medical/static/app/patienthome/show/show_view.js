@@ -112,9 +112,9 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'dust', 'dustMarion
 			"click @ui.deleteLinks": "deleteDiagnose"
 		},
 		actionLinkHandler: function(e) {
-			e.preventDefault();
 			var $link = $(e.target);
-			if ($link.is('.sharing-link')) {
+			if ($link.is('.action-link')) {
+				e.preventDefault();
 				console.log("sharing-link click");
 				var model = this.model;
 				var sharingModalView = new SharingModalView({

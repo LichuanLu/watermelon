@@ -68,8 +68,8 @@ define(['lodash', 'config/base/constant', 'config/controllers/_base_controller',
 			}, this));
 
 			//handle recommaned doctor
-			ReqCmd.reqres.setHandler("ApplyDiagnosePageLayoutView:getRecommandedDoctor", Lodash.bind(function() {
-				this.recommandedDoctorModel = DoctorEntity.API.getRecommandedDoctorModel();
+			ReqCmd.commands.setHandler("ApplyDiagnosePageLayoutView:getRecommandedDoctor", Lodash.bind(function(params) {
+				this.recommandedDoctorModel = DoctorEntity.API.getRecommandedDoctorModel(params);
 				this.recommandedDoctorView = this.getRecommandedDoctorView(this.recommandedDoctorModel);
 				this.show(this.recommandedDoctorView, {
 					region: this.layoutView.recommandedDoctorRegion,

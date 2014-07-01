@@ -7,6 +7,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 			console.log("init ApplyDiagnosePageLayoutView");
 			this.isEdit = $.getUrlVar('edit');
 			this.diagnoseId = $.getUrlVar('diagnoseid');
+			this.doctorId = $.getUrlVar('doctorid');
 			this.isHospitalUser = $.getUrlVar('type');
 			this.appInstance = require('app');
 			if (this.diagnoseId) {
@@ -287,7 +288,11 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 		},
 		// we need this to do init work for forms
 		initDiagnoseForms: function() {
-			ReqCmd.reqres.request("ApplyDiagnosePageLayoutView:getRecommandedDoctor");
+			var params = {};
+			if(this.doctorId){
+				params.doctorId = this.doctorId;
+			}
+			ReqCmd.commands.execute("ApplyDiagnosePageLayoutView:getRecommandedDoctor",params);
 			this.initPatientProfile();
 			this.initDicomInfo();
 

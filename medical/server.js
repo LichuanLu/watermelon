@@ -118,6 +118,11 @@ app.configure(function() {
   app.get('/error/404', function(req, res) {
     res.render('errorpage', {});
   });
+  app.get('/help/center', function(req, res) {
+    res.render('helpcenter', {});
+  });
+
+
   app.configure('development', function() {
     app.use(express.errorHandler());
   });
@@ -760,6 +765,7 @@ app.configure(function() {
   app.get('/diagnose/actions', function(req, res) {
     console.dir(req.query);
     var data = {
+      id:1,
       diagnoseStatus:7,
       diagnosenumber:"34332",
       applyTime: "2013-03-30",
