@@ -8,30 +8,30 @@
     <li>
       <a href="/">主页</a>
     </li>
-    <li class="active">常用问题解答</li>
+    <li class="active">关于易诊断</li>
   </ol>
 </div>
 <!-- EOF: #breadcrumb-inside -->
 </div>
 {/breadcrumbsHolder}
 {<contentHolder}
-<div id="helppage-content" class="main-content-padding">
+<div id="aboutpage-content" class="main-content-padding">
 	<div class="row help-doc-content">
 		<div class="col-md-3">
-			<ul class="nav nav-list nav-list-vivid vertical-list" id="help-tab">
+			<ul class="nav nav-list nav-list-vivid vertical-list" id="about-tab">
             <li class="active">
-              <a href="#register">
-                注册与登陆
+              <a href="#aboutus">
+                关于我们
               </a>
             </li>
             <li class="">
-              <a href="#account">
-                帐号相关
+              <a href="#responsible">
+                用户条款及免责条款
               </a>
             </li>
             <li class="">
-              <a href="#zhenduan">
-                诊断相关
+              <a href="#contact">
+                联系我们
               </a>
             </li>
             
@@ -40,43 +40,45 @@
 		<div class="col-md-9">
 			<div id='content' class="tab-content vertical-tab-content">
 
-				<div id="register" class="tab-pane active">
-          <h6 class="title">注册与登陆</h6>
+				<div id="aboutus" class="tab-pane active about-content-1">
+          <h6 class="title">关于我们</h6>
           <ul>
             <li>
-    					<h3>如何使用手机注册？</h3>
-              <p>第一步，在主页上点击“用户注册入口”。</p>
-              <p>第二步，填写手机号，设置密码。</p>
-              <p>第三步，点击“同意服务条款并提交”。</p>
-            </li>
-            <li>
-              <h3>如何登陆易诊断？</h3>
-              <p>第一步，在主页上右方点击“登陆”。</p>
-              <p>第二步，在弹出框中输入正确的帐号和密码，帐号为手机号或者邮箱。</p>
-              <p>第三步，点击“确定”。</p>
+              <h3>“易诊断”项目</h3>
+    					<p>
+                “易诊断”项目是一个创新的医疗影像诊断互联网平台和移动互联网解决方案。易诊断的目标是成为领先的影像医疗决策诊断平台和医疗健康信息管理平台： <br/>
+1. 成为医疗影像诊断首选网站/APP<br/>
+2. 有利于科研，改进影像医疗诊断，建立最大的医疗数据库，通过数据挖掘发现治疗新方法和病例<br/>
+3. 建立个人影像健康档案，提升用户的健康管理水平 <br/>
+              </p>
             </li>
           </ul>
 				</div>
-				<div id="account" class="tab-pane">
-          <h6 class="title">帐号相关问题</h6>
+				<div id="responsible" class="tab-pane">
+          <h6 class="title">用户条款及免责条款</h6>
+          当有用户访问或使用本网站之行为时，即表示用户已同意接受本条款的各项内容的约束。
           <ul>
             <li>
-              <h3>忘记密码怎么办？</h3>
-              <p>第一步，在主页上右方点击“登陆”。</p>
-              <p>第二步，在弹出框中点击“忘记密码”。</p>
-              <p>第三步，在弹出页面中，输入手机号，填写验证码。</p>
-              <p>第四步，输入新密码并点击“确认”。</p>
+              <h3>医学内容免责声明</h3>
+              <p>易诊断旨在提供医疗影像诊断平台，服务大众，促进影像医疗发展。所有产生的影像诊断，平台保证均是相关医疗机构相关影像科医生所产生，但平台不对诊断内容负有任何责任。在用户在对诊断结果有相关的问题时，请务必向医生或其他合格的医疗机构征求意见。</p>
             </li>
             <li>
-              <h3>如何修改密码？</h3>
-              <p>第一步，登陆易诊断。</p>
-              <p>第二步，选择“进入个人中心”。</p>
-              <p>第三步，在个人中心页面，选择“帐号管理”。</p>
-              <p>第四步，选择“修改密码”，并且输入旧密码和新密码，点击“提交”。</p>
+              <h3>分享产权</h3>
+              <p>易诊断拥有本应用及/或相关网站所有内容的版权，包括但不限于文本、图片、模块等。未经易诊断的书面许可，禁止挪用或复制本站内容。所有未在此明确授予用户的权利，看处方将予以保留。</p>
+            </li>
+            <li>
+              <h3>责任限制</h3>
+              <p>
+                用户理解并同意自主选择、使用易诊断服务的风险自负。在任何条件下，易诊断及附属公司、员工、创建或者维护易诊断应用的人员对用户使用本站或链接本站的第三方网站导致的直接、间接、偶然、特殊、关联性损害或利益损失，或由错误、疏漏、信号中断、文件删除、病毒、网站出错，漏洞导致的直接或间接损害，或由于运行不稳、通信故障、盗窃、破坏或未经授权使用导致的损害不承担任何法律责任。
+              </p>
+            </li>
+            <li>
+              <h3>条款变更</h3>
+              <p>易诊断保留不需事先通知即可修改本条款并在本站公布修改条款的权利。用户应定期阅读该条款，了解本条款的任何变更以及变更的生效日期。用户理解并同意，如果用户在本条款做出变更后继续使用本网站，则视为接受该变更。</p>
             </li>
           </ul>
         </div>
-        <div id="zhenduan" class="tab-pane">
+        <div id="contact" class="tab-pane">
           <h6 class="title">诊断相关问题</h6>
           <ul>
             <li>
@@ -104,6 +106,6 @@
 {<scriptsHolder}
 <script type="text/javascript" src="/static/app/lib/jquery/jquery.min.js"></script>
 <script type="text/javascript" src="/static/app/lib/bootstrap/dist/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="/static/app/help/helpapp.js"></script>
+<script type="text/javascript" src="/static/app/about/aboutapp.js"></script>
 
 {/scriptsHolder}

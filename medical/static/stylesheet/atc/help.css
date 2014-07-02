@@ -2,19 +2,23 @@
   border-bottom-color: #34495e !important;
   border-top-color: #34495e !important;
 }
-#helppage-content .help-doc-content {
+#helppage-content .help-doc-content,
+#aboutpage-content .help-doc-content {
   margin-top: 20px;
 }
-#helppage-content .nav.vertical-list li a {
+#helppage-content .nav.vertical-list li a,
+#aboutpage-content .nav.vertical-list li a {
   font-size: 15px;
   line-height: 200%;
   color: #666666;
 }
-#helppage-content .nav.vertical-list li.active a {
+#helppage-content .nav.vertical-list li.active a,
+#aboutpage-content .nav.vertical-list li.active a {
   color: #ffffff;
   margin-right: -34px;
 }
-#helppage-content .nav.vertical-list li.active a:after {
+#helppage-content .nav.vertical-list li.active a:after,
+#aboutpage-content .nav.vertical-list li.active a:after {
   border: 23px solid #ffffff;
   border-left-color: transparent;
   border-right-width: 0;
@@ -25,10 +29,12 @@
   top: 0;
   width: 0;
 }
-#helppage-content .tab-content.vertical-tab-content {
+#helppage-content .tab-content.vertical-tab-content,
+#aboutpage-content .tab-content.vertical-tab-content {
   border-width: 1px;
 }
-#helppage-content .tab-content.vertical-tab-content h6.title {
+#helppage-content .tab-content.vertical-tab-content h6.title,
+#aboutpage-content .tab-content.vertical-tab-content h6.title {
   font-size: 18px;
   border-bottom: 1px solid #16a085;
   margin: 5px 0;
@@ -36,18 +42,23 @@
   padding-bottom: 10px;
 }
 #helppage-content .tab-content.vertical-tab-content h2,
-#helppage-content .tab-content.vertical-tab-content h3 {
+#aboutpage-content .tab-content.vertical-tab-content h2,
+#helppage-content .tab-content.vertical-tab-content h3,
+#aboutpage-content .tab-content.vertical-tab-content h3 {
   font-size: 16px;
   color: #000000;
 }
-#helppage-content .tab-content.vertical-tab-content p {
+#helppage-content .tab-content.vertical-tab-content p,
+#aboutpage-content .tab-content.vertical-tab-content p {
   color: #666666;
   font-size: 14px;
 }
-#helppage-content .tab-content.vertical-tab-content p a {
+#helppage-content .tab-content.vertical-tab-content p a,
+#aboutpage-content .tab-content.vertical-tab-content p a {
   color: #16a085;
 }
-#helppage-content .tab-content.vertical-tab-content ul {
+#helppage-content .tab-content.vertical-tab-content ul,
+#aboutpage-content .tab-content.vertical-tab-content ul {
   list-style: none;
   padding: 0;
 }

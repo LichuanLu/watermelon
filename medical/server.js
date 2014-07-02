@@ -122,6 +122,10 @@ app.configure(function() {
     res.render('helpcenter', {});
   });
 
+  app.get('/about', function(req, res) {
+    res.render('about', {});
+  });
+
 
   app.configure('development', function() {
     app.use(express.errorHandler());

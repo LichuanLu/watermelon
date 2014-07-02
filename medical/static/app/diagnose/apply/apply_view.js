@@ -19,8 +19,8 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 			"recommandedDoctorRegion": "#recommandedDoctor",
 			"patientProfileRegion": "#patient-already-profile-region",
 			"dicomInfoRegion": "#dicom-already-info-region",
-			"historyAlreadyExistsSelect": "#history-already-exists-select",
-			"dicomAlreadyExistsSelect": "#dicom-already-exists-select"
+			"historyAlreadyExistsSelect": "#history-already-exists-select-region",
+			"dicomAlreadyExistsSelect": "#dicom-already-exists-select-region"
 
 		},
 		el: "#applydignose-content",
@@ -35,7 +35,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 		events: {
 			'click @ui.submitBtns': "submitHandler",
 			'change @ui.patientAlreadyExistsSelect': "changePatientAlreadyExists",
-			'change @ui.dicomAlreadyExistsSelect': "changeDicomAlreadyExists",
+			// 'change @ui.dicomAlreadyExistsSelect': "changeDicomAlreadyExists",
 			'click @ui.reuploadBtn': "reuploadFile"
 		},
 		attachEndHandler: function() {
@@ -255,21 +255,20 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 						illnessHistory: {
 							required: true
 						},
-						patientlocation:{
+						patientlocation: {
 							required: true
 
 						},
-						dicomtype:{
+						dicomtype: {
 							required: true
 
 						},
-						hospitalId:{
+						hospitalId: {
 							required: true
 
 						}
 
 
-						
 
 					},
 					ignore: [],
@@ -301,10 +300,11 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 		// we need this to do init work for forms
 		initDiagnoseForms: function() {
 			var params = {};
-			if(this.doctorId){
+			if (this.doctorId) {
 				params.doctorId = this.doctorId;
 			}
-			ReqCmd.commands.execute("ApplyDiagnosePageLayoutView:getRecommandedDoctor",params);
+			//don't use front end rend
+			ReqCmd.commands.execute("ApplyDiagnosePageLayoutView:getRecommandedDoctor", params);
 			this.initPatientProfile();
 			// this.initDicomInfo();
 
@@ -370,7 +370,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 			var $form = $panel.find('form:visible');
 			var formId = $panel.data('form-id');
 			var data = this.validate($form, formId);
-			console.dir(data);
+			//console.dir(data);
 			if (data) {
 				//when edit , add diagnose id for the request
 				if (this.isEdit === 'true' && this.diagnoseId) {
@@ -418,61 +418,63 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 		},
 		validate: function($form, formId) {
 			var data;
-			console.log($form.valid());
-			if (formId == 1) {
-				console.dir(this.ui.recommandedDoctor);
-				data = "doctorId=" + $('#recommandedDoctor .doctor-preview').data('doctor-id');
-			} else if (formId == 3) {
-				var $newDicomForm = $('#new-dicom-form');
-				var $editFileWrapper = $newDicomForm.find('.edit-file-wrapper');
-				var $newFileWrapper = $newDicomForm.find('.new-file-wrapper');
-				if($editFileWrapper.is(':hidden')){
-					var tempstr = $newFileWrapper.find('.downloadFileLink').attr('href');
-					var fileId = $newFileWrapper.find('.downloadFileLink').data('fileid');
-				}else if($newFileWrapper.is(':hidden')){
-					var tempstr = $editFileWrapper.find('.file-link').attr('href');
-					var fileId = $editFileWrapper.find('.file-link').data('fileid');
-				}
+			if ($form.valid()) {
+				if (formId == 1) {
+					console.dir(this.ui.recommandedDoctor);
+					data = "doctorId=" + $('#recommandedDoctor .doctor-preview').data('doctor-id');
+				} else if (formId == 3) {
+					var $newDicomForm = $('#new-dicom-form');
+					var $editFileWrapper = $newDicomForm.find('.edit-file-wrapper');
+					var $newFileWrapper = $newDicomForm.find('.new-file-wrapper');
+					if ($editFileWrapper.is(':hidden')) {
+						var tempstr = $newFileWrapper.find('.downloadFileLink').attr('href');
+						var fileId = $newFileWrapper.find('.downloadFileLink').data('fileid');
+					} else if ($newFileWrapper.is(':hidden')) {
+						var tempstr = $editFileWrapper.find('.file-link').attr('href');
+						var fileId = $editFileWrapper.find('.file-link').data('fileid');
+					}
 
-				var data = $form.serialize();
-				if (typeof tempstr !== 'undefined' && tempstr != 'undefined') {
-					data =  data + "&fileurl=" + encodeURIComponent(tempstr);
-				}
-				if(typeof fileId !== 'undefined'){
-					data = data + "&fileid=" + fileId;
-				}
-
-			} else {
-				var $newHistoryForm = $('#new-history-form');
-				var $editFileWrapper = $newHistoryForm.find('.edit-file-wrapper');
-				var $newFileWrapper = $newHistoryForm.find('.new-file-wrapper');
-				if($editFileWrapper.is(':hidden')){
-					var filelinks = $newFileWrapper.find('.downloadFileLink');
-				}else if($newFileWrapper.is(':hidden')){
-					var filelinks = $editFileWrapper.find('.file-link');
-				}
-				
-				data = $form.serialize();
-				var fileurl = "";
-				var fileid = "";
-				filelinks.each(function(index, element) {
-					var tempstr = $(element).attr('href');
-					var tempIdStr = $(element).data('fileid');
+					var data = $form.serialize();
 					if (typeof tempstr !== 'undefined' && tempstr != 'undefined') {
-						fileurl += "&fileurl=" + encodeURIComponent(tempstr);
+						data = data + "&fileurl=" + encodeURIComponent(tempstr);
 					}
-					if (typeof tempIdStr !== 'undefined' && tempIdStr != 'undefined') {
-						fileid += "&fileid=" + tempIdStr;
+					if (typeof fileId !== 'undefined') {
+						data = data + "&fileid=" + fileId;
 					}
-				});
-				if (typeof fileurl !== 'undefined') {
-					data = data + fileurl;
-				}
-				if (typeof fileid !== 'undefined') {
-					data = data + fileid;
-				}
 
+				} else {
+					var $newHistoryForm = $('#new-history-form');
+					var $editFileWrapper = $newHistoryForm.find('.edit-file-wrapper');
+					var $newFileWrapper = $newHistoryForm.find('.new-file-wrapper');
+					if ($editFileWrapper.is(':hidden')) {
+						var filelinks = $newFileWrapper.find('.downloadFileLink');
+					} else if ($newFileWrapper.is(':hidden')) {
+						var filelinks = $editFileWrapper.find('.file-link');
+					}
+
+					data = $form.serialize();
+					var fileurl = "";
+					var fileid = "";
+					filelinks.each(function(index, element) {
+						var tempstr = $(element).attr('href');
+						var tempIdStr = $(element).data('fileid');
+						if (typeof tempstr !== 'undefined' && tempstr != 'undefined') {
+							fileurl += "&fileurl=" + encodeURIComponent(tempstr);
+						}
+						if (typeof tempIdStr !== 'undefined' && tempIdStr != 'undefined') {
+							fileid += "&fileid=" + tempIdStr;
+						}
+					});
+					if (typeof fileurl !== 'undefined') {
+						data = data + fileurl;
+					}
+					if (typeof fileid !== 'undefined') {
+						data = data + fileid;
+					}
+
+				}
 			}
+
 
 			return data;
 		},
@@ -707,11 +709,22 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 		},
 		onRender: function() {
 			console.log("PathologyCollectionView render");
-
+			console.dir(this.$el);
+			
 
 		},
 		onAfterItemAdded: function(itemView) {
 
+		},
+		onDomRefresh: function() {
+			this.$el.selectpicker({
+				style: 'btn-sm btn-primary',
+				title: "没有纪录"
+			});
+
+			this.$el.change(function() {
+				ReqCmd.commands.execute('selectChange:PathologyCollectionView')
+			});
 		},
 		onShow: function() {
 			console.log("PathologyCollectionView onShow");

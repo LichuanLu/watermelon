@@ -176,7 +176,7 @@
 							<div class="input-wrapper location-wrapper">
 								<!-- <input type="text" id="locationinput" class="form-control" name="location" data-provide="typeahead" /> -->
 								<select id="locationinput" name="locationId" class="multiselect">
- 									<option value="0">未选中</option>
+ 									<option value="">未选中</option>
 									<option value="1" selected>陕西，西安</option>
 									<option value="2">陕西，汉中</option>
 									<option value="－1">其他</option>
@@ -223,8 +223,10 @@
 							<input type="radio" name="dicomInfo" value="2" data-toggle="radio" checked="true">新影像信息</label>
 					</div>
 					<form id="dicom-already-exists" class="full-width-dropdown" style="display:none;">
-						<select id="dicom-already-exists-select" name="pathologyId">
-						</select>
+						<div id="dicom-already-exists-select-region">
+							<select id="dicom-already-exists-select" name="pathologyId">
+							</select>
+						</div>
 						<div id="dicom-already-info-region">
 						</div>
 					</form>
@@ -365,8 +367,11 @@
 							<input type="radio" name="historyInfo" value="2" data-toggle="radio" checked="true">新额外信息</label>
 				</div>
 				<form id="history-already-exists" class="full-width-dropdown" style="display:none;">
-						<select id="history-already-exists-select" name="pathologyId">
-						</select>
+						<div id="history-already-exists-select-region">
+
+							<select id="history-already-exists-select" name="pathologyId">
+							</select>
+						</div>
 						<div id="history-already-info-region">
 						</div>
 				</form>
@@ -380,7 +385,7 @@
 <!-- 							<input type="text" id="hospitalinput" name="hospitalId" class="form-control" data-provide="typeahead" />
  -->
  							<select id="hospitalinput" name="hospitalId" class="multiselect">
- 								<option value="0">未选中</option>
+ 								<option value="">未选中</option>
 								<option value="1">西安西京医院</option>
 								<option value="2">301医院</option>
 								<option value="－1">其他</option>
