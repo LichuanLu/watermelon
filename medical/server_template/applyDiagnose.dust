@@ -555,5 +555,5 @@
 {<footerHolder}
 {/footerHolder}
 {<ModalHolder}
-    {>selectDoctorModal/} 
+    {>registerDoctorWarningModal/} 
 {/ModalHolder}
