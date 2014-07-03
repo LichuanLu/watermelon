@@ -1,4 +1,4 @@
-define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.main', 'entities/doctorEntity', 'dust', 'dustMarionette', "bootstrap", 'typeahead', 'flatui.checkbox', 'flatui.radio', 'jquery-ui', 'bootstrap.select', 'flat_ui_custom', 'dust_cus_helpers', 'config/validator/config', 'bootstrap.multiselect'], function(ReqCmd, Lodash, Marionette, Templates, FileUploaderMain, DoctorEntity) {
+define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.main', 'entities/doctorEntity', 'ladda-bootstrap','dust', 'dustMarionette', "bootstrap", 'typeahead', 'flatui.checkbox', 'flatui.radio', 'jquery-ui', 'bootstrap.select', 'flat_ui_custom', 'dust_cus_helpers', 'config/validator/config', 'bootstrap.multiselect'], function(ReqCmd, Lodash, Marionette, Templates, FileUploaderMain, DoctorEntity,ladda) {
 	// body...
 	"use strict";
 	//var $;
@@ -10,6 +10,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 			this.doctorId = $.getUrlVar('doctorid');
 			this.isHospitalUser = $.getUrlVar('type');
 			this.appInstance = require('app');
+			this.applyUserType = $.getUrlVar('type');
 			if (this.diagnoseId) {
 				$('#diagnose-id-input').val(this.diagnoseId);
 			}
@@ -303,6 +304,9 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 			if (this.doctorId) {
 				params.doctorId = this.doctorId;
 			}
+			if (this.diagnoseId) {
+				params.diagnoseId = this.diagnoseId;
+			}
 			//don't use front end rend
 			ReqCmd.commands.execute("ApplyDiagnosePageLayoutView:getRecommandedDoctor", params);
 			this.initPatientProfile();
@@ -370,13 +374,23 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 			var $form = $panel.find('form:visible');
 			var formId = $panel.data('form-id');
 			var data = this.validate($form, formId);
+			//console.dir(e.target);
+			//console.dir(document.querySelector('.ladda-button'));
+			var l = ladda.create(e.target);
 			//console.dir(data);
 			if (data) {
 				//when edit , add diagnose id for the request
 				if (this.isEdit === 'true' && this.diagnoseId) {
 					data += "&diagnoseId=" + this.diagnoseId;
 				}
+				if(this.applyUserType){
+					data+= "&type="+this.applyUserType;
+				}
 				var that = this;
+				//add ladda
+				l.start();
+
+
 				$.ajax({
 					url: '/save/diagnose/' + formId,
 					data: data,
@@ -410,6 +424,9 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 					},
 					resetForm: function(leaveInputData) {
 
+					},
+					complete: function(status,request) {
+						l.stop();
 					}
 				});
 
@@ -482,19 +499,19 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 			if (typeof data.data.formId !== 'undefined') {
 				if (data.data.formId == 1) {
 					if (this.isEdit !== 'true') {
-						ReqCmd.reqres.request("ApplyDiagnosePageLayoutView:getRecommandedDoctor");
 					}
 				} else if (data.data.formId == 2) {
 					if (this.isEdit !== 'true') {
 						this.initPatientProfile();
 					}
+					if (data.data.diagnoseId) {
+						$('#diagnose-id-input').val(data.data.diagnoseId);
+					}
 				} else if (data.data.formId == 3) {
 					if (this.isEdit !== 'true') {
 						this.initDicomInfo();
 					}
-					if (data.data.diagnoseId) {
-						$('#diagnose-id-input').val(data.data.diagnoseId);
-					}
+					
 				}
 				this.showForm(data.data.formId);
 			}

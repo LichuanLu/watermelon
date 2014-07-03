@@ -47,7 +47,7 @@ button::-moz-focus-inner {
   height: 90px;
   background: url(../../assets/image/logo-1.jpg) no-repeat;
   display: block;
-  margin-left: 0px;
+  margin-left: -5px;
 }
 .home-header-wrapper {
   background-color: #fcfcfc;

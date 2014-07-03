@@ -75,9 +75,9 @@
 					任志强
 					<span>副主任医师</span>
 				</h6>
-				<p class="hospital">西安西京医院</p>
-				<p class="skill">擅长泌尿科，肿瘤</p>
-				<a href="/doctor/site/1" class="doctor-link">查看详细信息</a>
+				<p class="hospital">医院： 西安西京医院</p>
+				<p class="skill">擅长： 泌尿科，肿瘤</p>
+				<a href="/doctor/site/1" class="doctor-link">进入医生主页</a>
 			</div>
 		</div>
 		<div class="col-md-8 doctor-slider">
