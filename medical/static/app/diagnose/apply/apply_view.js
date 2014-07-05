@@ -438,7 +438,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 			if ($form.valid()) {
 				if (formId == 1) {
 					console.dir(this.ui.recommandedDoctor);
-					data = "doctorId=" + $('#recommandedDoctor .doctor-preview').data('doctor-id');
+					data = "doctorid=" + $('#recommandedDoctor .doctor-preview').data('doctor-id');
 				} else if (formId == 3) {
 					var $newDicomForm = $('#new-dicom-form');
 					var $editFileWrapper = $newDicomForm.find('.edit-file-wrapper');
