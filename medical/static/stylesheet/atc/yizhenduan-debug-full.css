@@ -6298,6 +6298,10 @@ fieldset[disabled] .navbar-inverse .navbar-btn.active {
   margin-left: 20px !important;
 }
 
+#select-doctor-modal .doctor-preview .image-preview img {
+  height: 90px;
+  width: 90px;
+}
 #select-doctor-modal .all-doctor-wrapper {
   overflow: hidden;
 }
