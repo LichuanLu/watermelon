@@ -6343,6 +6343,10 @@ fieldset[disabled] .navbar-inverse .navbar-btn.active {
   margin-left: 10px;
   margin-bottom: 8px;
 }
+#applydignose-content .doctor-preview .image-preview img {
+  height: 90px;
+  width: 90px;
+}
 #applydignose-content .submit-patient-info-wrapper .location-wrapper .line,
 #applydignose-content .submit-patient-info-wrapper .location-wrapper .ball,
 #applydignose-content .submit-patient-info-wrapper .location-wrapper .side-description {
@@ -6844,6 +6848,7 @@ ul.message-list li .message-content-wrapper p {
 #doctorlist-content .query-result-wrapper .result-list li .doctor-detail-preview .image-preview img {
   float: left;
   height: 80px;
+  width: 80px;
 }
 #doctorlist-content .query-result-wrapper .result-list li .doctor-detail-preview .doctor-preview-des {
   padding-left: 100px;
