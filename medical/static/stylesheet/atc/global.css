@@ -45,7 +45,7 @@ button::-moz-focus-inner {
 .logo-bar .logo {
   width: 200px;
   height: 90px;
-  background: url(../../assets/image/logo-1.jpg) no-repeat;
+  background: url(http://static.ezhenduan.com/static/logo-1.jpg) no-repeat;
   display: block;
   margin-left: -5px;
 }
