@@ -245,12 +245,11 @@
 									<option value="1">头部</option>
 									<option value="2">颈部</option>
 								</select>
-								<!-- <div class="line-area">
+								 <div class="line-area">
 								<div class="line"></div>
 								<div class="ball"></div>
 							</div>
-							<p class="side-description">就诊人姓名须与诊断书和影像数据上姓名相符就诊人姓名须与诊断书和影像数据上姓名相符</p>
-							-->
+							<p class="side-description">您希望专家诊断的部位，需要包含在您上传的dicom影像文件的部位中。</p>
 						</div>
 					</div>
 					<div class="form-group">
@@ -273,6 +272,8 @@
 								</span>
 								<input type="radio" name="dicomtype" value="mri" data-toggle="radio">核磁共振(MR)</label>
 						</div>
+						<p class="warning-mes">专家的参考诊断费用为：CT诊断180元每个部位，MRI诊断200元每个部位。易诊断平台不收取任何费用。</p>
+
 					</div>
 					<div class="form-group" id="dicomfileupload">
 						<label for="dicomfileinput">

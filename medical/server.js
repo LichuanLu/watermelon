@@ -217,6 +217,92 @@ app.configure(function() {
     });
   });
 
+  app.get('/patient/diagnose/list', function(req, res) {
+    console.log(req.query.type);
+    if(req.query.type == ""){
+      var data = [{
+        id: 1,
+        diagnosenumber: '35423',
+        doctorName: '张名',
+        patientName: "李冰",
+        date: "2014-10-29",
+        section: "头部，颈部",
+        status: "待审核",
+        statusId: "5"
+
+      },{
+         id: 2,
+        diagnosenumber: '35443',
+        doctorName: '张名1',
+        patientName: "李冰1",
+        date: "2014-11-29",
+        section: "头部，颈部，胸部",
+        status: "诊断完成",
+        statusId: "6",
+        isFeedback:false
+
+      },
+      {
+        id: 3,
+        diagnosenumber: '35443',
+        doctorName: '张名1',
+        patientName: "李冰1",
+        date: "2014-11-29",
+        section: "头部，颈部，胸部",
+        status: "诊断完成",
+        statusId: "0"
+
+      }]
+    }else{
+       var data = [{
+        id: 1,
+        diagnosenumber: '35423',
+        doctorName: '张名',
+        patientName: "李冰",
+        date: "2014-10-29",
+        section: "头部，颈部",
+        status: "待审核",
+        statusId: "5"
+      }, {
+        id: 2,
+        diagnosenumber: '35443',
+        doctorName: '张名1',
+        patientName: "李冰1",
+        date: "2014-11-29",
+        section: "头部，颈部，胸部",
+        status: "诊断完成",
+        statusId: "6"
+      }, {
+        id: 3,
+        diagnosenumber: '35413',
+        doctorName: '张名2',
+        patientName: "李冰2",
+        date: "2013-10-29",
+        section: "颈部",
+        status: "待诊断",
+        statusId: "4"
+      }, {
+        id: 4,
+        diagnosenumber: '35413',
+        doctorName: '张名2',
+        patientName: "李冰2",
+        date: "2013-10-29",
+        section: "颈部",
+        status: "需要更新",
+        statusId: "7"
+      }
+
+    ];
+
+    }
+   
+    res.send({
+      status: 0,
+      msg: "",
+      data: data
+    });
+  });
+
 
 
   app.post('/register/patient.json', function(req, res) {
