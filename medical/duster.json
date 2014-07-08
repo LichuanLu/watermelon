@@ -1,4 +1,4 @@
 {
-  "raw_dir": "/static/app/patienthome/templates_raw",
-  "pre_dir": "/static/app/patienthome/templates"
+  "raw_dir": "/static/app/doctorList/templates_raw",
+  "pre_dir": "/static/app/doctorList/templates"
 }
