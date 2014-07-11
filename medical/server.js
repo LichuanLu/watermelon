@@ -297,7 +297,7 @@ app.configure(function() {
     }
    
     res.send({
-      status: 0,
+      status: 2,
       msg: "",
       data: data
     });
@@ -632,7 +632,7 @@ app.configure(function() {
       date: "2014-10-29",
       positionName: "头部，颈部",
       status: "待分诊",
-      hispital: "西安西京医院",
+      doctorHispital: "西安西京医院",
       statusId: "3"
     }, {
       id: 2,
@@ -642,7 +642,7 @@ app.configure(function() {
       date: "2014-11-29",
       positionName: "头部，颈部，胸部",
       status: "待分诊",
-      hispital: "西安西京医院2",
+      doctorHispital: "西安西京医院2",
       statusId: "3"
     }];
     res.send({
@@ -663,7 +663,7 @@ app.configure(function() {
         date: "2014-11-29",
         positionName: "头部，颈部，胸部",
         status: "分诊中",
-        hispital: "西安西京医院2",
+        doctorHispital: "西安西京医院2",
         statusId: "4",
         dicomUrl: "test"
       }, {
@@ -674,7 +674,7 @@ app.configure(function() {
         date: "2014-11-28",
         positionName: "头部，颈部，胸部",
         status: "待诊断",
-        hispital: "西安西京医院2",
+        doctorHispital: "西安西京医院2",
         statusId: "5",
         dicomUrl: "Test"
       }];
@@ -687,7 +687,7 @@ app.configure(function() {
         date: "2014-11-29",
         positionName: "头部，颈部，胸部",
         status: "分诊中",
-        hispital: "西安西京医院2",
+        doctorHispital: "西安西京医院2",
         statusId: "4",
         dicomUrl: "Test"
       }, {
@@ -698,7 +698,7 @@ app.configure(function() {
         date: "2014-11-28",
         positionName: "头部，颈部，胸部",
         status: "待诊断",
-        hispital: "西安西京医院2",
+        doctorHispital: "西安西京医院2",
         statusId: "5",
         dicomUrl: "test"
       }];

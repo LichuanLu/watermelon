@@ -137,8 +137,16 @@
 										</button>
 									</span>
 									<input type="text" class="form-control" id="birthdateinput" name="birthdate"></div>
+									<div class="right-box">
+										<div class="line-area">
+											<div class="line"></div>
+											<div class="ball"></div>
+										</div>
+										<p class="side-description">日期格式：1980-01-01</p>
+									</div>
 
-							</div>
+								</div>
+
 						</div>
 
 						<div class="form-group">
@@ -245,12 +253,12 @@
 									<option value="1">头部</option>
 									<option value="2">颈部</option>
 								</select>
-								 <div class="line-area">
-								<div class="line"></div>
-								<div class="ball"></div>
+								<div class="line-area">
+									<div class="line"></div>
+									<div class="ball"></div>
+								</div>
+								<p class="side-description">您希望专家诊断的部位，需要包含在您上传的dicom影像文件的部位中。</p>
 							</div>
-							<p class="side-description">您希望专家诊断的部位，需要包含在您上传的dicom影像文件的部位中。</p>
-						</div>
 					</div>
 					<div class="form-group">
 						<label for="dicomtype">

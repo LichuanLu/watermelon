@@ -1345,7 +1345,7 @@ require(['messenger', 'messenger-theme-future'], function() {
             //         error = data.status;
                    
             //         Messenger().post({
-            //             message: "%ERROR_MESSAGE:" + data.message,
+            //             message: "错误信息:" + data.message,
             //             type: 'error',
             //             showCloseButton: true
             //         });
@@ -14998,7 +14998,7 @@ define('login/login_app',['ladda-bootstrap','crypto-sha256'], function(ladda) {
 						//var error = jQuery.parseJSON(data);
 						if (typeof res.msg !== 'undefined') {
 							Messenger().post({
-								message: "%ERROR_MESSAGE:" + res.msg,
+								message: "错误信息:" + res.msg,
 								type: 'error',
 								showCloseButton: true
 							});
@@ -26134,7 +26134,7 @@ define('diagnose/apply/apply_view',['utils/reqcmd', 'lodash', 'marionette', 'tem
 						//var error = jQuery.parseJSON(data);
 						if (typeof res.msg !== 'undefined') {
 							Messenger().post({
-								message: "%ERROR_MESSAGE:" + res.msg,
+								message: "错误信息:" + res.msg,
 								type: 'error',
 								showCloseButton: true
 							});
@@ -26933,12 +26933,12 @@ define('register/patient/show_view',['utils/reqcmd', 'lodash', 'marionette', 'te
 						//var error = jQuery.parseJSON(data);
 						if (typeof res.msg !== 'undefined') {
 							Messenger().post({
-								message: "%ERROR_MESSAGE:" + res.msg,
+								message: "错误信息:" + res.msg,
 								type: 'error',
 								showCloseButton: true
 							});
 						}
-						//alert("%ERROR_CODE_" + data.status + ",%ERROR_MESSAGE_" + data.message);
+						//alert("%ERROR_CODE_" + data.status + ",错误信息_" + data.message);
 
 						//allowSubmit = true;
 					},
@@ -27079,12 +27079,12 @@ define('register/doctor/show_view',['utils/reqcmd', 'lodash', 'marionette', 'tem
 						//var error = jQuery.parseJSON(data);
 						if (typeof res.msg !== 'undefined') {
 							Messenger().post({
-								message: "%ERROR_MESSAGE:" + res.msg,
+								message: "错误信息:" + res.msg,
 								type: 'error',
 								showCloseButton: true
 							});
 						}
-						//alert("%ERROR_CODE_" + data.status + ",%ERROR_MESSAGE_" + data.message);
+						//alert("%ERROR_CODE_" + data.status + ",错误信息_" + data.message);
 
 						//allowSubmit = true;
 					},
@@ -27889,7 +27889,7 @@ define('doctorhome/show/show_view',['utils/reqcmd', 'lodash', 'marionette', 'tem
 						//var error = jQuery.parseJSON(data);
 						if (typeof res.msg !== 'undefined') {
 							Messenger().post({
-								message: "%ERROR_MESSAGE:" + res.msg,
+								message: "错误信息:" + res.msg,
 								type: 'error',
 								showCloseButton: true
 							});
@@ -27953,7 +27953,7 @@ define('doctorhome/show/show_view',['utils/reqcmd', 'lodash', 'marionette', 'tem
 			// 			//var error = jQuery.parseJSON(data);
 			// 			if (typeof res.msg !== 'undefined') {
 			// 				Messenger().post({
-			// 					message: "%ERROR_MESSAGE:" + res.msg,
+			// 					message: "错误信息:" + res.msg,
 			// 					type: 'error',
 			// 					showCloseButton: true
 			// 				});
@@ -28070,7 +28070,7 @@ define('doctorhome/show/show_view',['utils/reqcmd', 'lodash', 'marionette', 'tem
 								//var error = jQuery.parseJSON(data);
 								if (typeof res.msg !== 'undefined') {
 									Messenger().post({
-										message: "%ERROR_MESSAGE:" + res.msg,
+										message: "错误信息:" + res.msg,
 										type: 'error',
 										showCloseButton: true
 									});
@@ -28134,7 +28134,7 @@ define('doctorhome/show/show_view',['utils/reqcmd', 'lodash', 'marionette', 'tem
 								//var error = jQuery.parseJSON(data);
 								if (typeof res.msg !== 'undefined') {
 									Messenger().post({
-										message: "%ERROR_MESSAGE:" + res.msg,
+										message: "错误信息:" + res.msg,
 										type: 'error',
 										showCloseButton: true
 									});
@@ -28232,7 +28232,7 @@ define('doctorhome/show/show_view',['utils/reqcmd', 'lodash', 'marionette', 'tem
 						//var error = jQuery.parseJSON(data);
 						if (typeof res.msg !== 'undefined') {
 							Messenger().post({
-								message: "%ERROR_MESSAGE:" + res.msg,
+								message: "错误信息:" + res.msg,
 								type: 'error',
 								showCloseButton: true
 							});
@@ -28687,7 +28687,7 @@ define('message/show/show_view',['utils/reqcmd', 'lodash', 'marionette', 'templa
 						//var error = jQuery.parseJSON(data);
 						if (typeof res.msg !== 'undefined') {
 							Messenger().post({
-								message: "%ERROR_MESSAGE:" + res.msg,
+								message: "错误信息:" + res.msg,
 								type: 'error',
 								showCloseButton: true
 							});
@@ -29120,7 +29120,7 @@ define('patienthome/show/show_view',['utils/reqcmd', 'lodash', 'marionette', 'te
 						//var error = jQuery.parseJSON(data);
 						if (typeof res.msg !== 'undefined') {
 							Messenger().post({
-								message: "%ERROR_MESSAGE:" + res.msg,
+								message: "错误信息:" + res.msg,
 								type: 'error',
 								showCloseButton: true
 							});
@@ -29525,7 +29525,7 @@ define('patienthome/show/show_controller',['lodash', 'config/base/constant', 'co
 						//var error = jQuery.parseJSON(data);
 						if (typeof res.msg !== 'undefined') {
 							Messenger().post({
-								message: "%ERROR_MESSAGE:" + res.msg,
+								message: "错误信息:" + res.msg,
 								type: 'error',
 								showCloseButton: true
 							});
@@ -29583,7 +29583,7 @@ define('patienthome/show/show_controller',['lodash', 'config/base/constant', 'co
 							//var error = jQuery.parseJSON(data);
 							if (typeof res.msg !== 'undefined') {
 								Messenger().post({
-									message: "%ERROR_MESSAGE:" + res.msg,
+									message: "错误信息:" + res.msg,
 									type: 'error',
 									showCloseButton: true
 								});
@@ -30089,7 +30089,7 @@ define('utils/followbtn',[], function() {
 							$this.removeAttr('disabled');
 							if (typeof res.msg !== 'undefined') {
 								Messenger().post({
-									message: "%ERROR_MESSAGE:" + res.msg,
+									message: "错误信息:" + res.msg,
 									type: 'error',
 									showCloseButton: true
 								});
@@ -30155,7 +30155,7 @@ define('doctorSite/show/show_view',['utils/reqcmd', 'lodash', 'marionette', 'tem
 						//var error = jQuery.parseJSON(data);
 						if (typeof res.msg !== 'undefined') {
 							Messenger().post({
-								message: "%ERROR_MESSAGE:" + res.msg,
+								message: "错误信息:" + res.msg,
 								type: 'error',
 								showCloseButton: true
 							});
@@ -30400,7 +30400,7 @@ define('admin/fenzhen/fz_view',['utils/reqcmd', 'lodash', 'marionette', 'templat
 						//var error = jQuery.parseJSON(data);
 						if (typeof res.msg !== 'undefined') {
 							Messenger().post({
-								message: "%ERROR_MESSAGE:" + res.msg,
+								message: "错误信息:" + res.msg,
 								type: 'error',
 								showCloseButton: true
 							});
@@ -30621,7 +30621,7 @@ define('admin/fenzhen/fz_controller',['lodash', 'config/base/constant', 'config/
 							//var error = jQuery.parseJSON(data);
 							if (typeof res.msg !== 'undefined') {
 								Messenger().post({
-									message: "%ERROR_MESSAGE:" + res.msg,
+									message: "错误信息:" + res.msg,
 									type: 'error',
 									showCloseButton: true
 								});
@@ -30724,7 +30724,7 @@ define('admin/kefu/kf_view',['utils/reqcmd', 'lodash', 'marionette', 'templates'
 						//var error = jQuery.parseJSON(data);
 						if (typeof res.msg !== 'undefined') {
 							Messenger().post({
-								message: "%ERROR_MESSAGE:" + res.msg,
+								message: "错误信息:" + res.msg,
 								type: 'error',
 								showCloseButton: true
 							});
@@ -30763,7 +30763,7 @@ define('admin/kefu/kf_view',['utils/reqcmd', 'lodash', 'marionette', 'templates'
 						//var error = jQuery.parseJSON(data);
 						if (typeof res.msg !== 'undefined') {
 							Messenger().post({
-								message: "%ERROR_MESSAGE:" + res.msg,
+								message: "错误信息:" + res.msg,
 								type: 'error',
 								showCloseButton: true
 							});

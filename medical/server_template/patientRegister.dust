@@ -16,6 +16,13 @@
 	 -->			</div>
 				</div>
 				<div class="form-group">
+					<label class="col-md-4 control-label" for="inUserName">用户昵称：</label>
+					<div class="col-md-8">
+						<input id="inNickName" type="text" name="nickname" placeholder="用户昵称，允许数字或者字母" class="form-control">
+	 				</div>
+		
+				</div>
+				<div class="form-group">
 					<label class="col-md-4 control-label" for="inPassword">密码：</label>
 					<div class="col-md-8">
 
@@ -28,7 +35,7 @@
 						<input id="confirmPassword" type="password" name="" class="form-control" placeholder="确保输入密码一致">
 					</div>
 				</div>
-				<div class="col-md-offset-4 code-wrapper">
+				<!-- <div class="col-md-offset-4 code-wrapper">
 					<input id="codeCheck" type="checkbox" class="no_indent" value="" checked="">
 					<span>我有注册码</span>
 				</div>
@@ -36,7 +43,7 @@
 					<div class="col-md-offset-4 col-md-8">
 						<input id="inCode" type="text" name="" class="form-control" placeholder="医院注册码">
 					</div>
-				</div>
+				</div> -->
 
 				<a class="col-md-offset-4 service-link">服务条款</a>
 				 <div class="form-group">
