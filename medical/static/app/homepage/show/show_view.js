@@ -80,8 +80,8 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'login/login_app', 
 		},
 		changeInfo: function(el, pos) {
 			this.ui.previewWrapper.find('h6').html(el.find('h6').html());
-			this.ui.previewWrapper.find('.hospital').html(el.find('.hospital').html());
-			this.ui.previewWrapper.find('.skill').html(el.find('.skill').html());
+			this.ui.previewWrapper.find('.hospital span').html(el.find('.hospital').html());
+			this.ui.previewWrapper.find('.skill span').html(el.find('.skill').html());
 			this.ui.previewWrapper.find('.doctor-link').attr('href',el.find('.doctor-link').html())
 		}
 
