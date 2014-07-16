@@ -6888,8 +6888,8 @@ ul.message-list li .message-content-wrapper p {
 }
 #doctorlist-content .query-result-wrapper .result-list li .doctor-statinfo .exp-comment {
   float: left;
-  margin-top: 15px;
-  margin-left: 10px;
+  margin-top: 17px;
+  margin-left: 40px;
 }
 #doctorlist-content .query-result-wrapper .result-list li .doctor-statinfo .exp-comment p {
   font-size: 14px;
