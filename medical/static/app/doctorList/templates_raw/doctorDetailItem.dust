@@ -22,8 +22,9 @@
 	</div>
 	<div class="col-md-4 doctor-statinfo">
 		<div class="exp-comment">
-			<p>诊断</p>
-			<p class="number">{diagnoseNumber} 次</p>
+
+			<p class="number">{diagnoseNumber}</p>
+			<p>诊断量</p>
 			
 		</div>
 		<img alt="" src="/static/assets/Icons/SVG/retina.svg"></img>
