@@ -1,4 +1,8 @@
-define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.main', 'entities/doctorEntity', 'ladda-bootstrap', 'dust', 'dustMarionette', "bootstrap", 'typeahead', 'flatui.checkbox', 'flatui.radio', 'jquery-ui', 'bootstrap.select', 'flat_ui_custom', 'dust_cus_helpers', 'config/validator/config', 'bootstrap.multiselect'], function(ReqCmd, Lodash, Marionette, Templates, FileUploaderMain, DoctorEntity, ladda) {
+define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.main', 
+	'entities/doctorEntity', 'ladda-bootstrap', 'dust', 'dustMarionette',
+	 "bootstrap", 'typeahead', 'flatui.checkbox', 'flatui.radio', 'jquery-ui', 
+	 'bootstrap.select', 'flat_ui_custom', 'dust_cus_helpers', 'config/validator/config', 
+	 'bootstrap.multiselect'], function(ReqCmd, Lodash, Marionette, Templates, FileUploaderMain, DoctorEntity, ladda) {
 	// body...
 	"use strict";
 	//var $;

@@ -1,10 +1,10 @@
 require(['messenger', 'messenger-theme-future'], function() {
     // body...
     "use strict";
-    // Messenger.options = {
-    //     extraClasses: 'messenger-fixed messenger-on-bottom',
-    //     theme: 'future'
-    // };
+    Messenger.options = {
+        extraClasses: 'messenger-fixed messenger-on-top',
+        theme: 'air'
+    };
 
     $.ajaxSetup({
         headers: {

@@ -60,7 +60,10 @@ define(function(require) {
 		hospitalUserSubmittedDignoseItem:require('hospitalUserPage/templates/hospitalUserSubmittedDiagnoseItem'),
 
 
-		messageItem:require('message/templates/messageItem')
+		messageItem:require('message/templates/messageItem'),
+
+		//model view
+		mobileBindModal:require('modal/templates/mobileBindModal')
 
 
 		

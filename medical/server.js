@@ -8,6 +8,7 @@ var express = require('express'),
   http = require('http'),
   path = require('path');
 var fs = require('fs');
+var sleep = require('sleep');
 //var engines = require('consolidate');
 //var dust = require('express-dust-linkedin');
 
@@ -66,8 +67,8 @@ app.configure(function() {
   });
 
   app.get('/applyDiagnose', function(req, res) {
-    res.render('applyDiagnose',{
-      edit:true
+    res.render('applyDiagnose', {
+      edit: true
     });
   });
 
@@ -108,10 +109,10 @@ app.configure(function() {
     res.render('helpdoc', {});
   });
 
-  app.get('/login', function(req, res) {
+  app.get('/loginPage', function(req, res) {
     res.render('loginPage', {});
   });
-   app.get('/hospital/user', function(req, res) {
+  app.get('/hospital/user', function(req, res) {
     res.render('hospitalUser', {});
   });
 
@@ -133,7 +134,7 @@ app.configure(function() {
 
   app.get('/diagnose/list', function(req, res) {
     console.log(req.query.type);
-    if(req.query.type == ""){
+    if (req.query.type == "") {
       var data = [{
         id: 1,
         diagnosenumber: '35423',
@@ -144,8 +145,8 @@ app.configure(function() {
         status: "待审核",
         statusId: "5"
 
-      },{
-         id: 2,
+      }, {
+        id: 2,
         diagnosenumber: '35443',
         doctorName: '张名1',
         patientName: "李冰1",
@@ -153,10 +154,9 @@ app.configure(function() {
         section: "头部，颈部，胸部",
         status: "诊断完成",
         statusId: "6",
-        isFeedback:false
+        isFeedback: false
 
-      },
-      {
+      }, {
         id: 3,
         diagnosenumber: '35443',
         doctorName: '张名1',
@@ -167,49 +167,49 @@ app.configure(function() {
         statusId: "0"
 
       }]
-    }else{
-       var data = [{
-        id: 1,
-        diagnosenumber: '35423',
-        doctorName: '张名',
-        patientName: "李冰",
-        date: "2014-10-29",
-        section: "头部，颈部",
-        status: "待审核",
-        statusId: "5"
-      }, {
-        id: 2,
-        diagnosenumber: '35443',
-        doctorName: '张名1',
-        patientName: "李冰1",
-        date: "2014-11-29",
-        section: "头部，颈部，胸部",
-        status: "诊断完成",
-        statusId: "6"
-      }, {
-        id: 3,
-        diagnosenumber: '35413',
-        doctorName: '张名2',
-        patientName: "李冰2",
-        date: "2013-10-29",
-        section: "颈部",
-        status: "待诊断",
-        statusId: "4"
-      }, {
-        id: 4,
-        diagnosenumber: '35413',
-        doctorName: '张名2',
-        patientName: "李冰2",
-        date: "2013-10-29",
-        section: "颈部",
-        status: "需要更新",
-        statusId: "7"
-      }
+    } else {
+      var data = [{
+          id: 1,
+          diagnosenumber: '35423',
+          doctorName: '张名',
+          patientName: "李冰",
+          date: "2014-10-29",
+          section: "头部，颈部",
+          status: "待审核",
+          statusId: "5"
+        }, {
+          id: 2,
+          diagnosenumber: '35443',
+          doctorName: '张名1',
+          patientName: "李冰1",
+          date: "2014-11-29",
+          section: "头部，颈部，胸部",
+          status: "诊断完成",
+          statusId: "6"
+        }, {
+          id: 3,
+          diagnosenumber: '35413',
+          doctorName: '张名2',
+          patientName: "李冰2",
+          date: "2013-10-29",
+          section: "颈部",
+          status: "待诊断",
+          statusId: "4"
+        }, {
+          id: 4,
+          diagnosenumber: '35413',
+          doctorName: '张名2',
+          patientName: "李冰2",
+          date: "2013-10-29",
+          section: "颈部",
+          status: "需要更新",
+          statusId: "7"
+        }
 
-    ];
+      ];
 
     }
-   
+
     res.send({
       status: 0,
       msg: "",
@@ -219,7 +219,7 @@ app.configure(function() {
 
   app.get('/patient/diagnose/list', function(req, res) {
     console.log(req.query.type);
-    if(req.query.type == ""){
+    if (req.query.type == "") {
       var data = [{
         id: 1,
         diagnosenumber: '35423',
@@ -230,8 +230,8 @@ app.configure(function() {
         status: "待审核",
         statusId: "5"
 
-      },{
-         id: 2,
+      }, {
+        id: 2,
         diagnosenumber: '35443',
         doctorName: '张名1',
         patientName: "李冰1",
@@ -239,10 +239,9 @@ app.configure(function() {
         section: "头部，颈部，胸部",
         status: "诊断完成",
         statusId: "6",
-        isFeedback:false
+        isFeedback: false
 
-      },
-      {
+      }, {
         id: 3,
         diagnosenumber: '35443',
         doctorName: '张名1',
@@ -253,51 +252,51 @@ app.configure(function() {
         statusId: "0"
 
       }]
-    }else{
-       var data = [{
-        id: 1,
-        diagnosenumber: '35423',
-        doctorName: '张名',
-        patientName: "李冰",
-        date: "2014-10-29",
-        section: "头部，颈部",
-        status: "待审核",
-        statusId: "5"
-      }, {
-        id: 2,
-        diagnosenumber: '35443',
-        doctorName: '张名1',
-        patientName: "李冰1",
-        date: "2014-11-29",
-        section: "头部，颈部，胸部",
-        status: "诊断完成",
-        statusId: "6"
-      }, {
-        id: 3,
-        diagnosenumber: '35413',
-        doctorName: '张名2',
-        patientName: "李冰2",
-        date: "2013-10-29",
-        section: "颈部",
-        status: "待诊断",
-        statusId: "4"
-      }, {
-        id: 4,
-        diagnosenumber: '35413',
-        doctorName: '张名2',
-        patientName: "李冰2",
-        date: "2013-10-29",
-        section: "颈部",
-        status: "需要更新",
-        statusId: "7"
-      }
+    } else {
+      var data = [{
+          id: 1,
+          diagnosenumber: '35423',
+          doctorName: '张名',
+          patientName: "李冰",
+          date: "2014-10-29",
+          section: "头部，颈部",
+          status: "待审核",
+          statusId: "5"
+        }, {
+          id: 2,
+          diagnosenumber: '35443',
+          doctorName: '张名1',
+          patientName: "李冰1",
+          date: "2014-11-29",
+          section: "头部，颈部，胸部",
+          status: "诊断完成",
+          statusId: "6"
+        }, {
+          id: 3,
+          diagnosenumber: '35413',
+          doctorName: '张名2',
+          patientName: "李冰2",
+          date: "2013-10-29",
+          section: "颈部",
+          status: "待诊断",
+          statusId: "4"
+        }, {
+          id: 4,
+          diagnosenumber: '35413',
+          doctorName: '张名2',
+          patientName: "李冰2",
+          date: "2013-10-29",
+          section: "颈部",
+          status: "需要更新",
+          statusId: "7"
+        }
 
-    ];
+      ];
 
     }
-   
+
     res.send({
-      status: 2,
+      status: 0,
       msg: "",
       data: data
     });
@@ -366,7 +365,7 @@ app.configure(function() {
         status: 0,
         msg: "success",
         data: {
-          isFinal:true
+          isFinal: true
         }
       };
     }
@@ -526,34 +525,34 @@ app.configure(function() {
 
   app.get('/message/list', function(req, res) {
     console.dir(req.query);
-    if(req.query.status == 1){
+    if (req.query.status == 1) {
       var data = [{
-      id: 1,
-      url: "diagnoseLink",
-      title:"诊断申请",
-      type: "未读消息",
-      createTime: "2013-12-12 13:00",
-      content: "您有一条新的诊断申请。诊断号：34556 ｜ 诊断类型：MR ｜ 诊断部位：头部，颈部 ｜ 患者：李响"
-    }, {
-      id: 2,
-      url: "diagnoseLink",
-      title:"诊断申请",
-      type: "未读消息",
-      createTime: "2013-12-12 13:00",
-      content: "您有一条新的诊断申请。诊断号：34556 ｜ 诊断类型：MR ｜ 诊断部位：头部，颈部 ｜ 患者：李响"
+        id: 1,
+        url: "diagnoseLink",
+        title: "诊断申请",
+        type: "未读消息",
+        createTime: "2013-12-12 13:00",
+        content: "您有一条新的诊断申请。诊断号：34556 ｜ 诊断类型：MR ｜ 诊断部位：头部，颈部 ｜ 患者：李响"
+      }, {
+        id: 2,
+        url: "diagnoseLink",
+        title: "诊断申请",
+        type: "未读消息",
+        createTime: "2013-12-12 13:00",
+        content: "您有一条新的诊断申请。诊断号：34556 ｜ 诊断类型：MR ｜ 诊断部位：头部，颈部 ｜ 患者：李响"
 
-    }];
-  }else{
-    var data = [{
-      id: 1,
-      url: "diagnoseLink",
-      title:"诊断申请",
-      type: "未读消息",
-      createTime: "2013-12-12 13:00",
-      content: "您有一条新的诊断申请。诊断号：34556 ｜ 诊断类型：MR ｜ 诊断部位：头部，颈部 ｜ 患者：李响"
-    }];
-  }
-    
+      }];
+    } else {
+      var data = [{
+        id: 1,
+        url: "diagnoseLink",
+        title: "诊断申请",
+        type: "未读消息",
+        createTime: "2013-12-12 13:00",
+        content: "您有一条新的诊断申请。诊断号：34556 ｜ 诊断类型：MR ｜ 诊断部位：头部，颈部 ｜ 患者：李响"
+      }];
+    }
+
     res.send({
       status: 0,
       msg: "",
@@ -561,9 +560,6 @@ app.configure(function() {
     });
 
   });
-
-
-
 
 
 
@@ -752,7 +748,7 @@ app.configure(function() {
 
   app.get('/diagnoseTemplate/postionList', function(req, res) {
     console.dir(req.query);
-    var data = ["呼吸系统","骨关节病变"];
+    var data = ["呼吸系统", "骨关节病变"];
     res.send({
       status: 0,
       msg: "",
@@ -763,11 +759,11 @@ app.configure(function() {
   app.get('/diagnoseTemplate/diagnoseAndImageDesc', function(req, res) {
     console.dir(req.query);
     var data = [{
-      imageDesc:"左尺桡骨形态，骨密度正常，未见明确骨质增生及破坏，左尺桡骨形态，骨密度正常，未见明确骨质增生及破坏，左尺桡骨形态，骨密度正常，未见明确骨质增生及破坏",
-      diagnoseDesc:"心肺未见异常"
-    },{
-      imageDesc:"左尺桡骨形态，骨密度正常，未见明确骨质增生及破坏，左尺桡骨形态，骨密度正常，未见明确骨质增生及破坏，左尺桡骨形态，骨密度正常，未见明确骨质增生及破坏",
-      diagnoseDesc:"心肺未见异常"
+      imageDesc: "左尺桡骨形态，骨密度正常，未见明确骨质增生及破坏，左尺桡骨形态，骨密度正常，未见明确骨质增生及破坏，左尺桡骨形态，骨密度正常，未见明确骨质增生及破坏",
+      diagnoseDesc: "心肺未见异常"
+    }, {
+      imageDesc: "左尺桡骨形态，骨密度正常，未见明确骨质增生及破坏，左尺桡骨形态，骨密度正常，未见明确骨质增生及破坏，左尺桡骨形态，骨密度正常，未见明确骨质增生及破坏",
+      diagnoseDesc: "心肺未见异常"
     }];
     res.send({
       status: 0,
@@ -787,7 +783,7 @@ app.configure(function() {
     });
   });
 
- app.post('/addDiagnoseComment.json', function(req, res) {
+  app.post('/addDiagnoseComment.json', function(req, res) {
     console.dir(req.query);
     res.send({
       status: 0,
@@ -801,18 +797,18 @@ app.configure(function() {
   app.get('/userFavorties/:userId/list', function(req, res) {
     console.dir(req.params.userId);
     var data = [{
-        id:123,
-        uid:23,
-        name:"王一分",
-        content:"复旦大学附属华山医院-皮肤科"
+      id: 123,
+      uid: 23,
+      name: "王一分",
+      content: "复旦大学附属华山医院-皮肤科"
 
-     
-    },{
-        id:124,
-        uid:33,
-        name:"力一分",
-        content:"复旦大学附属华山医院-影像"
-    
+
+    }, {
+      id: 124,
+      uid: 33,
+      name: "力一分",
+      content: "复旦大学附属华山医院-影像"
+
     }];
     res.send({
       status: 0,
@@ -842,7 +838,7 @@ app.configure(function() {
 
   });
 
- app.post('/gratitude/create', function(req, res) {
+  app.post('/gratitude/create', function(req, res) {
     res.send({
       status: 0,
       msg: "",
@@ -855,34 +851,33 @@ app.configure(function() {
   app.get('/diagnose/actions', function(req, res) {
     console.dir(req.query);
     var data = {
-      id:1,
-      diagnoseStatus:7,
-      diagnosenumber:"34332",
+      id: 1,
+      diagnoseStatus: 7,
+      diagnosenumber: "34332",
       applyTime: "2013-03-30",
-      doctorName:"李响",
-      patientName:"xuyan",
-      gender:"nan",
-      birthDate:"1999-09-09",
-      positionName:"头部，颈部，胸部",
-      diagnoseType:"mri",
-      dicomUrl:"http://test.com",
-      hospitalId:"123",
-      hospitalHistory:"dsadasdasdasda",
-      caseHistory:"dadasdasd",
-      docUrl:"http://123.com",
+      doctorName: "李响",
+      patientName: "xuyan",
+      gender: "nan",
+      birthDate: "1999-09-09",
+      positionName: "头部，颈部，胸部",
+      diagnoseType: "mri",
+      dicomUrl: "http://test.com",
+      hospitalId: "123",
+      hospitalHistory: "dsadasdasdasda",
+      caseHistory: "dadasdasd",
+      docUrl: "http://123.com",
       isFeedback: false,
-      actions:[{
+      actions: [{
         time: "2013-02-03",
-           title: "分诊医生 李响 需要就诊人更新申请信息",
-           comments: "dasd啊是大事",
-           name: "李响"
-      },{
+        title: "分诊医生 李响 需要就诊人更新申请信息",
+        comments: "dasd啊是大事",
+        name: "李响"
+      }, {
         time: "2013-02-04",
         title: "分诊医生 李1响 需要就诊人更新申请信息",
 
-      }
-      ]
-    };  
+      }]
+    };
     res.send({
       status: 0,
       msg: "",
@@ -893,32 +888,32 @@ app.configure(function() {
 
   app.get('/hospital/user/list/unfinish', function(req, res) {
     console.log(req.query.status);
-      var data = [{
-        id: 1,
-        diagnosenumber: '35443',
-        doctorName: '张名1',
-        patientName: "李冰1",
-        date: "2014-11-29",
-        positionName: "头部，颈部，胸部",
-        status: "分诊中",
-        hispital: "西安西京医院2",
-        statusId: "7",
-        hasDicom:true,
-        dicomFileName:"test",
-        dicomUrl: "test"
-      }, {
-        id: 2,
-        diagnosenumber: '35433',
-        doctorName: '张名2',
-        patientName: "李冰2",
-        date: "2014-11-28",
-        positionName: "头部，颈部，胸部",
-        status: "待诊断",
-        hispital: "西安西京医院2",
-        statusId: "1",
-        hasDicom:false
-      }];
-  
+    var data = [{
+      id: 1,
+      diagnosenumber: '35443',
+      doctorName: '张名1',
+      patientName: "李冰1",
+      date: "2014-11-29",
+      positionName: "头部，颈部，胸部",
+      status: "分诊中",
+      hispital: "西安西京医院2",
+      statusId: "7",
+      hasDicom: true,
+      dicomFileName: "test",
+      dicomUrl: "test"
+    }, {
+      id: 2,
+      diagnosenumber: '35433',
+      doctorName: '张名2',
+      patientName: "李冰2",
+      date: "2014-11-28",
+      positionName: "头部，颈部，胸部",
+      status: "待诊断",
+      hispital: "西安西京医院2",
+      statusId: "1",
+      hasDicom: false
+    }];
+
 
     res.send({
       status: 0,
@@ -930,7 +925,7 @@ app.configure(function() {
 
   app.get('/hospital/user/list/all', function(req, res) {
     console.log(req.query.status);
-       if (req.query.status == 0) {
+    if (req.query.status == 0) {
       var data = [{
         id: 1,
         diagnosenumber: '35443',
@@ -975,7 +970,7 @@ app.configure(function() {
         statusId: "5"
       }];
     }
-  
+
 
     res.send({
       status: 0,
@@ -1006,7 +1001,7 @@ app.configure(function() {
   });
 
 
-  app.post('/doctor/register/confirm', function(req, res) {
+  app.post('/doctor/statuschange', function(req, res) {
     console.dir(req.query);
     res.send({
       status: 0,
@@ -1018,18 +1013,83 @@ app.configure(function() {
 
 
 
-  app.get('/diagnose/paylink', function(req, res) {
+  app.post('/diagnose/alipayurl/:diagnoseId', function(req, res) {
+    console.log(req.params.diagnoseId);
+    
+
+    res.send({
+      status: 0,
+      msg: "",
+      data: ""
+    });
+  });
+
+  app.get('/account/info', function(req, res) {
     console.log(req.query);
+    if (req.query.type == 1) {
       var data = {
-        id: 1,
-        paylink:"http://test"
+        userId: 1,
+        name: '李响',
+        mobile: '15210892443',
+        email: 'lulichuan628@gmail.com'
+      }
+    } else {
+      var data = {
+        userId: 1,
+        userName: '殷红',
+        mobile: '15210892443',
+        email: 'lulichuan628@gmail.com',
+        hospitalName: '西安西京医院',
+        identityPhone: '029-82480689'
       };
-  
+
+    }
 
     res.send({
       status: 0,
       msg: "",
       data: data
+    });
+  });
+
+  app.post('/acount/admin', function(req, res) {
+    console.dir(req.body);
+    res.send({
+      status: 0,
+      msg: "",
+      data: ""
+    });
+
+  });
+
+
+  app.get('/user/mobile/checkVerifyCode', function(req, res) {
+    console.dir(req.body);
+    sleep.sleep(5);
+    res.send({
+      status: 0,
+      msg: "",
+      data: ""
+    });
+  });
+
+app.post('/user/mobile/update', function(req, res) {
+    console.dir(req.body);
+    sleep.sleep(5);
+    res.send({
+      status: 0,
+      msg: "",
+      data: ""
+    });
+  });
+
+
+app.post('/acount/changePasswd', function(req, res) {
+    console.dir(req.body);
+    res.send({
+      status: 0,
+      msg: "",
+      data: ""
     });
   });
 

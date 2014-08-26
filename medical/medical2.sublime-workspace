@@ -4,6 +4,106 @@
 		"selected_items":
 		[
 			[
+				"mar",
+				"margin-left"
+			],
+			[
+				"pro",
+				"prototype"
+			],
+			[
+				"pad",
+				"padding-right"
+			],
+			[
+				"font",
+				"font-weight"
+			],
+			[
+				"requ",
+				"request"
+			],
+			[
+				"exe",
+				"execute"
+			],
+			[
+				"bor",
+				"border-radius"
+			],
+			[
+				"co",
+				"color"
+			],
+			[
+				"border-r",
+				"border-right"
+			],
+			[
+				"pa",
+				"padding-top"
+			],
+			[
+				"download",
+				"downloadFileLink"
+			],
+			[
+				"diagnose",
+				"diagnoseId"
+			],
+			[
+				"reque",
+				"require"
+			],
+			[
+				"deleteDiagnos",
+				"DeleteDiagnoseModalView"
+			],
+			[
+				"backg",
+				"background-color"
+			],
+			[
+				"min",
+				"min-width"
+			],
+			[
+				"bo",
+				"bottom"
+			],
+			[
+				"text",
+				"text-align"
+			],
+			[
+				"req",
+				"require"
+			],
+			[
+				"marg",
+				"margin-top"
+			],
+			[
+				"cv",
+				"CollectionView"
+			],
+			[
+				"inlin",
+				"inline-block"
+			],
+			[
+				"sharin",
+				"SharingModalView"
+			],
+			[
+				"actionl",
+				"patientActionLinksHandler"
+			],
+			[
+				"messa",
+				"messageId"
+			],
+			[
 				"import",
 				"important"
 			],
@@ -18,10 +118,6 @@
 			[
 				"wi",
 				"width"
-			],
-			[
-				"pad",
-				"padding"
 			],
 			[
 				"bac",
@@ -124,10 +220,6 @@
 				"jQuery.get	jQuery.get"
 			],
 			[
-				"req",
-				"require"
-			],
-			[
 				"ex",
 				"express"
 			],
@@ -144,29 +236,26 @@
 	"buffers":
 	[
 		{
-			"file": "static/app/message/show/show_view.js",
+			"file": "static/stylesheet/less/patient-home.less",
 			"settings":
 			{
-				"buffer_size": 1042,
+				"buffer_size": 4906,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "static/stylesheet/less/apply-diagnose.less",
+			"file": "static/stylesheet/less/doctor-home.less",
 			"settings":
 			{
-				"buffer_size": 4348,
+				"buffer_size": 2975,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"contents": "{\n	\"folders\":\n	[\n		{\n			\"path\": \"/dev_lic/watermelon/medical\"\n		}\n	],\n	\"settings\":\n	{\n		\"less2css\":\n		{\n			\"autoCompile\": false,\n			\"minify\": false,\n			\"outputDir\": \"./static/stylesheet/atc\"\n		}\n	}\n}\n",
-			"file": "medical2.sublime-project",
-			"file_size": 200,
-			"file_write_time": 1401810897000000,
+			"file": "static/stylesheet/less/variables.less",
 			"settings":
 			{
-				"buffer_size": 200,
+				"buffer_size": 19770,
 				"line_ending": "Unix"
 			}
 		}
@@ -174,9 +263,33 @@
 	"build_system": "",
 	"command_palette":
 	{
-		"height": 347.0,
+		"height": 207.0,
 		"selected_items":
 		[
+			[
+				"for",
+				"Format: Javascript"
+			],
+			[
+				"For",
+				"Format: Javascript"
+			],
+			[
+				"fo",
+				"Format: Javascript"
+			],
+			[
+				"PACKA",
+				"Package Control: Install Package"
+			],
+			[
+				"PACK",
+				"Package Control: Remove Package"
+			],
+			[
+				"PA",
+				"Package Control: List Packages"
+			],
 			[
 				"pack",
 				"Package Control: Install Package"
@@ -192,14 +305,6 @@
 			[
 				"list pa",
 				"Package Control: List Packages"
-			],
-			[
-				"for",
-				"Tag: Auto-Format Tags on Document"
-			],
-			[
-				"fo",
-				"Tag: Auto-Format Tags on Document"
 			],
 			[
 				"insta",
@@ -242,7 +347,7 @@
 				"Preferences: Browse Packages"
 			]
 		],
-		"width": 476.0
+		"width": 530.0
 	},
 	"console":
 	{
@@ -259,70 +364,134 @@
 	},
 	"file_history":
 	[
-		"/dev_lic/watermelon/medical/medical.sublime-project",
-		"/dev_lic/js_ws/Flat UI HTML - Personal License/HTML/UI/Flat-UI-Pro-1.2.5/js/bootstrap-select.js",
-		"/dev_lic/js_ws/Flat-UI-master/.editorconfig",
-		"/dev_lic/Pomegranate/static/app/translate/show/show_controller.js",
-		"/dev_lic/Pomegranate/static/app/translate/show/show_view.js",
-		"/dev_lic/Pomegranate/static/app/project_setup/show/show_view.js",
-		"/dev_lic/Pomegranate/static/app/project_manage/manage/manage_view.js",
-		"/dev_lic/Pomegranate/static/app/entities/localeEntity.js",
-		"/dev_lic/Pomegranate/static/app/admin/show/show_view.js",
-		"/dev_lic/Pomegranate/static/stylesheet/atc/translate.css",
-		"/dev_lic/Pomegranate/static/app/config/jquery/ajax_setup.js",
-		"/dev_lic/Pomegranate/static/app/config/validator/config.js",
-		"/dev_lic/Pomegranate/static/index-translate.html",
-		"/dev_lic/Pomegranate/static/app/login/show/show_view.js",
-		"/dev_lic/Pomegranate/static/app/admin/show/show_controller.js",
-		"/dev_lic/Pomegranate/static/app/templates.js",
-		"/dev_lic/Pomegranate/static/app/entities/translateEntity.js",
-		"/dev_lic/Pomegranate/server.js",
-		"/dev_lic/Pomegranate/static/app/translate/templates_raw/stringListItem.dust",
-		"/dev_lic/Pomegranate/static/app/translate/templates_raw/suggestionListItem.dust",
-		"/Users/lichuan/Desktop/scipyinstall.sh",
-		"/Users/lichuan/Downloads/∑¢∏¯¬Ω¿Ë¥®/DicomDAO.py",
-		"/Applications/MAMP/htdocs/jqplot/examples/barLineAnimated.php",
-		"/Users/lichuan/Desktop/share/SlicerSharing/useful_link",
-		"/Users/lichuan/Desktop/test.jsp",
-		"/Users/lichuan/Downloads/download (5)",
-		"/Users/lichuan/Downloads/download",
-		"/dev_lic/js_ws/todomvc/labs/dependency-examples/backbone_marionette_require/js/bower_component/.placeholder",
-		"/dev_lic/js_ws/todomvc/labs/dependency-examples/backbone_marionette_require/js/templates/todoListCompositeView.dust",
-		"/dev_lic/js_ws/todomvc/labs/dependency-examples/backbone_marionette_require/js/templates/header.dust",
-		"/dev_lic/js_ws/todomvc/labs/dependency-examples/backbone_marionette_require/js/templates/footer.dust",
-		"/dev_lic/js_ws/todomvc/labs/dependency-examples/backbone_marionette_require/preinit.sh",
-		"/dev_lic/js_ws/todomvc/labs/dependency-examples/backbone_marionette_require/js/templates/todoItemView.dust",
-		"/dev_lic/js_ws/todomvc/labs/dependency-examples/backbone_marionette_require/js/bower_component",
-		"/dev_lic/js_ws/todomvc/labs/dependency-examples/backbone_marionette_require/.bowerrc",
-		"/dev_lic/js_ws/sc02-loading-views/sc02-loading-views-after/app/assets/javascripts/backbone/app.js.coffee",
-		"/dev_lic/js_ws/todomvc/labs/dependency-examples/backbone_marionette_require/js/views/Footer.js",
-		"/dev_lic/js_ws/todomvc/labs/dependency-examples/backbone_marionette_require/js/main.js",
-		"/dev_lic/js_ws/todomvc/labs/dependency-examples/backbone_marionette_require/js/views/Header.js",
-		"/dev_lic/js_ws/todomvc/labs/dependency-examples/backbone_marionette_require/js/views/TodoItemView.js",
-		"/dev_lic/js_ws/todomvc/labs/dependency-examples/backbone_marionette_require/js/views/TodoListCompositeView.js",
-		"/dev_lic/js_ws/todomvc/labs/dependency-examples/backbone_marionette_require/js/templates.js",
-		"/dev_lic/js_ws/todomvc/labs/dependency-examples/backbone_marionette_require/js/views/ActiveCount.js",
-		"/dev_lic/js_ws/todomvc/labs/dependency-examples/backbone_marionette_require/js/templates/todoItemView.tmpl",
-		"/dev_lic/js_ws/todomvc/labs/dependency-examples/backbone_marionette_require/js/dust_templates/todoItemView.js",
-		"/dev_lic/js_ws/todomvc/labs/dependency-examples/backbone_marionette_require/js/models/Todo.js",
-		"/dev_lic/js_ws/todomvc/labs/dependency-examples/backbone_marionette_require/js/collections/TodoList.js",
-		"/dev_lic/js_ws/todomvc/labs/dependency-examples/backbone_marionette_require/assets/base.css",
-		"/dev_lic/js_ws/todomvc/labs/dependency-examples/backbone_marionette_require/js/lib/backbone.marionette.js",
-		"/dev_lic/js_ws/todomvc/labs/dependency-examples/backbone_marionette_require/js/lib/backbone.wreqr.min.js",
-		"/dev_lic/js_ws/todomvc/labs/dependency-examples/backbone_marionette_require/js/vent.js",
-		"/dev_lic/js_ws/todomvc/labs/dependency-examples/backbone_marionette_require/js/lib/backbone.eventBinder.amd.full.js",
-		"/dev_lic/js_ws/todomvc/labs/dependency-examples/backbone_marionette_require/js/lib/backbone.babysitter.amd.full.js",
-		"/dev_lic/js_ws/todomvc/labs/dependency-examples/backbone_marionette_require/js/lib/backbone-1.0-full.js",
-		"/dev_lic/js_ws/todomvc/labs/dependency-examples/backbone_marionette_require/js/lib/underscore-1.5.1.js",
-		"/dev_lic/js_ws/todomvc/labs/dependency-examples/backbone_marionette_require/js/lib/backbone.wreqr.amd.full.js",
-		"/dev_lic/js_ws/todomvc/labs/dependency-examples/backbone_marionette_require/js/controllers/index.js",
-		"/dev_lic/js_ws/todomvc/labs/dependency-examples/backbone_marionette_require/app.build.js",
-		"/dev_lic/js_ws/todomvc/labs/dependency-examples/backbone_marionette_require/js/app.js",
-		"/dev_lic/js_ws/todomvc/labs/dependency-examples/backbone_marionette_require/index-dev.html",
-		"/dev_lic/js_ws/todomvc/labs/dependency-examples/backbone_marionette_require/js/templates/todoItemView.js",
-		"/Users/lichuan/Library/Application Support/Sublime Text 2/Packages/User/Package Control.sublime-settings",
-		"/dev_lic/js_ws/todomvc/labs/dependency-examples/backbone_marionette_require/js/templates/footer.tmpl",
-		"/dev_lic/js_ws/todomvc/labs/dependency-examples/backbone_marionette_require/js/lib/require.js"
+		"/dev_lic/watermelon/medical/static/app/homepage/show/show_view.js",
+		"/dev_lic/watermelon/medical/server_template/home.dust",
+		"/dev_lic/watermelon/medical/duster.json",
+		"/dev_lic/watermelon/medical/static/app/doctorList/templates_raw/doctorDetailItem.dust",
+		"/dev_lic/watermelon/medical/static/stylesheet/less/doctor-list.less",
+		"/dev_lic/watermelon/medical/server.js",
+		"/dev_lic/watermelon/medical/Gruntfile.js",
+		"/dev_lic/watermelon/medical/server_template/doctorList.dust",
+		"/dev_lic/watermelon/medical/server_template/head.dust",
+		"/dev_lic/watermelon/medical/server_template/basicLayout.dust",
+		"/dev_lic/watermelon/medical/static/stylesheet/less/global.less",
+		"/dev_lic/watermelon/medical/server_template/footer.dust",
+		"/dev_lic/watermelon/medical/static/app/patienthome/templates_raw/diagnoseItem.dust",
+		"/dev_lic/watermelon/medical/static/app/patienthome/templates_raw/detailTrackLayout.dust",
+		"/dev_lic/watermelon/medical/static/app/hospitalUserPage/templates_raw/hospitalUserSubmittedDiagnoseItem.dust",
+		"/dev_lic/watermelon/medical/static/app/doctorhome/templates_raw/newDiagnoseLayout.dust",
+		"/dev_lic/watermelon/medical/static/app/doctorhome/templates_raw/doctorDiagnoseItem.dust",
+		"/dev_lic/watermelon/medical/static/app/lib/jquery-uploader/_main.js",
+		"/dev_lic/watermelon/medical/server_template/scripts.dust",
+		"/dev_lic/watermelon/medical/static/app/admin/fenzhen/templates_raw/myDiagnoseItem.dust",
+		"/dev_lic/watermelon/medical/static/app/config/jquery/file_uploader.js",
+		"/dev_lic/watermelon/medical/static/app/lib/backbone/backbone.js",
+		"/dev_lic/watermelon/medical/static/app/entities/diagnoseEntity.js",
+		"/dev_lic/watermelon/medical/static/app/doctorSite/show/show_view.js",
+		"/dev_lic/watermelon/medical/static/app/doctorList/show/show_view.js",
+		"/dev_lic/watermelon/medical/static/app/entities/doctorEntity.js",
+		"/dev_lic/watermelon/medical/static/app/config/backbone/sync.js",
+		"/dev_lic/watermelon/medical/static/app/app.js",
+		"/dev_lic/watermelon/medical/static/app/main.js",
+		"/dev_lic/watermelon/medical/static/app/config/_base.js",
+		"/dev_lic/watermelon/medical/static/stylesheet/less/home.less",
+		"/dev_lic/watermelon/medical/static/app/config/jquery/ajax_setup.js",
+		"/dev_lic/watermelon/medical/static/app/admin/fenzhen/fz_controller.js",
+		"/dev_lic/watermelon/medical/static/app/admin/fenzhen/fz_view.js",
+		"/dev_lic/watermelon/medical/static/app/admin/kefu/kf_view.js",
+		"/dev_lic/watermelon/medical/static/app/diagnose/apply/apply_view.js",
+		"/dev_lic/watermelon/medical/static/app/diagnose/apply/apply_controller.js",
+		"/dev_lic/watermelon/medical/static/app/doctorhome/show/show_controller.js",
+		"/dev_lic/watermelon/medical/static/app/doctorhome/show/show_view.js",
+		"/dev_lic/watermelon/medical/static/app/patienthome/show/show_view.js",
+		"/dev_lic/watermelon/medical/static/app/patienthome/show/show_controller.js",
+		"/dev_lic/watermelon/medical/server_template/patientRegister.dust",
+		"/dev_lic/watermelon/medical/static/app/message/templates_raw/messageItem.dust",
+		"/dev_lic/watermelon/medical/static/stylesheet/less/message.less",
+		"/dev_lic/watermelon/medical/static/stylesheet/less/patient-home.less",
+		"/dev_lic/watermelon/medical/static/app/message/show/show_view.js",
+		"/dev_lic/watermelon/medical/static/app/patienthome/templates_raw/sharingModal.dust",
+		"/dev_lic/watermelon/medical/static/app/patienthome/templates_raw/patientMessageLayout.dust",
+		"/dev_lic/watermelon/medical/static/app/login/login_app.js",
+		"/dev_lic/watermelon/medical/static/app/homepage/show/show_controller.js",
+		"/dev_lic/watermelon/medical/static/app/homepage/homepage_app.js",
+		"/dev_lic/watermelon/medical/static/app/register/doctor/show_view.js",
+		"/dev_lic/watermelon/medical/static/app/register/patient/show_view.js",
+		"/dev_lic/watermelon/medical/static/app/login/loginpage_app.js",
+		"/dev_lic/watermelon/medical/static/app/login/show/show_view.js",
+		"/dev_lic/watermelon/medical/static/app/help/helpCenterApp.js",
+		"/dev_lic/watermelon/medical/static/app/help/helpapp.js",
+		"/dev_lic/watermelon/medical/static/app/lib/jquery-uploader/jquery.fileupload-ui.js",
+		"/dev_lic/watermelon/medical/static/app/utils/followbtn.js",
+		"/dev_lic/watermelon/medical/static/dist/debug/js/yizhenduan-debug.js",
+		"/dev_lic/watermelon/medical/static/app/register/patient/show_controller.js",
+		"/dev_lic/watermelon/medical/static/stylesheet/less/variables.less",
+		"/dev_lic/watermelon/medical/static/app/diagnose/templates_raw/successSubmitDiagnoseModal.dust",
+		"/dev_lic/watermelon/medical/server_template/applyDiagnose.dust",
+		"/dev_lic/watermelon/medical/static/stylesheet/less/apply-diagnose.less",
+		"/dev_lic/watermelon/medical/server_template/adminKefu.dust",
+		"/dev_lic/watermelon/medical/static/app/admin/fenzhen/templates_raw/allDiagnoseItem.dust",
+		"/dev_lic/watermelon/medical/server_template/loginPage.dust",
+		"/dev_lic/watermelon/medical/static/stylesheet/less/doctor-home.less",
+		"/dev_lic/watermelon/medical/static/app/doctorList/templates_raw/doctorDetailList.dust",
+		"/dev_lic/watermelon/medical/server_template/iconSearch.dust",
+		"/dev_lic/watermelon/medical/static/stylesheet/atc/yizhenduan-debug-full.css",
+		"/dev_lic/watermelon/medical/static/stylesheet/atc/loginpage.css",
+		"/dev_lic/watermelon/medical/static/stylesheet/less/loginpage.less",
+		"/dev_lic/watermelon/medical/static/stylesheet/atc/apply-diagnose.css",
+		"/dev_lic/watermelon/medical/server_template/registerDoctorWarningModal.dust",
+		"/dev_lic/watermelon/medical/server_template/doctorRegister.dust",
+		"/dev_lic/watermelon/medical/static/app/register/doctor/show_controller.js",
+		"/dev_lic/watermelon/medical/server_template/helpcenter.dust",
+		"/dev_lic/watermelon/medical/server_template/helpdoc.dust",
+		"/dev_lic/watermelon/medical/server_template/about.dust",
+		"/dev_lic/watermelon/medical/server_template/doctorSite.dust",
+		"/dev_lic/watermelon/medical/static/app/patienthome/templates_raw/diagnoseLayout.dust",
+		"/dev_lic/watermelon/medical/server_template/header.dust",
+		"/dev_lic/watermelon/medical/static/assets/image/doctor1.png",
+		"/dev_lic/watermelon/medical/static/stylesheet/less/doctor-site.less",
+		"/dev_lic/watermelon/medical/static/app/register/register_app.js",
+		"/dev_lic/watermelon/medical/static/dist/debug/stylesheet/yizhenduan-debug-full.css",
+		"/dev_lic/watermelon/medical/static/stylesheet/atc/home.css",
+		"/dev_lic/watermelon/medical/static/stylesheet/atc/doctor-home.css",
+		"/dev_lic/watermelon/medical/static/stylesheet/atc/global.css",
+		"/dev_lic/watermelon/medical/static/stylesheet/atc/variables.css",
+		"/dev_lic/watermelon/medical/static/stylesheet/atc/report.css",
+		"/dev_lic/watermelon/medical/static/stylesheet/atc/register.css",
+		"/dev_lic/watermelon/medical/static/stylesheet/atc/patient-home.css",
+		"/dev_lic/watermelon/medical/static/stylesheet/atc/message.css",
+		"/dev_lic/watermelon/medical/static/stylesheet/atc/hospital-user.css",
+		"/dev_lic/watermelon/medical/static/stylesheet/atc/doctor-list.css",
+		"/dev_lic/watermelon/medical/static/stylesheet/atc/doctor-site.css",
+		"/dev_lic/watermelon/medical/static/stylesheet/atc/errorpage.css",
+		"/dev_lic/watermelon/medical/static/stylesheet/atc/fenzhen.css",
+		"/dev_lic/watermelon/medical/static/stylesheet/atc/flat-ui.css",
+		"/dev_lic/watermelon/medical/server_template/loginModal.dust",
+		"/dev_lic/watermelon/medical/static/app/lib/ladda-bootstrap/dist/ladda.js",
+		"/dev_lic/watermelon/medical/static/app/about/aboutapp.js",
+		"/dev_lic/watermelon/medical/static/stylesheet/less/help.less",
+		"/dev_lic/watermelon/medical/static/app/entities/pathologyEntity.js",
+		"/dev_lic/watermelon/medical/static/app/hospitalUserPage/show/show_view.js",
+		"/dev_lic/watermelon/medical/static/app/lib/flatui/flatui-radio.js",
+		"/dev_lic/watermelon/medical/server_template/selectDoctorModal.dust",
+		"/dev_lic/watermelon/medical/static/app/diagnose/templates_raw/selectDoctorItem.dust",
+		"/dev_lic/watermelon/medical/static/assets/Glyphs/Additional/radio-checked.svg",
+		"/dev_lic/watermelon/medical/server_template/patientHome.dust",
+		"/dev_lic/watermelon/medical/duster.js",
+		"/dev_lic/watermelon/medical/server_template/breadcrumbs.dust",
+		"/dev_lic/watermelon/medical/node_modules/dustjs-helpers/dist/dust-helpers.js",
+		"/dev_lic/watermelon/medical/server_template/hospitalUser.dust",
+		"/dev_lic/watermelon/medical/static/app/doctorList/show/show_controller.js",
+		"/dev_lic/watermelon/medical/node_modules/dustjs-linkedin/lib/dust.js",
+		"/dev_lic/watermelon/medical/static/assets/image/logo.jpg",
+		"/dev_lic/watermelon/medical/static/app/admin/kefu/kf_controller.js",
+		"/dev_lic/watermelon/medical/static/app/admin/admin_app.js",
+		"/dev_lic/watermelon/medical/static/app/admin/kefu/templates_raw/displayPayLinkModal.dust",
+		"/dev_lic/watermelon/medical/static/app/templates.js",
+		"/dev_lic/watermelon/medical/static/app/lib/jquery-uploader/jquery.fileupload.js",
+		"/dev_lic/watermelon/medical/static/app/lib/elastislide/_main.js",
+		"/Users/lichuan/Downloads/apply_view.js",
+		"/dev_lic/watermelon/medical/static/app/login/show/show_controller.js"
 	],
 	"find":
 	{
@@ -334,6 +503,25 @@
 		"where_history":
 		[
 			"<open folders>,*.js",
+			"<open folders>,*.dust",
+			"<open folders>,*.js",
+			"<open folders>,*.j s",
+			"<open folders>,*.less",
+			"<open folders>,*.js",
+			"<open folders>,*.less",
+			"<open folders>,*.js",
+			"<open folders>,*.dust",
+			"<open folders>,*.less",
+			"<open folders>",
+			"<open folders>,*.js",
+			"",
+			"<open folders>,*.js",
+			"<open folders>,*.less",
+			"<open folders>,*.js",
+			"<open folders>,*.less",
+			"<open folders>,*.js",
+			"<open folders>,*.dust",
+			"<open folders>,*.js",
 			"<open folders>"
 		]
 	},
@@ -342,141 +530,146 @@
 		"case_sensitive": false,
 		"find_history":
 		[
-			"myCarousel",
-			"carousel",
-			"carousel()",
-			"myCarousel",
-			"my",
-			"pagination",
-			"page",
-			"dialog",
-			"typeahead",
-			"type",
-			"radio",
-			"live",
-			"search",
-			"select",
-			"fileinput",
-			"file",
-			"front_page",
-			"search-query",
-			"dropdown",
-			"@base",
-			"jquery-ui",
-			"icon-font-ie7",
-			"tint",
-			"saturate",
-			"navbar-default",
-			"@clouds",
-			"navbar-default",
-			"@body-bg",
-			"navbar-default",
-			"navbar-collapse",
-			"mix",
-			"@brand-secondary",
-			"@base",
-			"calc-color",
-			"turquoise",
-			"1abc9c",
-			"color",
-			"variables",
-			"orange",
-			"sort-selector",
-			"dashboard-end",
-			"getSuggestions:success:entities",
-			"hideLoadingImg",
-			"loading-img",
-			"/product/logo/upload/",
-			"stringDetailLayoutView:showFetched",
-			"child_stringDetailContentView",
-			"selfvoteView",
-			"submit",
+			"ajax",
+			"user-wrapper",
+			"window.location.replace",
+			"replace",
+			"window.location",
+			"exp-comment",
+			"Merge conflict",
+			"merge",
+			"changeInfo",
+			"下载",
+			"glyphicon glyphicon-upload",
+			"footer",
+			"main-block",
+			"footer-region",
+			"background-color",
+			"website-main-news-block",
+			"wrapError",
+			"config",
+			"sync",
+			"onerror",
+			"fetch",
 			"onError",
-			"Messenger.post",
-			"suggestion-list-table",
-			"hideLoadingImg",
-			"oShow",
-			"stringDetailLayoutView:showNe",
-			"no-suggestion-label",
-			"selfsuggestion",
-			"$.ajax",
-			"stringlistItem.js",
-			"cvn1Python 2.7.3 (default, Oct  4 2013, 05:22:36) \n[GCC 4.2.1 (Apple Inc. build 5666) (dot 3)] on darwin\n>>> RuntimeError: qSlicerScriptedLoadableModule::setPythonSource - Failed to load scripted pythonqt module class definition BrainASUtils from /dev_lic/SlicerPy/helloPython/code/BrainASUtils.py\nRuntimeError: qSlicerScriptedLoadableModule::setPythonSource - Failed to load scripted pythonqt module class definition DicomDAO from /dev_lic/SlicerPy/helloPython/code/DicomDAO.py\n[(1, u'WRIX', None, None, None)]\npExtendRow(1, u'WRIX', None, None, None)\nget or insert error of patient_extend\nlines:Done!\nlines:Done!\nlines:Done!\nlines:start_freesurfer processing at 2014-02-05 22:23:21\n[(2, u'ANONYMIZE', u'2005-07-28', 2, 1), (3, u'libing', u'2013-12-28', 2, 0)]\n(2, u'ANONYMIZE', u'2005-07-28', 2, 1)\n0--PUID\n(2, u'ANONYMIZE', u'2005-07-28', 2, 1)\n1--PName\n(2, u'ANONYMIZE', u'2005-07-28', 2, 1)\n2--Date\n(2, u'ANONYMIZE', u'2005-07-28', 2, 1)\n3--Status\n(2, u'ANONYMIZE', u'2005-07-28', 2, 1)\n4--\nsetContentData:new btn show:btnSARTable-2-2-0\n(2, u'ANONYMIZE', u'2005-07-28', 2, 1)\n5--PGroup\n(2, u'ANONYMIZE', u'2005-07-28', 2, 1)\n6--\n(3, u'libing', u'2013-12-28', 2, 0)\n0--PUID\n(3, u'libing', u'2013-12-28', 2, 0)\n1--PName\n(3, u'libing', u'2013-12-28', 2, 0)\n2--Date\n(3, u'libing', u'2013-12-28', 2, 0)\n3--Status\n(3, u'libing', u'2013-12-28', 2, 0)\n4--\nsetContentData:new btn show:btnSARTable-3-2-1\n(3, u'libing', u'2013-12-28', 2, 0)\n5--PGroup\n(3, u'libing', u'2013-12-28', 2, 0)\n6--\nmyinstance<DicomAnalyze.DicomAnalyzeWidget instance at 0x1298cab48>\n0,200,All,10\ninit PatientDAO\n0,200,All,10\ninit PatientDAO\ngroup text:Normal\ngroup text:Patient\nleftBrainBtnClicked\n3\nlibing\nLeft,3\n2\ninit group chart dao\nGroupData sql:SELECT Foldername FROM Patients_extend where Patient_UID in (?)\nfilepath:/bas/freesurfer/2.ANONYMIZE.1391348570.0/data/patient/stats/lh.aparc.a2009s.stats\n['G_and_S_occipital_inf                    1757   1165   2858  2.258 0.469     0.163     0.060       33     4.3\\n', 'G_and_S_paracentral                      1719    991   2488  2.154 0.567     0.130     0.057       62     3.7\\n', 'G_and_S_subcentral                       1584   1057   2992  2.429 0.629     0.141     0.056       26     3.9\\n', 'G_and_S_transv_frontopol                  599    418   1248  2.266 0.515     0.217     0.111       20     2.3\\n', 'G_and_S_cingul-Ant                       1731   1215   3365  2.535 0.666     0.144     0.049       23     3.5\\n', 'G_and_S_cingul-Mid-Ant                   1191    837   2367  2.756 0.581     0.154     0.048       18     2.2\\n', 'G_and_S_cingul-Mid-Post                  1199    837   2201  2.724 0.508     0.163     0.066       24     3.0\\n', 'G_cingul-Post-dorsal                      414    283   1071  2.904 0.559     0.173     0.049        8     0.9\\n', 'G_cingul-Post-ventral                     253    147    423  2.743 0.810     0.136     0.057        5     0.4\\n', 'G_cuneus                                 1905   1199   2151  1.588 0.447     0.142     0.045       28     3.6\\n', 'G_front_inf-Opercular                    1383    933   3111  2.624 0.414     0.154     0.070       38     3.5\\n', 'G_front_inf-Orbital                       147     98    387  2.749 0.452     0.178     0.087        3     0.4\\n', 'G_front_inf-Triangul                      764    515   1444  2.234 0.465     0.171     0.070       17     2.0\\n', 'G_front_middle                           4116   2794   8396  2.353 0.529     0.174     0.074      100    12.9\\n', 'G_front_sup                              6377   4339  14455  2.720 0.598     0.150     0.052      101    13.4\\n', 'G_Ins_lg_and_S_cent_ins                   453    297    876  2.846 0.555     0.157     0.087       10     1.3\\n', 'G_insular_short                           712    431   1688  3.077 0.875     0.174     0.167       50     6.7\\n', 'G_occipital_middle                       2494   1558   5157  2.601 0.555     0.173     0.103      124    13.4\\n', 'G_occipital_sup                          1617    983   2251  2.018 0.491     0.147     0.058       38     4.0\\n', 'G_oc-temp_lat-fusifor                    2027   1340   4625  2.729 0.496     0.173     0.094       86     8.2\\n', 'G_oc-temp_med-Lingual                    3208   2176   4237  1.739 0.526     0.176     0.069       66     9.0\\n', 'G_oc-temp_med-Parahip                    1129    758   3578  3.431 0.824     0.150     0.074       27     3.3\\n', 'G_orbital                                2500   1657   5748  2.698 0.629     0.186     0.098       70    10.0\\n', 'G_pariet_inf-Angular                     2503   1633   5991  2.797 0.665     0.167     0.072       51     5.8\\n', 'G_pariet_inf-Supramar                    2450   1707   5352  2.604 0.503     0.148     0.067       68     7.0\\n', 'G_parietal_sup                           2908   1854   5442  2.404 0.611     0.153     0.055       52     6.4\\n', 'G_postcentral                            2505   1459   3694  2.100 0.486     0.147     0.132      235    19.6\\n', 'G_precentral                             2818   1713   5372  2.491 0.522     0.142     0.071       57     8.2\\n', 'G_precuneus                              2346   1605   4716  2.456 0.616     0.162     0.055       41     5.2\\n', 'G_rectus                                  901    585   1935  2.473 0.682     0.174     0.077       32     3.1\\n', 'G_subcallosal                             234    162    392  2.444 1.080     0.198     0.808       46     1.1\\n', 'G_temp_sup-G_T_transv                     529    340    761  1.902 0.315     0.122     0.043        6     0.9\\n', 'G_temp_sup-Lateral                       1876   1140   4317  2.758 0.502     0.133     0.040       61     3.1\\n', 'G_temp_sup-Plan_polar                     848    554   1965  3.154 0.712     0.094     0.029        4     1.1\\n', 'G_temp_sup-Plan_tempo                     661    459   1102  2.247 0.493     0.104     0.026        5     0.7\\n', 'G_temporal_inf                           2728   1832   6904  2.791 0.628     0.176     0.077       70     9.3\\n', 'G_temporal_middle                        2602   1729   7145  3.028 0.567     0.153     0.058       50     6.1\\n', 'Lat_Fis-ant-Horizont                      275    183    465  2.376 0.517     0.150     0.037        4     0.5\\n', 'Lat_Fis-ant-Vertical                      151    109    182  1.791 0.361     0.104     0.020        1     0.1\\n', 'Lat_Fis-post                             1035    694   1245  2.140 0.522     0.126     0.034        9     1.4\\n', 'Pole_occipital                           2400   1389   2473  1.688 0.383     0.158     0.103       59     8.0\\n', 'Pole_temporal                            1716   1224   5476  3.277 0.749     0.173     0.093       37     4.8\\n', 'S_calcarine                              2115   1495   2381  1.748 0.682     0.150     0.065       41     5.9\\n', 'S_central                                3057   2059   3265  1.766 0.578     0.124     0.040       28     5.3\\n', 'S_cingul-Marginalis                       904    602   1269  2.246 0.504     0.114     0.028        8     1.0\\n', 'S_circular_insula_ant                     533    352    881  2.734 0.748     0.123     0.162       22     1.0\\n', 'S_circular_insula_inf                    1253    811   1721  2.393 0.574     0.082     0.019        5     0.9\\n', 'S_circular_insula_sup                    1707   1143   2303  2.333 0.424     0.122     0.032       13     2.3\\n', 'S_collat_transv_ant                       911    645   1456  2.461 0.570     0.122     0.030        8     1.1\\n', 'S_collat_transv_post                      265    173    417  2.096 0.414     0.178     0.068        6     0.7\\n', 'S_front_inf                              1928   1307   2491  2.049 0.517     0.120     0.029       16     2.3\\n', 'S_front_middle                           1586   1047   2034  1.967 0.458     0.144     0.061       23     3.2\\n', 'S_front_sup                              2676   1846   4478  2.456 0.421     0.130     0.045       32     4.7\\n', 'S_interm_prim-Jensen                      344    233    601  2.412 0.672     0.151     0.085        5     1.8\\n', 'S_intrapariet_and_P_trans                3075   2021   4098  2.064 0.410     0.119     0.035       27     4.1\\n', 'S_oc_middle_and_Lunatus                  1557   1038   1908  1.974 0.499     0.150     0.045       21     2.9\\n', 'S_oc_sup_and_transversal                 1542   1007   1892  1.989 0.429     0.131     0.038       16     2.4\\n', 'S_occipital_ant                           903    614   1282  2.356 0.457     0.141     0.043       12     1.4\\n', 'S_oc-temp_lat                             521    353    894  2.650 0.512     0.122     0.033        4     0.6\\n', 'S_oc-temp_med_and_Lingual                2156   1505   3399  2.386 0.508     0.142     0.043       25     3.8\\n', 'S_orbital_lateral                         449    316    561  1.863 0.464     0.124     0.029        3     0.6\\n', 'S_orbital_med-olfact                      870    592   1245  2.259 0.761     0.115     0.036        7     1.2\\n', 'S_orbital-H_Shaped                       1018    695   1568  2.267 0.701     0.136     0.041       10     1.8\\n', 'S_parieto_occipital                      2179   1478   2730  1.928 0.483     0.139     0.045       26     4.1\\n', 'S_pericallosal                           1034    624   1281  2.678 0.855     0.156     0.058       24     2.2\\n', 'S_postcentral                            2647   1785   3820  2.250 0.544     0.129     0.036       25     4.2\\n', 'S_precentral-inf-part                    1458   1002   2093  2.289 0.490     0.107     0.026        9     1.5\\n', 'S_precentral-sup-part                    1317    868   1696  2.166 0.415     0.130     0.053       16     2.8\\n', 'S_suborbital                              568    383   1089  2.768 0.902     0.174     0.078       12     1.5\\n', 'S_subparietal                             834    592   1516  2.670 0.552     0.147     0.050       12     1.3\\n', 'S_temporal_inf                           1290    893   2061  2.610 0.450     0.132     0.037       13     1.9\\n', 'S_temporal_sup                           5390   3671   8852  2.567 0.509     0.122     0.034       78     8.1\\n', 'S_temporal_transverse                     349    225    378  1.954 0.378     0.131     0.031        4     0.5\\n']\n73\n73\nfilepath:/bas/freesurfer/2.ANONYMIZE.1391348570.0/data/patient/stats/rh.aparc.a2009s.stats\n['G_and_S_occipital_inf                    1562   1020   2956  2.621 0.633     0.160     0.054       28     3.4\\n', 'G_and_S_paracentral                      1246    706   1848  2.234 0.625     0.128     0.072       20     4.6\\n', 'G_and_S_subcentral                       1228    811   1869  2.222 0.636     0.159     0.053       22     2.6\\n', 'G_and_S_transv_frontopol                  830    547   1525  2.186 0.542     0.198     0.098       27     3.2\\n', 'G_and_S_cingul-Ant                       2327   1583   4241  2.399 0.715     0.155     0.074       55     7.8\\n', 'G_and_S_cingul-Mid-Ant                   1364    941   2495  2.523 0.547     0.136     0.039       16     2.1\\n', 'G_and_S_cingul-Mid-Post                  1581   1061   2862  2.556 0.575     0.145     0.044       25     2.9\\n', 'G_cingul-Post-dorsal                      412    274    895  2.898 0.663     0.178     0.080        9     1.3\\n', 'G_cingul-Post-ventral                     261    168    597  2.770 0.791     0.157     0.065        6     0.6\\n', 'G_cuneus                                 2097   1315   2316  1.642 0.449     0.166     0.069       37     6.2\\n', 'G_front_inf-Opercular                    1075    725   2289  2.425 0.467     0.143     0.052       16     2.3\\n', 'G_front_inf-Orbital                       294    188    663  2.567 0.513     0.175     0.071        7     0.8\\n', 'G_front_inf-Triangul                      945    643   2034  2.379 0.552     0.171     0.064       22     2.8\\n', 'G_front_middle                           4245   2899   8708  2.363 0.623     0.178     0.097      123    16.2\\n', 'G_front_sup                              6132   4010  13342  2.735 0.592     0.161     0.084      137    23.2\\n', 'G_Ins_lg_and_S_cent_ins                   443    288    941  2.876 0.667     0.144     0.120       20     2.4\\n', 'G_insular_short                           579    364   1646  3.324 0.814     0.159     0.074       14     1.9\\n', 'G_occipital_middle                       2293   1537   4713  2.471 0.505     0.175     0.070       54     6.1\\n', 'G_occipital_sup                          1624   1022   2540  2.036 0.439     0.172     0.092       91     6.3\\n', 'G_oc-temp_lat-fusifor                    1516   1012   3107  2.573 0.624     0.157     0.055       28     3.4\\n', 'G_oc-temp_med-Lingual                    2831   1816   3821  1.911 0.601     0.179     0.118       94     9.0\\n', 'G_oc-temp_med-Parahip                    1075    700   3099  3.300 0.736     0.145     0.101       29     5.5\\n', 'G_orbital                                2913   1905   5409  2.269 0.737     0.195     0.199      169    13.3\\n', 'G_pariet_inf-Angular                     3013   2039   6219  2.449 0.651     0.165     0.070       72     7.9\\n', 'G_pariet_inf-Supramar                    2541   1621   4133  2.182 0.678     0.162     0.074       56     6.6\\n', 'G_parietal_sup                           2326   1444   4200  2.276 0.492     0.144     0.049       39     4.8\\n', 'G_postcentral                            2379   1386   2983  1.781 0.471     0.137     0.058       42     6.1\\n', 'G_precentral                             2633   1599   4819  2.432 0.547     0.141     0.207       65     6.9\\n', 'G_precuneus                              2328   1528   4503  2.394 0.500     0.153     0.058       43     5.2\\n', 'G_rectus                                  712    472   1470  2.292 0.577     0.194     0.123       29     3.0\\n', 'G_subcallosal                             401    280    662  2.269 0.770     0.072     0.019        2     0.3\\n', 'G_temp_sup-G_T_transv                     387    223    624  2.253 0.413     0.135     0.052        5     0.9\\n', 'G_temp_sup-Lateral                       1425    861   2577  2.311 0.800     0.150     0.073       42     4.8\\n', 'G_temp_sup-Plan_polar                     841    584   1925  3.171 0.768     0.102     0.032        5     1.0\\n', 'G_temp_sup-Plan_tempo                     499    326    788  2.259 0.520     0.098     0.024        3     0.5\\n', 'G_temporal_inf                           2692   1720   5875  2.648 0.772     0.183     0.108      123     9.0\\n', 'G_temporal_middle                        2292   1455   4642  2.396 0.865     0.168     0.073       63     7.4\\n', 'Lat_Fis-ant-Horizont                      413    281    488  1.817 0.353     0.104     0.024        2     0.4\\n', 'Lat_Fis-ant-Vertical                      193    136    232  2.031 0.379     0.104     0.025        1     0.2\\n', 'Lat_Fis-post                             1380    911   1753  2.263 0.475     0.120     0.035       11     1.8\\n', 'Pole_occipital                           3734   2237   4353  1.832 0.463     0.171     0.077       88    11.6\\n', 'Pole_temporal                            1695   1131   5401  3.407 0.592     0.160     0.074       33     5.0\\n', 'S_calcarine                              2550   1714   2754  1.757 0.566     0.182     0.136      137    15.7\\n', 'S_central                                3053   2091   3043  1.598 0.455     0.121     0.034       23     4.4\\n', 'S_cingul-Marginalis                      1275    881   1878  2.165 0.489     0.143     0.079       20     2.4\\n', 'S_circular_insula_ant                     494    339    699  2.220 0.520     0.105     0.029        2     0.6\\n', 'S_circular_insula_inf                    1070    706   1482  2.573 0.520     0.092     0.028        7     1.0\\n', 'S_circular_insula_sup                    1189    818   1642  2.242 0.409     0.116     0.031        8     1.4\\n', 'S_collat_transv_ant                      1023    694   1933  3.101 0.636     0.141     0.050       13     2.0\\n', 'S_collat_transv_post                      702    460    776  1.829 0.425     0.158     0.052       10     1.6\\n', 'S_front_inf                              1828   1265   2333  1.949 0.406     0.131     0.043       18     2.7\\n', 'S_front_middle                           2178   1521   2593  1.615 0.478     0.142     0.050       25     4.3\\n', 'S_front_sup                              2236   1539   2967  1.966 0.487     0.121     0.038       19     3.3\\n', 'S_interm_prim-Jensen                      271    184    336  2.198 0.361     0.124     0.029        2     0.3\\n', 'S_intrapariet_and_P_trans                3031   2019   3791  2.018 0.472     0.125     0.034       28     4.2\\n', 'S_oc_middle_and_Lunatus                  1421    962   1792  2.135 0.465     0.156     0.049       19     2.8\\n', 'S_oc_sup_and_transversal                 1133    775   1579  2.108 0.439     0.119     0.030       10     1.3\\n', 'S_occipital_ant                           998    675   1530  2.460 0.350     0.122     0.035        9     1.5\\n', 'S_oc-temp_lat                             634    456    891  2.396 0.440     0.123     0.026        4     0.7\\n', 'S_oc-temp_med_and_Lingual                1695   1158   2677  2.465 0.510     0.133     0.041       20     2.8\\n', 'S_orbital_lateral                         350    234    395  1.588 0.645     0.153     0.062        6     0.7\\n', 'S_orbital_med-olfact                      832    586   1139  2.038 0.708     0.125     0.034       11     1.2\\n', 'S_orbital-H_Shaped                       1239    845   1879  2.076 0.540     0.149     0.052       16     2.5\\n', 'S_parieto_occipital                      2490   1647   3194  2.210 0.696     0.138     0.051       29     5.3\\n', 'S_pericallosal                           1439    906   1515  2.025 0.630     0.134     0.049       22     2.4\\n', 'S_postcentral                            1957   1305   2144  1.885 0.436     0.135     0.040       21     3.1\\n', 'S_precentral-inf-part                    1368    912   1872  2.171 0.572     0.121     0.034       10     1.9\\n', 'S_precentral-sup-part                    1196    811   1556  2.265 0.375     0.118     0.028        8     1.5\\n', 'S_suborbital                              247    165    309  1.810 0.611     0.088     0.015        1     0.2\\n', 'S_subparietal                            1082    714   1746  2.295 0.684     0.148     0.054       17     2.3\\n', 'S_temporal_inf                           1597   1065   2294  2.488 0.486     0.120     0.032       11     2.1\\n', 'S_temporal_sup                           4695   3157   7350  2.499 0.559     0.120     0.031       44     5.9\\n', 'S_temporal_transverse                     275    173    409  2.956 0.439     0.167     0.054        5     0.7\\n']\n73\n73\nGroupData:1,1\nbrainType:Left\ngenerateChartString res pid:(u'3.libing.1391348570.0',),3\npatient path:/bas/freesurfer/3.libing.1391348570.0/data/patient/stats/lh.aparc.a2009s.stats\nfilepath:/bas/freesurfer/3.libing.1391348570.0/data/patient/stats/lh.aparc.a2009s.stats\n['G_and_S_occipital_inf                    1156    766   2289  2.653 0.451     0.172     0.096       27     2.7\\n', 'G_and_S_paracentral                      1857   1144   3363  2.429 0.508     0.133     0.046       41     3.7\\n', 'G_and_S_subcentral                       1579   1053   3069  2.467 0.394     0.142     0.042       25     2.7\\n', 'G_and_S_transv_frontopol                  575    388   1332  2.598 0.385     0.197     0.089       22     1.9\\n', 'G_and_S_cingul-Ant                       2559   1664   4776  2.662 0.538     0.137     0.064       50     8.1\\n', 'G_and_S_cingul-Mid-Ant                   1590   1093   3370  2.946 0.489     0.148     0.053       26     3.8\\n', 'G_and_S_cingul-Mid-Post                  1534   1014   2940  2.836 0.463     0.161     0.070       29     4.5\\n', 'G_cingul-Post-dorsal                      410    281   1091  2.983 0.540     0.179     0.061       10     0.9\\n', 'G_cingul-Post-ventral                     319    190    606  2.941 0.651     0.151     0.064        7     0.7\\n', 'G_cuneus                                 2369   1509   3332  1.932 0.463     0.179     0.100       65     9.0\\n', 'G_front_inf-Opercular                    1322    864   2978  2.626 0.383     0.145     0.046       30     2.5\\n', 'G_front_inf-Orbital                       252    163    555  2.472 0.380     0.177     0.061        6     0.6\\n', 'G_front_inf-Triangul                      953    615   2106  2.594 0.476     0.152     0.232       24    15.6\\n', 'G_front_middle                           4816   3130  10017  2.538 0.486     0.162     0.064      103    12.1\\n', 'G_front_sup                              6412   4274  15128  2.827 0.461     0.154     0.055      112    14.6\\n', 'G_Ins_lg_and_S_cent_ins                   448    262    973  3.183 0.621     0.126     0.072        9     0.9\\n', 'G_insular_short                           659    403   1795  3.412 0.803     0.165     0.112       18     2.9\\n', 'G_occipital_middle                       1626   1057   3573  2.661 0.536     0.178     0.091       49     4.7\\n', 'G_occipital_sup                          1733   1091   2940  2.449 0.500     0.176     0.077       44     5.5\\n', 'G_oc-temp_lat-fusifor                    1623   1075   3730  2.761 0.496     0.183     0.076       43     5.0\\n', 'G_oc-temp_med-Lingual                    3420   2202   5394  2.115 0.549     0.198     0.113      100    15.2\\n', 'G_oc-temp_med-Parahip                    1115    769   3480  3.525 0.699     0.140     0.172       43     4.4\\n', 'G_orbital                                2400   1563   5265  2.587 0.583     0.172     0.095       64     8.0\\n', 'G_pariet_inf-Angular                     2728   1847   6314  2.622 0.471     0.175     0.084       79     8.6\\n', 'G_pariet_inf-Supramar                    2942   1954   6436  2.724 0.445     0.164     0.061       63     6.9\\n', 'G_parietal_sup                           2625   1706   5245  2.512 0.448     0.158     0.053       53     5.8\\n', 'G_postcentral                            2034   1282   3374  2.134 0.468     0.134     0.053       36     4.6\\n', 'G_precentral                             2782   1617   5661  2.774 0.444     0.127     0.064       85     8.1\\n', 'G_precuneus                              2769   1807   5948  2.570 0.444     0.164     0.069       63     7.8\\n', 'G_rectus                                  912    545   1822  2.420 0.686     0.197     0.135       46     5.1\\n', 'G_subcallosal                             241    142    450  2.862 1.084     0.153     0.815       29     1.1\\n', 'G_temp_sup-G_T_transv                     430    255    769  2.416 0.469     0.137     0.062        6     0.8\\n', 'G_temp_sup-Lateral                       2141   1396   5728  2.943 0.548     0.155     0.056       42     5.1\\n', 'G_temp_sup-Plan_polar                     562    382   1480  3.306 0.592     0.125     0.041        5     0.9\\n', 'G_temp_sup-Plan_tempo                     957    635   1789  2.607 0.441     0.126     0.043       11     1.4\\n', 'G_temporal_inf                           2731   1824   7195  3.078 0.706     0.173     0.075       69     8.6\\n', 'G_temporal_middle                        3011   2061   8214  2.945 0.542     0.171     0.068       75     8.4\\n', 'Lat_Fis-ant-Horizont                      334    225    382  1.983 0.321     0.105     0.026        2     0.4\\n', 'Lat_Fis-ant-Vertical                      257    178    360  2.149 0.330     0.100     0.022        1     0.2\\n', 'Lat_Fis-post                             1186    779   1619  2.589 0.392     0.123     0.033       10     1.6\\n', 'Pole_occipital                           1969   1252   2995  2.104 0.544     0.182     0.087       53     6.7\\n', 'Pole_temporal                            1847   1281   5800  3.381 0.747     0.155     0.061       30     4.7\\n', 'S_calcarine                              2941   1996   3511  1.888 0.463     0.154     0.099       92    10.8\\n', 'S_central                                2767   1892   3112  1.863 0.572     0.118     0.076       63    12.4\\n', 'S_cingul-Marginalis                      1093    741   1721  2.454 0.416     0.130     0.039       11     1.7\\n', 'S_circular_insula_ant                     334    232    581  2.704 0.504     0.115     0.025        2     0.4\\n', 'S_circular_insula_inf                    1300    874   2023  2.622 0.657     0.086     0.019        5     1.0\\n', 'S_circular_insula_sup                    1670   1105   2406  2.511 0.399     0.119     0.033       13     2.3\\n', 'S_collat_transv_ant                       998    678   1597  2.758 0.450     0.114     0.030        7     1.2\\n', 'S_collat_transv_post                      410    267    497  2.041 0.305     0.127     0.033        4     0.6\\n', 'S_front_inf                              1882   1297   2808  2.220 0.440     0.140     0.045       25     3.3\\n', 'S_front_middle                           1576   1062   2216  2.120 0.411     0.137     0.041       19     2.5\\n', 'S_front_sup                              2270   1546   3724  2.435 0.410     0.112     0.030       17     3.1\\n', 'S_interm_prim-Jensen                      478    320    545  1.833 0.294     0.111     0.024        3     0.6\\n', 'S_intrapariet_and_P_trans                2930   1981   4364  2.251 0.352     0.123     0.037       52     4.2\\n', 'S_oc_middle_and_Lunatus                  1245    845   1612  2.244 0.355     0.161     0.053       18     2.7\\n', 'S_oc_sup_and_transversal                 1301    882   1897  2.260 0.376     0.132     0.035       12     2.0\\n', 'S_occipital_ant                           470    311    668  2.425 0.515     0.130     0.034        4     0.8\\n', 'S_oc-temp_lat                             785    516   1100  2.391 0.488     0.129     0.046        9     1.2\\n', 'S_oc-temp_med_and_Lingual                2152   1480   3343  2.473 0.451     0.144     0.043       26     4.0\\n', 'S_orbital_lateral                         394    264    567  2.034 0.420     0.133     0.040        5     0.7\\n', 'S_orbital_med-olfact                      514    370    818  2.446 0.582     0.156     0.049        8     1.2\\n', 'S_orbital-H_Shaped                       1217    827   2038  2.450 0.653     0.154     0.060       21     2.5\\n', 'S_parieto_occipital                      2101   1385   3040  2.370 0.377     0.131     0.043       26     3.7\\n', 'S_pericallosal                           1039    636   1323  2.472 0.815     0.161     0.068       50     2.8\\n', 'S_postcentral                            2609   1735   3497  2.244 0.393     0.125     0.034       24     3.6\\n', 'S_precentral-inf-part                    1421    956   2134  2.391 0.352     0.112     0.027       12     1.6\\n', 'S_precentral-sup-part                    1183    811   1938  2.773 0.438     0.119     0.033        9     1.5\\n', 'S_suborbital                              758    511   1098  2.283 0.603     0.153     0.051       13     1.7\\n', 'S_subparietal                             977    660   1469  2.373 0.347     0.126     0.035        9     1.5\\n', 'S_temporal_inf                           1761   1190   2576  2.517 0.409     0.123     0.033       15     2.3\\n', 'S_temporal_sup                           4869   3318   7373  2.458 0.392     0.121     0.033       42     6.6\\n', 'S_temporal_transverse                     385    249    563  2.530 0.362     0.129     0.030        3     0.5\\n']\n73\n73\ngenerateChartString pfileData:73\ngroup\nlenght:73\nself.ghdata:73\nlenght:73\nself.gldata:73\ndata:['2.653', '2.429', '2.467', '2.598', '2.662', '2.946', '2.836', '2.983', '2.941', '1.932', '2.626', '2.472', '2.594', '2.538', '2.827', '3.183', '3.412', '2.661', '2.449', '2.761', '2.115', '3.525', '2.587', '2.622', '2.724', '2.512', '2.134', '2.774', '2.570', '2.420', '2.862', '2.416', '2.943', '3.306', '2.607', '3.078', '2.945', '1.983', '2.149', '2.589', '2.104', '3.381', '1.888', '1.863', '2.454', '2.704', '2.622', '2.511', '2.758', '2.041', '2.220', '2.120', '2.435', '1.833', '2.251', '2.244', '2.260', '2.425', '2.391', '2.473', '2.034', '2.446', '2.450', '2.370', '2.472', '2.244', '2.391', '2.773', '2.283', '2.373', '2.517', '2.458', '2.530']\ndata:['2.258', '2.154', '2.429', '2.266', '2.535', '2.756', '2.724', '2.904', '2.743', '1.588', '2.624', '2.749', '2.234', '2.353', '2.72', '2.846', '3.077', '2.601', '2.018', '2.729', '1.739', '3.431', '2.698', '2.797', '2.604', '2.404', '2.1', '2.491', '2.456', '2.473', '2.444', '1.902', '2.758', '3.154', '2.247', '2.791', '3.028', '2.376', '1.791', '2.14', '1.688', '3.277', '1.748', '1.766', '2.246', '2.734', '2.393', '2.333', '2.461', '2.096', '2.049', '1.967', '2.456', '2.412', '2.064', '1.974', '1.989', '2.356', '2.65', '2.386', '1.863', '2.259', '2.267', '1.928', '2.678', '2.25', '2.289', '2.166', '2.768', '2.67', '2.61', '2.567', '1.954']\ndata:['2.258', '2.154', '2.429', '2.266', '2.535', '2.756', '2.724', '2.904', '2.743', '1.588', '2.624', '2.749', '2.234', '2.353', '2.72', '2.846', '3.077', '2.601', '2.018', '2.729', '1.739', '3.431', '2.698', '2.797', '2.604', '2.404', '2.1', '2.491', '2.456', '2.473', '2.444', '1.902', '2.758', '3.154', '2.247', '2.791', '3.028', '2.376', '1.791', '2.14', '1.688', '3.277', '1.748', '1.766', '2.246', '2.734', '2.393', '2.333', '2.461', '2.096', '2.049', '1.967', '2.456', '2.412', '2.064', '1.974', '1.989', '2.356', '2.65', '2.386', '1.863', '2.259', '2.267', '1.928', '2.678', '2.25', '2.289', '2.166', '2.768', '2.67', '2.61', '2.567', '1.954']\nchart string:var data = [[2.653,2.429,2.467,2.598,2.662,2.946,2.836,2.983,2.941,1.932,2.626,2.472,2.594,2.538,2.827,3.183,3.412,2.661,2.449,2.761,2.115,3.525,2.587,2.622,2.724,2.512,2.134,2.774,2.570,2.420,2.862,2.416,2.943,3.306,2.607,3.078,2.945,1.983,2.149,2.589,2.104,3.381,1.888,1.863,2.454,2.704,2.622,2.511,2.758,2.041,2.220,2.120,2.435,1.833,2.251,2.244,2.260,2.425,2.391,2.473,2.034,2.446,2.450,2.370,2.472,2.244,2.391,2.773,2.283,2.373,2.517,2.458,2.530],[2.258,2.154,2.429,2.266,2.535,2.756,2.724,2.904,2.743,1.588,2.624,2.749,2.234,2.353,2.72,2.846,3.077,2.601,2.018,2.729,1.739,3.431,2.698,2.797,2.604,2.404,2.1,2.491,2.456,2.473,2.444,1.902,2.758,3.154,2.247,2.791,3.028,2.376,1.791,2.14,1.688,3.277,1.748,1.766,2.246,2.734,2.393,2.333,2.461,2.096,2.049,1.967,2.456,2.412,2.064,1.974,1.989,2.356,2.65,2.386,1.863,2.259,2.267,1.928,2.678,2.25,2.289,2.166,2.768,2.67,2.61,2.567,1.954],[2.258,2.154,2.429,2.266,2.535,2.756,2.724,2.904,2.743,1.588,2.624,2.749,2.234,2.353,2.72,2.846,3.077,2.601,2.018,2.729,1.739,3.431,2.698,2.797,2.604,2.404,2.1,2.491,2.456,2.473,2.444,1.902,2.758,3.154,2.247,2.791,3.028,2.376,1.791,2.14,1.688,3.277,1.748,1.766,2.246,2.734,2.393,2.333,2.461,2.096,2.049,1.967,2.456,2.412,2.064,1.974,1.989,2.356,2.65,2.386,1.863,2.259,2.267,1.928,2.678,2.25,2.289,2.166,2.768,2.67,2.61,2.567,1.954]];\nchart string:var data = [[2.653,2.429,2.467,2.598,2.662,2.946,2.836,2.983,2.941,1.932,2.626,2.472,2.594,2.538,2.827,3.183,3.412,2.661,2.449,2.761,2.115,3.525,2.587,2.622,2.724,2.512,2.134,2.774,2.570,2.420,2.862,2.416,2.943,3.306,2.607,3.078,2.945,1.983,2.149,2.589,2.104,3.381,1.888,1.863,2.454,2.704,2.622,2.511,2.758,2.041,2.220,2.120,2.435,1.833,2.251,2.244,2.260,2.425,2.391,2.473,2.034,2.446,2.450,2.370,2.472,2.244,2.391,2.773,2.283,2.373,2.517,2.458,2.530],[2.258,2.154,2.429,2.266,2.535,2.756,2.724,2.904,2.743,1.588,2.624,2.749,2.234,2.353,2.72,2.846,3.077,2.601,2.018,2.729,1.739,3.431,2.698,2.797,2.604,2.404,2.1,2.491,2.456,2.473,2.444,1.902,2.758,3.154,2.247,2.791,3.028,2.376,1.791,2.14,1.688,3.277,1.748,1.766,2.246,2.734,2.393,2.333,2.461,2.096,2.049,1.967,2.456,2.412,2.064,1.974,1.989,2.356,2.65,2.386,1.863,2.259,2.267,1.928,2.678,2.25,2.289,2.166,2.768,2.67,2.61,2.567,1.954],[2.258,2.154,2.429,2.266,2.535,2.756,2.724,2.904,2.743,1.588,2.624,2.749,2.234,2.353,2.72,2.846,3.077,2.601,2.018,2.729,1.739,3.431,2.698,2.797,2.604,2.404,2.1,2.491,2.456,2.473,2.444,1.902,2.758,3.154,2.247,2.791,3.028,2.376,1.791,2.14,1.688,3.277,1.748,1.766,2.246,2.734,2.393,2.333,2.461,2.096,2.049,1.967,2.456,2.412,2.064,1.974,1.989,2.356,2.65,2.386,1.863,2.259,2.267,1.928,2.678,2.25,2.289,2.166,2.768,2.67,2.61,2.567,1.954]];var xAxisTicks = ['G_and_S_occipital_inf', 'G_and_S_paracentral', 'G_and_S_subcentral', 'G_and_S_transv_frontopol', 'G_and_S_cingul-Ant', 'G_and_S_cingul-Mid-Ant', 'G_and_S_cingul-Mid-Post', 'G_cingul-Post-dorsal', 'G_cingul-Post-ventral', 'G_cuneus', 'G_front_inf-Opercular', 'G_front_inf-Orbital', 'G_front_inf-Triangul', 'G_front_middle', 'G_front_sup', 'G_Ins_lg_and_S_cent_ins', 'G_insular_short', 'G_occipital_middle', 'G_occipital_sup', 'G_oc-temp_lat-fusifor', 'G_oc-temp_med-Lingual', 'G_oc-temp_med-Parahip', 'G_orbital', 'G_pariet_inf-Angular', 'G_pariet_inf-Supramar', 'G_parietal_sup', 'G_postcentral', 'G_precentral', 'G_precuneus', 'G_rectus', 'G_subcallosal', 'G_temp_sup-G_T_transv', 'G_temp_sup-Lateral', 'G_temp_sup-Plan_polar', 'G_temp_sup-Plan_tempo', 'G_temporal_inf', 'G_temporal_middle', 'Lat_Fis-ant-Horizont', 'Lat_Fis-ant-Vertical', 'Lat_Fis-post', 'Pole_occipital', 'Pole_temporal', 'S_calcarine', 'S_central', 'S_cingul-Marginalis', 'S_circular_insula_ant', 'S_circular_insula_inf', 'S_circular_insula_sup', 'S_collat_transv_ant', 'S_collat_transv_post', 'S_front_inf', 'S_front_middle', 'S_front_sup', 'S_interm_prim-Jensen', 'S_intrapariet_and_P_trans', 'S_oc_middle_and_Lunatus', 'S_oc_sup_and_transversal', 'S_occipital_ant', 'S_oc-temp_lat', 'S_oc-temp_med_and_Lingual', 'S_orbital_lateral', 'S_orbital_med-olfact', 'S_orbital-H_Shaped', 'S_parieto_occipital', 'S_pericallosal', 'S_postcentral', 'S_precentral-inf-part', 'S_precentral-sup-part', 'S_suborbital', 'S_subparietal', 'S_temporal_inf', 'S_temporal_sup', 'S_temporal_transverse'];\ncolor string:seriesColors:['#FF0000', '#FF0000', '#FF0000', '#FF0000', '#FF0000', '#FF0000', '#FF0000', '#FF0000', '#FF0000', '#FF0000', '#FF0000', '#0000FF', '#FF0000', '#FF0000', '#FF0000', '#FF0000', '#FF0000', '#FF0000', '#FF0000', '#FF0000', '#FF0000', '#FF0000', '#0000FF', '#0000FF', '#FF0000', '#FF0000', '#FF0000', '#FF0000', '#FF0000', '#0000FF', '#FF0000', '#FF0000', '#FF0000', '#FF0000', '#FF0000', '#FF0000', '#0000FF', '#0000FF', '#FF0000', '#FF0000', '#FF0000', '#FF0000', '#FF0000', '#FF0000', '#FF0000', '#0000FF', '#FF0000', '#FF0000', '#FF0000', '#0000FF', '#FF0000', '#FF0000', '#0000FF', '#0000FF', '#FF0000', '#FF0000', '#FF0000', '#FF0000', '#0000FF', '#FF0000', '#FF0000', '#FF0000', '#FF0000', '#FF0000', '#0000FF', '#0000FF', '#FF0000', '#FF0000', '#0000FF', '#0000FF', '#0000FF', '#0000FF', '#FF0000'],\noption string: var options = { \n            highlighter: {\n                show:true,\n                useAxesFormatters:false,\n                tooltipContentEditor:function (str,seriesIndex,pointIndex,plot) {\n                    var label = plot.axes.xaxis._ticks[pointIndex*2+1].label;\n                    if(seriesIndex == 1){\n                        return \"Group High-\"+label+\":\"+plot.data[seriesIndex][pointIndex]\n                    }\n                    else if(seriesIndex == 2){\n                        return \"Group Low-\"+label+\":\"+plot.data[seriesIndex][pointIndex]\n\n                    }\n                    else{\n                        return \"Patient-\"+label+\":\"+plot.data[seriesIndex][pointIndex]\n\n                    }                    \n                }\n\n            },\n            cursor: {\n                show: true,\n                zoom: true,\n            },\n            title:Cortex Thickness Group Analysis Chart-Left Brain,\n            seriesColors:['#FF0000', '#FF0000', '#FF0000', '#FF0000', '#FF0000', '#FF0000', '#FF0000', '#FF0000', '#FF0000', '#FF0000', '#FF0000', '#0000FF', '#FF0000', '#FF0000', '#FF0000', '#FF0000', '#FF0000', '#FF0000', '#FF0000', '#FF0000', '#FF0000', '#FF0000', '#0000FF', '#0000FF', '#FF0000', '#FF0000', '#FF0000', '#FF0000', '#FF0000', '#0000FF', '#FF0000', '#FF0000', '#FF0000', '#FF0000', '#FF0000', '#FF0000', '#0000FF', '#0000FF', '#FF0000', '#FF0000', '#FF0000', '#FF0000', '#FF0000', '#FF0000', '#FF0000', '#0000FF', '#FF0000', '#FF0000', '#FF0000', '#0000FF', '#FF0000', '#FF0000', '#0000FF', '#0000FF', '#FF0000', '#FF0000', '#FF0000', '#FF0000', '#0000FF', '#FF0000', '#FF0000', '#FF0000', '#FF0000', '#FF0000', '#0000FF', '#0000FF', '#FF0000', '#FF0000', '#0000FF', '#0000FF', '#0000FF', '#0000FF', '#FF0000'],\n            series:[\n                {\n                    pointLabels: {\n                        show: true\n                    },\n                    renderer: $.jqplot.BarRenderer,\n                    label: 'Volumes',\n                    rendererOptions: {\n                        varyBarColor: true,\n                        barWidth: 15,\n                        barPadding: -15,\n                        barMargin: 0,\n                        highlightMouseOver: false\n                    }\n                }, \n                {\n                    rendererOptions: {\n                        color:'#4BB2C5',\n                        smooth: true\n                    }\n                },\n                {\n                    rendererOptions: {\n                        color:'#EAA228',\n                        smooth: true\n                    }\n                }\n            ],\n            axesDefaults: {\n                pad: 0\n            },\n            axes: {\n\n                xaxis: {\n                    label: 'Area Name',\n                    labelRenderer: $.jqplot.CanvasAxisLabelRenderer,\n                    renderer: $.jqplot.CategoryAxisRenderer,\n                    ticks:xAxisTicks,\n                    tickRenderer: $.jqplot.CanvasAxisTickRenderer,\n                    tickOptions:{ \n                        angle: -90\n                      }\n                },\n                yaxis: {\n                    label: 'Thickness(mm)',\n                    labelRenderer: $.jqplot.CanvasAxisLabelRenderer,\n                    rendererOptions: {\n                        forceTickAt0: true\n                    }\n                }\n            },\n            grid: {\n                drawGridlines: true\n            },\n            legend: {\n                show: true,\n                labels:['Patient Data','Group Data High','Group Data Low']\n            }\n            }; \nTraceback (most recent call last):\n  File \"/dev_lic/SlicerPy/helloPython/code/ThicknessChart.py\", line 219, in leftBrainBtnClicked\n    self.brainChartAnalyze(\"Left\",pid)\n  File \"/dev_lic/SlicerPy/helloPython/code/ThicknessChart.py\", line 268, in brainChartAnalyze\n    self.cvn1.SetChartNodeID(cn1.GetID())\nzscore",
-			"cvn1",
-			"left brain",
-			"generateDataString",
-			"setPatientChartData",
-			"pfileData",
-			"getPatientChartData",
-			"GroupChartDao",
-			"getGroupChartLowData",
-			"getGroupChartHighData",
-			"generateChartString",
-			"getZscore",
-			"generateDataString",
-			"generateColorList",
-			"color",
-			"colorstring",
-			"generateColorList",
-			"generateChartString",
-			"left",
-			"patient",
-			"cvn1",
-			"high",
-			"useAxesFormatters",
-			"pointLabels",
-			"qtobject",
-			"replot",
-			"chart",
-			"color",
-			"GroupChartDao",
-			"onTreeItemDoubleClicked",
-			"this.",
-			"cusWrapData",
-			"label",
-			"tick",
-			"var data",
-			"cusWrapData",
-			"plotData",
-			"PatientDao",
-			"new",
-			"if",
-			"type",
-			"plot1",
-			"pointLabels",
-			"xAxisTicks",
-			"data",
-			"cvn",
-			"ln",
-			"cusData",
-			"layout",
+			"diagnose",
+			"diagnoseList",
+			"getPatient",
+			"fetch",
+			"Backbone.sync",
+			"sync",
+			"fetch",
+			"onError",
+			"ajax",
+			"onError",
+			"login-link",
+			"LoginApp",
+			"window.location",
+			"message-link",
+			"message-content-wrapper",
+			"%ERROR_MESSAGE",
+			"ERROR_MESSAGE",
+			"onError",
+			"report",
+			"Empty file upload result",
+			"diagnoseId",
+			"admin",
+			"maxFileSize",
+			"form-group",
+			"input-wrapper",
+			"line-area",
+			"p.side-description",
+			"SuccessSubmitDiagnoseModalView",
+			"detail-content-wrapper",
+			"green-sea",
+			"exp-comment",
+			"doctor-statinfo",
+			"rowmarginbottom",
+			"actions-block",
+			"main-news-block",
+			"mainpage-feedback-block",
+			"user-wrapper",
+			"getDiagnoseList",
+			"getPatientDiagnoseList",
+			"getDiagnoseList",
+			"validate",
+			"diagnose",
+			"diagnose/list",
+			"doctorId",
+			"doctor-preview",
+			"image-preview",
+			"http://static",
+			"logo-",
+			"modal",
+			"website-actions-block",
+			"reLocation",
+			"modal",
+			"body",
+			"homepage",
+			"glyphicons-halflings-regular.ttf",
+			"glyphicons-halflings-regular.ttf ",
+			"font",
+			"jquery.min.map",
+			"submit-btn",
+			"ApplyDiagnosePageLayoutView:getRecommandedDoctor",
+			"apply",
+			"ladda",
+			"ApplyDiagnosePageLayoutView:getRecommandedDoctor",
+			"getRecommandedDoctorView",
+			"recommand",
+			"panel-title",
+			"doctor-preview-des",
+			"logo",
+			"img",
+			"more-link",
+			"ladda",
+			"submit",
+			"diagnoseid",
+			"initDicomInfo",
+			"selectChange:PathologyCollectionView",
 			"render",
-			"plot1",
-			"slicer",
-			"connect",
-			"onReload",
-			"SetProperty",
-			"setProperty",
-			"math",
-			"assertTrue",
-			"ChartingLogic",
-			"import",
-			"hasImageData",
-			"volume",
-			"volumeNode",
-			"ChartingLogic",
-			"EndoscopyPathModel",
-			"setMRMLScene",
-			"ctk",
-			"onHelloWorldButtonClicked",
-			"parseSelector"
+			"afterrender",
+			"afterrender ",
+			"select",
+			"dicomAlreadyExistsSelect",
+			"dicom-already-exists-select",
+			"dicomAlreadyExistsSelect",
+			"PathologyCollectionView",
+			"changeDicomAlreadyExists",
+			"PathologyCollectionView",
+			"dicomAlreadyExistsSelect",
+			"getPathologyCollectionView",
+			"dicomAlreadyExistsSelect",
+			"changeDicomAlreadyExists",
+			"initDicomInfo:ApplyDiagnosePageLayoutView",
+			"initDicomInfo",
+			"changeDicomAlreadyExists",
+			"initPatientProfile",
+			"changePatientAlreadyExists",
+			"initPatientProfile",
+			"initPathologySelect",
+			"initPathologySelect:ApplyDiagnosePageLayoutView",
+			"getPathologyList",
+			"getPathologyList\ngetPathologyList",
+			"getPathologyList",
+			"feedback",
+			"getRecommandedDoctorView",
+			"SelectDoctorItemView",
+			"getRecommandedDoctorView",
+			"recommandedDoctorView",
+			"recommand"
 		],
-		"highlight": true,
+		"highlight": false,
 		"in_selection": false,
 		"preserve_case": false,
 		"regex": false,
 		"replace_history":
 		[
+			"错误信息",
+			"True",
+			"False",
+			"doctorhome",
+			"patienthome"
 		],
 		"reverse": true,
 		"show_context": true,
@@ -487,50 +680,22 @@
 	"groups":
 	[
 		{
-			"selected": 2,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "static/app/message/show/show_view.js",
+					"file": "static/stylesheet/less/patient-home.less",
 					"settings":
 					{
-						"buffer_size": 1042,
+						"buffer_size": 4906,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								948,
-								948
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "static/stylesheet/less/apply-diagnose.less",
-					"settings":
-					{
-						"buffer_size": 4348,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								3829,
-								3829
+								2357,
+								2357
 							]
 						],
 						"settings":
@@ -539,34 +704,60 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 3019.0,
+						"translation.y": 1526.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 2,
-					"file": "medical2.sublime-project",
+					"buffer": 1,
+					"file": "static/stylesheet/less/doctor-home.less",
 					"settings":
 					{
-						"buffer_size": 200,
+						"buffer_size": 2975,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								200,
-								200
+								891,
+								820
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/JavaScript/JSON.tmLanguage",
+							"syntax": "Packages/LESS/LESS.tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 275.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "static/stylesheet/less/variables.less",
+					"settings":
+					{
+						"buffer_size": 19770,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								666,
+								672
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/LESS/LESS.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 199.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -607,7 +798,7 @@
 	"menu_visible": true,
 	"output.exec":
 	{
-		"height": 311.0
+		"height": 251.0
 	},
 	"replace":
 	{
@@ -620,8 +811,352 @@
 		"selected_items":
 		[
 			[
+				"doctor",
+				"static/stylesheet/less/doctor-home.less"
+			],
+			[
+				"pati",
+				"static/stylesheet/less/patient-home.less"
+			],
+			[
+				"ba",
+				"server_template/basicLayout.dust"
+			],
+			[
+				"head",
+				"server_template/head.dust"
+			],
+			[
+				"doct",
+				"server_template/doctorList.dust"
+			],
+			[
+				"doctor-",
+				"static/stylesheet/less/doctor-list.less"
+			],
+			[
+				"ser",
+				"server.js"
+			],
+			[
+				"doctor-li",
+				"static/stylesheet/less/doctor-list.less"
+			],
+			[
+				"dust",
+				"duster.json"
+			],
+			[
+				"hom",
+				"server_template/home.dust"
+			],
+			[
+				"scr",
+				"server_template/scripts.dust"
+			],
+			[
+				"dus",
+				"duster.json"
+			],
+			[
+				"foot",
+				"server_template/footer.dust"
+			],
+			[
+				"glo",
+				"static/stylesheet/less/global.less"
+			],
+			[
+				"home",
+				"static/stylesheet/less/home.less"
+			],
+			[
+				"main",
+				"static/app/main.js"
+			],
+			[
 				"app",
-				"HTML/UI/Flat-UI-Pro-1.2.5/js/application.js"
+				"static/app/app.js"
+			],
+			[
+				"back",
+				"static/app/lib/backbone/backbone.js"
+			],
+			[
+				"aj",
+				"static/app/config/jquery/ajax_setup.js"
+			],
+			[
+				"aja",
+				"static/app/config/jquery/ajax_setup.js"
+			],
+			[
+				"pat",
+				"static/stylesheet/less/patient-home.less"
+			],
+			[
+				"ajax",
+				"static/app/config/jquery/ajax_setup.js"
+			],
+			[
+				"",
+				"static/stylesheet/less/apply-diagnose.less"
+			],
+			[
+				"var",
+				"static/stylesheet/less/variables.less"
+			],
+			[
+				"appl",
+				"static/stylesheet/less/apply-diagnose.less"
+			],
+			[
+				"apply",
+				"server_template/applyDiagnose.dust"
+			],
+			[
+				"patient",
+				"static/stylesheet/less/patient-home.less"
+			],
+			[
+				"va",
+				"static/stylesheet/less/variables.less"
+			],
+			[
+				"du",
+				"duster.json"
+			],
+			[
+				"doctorhome",
+				"static/stylesheet/less/doctor-home.less"
+			],
+			[
+				"grun",
+				"Gruntfile.js"
+			],
+			[
+				"diagnose",
+				"static/stylesheet/less/apply-diagnose.less"
+			],
+			[
+				"login",
+				"static/stylesheet/less/loginpage.less"
+			],
+			[
+				"diagno",
+				"static/stylesheet/less/apply-diagnose.less"
+			],
+			[
+				"doctorlist",
+				"static/stylesheet/less/doctor-list.less"
+			],
+			[
+				"globa",
+				"static/stylesheet/less/global.less"
+			],
+			[
+				"icon",
+				"server_template/iconSearch.dust"
+			],
+			[
+				"header",
+				"server_template/header.dust"
+			],
+			[
+				"gl",
+				"static/stylesheet/less/global.less"
+			],
+			[
+				"doctor-s",
+				"static/stylesheet/less/doctor-site.less"
+			],
+			[
+				"scri",
+				"server_template/scripts.dust"
+			],
+			[
+				"bas",
+				"server_template/basicLayout.dust"
+			],
+			[
+				"grunt",
+				"Gruntfile.js"
+			],
+			[
+				"sc",
+				"server_template/scripts.dust"
+			],
+			[
+				"regist",
+				"static/app/register/register_app.js"
+			],
+			[
+				"about",
+				"server_template/about.dust"
+			],
+			[
+				"foo",
+				"server_template/footer.dust"
+			],
+			[
+				"help",
+				"static/app/help/helpapp.js"
+			],
+			[
+				"radio",
+				"static/app/lib/flatui/flatui-radio.js"
+			],
+			[
+				"d",
+				"duster.js"
+			],
+			[
+				"apply_v",
+				"static/app/diagnose/apply/apply_view.js"
+			],
+			[
+				"doctor-site.l",
+				"static/stylesheet/less/doctor-site.less"
+			],
+			[
+				"brea",
+				"server_template/breadcrumbs.dust"
+			],
+			[
+				"basi",
+				"server_template/basicLayout.dust"
+			],
+			[
+				"dust-",
+				"node_modules/dustjs-helpers/dist/dust-helpers.js"
+			],
+			[
+				"tem",
+				"static/app/templates.js"
+			],
+			[
+				"jqueryfi",
+				"static/app/lib/jquery-uploader/jquery.fileupload.js"
+			],
+			[
+				"apply_vi",
+				"static/app/diagnose/apply/apply_view.js"
+			],
+			[
+				"home.",
+				"static/stylesheet/less/home.less"
+			],
+			[
+				"_main",
+				"static/app/lib/jquery-uploader/_main.js"
+			],
+			[
+				"loginmo",
+				"server_template/loginModal.dust"
+			],
+			[
+				"head.",
+				"server_template/head.dust"
+			],
+			[
+				"fileuplo",
+				"static/app/lib/jquery-uploader/jquery.fileupload.js"
+			],
+			[
+				"enti",
+				"static/app/entities/doctorEntity.js"
+			],
+			[
+				"login_a",
+				"static/app/login/login_app.js"
+			],
+			[
+				"err",
+				"static/stylesheet/less/errorpage.less"
+			],
+			[
+				"e",
+				"server_template/errorpage.dust"
+			],
+			[
+				"erro",
+				"static/stylesheet/less/errorpage.less"
+			],
+			[
+				"fenz",
+				"static/stylesheet/less/fenzhen.less"
+			],
+			[
+				"fol",
+				"static/app/utils/followbtn.js"
+			],
+			[
+				"doctor-site",
+				"static/stylesheet/less/doctor-site.less"
+			],
+			[
+				"hos",
+				"static/stylesheet/less/hospital-user.less"
+			],
+			[
+				"heade",
+				"server_template/header.dust"
+			],
+			[
+				"hospi",
+				"static/stylesheet/less/hospital-user.less"
+			],
+			[
+				"fenzhen",
+				"static/stylesheet/less/fenzhen.less"
+			],
+			[
+				"modal",
+				"server_template/selectDoctorModal.dust"
+			],
+			[
+				"temp",
+				"static/app/templates.js"
+			],
+			[
+				"fen",
+				"static/stylesheet/less/fenzhen.less"
+			],
+			[
+				"pa",
+				"static/stylesheet/less/patient-home.less"
+			],
+			[
+				"patie",
+				"static/stylesheet/less/patient-home.less"
+			],
+			[
+				"base_con",
+				"static/app/config/controllers/_base_controller.js"
+			],
+			[
+				"patio",
+				"server_template/patientHome.dust"
+			],
+			[
+				"doctorsi",
+				"static/stylesheet/less/doctor-site.less"
+			],
+			[
+				"marionette.js",
+				"static/app/lib/backbone.marionette/lib/backbone.marionette.js"
+			],
+			[
+				"dust.json",
+				"duster.json"
+			],
+			[
+				"home.le",
+				"static/stylesheet/less/home.less"
+			],
+			[
+				"doc",
+				"static/stylesheet/less/doctor-site.less"
 			],
 			[
 				"conf",
@@ -634,10 +1169,6 @@
 			[
 				"config",
 				".editorconfig"
-			],
-			[
-				"ajax",
-				"static/app/config/jquery/ajax_setup.js"
 			]
 		],
 		"width": 0.0
@@ -654,6 +1185,6 @@
 	"show_open_files": false,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 258.0,
+	"side_bar_width": 325.0,
 	"status_bar_visible": true
 }

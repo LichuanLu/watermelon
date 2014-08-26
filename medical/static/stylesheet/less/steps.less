@@ -1,0 +1,85 @@
+.step-title {
+    min-height: 20px;
+    float:left;
+    border-radius: 0;
+}
+.next-button, .submit-button, .back-button {
+    float:right;
+    margin:3px;
+}
+@media(max-width:600px) {
+    .step-content {
+        margin-top: 10px;
+    }
+}
+
+.psteps_circle_titles{
+    overflow: hidden;
+}
+
+.step-content{
+    &.hide{
+        display: none;
+    }
+    h4{
+        font-size: 16px;
+    }
+    .form-group{
+        .form-body{
+            margin-top: 4px;
+            &.inline-body{
+                input,button{
+                    display: inline-block;
+                }
+                input{
+                    width: 40%;
+                }
+            }
+        }
+    }
+    .des{
+        font-size: 14px;
+        text-align: right;
+        margin-top: 20px;
+        
+    }
+    .mobile-text{
+        padding-top: 8px;
+        display: inline-block;
+    }
+}
+
+.psteps_circle_titles .circle-step {
+    width: 40px;
+    height: 42px;
+    padding: 5px;
+    line-height: 10px;
+    font-size: 10px;
+    border-radius: 500px 500px 500px 500px;
+    min-height:10px;
+    float:left;
+    padding-top: 17px;
+    font-size: 14px;
+}
+.psteps_circle_titles .step-line {
+    border-bottom: 1px solid #ddd;
+    display: inline-block;
+    width: 39%;
+    float:left;
+    margin-top:20px;
+}
+.psteps_circle_contents {
+    background: #F9F9F9;
+    border: 1px dashed #CCCCCC;
+    margin: 15px 0 0;
+    padding: 20px;
+}
+.before-heading {
+    margin-top: -32px;
+    width: 99%;
+    margin-left: -24px;
+}
+
+.btn.step-visited{
+    border: 1px solid #ebedef;
+}

@@ -54,7 +54,7 @@
 		borderColor: undefined, // '#dddddd',
 		onhoverColor: '#F5F5F5',
 		selectedColor: '#FFFFFF',
-		selectedBackColor: '#16a085',
+		selectedBackColor: '#428bca',
 
 		enableLinks: false,
 		highlightSelected: true,

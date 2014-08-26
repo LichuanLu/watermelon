@@ -22,11 +22,16 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'dust', 'dustMarion
 		confirmRegister: function(e) {
 			e.preventDefault();
 			var userid = $(e.target).closest('tr').data('userid');
+
 			if (userid) {
+				var params = {
+					doctorId:userid,
+					status:0
+				}
 				var that = this;
 				$.ajax({
-					url: '/doctor/register/confirm',
-					data: "userid=" + userid,
+					url: '/doctor/statuschange',
+					data: params,
 					dataType: 'json',
 					type: 'POST',
 					success: function(data) {
@@ -35,7 +40,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'dust', 'dustMarion
 
 						} else {
 							Messenger().post({
-								message: 'SUCCESS.register confirm.',
+								message: '成功更改医生状态',
 								type: 'success',
 								showCloseButton: true
 							});
@@ -69,19 +74,19 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'dust', 'dustMarion
 			var diagnoseId = $(e.target).closest('tr').data('id');
 			if (diagnoseId) {
 				var that = this;
+				var url = "/diagnose/alipayurl/"+diagnoseId;
 				$.ajax({
-					url: '/diagnose/paylink',
-					data: "diagnoseId=" + diagnoseId,
+					url: url,
 					dataType: 'json',
-					type: 'GET',
+					type: 'POST',
 					success: function(data) {
 						if (data.status != 0) {
 							this.onError(data);
 
 						} else {
-							ReqCmd.commands.execute('payLinkHandler:KfPageLayoutView', data.data);
+							// ReqCmd.commands.execute('payLinkHandler:KfPageLayoutView', data.data);
 							Messenger().post({
-								message: 'SUCCESS.Get diagnose.',
+								message: '成功确认支付请求',
 								type: 'success',
 								showCloseButton: true
 							});

@@ -1,141 +1,83 @@
-define(['lodash', 'config/base/constant', 'config/controllers/_base_controller', 'patienthome/show/show_view', 'utils/reqcmd', 'entities/diagnoseEntity', 'entities/messageEntity', 'message/show/show_view', 'entities/favoriteEntity'], function(Lodash, CONSTANT, BaseController, View, ReqCmd, DiagnoseEntity, MessageEntity, MessageView, FavoriteEntity) {
-	// body...
-	"use strict";
-	var ShowController = BaseController.extend({
-		initialize: function() {
+define(['lodash', 'config/base/constant', 'config/controllers/_base_controller',
+		'patienthome/show/show_view', 'utils/reqcmd', 'entities/diagnoseEntity',
+		'entities/messageEntity', 'message/show/show_view', 'entities/favoriteEntity', 'entities/userInfoEntity'
+	],
+	function(Lodash, CONSTANT, BaseController, View, ReqCmd,
+		DiagnoseEntity, MessageEntity, MessageView, FavoriteEntity, UserInfoEntity) {
+		// body...
+		"use strict";
+		var ShowController = BaseController.extend({
+			initialize: function() {
 
-			this.layoutView = this.getPatientHomePageLayoutView();
-			this.appInstance = require('app');
+				this.layoutView = this.getPatientHomePageLayoutView();
+				this.appInstance = require('app');
 
-			this.show(this.layoutView, {
-				name: "patientHomePageLayoutView",
-				//as bindAll this,so don't need that
-				instance: this
-			});
-
-			//instance is this controller instance
-			ReqCmd.commands.setHandler("patientHomePageLayoutView:attached", Lodash.bind(function(instance) {
-				console.log("attached end");
-				this.layoutView.attachEndHandler();
-
-			}, this));
-
-
-			//click left menu , change view , send from view 
-			ReqCmd.commands.setHandler("patientHomePageLayoutView:changeContentView", Lodash.bind(function(viewName) {
-				console.log("patientHomePageLayoutView changeContentView");
-				this.changeContentView(viewName);
-			}, this));
-
-			//diagnose list , change type , click search, send from view
-			ReqCmd.commands.setHandler("DiagnoseListView:searchDiagnose", Lodash.bind(function(type) {
-				console.log("DiagnoseListView searchDiagnose");
-				var params = {
-					type: type
-				};
-				console.dir(params);
-				if (this.diagnoseCollection) {
-					DiagnoseEntity.API.getPatientDiagnoseList(params, this.diagnoseCollection);
-
-				} else {
-					this.diagnoseCollection = DiagnoseEntity.API.getPatientDiagnoseList(params);
-				}
-			}, this));
-
-			//show message list after layout show
-			ReqCmd.reqres.setHandler("showMessageList:MessageLayoutView", Lodash.bind(function() {
-
-				this.unreadMessageCollection = MessageEntity.API.getMessageList({
-					status: 0
-				});
-				this.unreadMessageCollectionView = this.getMessageListView(this.unreadMessageCollection);
-				this.show(this.unreadMessageCollectionView, {
-					region: this.contentView.unReadMessageRegion,
-					client: true
+				this.show(this.layoutView, {
+					name: "patientHomePageLayoutView",
+					//as bindAll this,so don't need that
+					instance: this
 				});
 
-				this.readMessageCollection = MessageEntity.API.getMessageList({
-					status: 2
-				});
-				this.readMessageCollectionView = this.getMessageListView(this.readMessageCollection);
-				this.show(this.readMessageCollectionView, {
-					region: this.contentView.readMessageRegion,
-					client: true
-				});
+				//instance is this controller instance
+				ReqCmd.commands.setHandler("patientHomePageLayoutView:attached", Lodash.bind(function(instance) {
+					console.log("attached end");
+					this.layoutView.attachEndHandler();
+
+				}, this));
 
 
-			}, this));
+				//click left menu , change view , send from view 
+				ReqCmd.commands.setHandler("patientHomePageLayoutView:changeContentView", Lodash.bind(function(viewName) {
+					console.log("patientHomePageLayoutView changeContentView");
+					this.changeContentView(viewName);
+				}, this));
 
+				//diagnose list , change type , click search, send from view
+				ReqCmd.commands.setHandler("DiagnoseListView:searchDiagnose", Lodash.bind(function(type) {
+					console.log("DiagnoseListView searchDiagnose");
+					var params = {
+						type: type
+					};
+					console.dir(params);
+					if (this.diagnoseCollection) {
+						DiagnoseEntity.API.getPatientDiagnoseList(params, this.diagnoseCollection);
 
-			//提交sharing
-			ReqCmd.commands.setHandler("submitSharing:SharingModalView", Lodash.bind(function(data) {
-				var that = this;
-				$.ajax({
-					url: '/addDiagnoseComment.json',
-					data: data,
-					dataType: 'json',
-					type: 'POST',
-					success: function(data) {
-						if (data.status != 0) {
-							this.onError(data);
-
-						} else {
-							that.appInstance.modalRegion.close();
-							Messenger().post({
-								message: 'SUCCESS.Submit sharing.',
-								type: 'success',
-								showCloseButton: true
-							});
-						}
-					},
-					onError: function(res) {
-						//var error = jQuery.parseJSON(data);
-						if(res.status == 2){
-				                window.location.replace('/loginPage')
-
-				            }else if(res.status == 4){
-				                window.location.replace('/error')
-
-				            }
-						if (typeof res.msg !== 'undefined') {
-							Messenger().post({
-								message: "错误信息:" + res.msg,
-								type: 'error',
-								showCloseButton: true
-							});
-						}
-
+					} else {
+						this.diagnoseCollection = DiagnoseEntity.API.getPatientDiagnoseList(params);
 					}
-				});
+				}, this));
 
-			}, this));
+				//show message list after layout show
+				ReqCmd.reqres.setHandler("showMessageList:MessageLayoutView", Lodash.bind(function() {
 
-			//after favorite layout show, init favorite list
-			ReqCmd.reqres.setHandler("onShow:FavoriteLayoutView", Lodash.bind(function() {
-				var userId = $('#patienthome-content').data('userid');
-				if (userId) {
-					this.favoriteDoctorCollection = FavoriteEntity.API.getFavoriteList({
-						type: 0
-					}, userId);
-
-					this.favoriteDoctorCollectionView = this.getFavoriteListView(this.favoriteDoctorCollection);
-					this.show(this.favoriteDoctorCollectionView, {
-						region: this.contentView.doctorListRegion,
+					this.unreadMessageCollection = MessageEntity.API.getMessageList({
+						status: 0
+					});
+					this.unreadMessageCollectionView = this.getMessageListView(this.unreadMessageCollection);
+					this.show(this.unreadMessageCollectionView, {
+						region: this.contentView.unReadMessageRegion,
 						client: true
 					});
 
-				}
+					this.readMessageCollection = MessageEntity.API.getMessageList({
+						status: 2
+					});
+					this.readMessageCollectionView = this.getMessageListView(this.readMessageCollection);
+					this.show(this.readMessageCollectionView, {
+						region: this.contentView.readMessageRegion,
+						client: true
+					});
 
-			}, this));
+
+				}, this));
 
 
-			//confirm remove favorite
-			ReqCmd.commands.setHandler("removeFavorite:CancelFavoriteModalView", Lodash.bind(function(model) {
-				var that = this;
-				var favoriteId = model.get('id');
-				if (favoriteId) {
+				//提交sharing
+				ReqCmd.commands.setHandler("submitSharing:SharingModalView", Lodash.bind(function(data) {
+					var that = this;
 					$.ajax({
-						url: '/userFavorties/' + favoriteId + '/cancel',
+						url: '/addDiagnoseComment.json',
+						data: data,
 						dataType: 'json',
 						type: 'POST',
 						success: function(data) {
@@ -144,10 +86,8 @@ define(['lodash', 'config/base/constant', 'config/controllers/_base_controller',
 
 							} else {
 								that.appInstance.modalRegion.close();
-								//delete the view from collection
-								that.favoriteDoctorCollection.remove(model);
 								Messenger().post({
-									message: 'SUCCESS.remove favorite.',
+									message: 'SUCCESS.Submit sharing.',
 									type: 'success',
 									showCloseButton: true
 								});
@@ -155,13 +95,13 @@ define(['lodash', 'config/base/constant', 'config/controllers/_base_controller',
 						},
 						onError: function(res) {
 							//var error = jQuery.parseJSON(data);
-							if(res.status == 2){
-				                window.location.replace('/loginPage')
+							if (res.status == 2) {
+								window.location.replace('/loginPage')
 
-				            }else if(res.status == 4){
-				                window.location.replace('/error')
+							} else if (res.status == 4) {
+								window.location.replace('/error')
 
-				            }
+							}
 							if (typeof res.msg !== 'undefined') {
 								Messenger().post({
 									message: "错误信息:" + res.msg,
@@ -173,101 +113,181 @@ define(['lodash', 'config/base/constant', 'config/controllers/_base_controller',
 						}
 					});
 
+				}, this));
+
+				//after favorite layout show, init favorite list
+				ReqCmd.reqres.setHandler("onShow:FavoriteLayoutView", Lodash.bind(function() {
+					var userId = $('#patienthome-content').data('userid');
+					if (userId) {
+						this.favoriteDoctorCollection = FavoriteEntity.API.getFavoriteList({
+							type: 0
+						}, userId);
+
+						this.favoriteDoctorCollectionView = this.getFavoriteListView(this.favoriteDoctorCollection);
+						this.show(this.favoriteDoctorCollectionView, {
+							region: this.contentView.doctorListRegion,
+							client: true
+						});
+
+					}
+
+				}, this));
+
+
+				//confirm remove favorite
+				ReqCmd.commands.setHandler("removeFavorite:CancelFavoriteModalView", Lodash.bind(function(model) {
+					var that = this;
+					var favoriteId = model.get('id');
+					if (favoriteId) {
+						$.ajax({
+							url: '/userFavorties/' + favoriteId + '/cancel',
+							dataType: 'json',
+							type: 'POST',
+							success: function(data) {
+								if (data.status != 0) {
+									this.onError(data);
+
+								} else {
+									that.appInstance.modalRegion.close();
+									//delete the view from collection
+									that.favoriteDoctorCollection.remove(model);
+									Messenger().post({
+										message: 'SUCCESS.remove favorite.',
+										type: 'success',
+										showCloseButton: true
+									});
+								}
+							},
+							onError: function(res) {
+								//var error = jQuery.parseJSON(data);
+								if (res.status == 2) {
+									window.location.replace('/loginPage')
+
+								} else if (res.status == 4) {
+									window.location.replace('/error')
+
+								}
+								if (typeof res.msg !== 'undefined') {
+									Messenger().post({
+										message: "错误信息:" + res.msg,
+										type: 'error',
+										showCloseButton: true
+									});
+								}
+
+							}
+						});
+
+					}
+
+
+				}, this));
+
+				//click detail at diagnose list item
+				ReqCmd.commands.setHandler("detailLinksHandler:DiagnoseTableItemView", Lodash.bind(function(model) {
+					this.contentView.hideView();
+					// $('#diagnose-detail-track-wrapper').show();
+					var params = "diagnoseId=" + model.get('id');
+					var diagnosePatientDetailModel = DiagnoseEntity.API.getDiagnosePatientDetail(params);
+
+					this.diagnoseDetailTrackLayoutView = this.getDetailTrackLayoutView(diagnosePatientDetailModel);
+					this.show(this.diagnoseDetailTrackLayoutView, {
+						region: this.layoutView.diagnoseDetailTrackRegion,
+						client: true
+					});
+
+
+				}, this));
+
+				//click back link ,back to diagnose list from detail page
+				ReqCmd.reqres.setHandler("backLinkHandler:DetailTrackLayoutView", Lodash.bind(function() {
+					this.layoutView.diagnoseDetailTrackRegion.close();
+					this.contentView.showAndRefreshView();
+
+				}, this));
+
+
+				//close the bind mobile modal
+				ReqCmd.reqres.setHandler("MobileBindModalView:submit:success", Lodash.bind(function() {
+					this.appInstance.modalRegion.close();
+
+				}, this));
+
+
+
+				console.log('show controller init end');
+
+			},
+			changeContentView: function(viewName) {
+				this.layoutView.diagnoseDetailTrackRegion.close();
+
+				if (viewName === 'diagnoseLink') {
+					this.diagnoseCollection = DiagnoseEntity.API.getPatientDiagnoseList();
+					this.contentView = this.getDiagnoseListView(this.diagnoseCollection);
+
+				} else if (viewName === 'accountLink') {
+					//type = 1 means patient , type =2 means doctor
+					var params = {
+						type: 1
+					}
+					this.userInfoModel = UserInfoEntity.API.getUserInfo(params);
+					this.contentView = this.getAccountManageLayoutView(this.userInfoModel);
+
+
+				} else if (viewName === 'messageLink') {
+					this.contentView = this.getMessageLayoutView();
+				} else if (viewName === 'favoritesLink') {
+					this.contentView = this.getFavoriteLayoutView();
 				}
-
-
-			}, this));
-
-			//click detail at diagnose list item
-			ReqCmd.commands.setHandler("detailLinksHandler:DiagnoseTableItemView", Lodash.bind(function(model) {
-				this.contentView.hideView();
-				// $('#diagnose-detail-track-wrapper').show();
-				var params = "diagnoseId="+model.get('id');
-				var diagnosePatientDetailModel = DiagnoseEntity.API.getDiagnosePatientDetail(params);
-
-				this.diagnoseDetailTrackLayoutView = this.getDetailTrackLayoutView(diagnosePatientDetailModel);
-				this.show(this.diagnoseDetailTrackLayoutView, {
-					region: this.layoutView.diagnoseDetailTrackRegion,
+				// var that = this;
+				this.show(this.contentView, {
+					region: this.layoutView.contentRegion,
 					client: true
 				});
+			},
+			getPatientHomePageLayoutView: function() {
+				return new View.PatientHomePageLayoutView();
+			},
+			getDiagnoseListView: function(collection) {
+				var view = new View.DiagnoseListView({
+					collection: collection,
+					itemView: View.DiagnoseTableItemView
+				});
+				return view;
+			},
+			getAccountManageLayoutView: function(model) {
+				return new View.AccountManageLayoutView({
+					model: model
+				});
+			},
+			getMessageLayoutView: function() {
+				return new View.MessageLayoutView();
+			},
+			getMessageListView: function(collection) {
+				return new MessageView.MessageListView({
+					collection: collection,
+					itemView: MessageView.MessageItemView
+				});
+			},
+			getFavoriteLayoutView: function() {
+				return new View.FavoriteLayoutView();
+			},
+			getFavoriteListView: function(collection) {
+				var view = new View.FavoriteCollectionView({
+					collection: collection,
+					itemView: View.FavoriteItemView
+				});
+				return view;
+			},
+			getDetailTrackLayoutView: function(model) {
+				return new View.DetailTrackLayoutView({
+					model: model
+				});
 
-
-			}, this));
-
-			//click back link ,back to diagnose list from detail page
-			ReqCmd.reqres.setHandler("backLinkHandler:DetailTrackLayoutView", Lodash.bind(function() {
-				this.layoutView.diagnoseDetailTrackRegion.close();
-				this.contentView.showAndRefreshView();
-
-			}, this));
-
-
-
-
-			console.log('show controller init end');
-
-		},
-		changeContentView: function(viewName) {
-			this.layoutView.diagnoseDetailTrackRegion.close();
-
-			if (viewName === 'diagnoseLink') {
-				this.diagnoseCollection = DiagnoseEntity.API.getPatientDiagnoseList();
-				this.contentView = this.getDiagnoseListView(this.diagnoseCollection);
-
-			} else if (viewName === 'accountLink') {
-				this.contentView = this.getAccountManageLayoutView();
-			} else if (viewName === 'messageLink') {
-				this.contentView = this.getMessageLayoutView();
-			} else if (viewName === 'favoritesLink') {
-				this.contentView = this.getFavoriteLayoutView();
 			}
-			// var that = this;
-			this.show(this.contentView, {
-				region: this.layoutView.contentRegion,
-				client: true
-			});
-		},
-		getPatientHomePageLayoutView: function() {
-			return new View.PatientHomePageLayoutView();
-		},
-		getDiagnoseListView: function(collection) {
-			var view = new View.DiagnoseListView({
-				collection: collection,
-				itemView: View.DiagnoseTableItemView
-			});
-			return view;
-		},
-		getAccountManageLayoutView: function() {
-			return new View.AccountManageLayoutView();
-		},
-		getMessageLayoutView: function() {
-			return new View.MessageLayoutView();
-		},
-		getMessageListView: function(collection) {
-			return new MessageView.MessageListView({
-				collection: collection,
-				itemView: MessageView.MessageItemView
-			});
-		},
-		getFavoriteLayoutView: function() {
-			return new View.FavoriteLayoutView();
-		},
-		getFavoriteListView: function(collection) {
-			var view = new View.FavoriteCollectionView({
-				collection: collection,
-				itemView: View.FavoriteItemView
-			});
-			return view;
-		},
-		getDetailTrackLayoutView: function(model) {
-			return new View.DetailTrackLayoutView({
-				model: model
-			});
 
-		}
+		});
+
+		return ShowController;
 
 	});
-
-	return ShowController;
-
-});

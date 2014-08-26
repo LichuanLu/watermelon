@@ -21,7 +21,13 @@
 	     "messenger":"latest",
 	     "bootstrap-select":"latest",
 	     "bootstrap-treeview":"latest",
-	     "ladda-bootstrap":"latest"
+	     "ladda-bootstrap":"latest",
+	     "bootstrap-datepicker": "~1.3.0",
+	    "jquery.placeholder": "~0.2.4",
+	    "jquery-placeholder": "~2.0.8",
+	    "backbone.localStorage": "~1.1.13",
+	    "jquery.serializeJSON": "~2.1.0",
+	    "imgareaselect": "~0.9.10"
 
 
 	}

@@ -21,17 +21,17 @@ define(['lodash', 'config/base/constant', 'config/controllers/_base_controller',
 			}, this));
 
 
-			ReqCmd.commands.setHandler("payLinkHandler:KfPageLayoutView", Lodash.bind(function(data) {
-				if(data.paylink){
-					var TempModel = Backbone.Model.extend({});
-					var tempModel = new TempModel();
-					tempModel.set('paylink',data.paylink);
-					var modalview = this.getDisplayPayLinkModalView(tempModel);
-					this.appInstance.modalRegion.show(modalview);
+			// ReqCmd.commands.setHandler("payLinkHandler:KfPageLayoutView", Lodash.bind(function(data) {
+			// 	if(data.paylink){
+			// 		var TempModel = Backbone.Model.extend({});
+			// 		var tempModel = new TempModel();
+			// 		tempModel.set('paylink',data.paylink);
+			// 		var modalview = this.getDisplayPayLinkModalView(tempModel);
+			// 		this.appInstance.modalRegion.show(modalview);
 
-				}
+			// 	}
 				
-			}, this));
+			// }, this));
 
 
 		},

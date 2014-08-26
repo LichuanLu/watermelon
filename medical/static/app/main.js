@@ -11,6 +11,8 @@ require.config({
     'backbone.wreqr' : 'lib/backbone.wreqr/lib/amd/backbone.wreqr.min',
     'backbone.eventbinder' : 'lib/backbone.eventBinder/lib/amd/backbone.eventBinder.min',
     'backbone.babysitter' : 'lib/backbone.babysitter/lib/amd/backbone.babysitter.min',
+    'backbone.localStorage':'lib/backbone.localStorage/backbone.localStorage-min',
+
     //"underscore.string": 'lib/underscore.string/lib/underscore.string',
     //need to find non-amd version , or the global varaible maybe duplicate with jquery2 ($ and jQuery)
     //jquery110  : 'lib/jquery-110/jquery.min',
@@ -20,6 +22,10 @@ require.config({
     //bootstrapValidation : 'lib/jqBootstrapValidation',
     //jquery valicate
     'jquery.validate' : 'lib/jquery.validate',
+     //jquery serializeJSON
+    'jquery.serializejson':'lib/jquery.serializeJSON/jquery.serializejson.min',
+    //jquery select image
+    'jquery.imgareaselect':'lib/imgareaselect/jquery.imgareaselect.dev',
     //for jquery file uploader
     'jquery.uploader.main': 'lib/jquery-uploader/_main',
     'load-image': 'lib/blueimp-load-image/js/load-image',
@@ -31,6 +37,7 @@ require.config({
     'jquery.fileupload-process':'lib/jquery-uploader/jquery.fileupload-process',
     'jquery.fileupload':'lib/jquery-uploader/jquery.fileupload',
     // 'jquery.iframe-transport':'lib/jquery-uploader/jquery.iframe-transport',
+    'jquery.psteps':'utils/jquery.psteps',
     'jquery.ui.widget':'lib/jquery-uploader/jquery.ui.widget',
     'load-image-exif':'lib/blueimp-load-image/js/load-image-exif',
     'load-image-ios':'lib/blueimp-load-image/js/load-image-ios',
@@ -83,7 +90,17 @@ require.config({
     //crypto-js
     'crypto-sha256':'lib/CryptoJS v3.1.2/components/sha256-min',
     'crypto-core':'lib/CryptoJS v3.1.2/components/core-min',
+    //uploadify
+    'jquery.uploadify':'lib/uploadify/jquery.uploadify.min',
     
+    //bootstrap datepicker
+    'bootstrap-select':'lib/bootstrap-select/bootstrap-select.min',
+    'bootstrap-datepicker':'lib/bootstrap-datepicker/js/bootstrap-datepicker',
+    'bootstrap-datepicker.zh-CN':'lib/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN',
+    //jquery.placeholder --used for if brower doesn't support placeholder,not use
+    //'jquery.placeholder':'lib/jquery.placeholder/jquery.placeholder.min',
+    //jquery-placeholder --used for if brower doesn't support placeholder
+    'jquery-placeholder':'lib/jquery-placeholder/jquery.placeholder'
 
     // 'jquery.xdr-transport':'lib/jquery-uploader/jquery.xdr-transport'
   },
@@ -180,6 +197,33 @@ require.config({
     },
     'crypto-sha256':{
       deps:['crypto-core']
+    },
+     'jquery.uploadify':{
+      deps:['jquery']
+    },
+    'bootstrap-datepicker':{
+      deps:['jquery','bootstrap']
+    },
+    'bootstrap-datepicker.zh-CN':{
+      deps:['bootstrap-datepicker']
+    },
+    'jquery-placeholder':{
+      deps:['jquery']
+    },
+    'spin-jquery':{
+      deps:['spin','jquery']
+    },
+    'backbone.localStorage':{
+      deps:['backbone']
+    },
+    'jquery.serializejson':{
+      deps:['jquery']
+    },
+    'jquery.imgareaselect':{
+      deps:['jquery']
+    },
+    'jquery.psteps':{
+      deps:['jquery']
     }
         
 

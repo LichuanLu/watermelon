@@ -253,6 +253,8 @@ ul.message-list li .message-content-wrapper .btn {
 #patienthome-content .left-menu .user-wrapper img {
   float: left;
   margin-right: 10px;
+  width: 60px;
+  height: 60px;
 }
 #patienthome-content .left-menu .user-wrapper span {
   display: block;

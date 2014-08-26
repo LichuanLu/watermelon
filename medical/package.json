@@ -4,10 +4,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "express": "3.x",
-    "dustjs-linkedin": "latest",
-    "dustjs-helpers": "latest",
     "consolidate": "latest",
+    "dustjs-helpers": "latest",
+    "dustjs-linkedin": "latest",
+    "express": "3.x",
+    "sleep": "^1.1.8",
     "watch": "latest"
   },
   "devDependencies": {
@@ -16,7 +17,7 @@
     "grunt-contrib-concat": "~0.3.0",
     "grunt-contrib-cssmin": "~0.6.1",
     "grunt-contrib-less": "~0.7.0",
-    "grunt-contrib-requirejs":"latest",
-    "grunt-sync":"latest"
+    "grunt-contrib-requirejs": "latest",
+    "grunt-sync": "latest"
   }
 }

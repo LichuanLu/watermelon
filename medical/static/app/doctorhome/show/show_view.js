@@ -1,4 +1,7 @@
-define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'dust', 'dustMarionette', "bootstrap", 'bootstrap.select', 'bootstrap-treeview', 'flat_ui_custom'], function(ReqCmd, Lodash, Marionette, Templates) {
+define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'ladda-bootstrap', 'modal/modal_view', 'dust',
+	'dustMarionette', "bootstrap", 'bootstrap.select', 'bootstrap-treeview',
+	'flat_ui_custom', 'config/validator/config'
+], function(ReqCmd, Lodash, Marionette, Templates, ladda, ModalView) {
 	// body...
 	"use strict";
 	//var $;
@@ -133,35 +136,230 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'dust', 'dustMarion
 	var AccountManageLayoutView = Marionette.ItemView.extend({
 		initialize: function() {
 			console.log("AccountManageLayoutView init");
+			this.model.on('change', this.render);
+			this.AppInstance = require('app');
 
 		},
 		template: "doctorAccountManageLayout",
 		ui: {
+
 			"editBtns": ".edit-btn",
-			"editBlocks": "#doctor-user-account-form .edit-block"
+			"editBlocks": "#doctor-user-account-form .edit-block",
+			"cancelSubmit": ".btn-cancel",
+			"submitBtn": ".btn-submit",
+			"bindMobileBtn": "#bindMobileBtn",
+			"editMobileBtn": "#editMobileBtn",
+			"submitPwdBtn": "#submitPwdBtn"
 		},
 		events: {
-			"click @ui.editBtns": "editFormHandler"
+			"click @ui.editBtns": "editFormHandler",
+			"click @ui.cancelSubmit": "cancelSubmit",
+			"click @ui.submitBtn": "submitChange",
+			"click @ui.bindMobileBtn": "bindMobileHandler",
+			"click @ui.editMobileBtn": "editMobileHandler",
+			"click @ui.submitPwdBtn": "submitPassword"
+		},
+		resetPwdForm: function() {
+			$('#doctor-user-password-form').find('input').val('');
+		},
+		submitPassword: function(e) {
+			e.preventDefault();
+			if ($('#doctor-user-password-form').valid()) {
+				var that = this;
+				var l = ladda.create(e.target);
+				l.start();
+				var url = "/acount/changePasswd";
+				var data = $('#doctor-user-password-form').serialize();
+				$.ajax({
+					type: 'POST',
+					dataType: 'JSON',
+					data: data,
+					url: url,
+					success: function(data, status, request) {
+						console.log('success');
+						if (data.status != 0) {
+							this.onError(data);
+
+						} else {
+							that.resetPwdForm();
+							Messenger().post({
+								message: "密码修改成功",
+								type: 'success',
+								showCloseButton: true
+							});
+						}
+
+					},
+					onError: function(data) {
+						if (res.status == 2) {
+							window.location.replace('/loginPage')
+
+						} else if (res.status == 4) {
+							window.location.replace('/error')
+
+						}
+						if (typeof res.msg !== 'undefined') {
+							Messenger().post({
+								message: "错误信息:" + res.msg,
+								type: 'error',
+								showCloseButton: true
+							});
+						}
+					},
+					complete: function(status, request) {
+						l.stop();
+					}
+				});
+
+			}
+
+		},
+		bindMobileHandler: function(e) {
+			//set mobileType 1 bind , 2 modify
+			this.model.set('mobileType', 1);
+			var modalView = new ModalView.MobileBindModalView({
+				model: this.model
+			});
+			this.AppInstance.modalRegion.show(modalView);
+		},
+		editMobileHandler: function(e) {
+			//set mobileType 1 bind , 2 modify
+			this.model.set('mobileType', 2);
+			var modalView = new ModalView.MobileBindModalView({
+				model: this.model
+			});
+			this.AppInstance.modalRegion.show(modalView);
 		},
 		editFormHandler: function(e) {
 			e.preventDefault();
 			var $target = $(e.target);
-			$target.hide();
-			$target.siblings('.edit-block').show();
+			$target.closest('.form-body').find('.show-block').hide();
+			$target.closest('.form-body').find('.edit-block').show();
+
+		},
+		cancelSubmit: function(e) {
+			e.preventDefault();
+			var $target = $(e.target);
+			$target.closest('.form-body').find('.show-block').show();
+			$target.closest('.form-body').find('.edit-block').hide();
+		},
+		resetModel: function() {
+			this.model.clear();
+			this.model.fetch();
+		},
+		submitChange: function(e) {
+			e.preventDefault();
+			//need to add validate
+			var $target = $(e.target);
+			var $parent = $target.closest('.form-body');
+			var $inputField = $parent.find('input, textarea, select');
+			this.model.set($inputField.attr('name'), $inputField.val());
+			//type = 1 means patient , type = 2 means doctor
+			this.model.set('type', 2);
+			var that = this;
+
+			// console.log(data);
+			var l = ladda.create(e.target);
+			l.start();
+
+			var url = '/acount/admin';
+			var that = this;
+			$.ajax({
+				type: 'POST',
+				dataType: 'JSON',
+				data: that.model.toJSON(),
+				url: url,
+				success: function(data, status, request) {
+					console.log('success');
+					if (data.status != 0) {
+						this.onError(data);
+
+					} else {
+						that.resetModel();
+						Messenger().post({
+							message: "修改成功",
+							type: 'success',
+							showCloseButton: true
+						});
+					}
+
+				},
+				onError: function(data) {
+					if (res.status == 2) {
+						window.location.replace('/loginPage')
+
+					} else if (res.status == 4) {
+						window.location.replace('/error')
+
+					}
+					if (typeof res.msg !== 'undefined') {
+						Messenger().post({
+							message: "错误信息:" + res.msg,
+							type: 'error',
+							showCloseButton: true
+						});
+					}
+				},
+				complete: function(status, request) {
+					l.stop();
+				}
+			});
 
 		},
 		onRender: function() {
-			this.ui.editBlocks.hide();
+			console.log('AccountManageLayoutView on render');
 
 		},
-
-		onShow: function() {
+		onDomRefresh: function() {
+			this.ui.editBlocks.hide();
 			var $this = $(this);
 			console.dir($('#accountTab a'));
 			$('#accountTab a').click(function(e) {
 				e.preventDefault();
 				$(this).tab('show');
 			});
+
+			//init validation
+
+			$('#doctor-user-password-form').validate({
+				rules: {
+					oldPasswd: {
+						required: true
+					},
+					newPasswd: {
+						required: true,
+						minlength: 8
+					},
+					newPasswd_confirm: {
+						required: true,
+						equalTo: "#newPasswordInput"
+					}
+
+				},
+				ignore: [],
+				highlight: function(element) {
+					$(element).closest('.form-group').addClass('has-error');
+				},
+				unhighlight: function(element) {
+					$(element).closest('.form-group').removeClass('has-error');
+				},
+				errorElement: 'span',
+				errorClass: 'help-block',
+				errorPlacement: function(error, element) {
+					if (element.is(":hidden")) {
+						element.next().parent().append(error);
+					} else if (element.parent('.input-group').length) {
+						error.insertAfter(element.parent());
+					} else {
+						error.insertAfter(element);
+					}
+				}
+			});
+
+		},
+
+		onShow: function() {
+			console.log("AccountManageLayoutView onshow");
 		}
 	});
 
@@ -279,13 +477,13 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'dust', 'dustMarion
 					onError: function(res) {
 						// this.resetForm();
 						//var error = jQuery.parseJSON(data);
-						if(res.status == 2){
-				                window.location.replace('/loginPage')
+						if (res.status == 2) {
+							window.location.replace('/loginPage')
 
-				            }else if(res.status == 4){
-				                window.location.replace('/error')
+						} else if (res.status == 4) {
+							window.location.replace('/error')
 
-				            }
+						}
 						if (typeof res.msg !== 'undefined') {
 							Messenger().post({
 								message: "错误信息:" + res.msg,
@@ -467,13 +665,13 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'dust', 'dustMarion
 							},
 							onError: function(res) {
 								//var error = jQuery.parseJSON(data);
-								if(res.status == 2){
-				                window.location.replace('/loginPage')
+								if (res.status == 2) {
+									window.location.replace('/loginPage')
 
-				            }else if(res.status == 4){
-				                window.location.replace('/error')
+								} else if (res.status == 4) {
+									window.location.replace('/error')
 
-				            }
+								}
 								if (typeof res.msg !== 'undefined') {
 									Messenger().post({
 										message: "错误信息:" + res.msg,
@@ -538,13 +736,13 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'dust', 'dustMarion
 							},
 							onError: function(res) {
 								//var error = jQuery.parseJSON(data);
-								if(res.status == 2){
-				                window.location.replace('/loginPage')
+								if (res.status == 2) {
+									window.location.replace('/loginPage')
 
-				            }else if(res.status == 4){
-				                window.location.replace('/error')
+								} else if (res.status == 4) {
+									window.location.replace('/error')
 
-				            }
+								}
 								if (typeof res.msg !== 'undefined') {
 									Messenger().post({
 										message: "错误信息:" + res.msg,
@@ -643,13 +841,13 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'dust', 'dustMarion
 					onError: function(res) {
 						// this.resetForm();
 						//var error = jQuery.parseJSON(data);
-						if(res.status == 2){
-				                window.location.replace('/loginPage')
+						if (res.status == 2) {
+							window.location.replace('/loginPage')
 
-				            }else if(res.status == 4){
-				                window.location.replace('/error')
+						} else if (res.status == 4) {
+							window.location.replace('/error')
 
-				            }
+						}
 						if (typeof res.msg !== 'undefined') {
 							Messenger().post({
 								message: "错误信息:" + res.msg,
@@ -721,7 +919,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'dust', 'dustMarion
 			var diagnoseId = this.ui.rollbackForm.data('id');
 			// var comments = this.ui.rollbackForm.find('textarea').val().trim();
 			var data = this.ui.rollbackForm.serialize() + "&status=7";
-			ReqCmd.commands.execute("rollbackDiagnose:RollbackModalView", diagnoseId,data);
+			ReqCmd.commands.execute("rollbackDiagnose:RollbackModalView", diagnoseId, data);
 
 		}
 
