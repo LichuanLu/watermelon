@@ -1,0 +1,18 @@
+<p class="amount">
+	分享个数：
+	<span class="number">{amount}</span>
+	&nbsp;条
+</p>
+<table class="table table-striped table-hover result-table table-small-font" id="sharing-manage-table">
+	<thead>
+		<tr class="success">
+			<th>时间</th>
+			<th>评价</th>
+			<th>内容</th>
+			<th>操作</th>
+		</tr>
+	</thead>
+	<tbody id="sharing-manage-tbody">
+		
+	</tbody>
+</table>

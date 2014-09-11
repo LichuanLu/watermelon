@@ -15,7 +15,7 @@
 </div>
 {/breadcrumbsHolder}
 {<contentHolder}
-<div id="doctorhome-content" class="main-content-padding" data-userid="5">
+<div id="doctorhome-content" class="main-content-padding" data-userid="5" data-doctorid="8">
 	<div class="content-wrapper row">
 		<div class="col-md-3 nopadding full-height" id="doctor-actions">
 			

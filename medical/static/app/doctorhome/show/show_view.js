@@ -190,7 +190,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'ladda-bootstrap', 
 						}
 
 					},
-					onError: function(data) {
+					onError: function(res) {
 						if (res.status == 2) {
 							window.location.replace('/loginPage')
 
@@ -263,7 +263,6 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'ladda-bootstrap', 
 			l.start();
 
 			var url = '/acount/admin';
-			var that = this;
 			$.ajax({
 				type: 'POST',
 				dataType: 'JSON',
@@ -284,7 +283,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'ladda-bootstrap', 
 					}
 
 				},
-				onError: function(data) {
+				onError: function(res) {
 					if (res.status == 2) {
 						window.location.replace('/loginPage')
 
@@ -364,27 +363,6 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'ladda-bootstrap', 
 	});
 
 
-	//consult  view
-	var ConsultLayoutView = Marionette.ItemView.extend({
-		initialize: function() {
-			console.log("ConsultLayoutView init");
-
-		},
-		template: "doctorConsultLayout",
-		ui: {
-
-		},
-		events: {},
-		onRender: function() {},
-		onShow: function() {
-			var $this = $(this);
-			console.dir($('#accountTab a'));
-			$('#consultTab a').click(function(e) {
-				e.preventDefault();
-				$(this).tab('show');
-			});
-		}
-	});
 
 	var NewDiagnoseLayoutView = Marionette.ItemView.extend({
 		initialize: function(options) {
@@ -925,6 +903,197 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'ladda-bootstrap', 
 
 	});
 
+	//consult  view
+	var ConsultLayoutView = Marionette.Layout.extend({
+		initialize: function() {
+			console.log("ConsultLayoutView init");
+
+		},
+		template: "doctorConsultLayout",
+		ui: {
+
+		},
+		regions: {
+			"contentRegion": "#consultLayoutContent"
+		},
+		events: {},
+		onRender: function() {},
+		onShow: function() {
+			ReqCmd.reqres.request("ConsultLayoutView:onshow");
+		}
+	});
+
+	var ConsultListView = Marionette.CompositeView.extend({
+		initialize: function(options) {
+			console.log("ConsultListView init end");
+		},
+		onRender: function() {
+			console.log("ConsultListView render");
+		},
+		onDomRefresh: function() {
+			$("select").selectpicker({
+				style: 'btn-sm btn-primary'
+			});
+		},
+		ui: {
+			"searchConsultForm": "#searchConsultForm",
+			"submitBtn": ".submit-btn",
+			"newConsultBtn": "#new-consult-btn"
+
+
+		},
+		events: {
+			"click @ui.submitBtn": "searchConsult",
+			"click @ui.newConsultBtn": "addConsult"
+
+		},
+		addConsult: function(e) {
+			e.preventDefault();
+			ReqCmd.commands.execute("ConsultDetailListView:addConsult");
+		},
+		searchConsult: function(e) {
+			e.preventDefault();
+			var params = this.ui.searchConsultForm.serialize();
+			ReqCmd.commands.execute("ConsultListView:searchConsult", params, $("#searchConsultForm select").val());
+		},
+		template: 'consultListView',
+		itemViewContainer: '#consult-tbody'
+
+	});
+
+
+	var ConsultListItemView = Marionette.ItemView.extend({
+		template: "consultListItemView",
+		initialize: function(options) {},
+		ui: {
+			"checkLink": ".action-group .check-link"
+		},
+		events: {
+			"click @ui.checkLink": "checkDetail"
+		},
+		checkDetail: function(e) {
+			var model = this.model;
+			ReqCmd.commands.execute("ConsultListItemView:checkDetail", model);
+		},
+		onRender: function() {
+			// get rid of that pesky wrapping-div
+			// assumes 1 child element			
+			this.$el = this.$el.children();
+			this.setElement(this.$el);
+		}
+	});
+
+
+
+	var ConsultDetailLayoutView = Marionette.Layout.extend({
+		initialize: function() {
+			console.log("ConsultDetailLayoutView init");
+
+		},
+		template: "consultDetailLayout",
+		ui: {
+
+		},
+		regions: {
+			"diagnoseRegion": "#diagnoseContent",
+			"consultListRegion": "#consultListContent"
+		},
+		events: {},
+		onRender: function() {},
+		onShow: function() {
+			ReqCmd.reqres.request("consultDetailLayoutView:onshow");
+		}
+	});
+
+	//consult detail view
+	var ConsultDetailListView = Marionette.CompositeView.extend({
+		initialize: function() {
+			console.log("ConsultDetailListView init");
+		},
+		template: "consultDetailList",
+		ui: {
+			"backLink": ".back-link",
+			"addCommentsBtn": "#add-comments-btn",
+			"commentsTextArea": "#new-comments-content"
+		},
+		events: {
+			"click @ui.backLink": "backToList",
+			"click @ui.addCommentsBtn": "addComments",
+		},
+		
+		addComments: function(e) {
+			e.preventDefault();
+			$('.help-block').hide();
+			var comments = this.ui.commentsTextArea.val().trim();
+			if (comments) {
+				var params = {
+					userId: this.model.get("userId"),
+					doctorId: this.model.get("doctorId"),
+					title: this.model.get("title"),
+					content: this.ui.commentsTextArea.val(),
+					source_id: this.model.get("source_id"),
+					type: this.model.get("type"),
+					diagnoseId: this.model.get("diagnoseId")
+				}
+				ReqCmd.commands.execute("ConsultDetailListView:addComments", params);
+
+			} else {
+				$('.help-block').show();
+			}
+
+		},
+		backToList: function(e) {
+			e.preventDefault();
+			ReqCmd.reqres.request("ConsultDetailListView:backToList");
+		},
+		onRender: function() {
+			console.log("ConsultDetailListView render");
+		},
+		onShow: function() {
+			console.log("ConsultDetailListView on show");
+			// ReqCmd.reqres.request("ConsultLayoutView:onshow");
+		},
+		itemViewContainer: "#comments-wrapper"
+
+	});
+
+
+	var ConsultDetailItemView = Marionette.ItemView.extend({
+		template: "consultDetailItem",
+		initialize: function(options) {
+
+		},
+		ui: {},
+		events: {},
+		onRender: function() {
+			// get rid of that pesky wrapping-div
+			// assumes 1 child element			
+			this.$el = this.$el.children();
+			this.setElement(this.$el);
+		}
+	});
+
+	var ConsultDiagnoseView = Marionette.ItemView.extend({
+		template: "consultDiagnose",
+		initialize: function(options) {
+			console.log("ConsultDiagnoseView render");
+			this.model.on('change', this.render);
+
+		},
+		ui: {},
+		events: {},
+		onRender: function() {
+			console.log("ConsultDiagnoseView render");
+			// get rid of that pesky wrapping-div
+			// assumes 1 child element			
+			this.$el = this.$el.children();
+			this.setElement(this.$el);
+		}
+
+	});
+
+
+
 	return {
 		DoctorHomePageLayoutView: DoctorHomePageLayoutView,
 		DiagnoseListView: DiagnoseListView,
@@ -934,6 +1103,12 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'ladda-bootstrap', 
 		NewAuditLayoutView: NewAuditLayoutView,
 		MessageLayoutView: MessageLayoutView,
 		ConsultLayoutView: ConsultLayoutView,
-		RollbackModalView: RollbackModalView
+		ConsultListView: ConsultListView,
+		ConsultListItemView: ConsultListItemView,
+		ConsultDetailLayoutView: ConsultDetailLayoutView,
+		ConsultDetailListView: ConsultDetailListView,
+		RollbackModalView: RollbackModalView,
+		ConsultDetailItemView: ConsultDetailItemView,
+		ConsultDiagnoseView: ConsultDiagnoseView
 	}
 });

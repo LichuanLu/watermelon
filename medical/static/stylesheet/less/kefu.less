@@ -1,0 +1,21 @@
+// Loading config with variables (changing them leads to changing a color scheme)
+@import "variables";
+
+// Utility mixins for greater good
+@import "mixins";
+
+#admin-kefu-content{
+	.table-small-font{
+		font-size: 14px;
+		.action-group{
+			width: 150px;
+		}
+	}
+
+	.amount{
+		font-size: 16px;
+		.number{
+			color:@orange;
+		}
+	}
+}

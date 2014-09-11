@@ -1,0 +1,1 @@
+(function(){dust.register("diagnoseSelectItemView",body_0);function body_0(chk,ctx){return chk.write(" <option value=\"").reference(ctx.get(["id"], false),ctx,"h").write("\">").reference(ctx.get(["diagnosenumber"], false),ctx,"h").write("</option>");}return body_0;})();

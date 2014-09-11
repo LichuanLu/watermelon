@@ -132,6 +132,71 @@ app.configure(function() {
     app.use(express.errorHandler());
   });
 
+  app.get('/hospital/list', function(req, res) {
+    console.log(req.query.type);
+
+    var data = [{
+      id: 1,
+      name: "西安西京医院"
+
+    }, {
+      id: 2,
+      name: "西安西京医院2"
+
+    }]
+
+
+    res.send({
+      status: 0,
+      msg: "",
+      data: data
+    });
+  });
+
+  app.get('/department/list', function(req, res) {
+    console.log(req.query.type);
+
+    var data = [{
+      id: 1,
+      name: "放射科"
+
+    }, {
+      id: 2,
+      name: "内科"
+
+    }]
+
+
+    res.send({
+      status: 0,
+      msg: "",
+      data: data
+    });
+  });
+
+  app.get('/skill/list', function(req, res) {
+    console.log(req.query.type);
+
+    var data = [{
+      id: 1,
+      name: "肿瘤"
+
+    }, {
+      id: 2,
+      name: "神经系统"
+
+    }]
+
+
+    res.send({
+      status: 0,
+      msg: "",
+      data: data
+    });
+  });
+
+
+
   app.get('/diagnose/list', function(req, res) {
     console.log(req.query.type);
     if (req.query.type == "") {
@@ -900,7 +965,9 @@ app.configure(function() {
       statusId: "7",
       hasDicom: true,
       dicomFileName: "test",
-      dicomUrl: "test"
+      dicomUrl: "test",
+      hasDoc: true,
+      docUrl:["test1","test2"]
     }, {
       id: 2,
       diagnosenumber: '35433',
@@ -911,7 +978,8 @@ app.configure(function() {
       status: "待诊断",
       hispital: "西安西京医院2",
       statusId: "1",
-      hasDicom: false
+      hasDicom: false,
+      hasDoc:false
     }];
 
 
@@ -1012,10 +1080,21 @@ app.configure(function() {
   });
 
 
+  app.post('/doctor/updateinfo', function(req, res) {
+    console.dir(req.query);
+    res.send({
+      status: 0,
+      msg: "",
+      data: ""
+    });
+
+  });
+
+
 
   app.post('/diagnose/alipayurl/:diagnoseId', function(req, res) {
     console.log(req.params.diagnoseId);
-    
+
 
     res.send({
       status: 0,
@@ -1073,7 +1152,7 @@ app.configure(function() {
     });
   });
 
-app.post('/user/mobile/update', function(req, res) {
+  app.post('/user/mobile/update', function(req, res) {
     console.dir(req.body);
     sleep.sleep(5);
     res.send({
@@ -1084,7 +1163,16 @@ app.post('/user/mobile/update', function(req, res) {
   });
 
 
-app.post('/acount/changePasswd', function(req, res) {
+  app.post('/acount/changePasswd', function(req, res) {
+    console.dir(req.body);
+    res.send({
+      status: 0,
+      msg: "",
+      data: ""
+    });
+  });
+
+  app.post('/diagnose/statuschange', function(req, res) {
     console.dir(req.body);
     res.send({
       status: 0,
@@ -1095,6 +1183,293 @@ app.post('/acount/changePasswd', function(req, res) {
 
 
 
+  app.get('/diagnose/list/needpay', function(req, res) {
+    console.log(req.query);
+    if (req.query.type == 1) {
+      var list = [{
+        id: 1,
+        diagnosenumber: '34567',
+        doctorName: '殷红',
+        patientName: '李冰1',
+        date: "2014-11-29",
+        mobile: '15210892443',
+        statusId: 2,
+        status: "待支付",
+        hispital: '西安西京医院',
+        diagnoseMethod: 'mri',
+        payAmount: 400,
+        positionName: "头部，颈部，胸部"
+      }, {
+        id: 2,
+        diagnosenumber: '12567',
+        doctorName: '殷红2',
+        patientName: '李冰2',
+        date: "2013-11-29",
+        mobile: '13310892443',
+        statusId: 2,
+        status: "待支付",
+        hispital: '西安西京医院2',
+        diagnoseMethod: 'ct',
+        payAmount: 200,
+        positionName: "头部，颈部"
+      }, {
+        id: 3,
+        diagnosenumber: '22567',
+        doctorName: '殷红3',
+        patientName: '李冰2',
+        date: "2013-11-29",
+        mobile: '13310892443',
+        statusId: 2,
+        status: "待支付",
+        hispital: '西安西京医院2',
+        diagnoseMethod: 'ct',
+        payAmount: 200,
+        positionName: "头部，颈部"
+      }];
+
+    } else {
+      var list = [{
+        id: 1,
+        diagnosenumber: '34567',
+        doctorName: '殷红',
+        patientName: '李冰1',
+        date: "2014-11-29",
+        mobile: '15210892443',
+        statusId: 2,
+        status: "待支付",
+        hispital: '西安西京医院',
+        diagnoseMethod: 'mri',
+        payAmount: 400,
+        positionName: "头部，颈部，胸部"
+      }, {
+        id: 2,
+        diagnosenumber: '12567',
+        doctorName: '殷红2',
+        patientName: '李冰2',
+        date: "2013-11-29",
+        mobile: '13310892443',
+        statusId: 2,
+        status: "待支付",
+        hispital: '西安西京医院2',
+        diagnoseMethod: 'ct',
+        payAmount: 200,
+        positionName: "头部，颈部"
+      }];
+
+
+    }
+
+    res.send({
+      status: 0,
+      msg: "",
+      data: {
+        amount: 2,
+        list: list
+      }
+    });
+  });
+
+  app.get('/doctor/draftList', function(req, res) {
+    console.log(req.query);
+    if (req.query.type == 1) {
+      var list = [{
+        doctorId: 4,
+        username: '殷红',
+        identityPhone: '029-2323232'
+      }];
+
+    } else {
+      var list = [{
+        doctorId: 4,
+        username: '殷红',
+        identityPhone: '029-2323232'
+      }, {
+        doctorId: 5,
+        username: '殷红2',
+        identityPhone: '029-8823232'
+      }];
+
+    }
+
+
+
+    res.send({
+      status: 0,
+      msg: "",
+      data: {
+        amount: 2,
+        list: list
+      }
+    });
+  });
+
+  app.get('/gratitude/draft/list', function(req, res) {
+    console.log(req.query);
+
+    var list = [{
+      id: 4,
+      content: '感谢感谢感谢感谢感谢感谢。感谢感谢感谢感谢感谢感谢。',
+      createTime: '2014-05-24'
+    }, {
+      id: 5,
+      content: '感谢感谢感谢感谢感谢感谢。',
+      createTime: '2014-05-22'
+    }];
+
+    res.send({
+      status: 0,
+      msg: "",
+      data: {
+        amount: 2,
+        list: list
+      }
+    });
+  });
+
+  app.post('/gratitude/changestatus', function(req, res) {
+    console.dir(req.body);
+    res.send({
+      status: 0,
+      msg: "",
+      data: ""
+    });
+  });
+
+  
+
+  app.get('/diagnoseComment/draftList.json', function(req, res) {
+    console.log(req.query);
+
+    var list = [{
+      id: 4,
+      content: '感谢感谢感谢感谢感谢感谢。感谢感谢感谢感谢感谢感谢。',
+      scoreName:"满意",
+      createTime: '2014-05-24'
+    }, {
+      id: 5,
+       scoreName:"非常满意",
+      content: '感谢感谢感谢感谢感谢感谢。',
+      createTime: '2014-05-22'
+    }];
+
+    res.send({
+      status: 0,
+      msg: "",
+      data: {
+        amount: 2,
+        list: list
+      }
+    });
+  });
+
+  app.post('/consult/add', function(req, res) {
+    console.dir(req.body);
+    res.send({
+      status: 0,
+      msg: "",
+      data: ""
+    });
+  });
+
+
+
+
+
+
+
+
+  //consult
+  app.get('/doctor/:doctorId/consultList', function(req, res) {
+    console.log(req.query);
+    console.log(req.params.doctorId);
+    if(!req.query.source_id){
+      var data = [{
+        id:1,
+        userId:12,
+        doctorId:14,
+        title:"肩周炎怎么办",
+        doctorName:"张伟平",
+        doctorTitle:"主任医师",
+        userName:"tester",
+        content:"后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。",
+        updateTime:"2014-08-30",
+        createTime:"2014-07-30",
+        status: 0,
+        parent_id:456,
+        source_id:"",
+        amount:6,
+        type:0,
+        diagnoseId:1234
+      },{
+        id:5,
+        userId:12,
+        doctorId:15,
+        title:"肩周炎怎么办啊",
+        doctorName:"张伟平",
+        doctorTitle:"主任医师",
+        userName:"tester",
+        content:"后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。",
+        updateTime:"2014-08-31",
+        createTime:"2014-07-31",
+        status: 1,
+        parent_id:426,
+        source_id:"",
+        amount:6,
+        type:0,
+        diagnoseId:""
+
+      }];
+
+    }else{
+      var data = [{
+        id:4,
+        userId:12,
+        doctorId:14,
+        doctorName:"张伟平",
+        userName:"tester",
+        title:"肩周炎怎么办",
+        doctorTitle:"主任医师",
+        avartarUrl:"/static/assets/image/young-m.png",
+        content:"怎么办啊？",
+        updateTime:"2014-08-30",
+        createTime:"2014-07-30",
+        status: 0,
+        parent_id:456,
+        source_id:1,
+        type:0,
+        diagnoseId:""
+      },{
+        id:5,
+        userId:12,
+        doctorId:15,
+        doctorName:"张伟平",
+        userName:"tester",
+        title:"肩周炎怎么办",
+        doctorTitle:"主任医师",
+        avartarUrl:"/static/assets/image/young-m.png",
+        content:"可以去医院检查",
+        updateTime:"2014-08-31",
+        createTime:"2014-07-31",
+        status: 0,
+        parent_id:426,
+        source_id:1,
+        type:1,
+        diagnoseId:1234
+      }];
+
+    }
+    
+
+
+    res.send({
+      status: 0,
+      msg: "",
+      data: data
+    });
+  });
+
+
+  
 
   http.createServer(app).listen(app.get('port'), function() {
     console.log("Express server listening on port " + app.get('port'));

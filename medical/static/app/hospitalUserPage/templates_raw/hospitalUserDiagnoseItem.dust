@@ -7,13 +7,25 @@
 	<td>{status}</td>
 	{@if cond="'{hasDicom}' == 'true'"}
 	<td class="dicom-file-group">
-		<a href="{dicomUrl}" class="">{dicomFileName}</a>
+		<a href="{dicomUrl}" class="">Dicom文件</a>
 	</td>
 	{:else}
 	<td class="dicom-file-group">
-		等待DICOM文件上传
+		等待上传
 	</td>
 	{/if}
+	{@if cond="'{hasDoc}' == 'true'"}
+	<td class="doc-file-group">
+		{#docUrl}
+			<a href="{.}" target="_blank">文件{@math key=$idx method="add" operand="1"/}</a>{~n}
+		{/docUrl}
+	</td>
+	{:else}
+	<td class="doc-file-group">
+		等待上传
+	</td>
+	{/if}
+
 
 	<td class="action-group">
 		<a id="submit-diagnose-link" href="/applyDiagnose?diagnoseid={id}" target="_blank" class="">修改</a>

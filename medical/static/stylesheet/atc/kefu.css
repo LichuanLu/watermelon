@@ -1,0 +1,16 @@
+.dropdown-arrow-inverse {
+  border-bottom-color: #34495e !important;
+  border-top-color: #34495e !important;
+}
+#admin-kefu-content .table-small-font {
+  font-size: 14px;
+}
+#admin-kefu-content .table-small-font .action-group {
+  width: 150px;
+}
+#admin-kefu-content .amount {
+  font-size: 16px;
+}
+#admin-kefu-content .amount .number {
+  color: #f39c12;
+}

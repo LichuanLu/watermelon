@@ -1,8 +1,18 @@
-define(['lodash', 'config/base/constant', 'config/controllers/_base_controller', 'hospitalUserPage/show/show_view', 'utils/reqcmd','entities/diagnoseEntity'], function(Lodash, CONSTANT, BaseController, View, ReqCmd,DiagnoseEntity) {
+define(['lodash', 'config/base/constant', 'config/controllers/_base_controller', 'hospitalUserPage/show/show_view', 'utils/reqcmd', 'entities/diagnoseEntity'], function(Lodash, CONSTANT, BaseController, View, ReqCmd, DiagnoseEntity) {
 	// body...
 	"use strict";
 	var ShowController = BaseController.extend({
 		initialize: function() {
+			//render file upload view after unfinish collection on show
+			ReqCmd.reqres.setHandler("HospitalUserUnfinishDiagnoseCollectionView:onShow", Lodash.bind(function() {
+				if(this.unfinishDiagnoseCollection){
+					this.fileUploadListView = this.getFileUploadListView(this.unfinishDiagnoseCollection);
+					this.show(this.fileUploadListView, {
+						region: this.layoutView.fileUploadRegion,
+						client: true
+					});
+				}
+			}, this));
 
 			this.layoutView = this.getHospitalUserPageView();
 
@@ -11,6 +21,8 @@ define(['lodash', 'config/base/constant', 'config/controllers/_base_controller',
 				//as bindAll this,so don't need that
 				instance: this
 			});
+
+			
 
 			//instance is this controller instance
 			ReqCmd.commands.setHandler("hospitalUserPageView:attached", Lodash.bind(function(instance) {
@@ -72,6 +84,8 @@ define(['lodash', 'config/base/constant', 'config/controllers/_base_controller',
 			}, this));
 
 
+			
+
 
 			console.log('follow controller init end');
 
@@ -93,6 +107,13 @@ define(['lodash', 'config/base/constant', 'config/controllers/_base_controller',
 			var view = new View.HospitalUserUnfinishDiagnoseCollectionView({
 				collection: collection,
 				itemView: View.HospitalUserUnfinishDiagnoseItemView
+			})
+			return view;
+		},
+		getFileUploadListView: function(collection) {
+			var view = new View.FileUploadListView({
+				collection: collection,
+				itemView: View.FileUploadItemView
 			})
 			return view;
 		}

@@ -36,15 +36,25 @@ ul.message-list li .top-wrapper .right-content .date {
 }
 ul.message-list li .message-content-wrapper {
   margin-left: 65px;
+  position: relative;
 }
 ul.message-list li .message-content-wrapper p {
-  font-size: 15px;
+  font-size: 14px;
   color: #666666;
   margin: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   width: 100%;
+  padding-right: 40px;
+}
+ul.message-list li .message-content-wrapper p.open {
+  white-space: normal;
+}
+ul.message-list li .message-content-wrapper .btn {
+  position: absolute;
+  right: 0;
+  top: 0;
 }
 #new-diagnose-wrapper .header > div,
 #new-audit-wrapper .header > div {
@@ -156,6 +166,14 @@ ul.message-list li .message-content-wrapper p {
   text-align: center;
   display: inline-block;
   margin-bottom: 10px;
+}
+#doctorhome-content .action-table {
+  font-size: 15px;
+}
+#doctorhome-content .action-table.consult-table p.table-text-overflow {
+  font-size: 15px;
+  max-height: 45px;
+  max-width: 250px;
 }
 #doctorhome-content .content-wrapper {
   border: 1px solid #eaeaea;
@@ -302,4 +320,12 @@ ul.message-list li .message-content-wrapper p {
   color: #e74c3c;
   margin-left: 10px;
   font-size: 13px;
+}
+#doctorhome-content #doctor-action-content .consult-comments-wrapper {
+  margin-top: 20px;
+}
+#doctorhome-content #doctor-action-content .right-wrapper {
+  padding: 5px 0 10px;
+  text-align: right;
+  border-bottom: 1px dashed #e2e2e2;
 }

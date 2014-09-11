@@ -1,0 +1,13 @@
+<li>
+	<span class="image">
+		<img src="{avartarUrl}" alt=""></span>
+	<dl>
+		<dt>
+			<span class="des-text">标题：{title}</span>
+		</dt>
+		<dd class="mt10">
+			{content}
+		</dd>
+		<div class="time">{@if cond="'{type}' == '0'"}{userName}{:else}{doctorName}&nbsp{doctorTitle}{/if}&nbsp于{createTime}&nbsp留言</div>
+	</dl>
+</li>

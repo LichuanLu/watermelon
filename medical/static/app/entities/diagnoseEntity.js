@@ -59,6 +59,26 @@ define(["backbone", "marionette", "config/base/constant", "utils/reqcmd"], funct
 
 
 	var API = {
+		getDiagnoseListDefer: function(params, isDoctor, diagnoseCollection) {
+			if (!params) {
+				params = {
+					type: ""
+				};
+			}
+			if (typeof params === 'object') {
+				params = $.param(params);
+			}
+			if (isDoctor) {
+				var url = "/diagnose/list";
+			} else {
+				var url = "/patient/diagnose/list";
+			}
+			diagnoseCollection.url = url;
+			return diagnoseCollection.fetch({
+				data: params
+			});
+
+		},
 		getDiagnoseList: function(params, collection) {
 			if (!params) {
 				params = {
@@ -232,7 +252,7 @@ define(["backbone", "marionette", "config/base/constant", "utils/reqcmd"], funct
 			return diagnoseCollection
 		},
 		getHospitalUserUnfinishDiagnose: function(collection) {
-			
+
 			if (collection) {
 				collection.reset();
 				collection.fetch({
@@ -292,7 +312,8 @@ define(["backbone", "marionette", "config/base/constant", "utils/reqcmd"], funct
 	};
 
 	return {
-		API: API
+		API: API,
+		DiagnoseCollection:DiagnoseCollection
 	}
 
 });

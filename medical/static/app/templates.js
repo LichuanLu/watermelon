@@ -50,7 +50,15 @@ define(function(require) {
 		newDiagnoseLayout:require('doctorhome/templates/newDiagnoseLayout'),
 		newAuditLayout:require('doctorhome/templates/newAuditLayout'),
 		doctorMessageLayout:require('doctorhome/templates/doctorMessageLayout'),
+
 		doctorConsultLayout:require('doctorhome/templates/doctorConsultLayout'),
+
+		consultListView:require('doctorhome/templates/consultListView'),
+		consultListItemView:require('doctorhome/templates/consultListItemView'),
+		consultDetailLayout:require('doctorhome/templates/consultDetailLayout'),
+		consultDetailList:require('doctorhome/templates/consultDetailList'),
+		consultDetailItem:require('doctorhome/templates/consultDetailItem'),
+		consultDiagnose:require('doctorhome/templates/consultDiagnose'),
 
 		doctorDetailItem:require('doctorList/templates/doctorDetailItem'),
 		doctorDetailList:require('doctorList/templates/doctorDetailList'),
@@ -58,15 +66,33 @@ define(function(require) {
 
 		hospitalUserDignoseItem:require('hospitalUserPage/templates/hospitalUserDiagnoseItem'),
 		hospitalUserSubmittedDignoseItem:require('hospitalUserPage/templates/hospitalUserSubmittedDiagnoseItem'),
+		hospitalUserFileUpload:require('hospitalUserPage/templates/hospitalUserFileUpload'),
 
 
 		messageItem:require('message/templates/messageItem'),
 
 		//model view
-		mobileBindModal:require('modal/templates/mobileBindModal')
+		mobileBindModal:require('modal/templates/mobileBindModal'),
+		confirmModal:require('modal/templates/confirmModal'),
+		createConsultViewModal:require("modal/templates/createConsultViewModal"),
 
 
-		
+		//kefu view
+		kfDiagnoseListView:require('admin/kefu/templates/diagnoseListView'),
+		kfDiagnoseListItemView:require('admin/kefu/templates/diagnoseListItemView'),
+		doctorAuditListItemView:require('admin/kefu/templates/doctorAuditListItemView'),
+		doctorAuditListView:require('admin/kefu/templates/doctorAuditListView'),
+
+		sharingListView:require('admin/kefu/templates/sharingListView'),
+		sharingListItemView:require('admin/kefu/templates/sharingListItemView'),
+		gratitudeListView:require('admin/kefu/templates/gratitudeListView'),
+		gratitudeListItemView:require('admin/kefu/templates/gratitudeListItemView'),
+
+		updateDoctorInfoModal:require('modal/templates/updateDoctorInfoModal'),
+
+		//common view
+		selectItemView:require('common/templates/selectItemView'),
+		diagnoseSelectItemView:require('common/templates/diagnoseSelectItemView')
 
 		
 

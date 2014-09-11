@@ -98,7 +98,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 
 				// Uncomment the following to send cross-domain cookies:
 				//xhrFields: {withCredentials: true},
-				url: '/dicomfile/upload',
+				url: '/file/upload',
 				uploadTemplateId: FileUploaderMain.uploadTemplateStr,
 				downloadTemplateId: FileUploaderMain.downloadTemplateStr
 
@@ -106,7 +106,8 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 				// The example input, doesn't have to be part of the upload form:
 				var input = $('#diagnose-id-input');
 				data.formData = {
-					diagnoseId: input.val()
+					diagnoseId: input.val(),
+					type:0
 				};
 				// if (!data.formData.diagnoseId) {
 				//   data.context.find('button').prop('disabled', false);
@@ -122,7 +123,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 
 				// Uncomment the following to send cross-domain cookies:
 				//xhrFields: {withCredentials: true},
-				url: '/patientreport/upload',
+				url: '/file/upload',
 				uploadTemplateId: FileUploaderMain.uploadTemplateStr,
 				downloadTemplateId: FileUploaderMain.downloadTemplateStr
 
@@ -130,7 +131,8 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 				// The example input, doesn't have to be part of the upload form:
 				var input = $('#diagnose-id-input');
 				data.formData = {
-					diagnoseId: input.val()
+					diagnoseId: input.val(),
+					type:1
 				};
 				// if (!data.formData.diagnoseId) {
 				//   data.context.find('button').prop('disabled', false);

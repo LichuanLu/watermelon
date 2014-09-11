@@ -1,0 +1,13 @@
+<tr data-id="{diagnoseId}">
+	<td>{diagnosenumber}</td>
+	<td>{doctorName}</td>
+	<td>{hispital}</td>
+	<td>{patientName}</td>
+	<td>{mobile}</td>
+	<td>{positionName}</td>
+	<td>{diagnoseMethod}</td>
+	<td>{payAmount}元</td>
+	<td class="action-group">
+		<a class="btn btn-info btn-xs pay-link">通过</a>
+	</td>
+</tr>

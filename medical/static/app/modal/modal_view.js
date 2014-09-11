@@ -1,7 +1,7 @@
-define(['config/base/constant', 'utils/reqcmd', 'lodash', 'marionette', 'templates', 'ladda-bootstrap',
+define(['config/base/constant', 'utils/reqcmd', 'lodash', 'marionette', 'templates', 'ladda-bootstrap', 'jquery.uploader.main',
 	'config/validator/config', 'spin', 'bootstrap', 'dust', 'dustMarionette', 'jquery.psteps',
-	'jquery.uploadify', 'jquery.imgareaselect', 'utils/countDown'
-], function(Constant, ReqCmd, Lodash, Marionette, Templates, ladda) {
+	'jquery.uploadify', 'jquery.imgareaselect', 'utils/countDown', 'bootstrap.multiselect'
+], function(Constant, ReqCmd, Lodash, Marionette, Templates, ladda, FileUploaderMain) {
 	"use strict";
 	var MobileBindModalView = Marionette.ItemView.extend({
 		template: "mobileBindModal",
@@ -546,9 +546,151 @@ define(['config/base/constant', 'utils/reqcmd', 'lodash', 'marionette', 'templat
 
 	});
 
+	//used for all confirm modal
+	var ConfirmModalView = Marionette.ItemView.extend({
+		template: "confirmModal",
+		initialize: function(options) {
+			console.log("ConfirmModalView init");
+			this.submitCallback = options.callback;
+			this.callbackContext = options.callbackContext;
+		},
+		onRender: function() {
+			console.log("ConfirmModalView render");
+			// get rid of that pesky wrapping-div
+			// assumes 1 child element			
+			this.$el = this.$el.children();
+			this.setElement(this.$el);
+
+		},
+		onShow: function() {},
+		ui: {
+			'submitBtn': 'button[name="submit"]'
+		},
+		events: {
+			'click @ui.submitBtn': 'submitHandler'
+		},
+		submitHandler: function(e) {
+			if (this.submitCallback && this.callbackContext) {
+				this.submitCallback.call(this.callbackContext);
+			}
+		}
+
+	});
+
+
+	//update doctor info
+	var UpdateDoctorInfo = Marionette.ItemView.extend({
+		template: "updateDoctorInfoModal",
+		initialize: function(options) {
+			console.log("UpdateDoctorInfo init");
+		},
+		onRender: function() {
+			console.log("UpdateDoctorInfo render");
+			// get rid of that pesky wrapping-div
+			// assumes 1 child element			
+			this.$el = this.$el.children();
+			this.setElement(this.$el);
+
+		},
+		onShow: function() {
+			var that = this;
+			$('#avatarUpload').fileupload({
+				disableImageResize: false,
+				maxFileSize: 200000000,
+				acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+				maxNumberOfFiles: 5,
+
+				// Uncomment the following to send cross-domain cookies:
+				//xhrFields: {withCredentials: true},
+				url: '/acount/uploadAvatar',
+				uploadTemplateId: FileUploaderMain.uploadTemplateStr,
+				downloadTemplateId: FileUploaderMain.downloadTemplateStr
+
+			}).bind('fileuploadsubmit', function(e, data) {
+				// The example input, doesn't have to be part of the upload form:
+				data.formData = {
+					doctorId: that.model.get('doctorId')
+				};
+				// if (!data.formData.diagnoseId) {
+				//   data.context.find('button').prop('disabled', false);
+				//   input.focus();
+				//   return false;
+				// }
+			});
+
+			//multi select
+			// $("select.multiselect").multiselect({
+			// 	enableFiltering: true,
+			// 	filterPlaceholder: "搜索",
+			// 	nonSelectedText: "没有选中"
+			// 	// buttonWidth: '300px'
+			// });
+			ReqCmd.reqres.request('UpdateDoctorInfo:onShow');
+		},
+		ui: {
+			'submitBtn': 'button[name="submit"]',
+			'doctorInfoForm': '#doctorInfoForm'
+		},
+		events: {
+			'click @ui.submitBtn': 'submitHandler'
+		},
+		submitHandler: function(e) {
+			var params = this.ui.doctorInfoForm.serialize();
+			params += '&doctorId=' + this.model.get('doctorId') + '&status=0'
+			ReqCmd.commands.execute('UpdateDoctorInfo:submitHandler', params);
+		}
+
+	});
+
+	var CreateConsultView = Marionette.ItemView.extend({
+		template: "createConsultViewModal",
+		initialize: function(options) {
+			console.log("CreateConsultView init");
+		},
+		onRender: function() {
+			console.log("CreateConsultView render");
+			// get rid of that pesky wrapping-div
+			// assumes 1 child element			
+			this.$el = this.$el.children();
+			this.setElement(this.$el);
+
+		},
+		onShow: function() {
+			var that = this;
+			var $select = $('#diagnoseSelect');
+			// if ($select) {
+			// 	var params = {
+			// 		type:6
+			// 	}
+			// 	if(this.model.get("isDoctor")){
+			// 		this.selectData = DiagnoseEntity.API.getDiagnoseList(params);
+			// 	}else{
+			// 		this.selectData = DiagnoseEntity.API.getPatientDiagnoseList(params);
+			// 	}				
+			// }
+			ReqCmd.commands.execute('CreateConsultView:onShow',$select);
+		},
+		ui: {
+			'submitBtn': 'button[name="submit"]',
+			'consultForm': '#consultForm'
+		},
+		events: {
+			'click @ui.submitBtn': 'submitHandler'
+		},
+		submitHandler: function(e) {
+			var params = this.ui.consultForm.serialize();
+			ReqCmd.commands.execute('CreateConsultView:submitHandler', params);
+		}
+	});
+
+
+
 	return {
 		ImageAreaSelectModalView: ImageAreaSelectModalView,
 		DeleteModalView: DeleteModalView,
-		MobileBindModalView: MobileBindModalView
+		MobileBindModalView: MobileBindModalView,
+		ConfirmModalView: ConfirmModalView,
+		UpdateDoctorInfo: UpdateDoctorInfo,
+		CreateConsultView: CreateConsultView
 	}
 });

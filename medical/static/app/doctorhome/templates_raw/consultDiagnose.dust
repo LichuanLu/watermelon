@@ -1,0 +1,56 @@
+<div class="row diagnose-detail-group">
+	<h6 class="content-sub-title">
+		相关的诊断详情
+	</h6>
+	<div class="col-md-12">
+		<div class="col-md-6 left-side">
+			<div>
+				<span class="head">申请编号：</span>
+				<span>{diagnosenumber}</span>
+			</div>
+			<div>
+				<span class="head">姓名：</span>
+				<span>{patientName}</span>
+			</div>
+			<div>
+				<span class="head">性别：</span>
+				<span>{gender}</span>
+			</div>
+			<div>
+				<span class="head">出生日期：</span>
+				<span>{birthDate}</span>
+			</div>
+			<div>
+				<span class="head">诊断部位：</span>
+				<p>{positionName}</p>
+			</div>
+
+		</div>
+		<div class="col-md-6 right-side">
+			<div>
+				<span class="head">诊断类型：</span>
+				<span>{diagnoseType}</span>
+			</div>
+			<div>
+				<span class="head">DICOM文件：</span>
+				<a href="{dicomUrl}" target="_blank">点击下载</a>
+			</div>
+			<div>
+				<span class="head">曾就诊医院：</span>
+				<a href="/hospital/{hospitalId}">{hospitalHistory}</a>
+			</div>
+			<div>
+				<span class="head">病史：</span>
+				<p>{caseHistory}</p>
+			</div>
+			<div>
+				<span class="head">诊断相关文件：</span>
+				{#docUrl}
+				<a href="{.}" target="_blank">文件下载</a>
+				{~n}
+						{/docUrl}
+			</div>
+
+		</div>
+	</div>
+</div>
