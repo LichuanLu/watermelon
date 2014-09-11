@@ -1105,7 +1105,7 @@ app.configure(function() {
 
   app.get('/account/info', function(req, res) {
     console.log(req.query);
-    if (req.query.type == 1) {
+    if (req.query.type == 2) {
       var data = {
         userId: 1,
         name: '李响',
@@ -1131,7 +1131,7 @@ app.configure(function() {
     });
   });
 
-  app.post('/acount/admin', function(req, res) {
+  app.post('/account/admin', function(req, res) {
     console.dir(req.body);
     res.send({
       status: 0,
@@ -1163,7 +1163,7 @@ app.configure(function() {
   });
 
 
-  app.post('/acount/changePasswd', function(req, res) {
+  app.post('/account/changePasswd', function(req, res) {
     console.dir(req.body);
     res.send({
       status: 0,

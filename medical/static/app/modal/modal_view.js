@@ -602,7 +602,7 @@ define(['config/base/constant', 'utils/reqcmd', 'lodash', 'marionette', 'templat
 
 				// Uncomment the following to send cross-domain cookies:
 				//xhrFields: {withCredentials: true},
-				url: '/acount/uploadAvatar',
+				url: '/account/uploadAvatar',
 				uploadTemplateId: FileUploaderMain.uploadTemplateStr,
 				downloadTemplateId: FileUploaderMain.downloadTemplateStr
 

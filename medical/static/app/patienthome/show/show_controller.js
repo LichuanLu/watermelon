@@ -228,7 +228,7 @@ define(['lodash', 'config/base/constant', 'config/controllers/_base_controller',
 				} else if (viewName === 'accountLink') {
 					//type = 1 means patient , type =2 means doctor
 					var params = {
-						type: 1
+						type: 2
 					}
 					this.userInfoModel = UserInfoEntity.API.getUserInfo(params);
 					this.contentView = this.getAccountManageLayoutView(this.userInfoModel);

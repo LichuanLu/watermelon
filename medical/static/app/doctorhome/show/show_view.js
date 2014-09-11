@@ -168,7 +168,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'ladda-bootstrap', 
 				var that = this;
 				var l = ladda.create(e.target);
 				l.start();
-				var url = "/acount/changePasswd";
+				var url = "/account/changePasswd";
 				var data = $('#doctor-user-password-form').serialize();
 				$.ajax({
 					type: 'POST',
@@ -243,9 +243,11 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'ladda-bootstrap', 
 			$target.closest('.form-body').find('.show-block').show();
 			$target.closest('.form-body').find('.edit-block').hide();
 		},
-		resetModel: function() {
+		resetModel: function(params) {
 			this.model.clear();
-			this.model.fetch();
+			this.model.fetch({
+				data:params
+			});
 		},
 		submitChange: function(e) {
 			e.preventDefault();
@@ -262,7 +264,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'ladda-bootstrap', 
 			var l = ladda.create(e.target);
 			l.start();
 
-			var url = '/acount/admin';
+			var url = '/account/admin';
 			$.ajax({
 				type: 'POST',
 				dataType: 'JSON',
@@ -274,7 +276,10 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'ladda-bootstrap', 
 						this.onError(data);
 
 					} else {
-						that.resetModel();
+						var params = {
+							type:1
+						}
+						that.resetModel(params);
 						Messenger().post({
 							message: "修改成功",
 							type: 'success',
