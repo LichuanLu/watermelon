@@ -127,6 +127,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'dust',
 				e.preventDefault();
 				$(this).tab('show');
 			});
+			$('body').show();
 
 
 		}

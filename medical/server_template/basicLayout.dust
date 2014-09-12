@@ -13,7 +13,7 @@
 <![endif]-->
 <html>
     {>head/}
-    <body>
+    <body style="display:none;">
             {+headerHolder}
                 {>header/}
             {/headerHolder}

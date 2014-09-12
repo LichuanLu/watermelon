@@ -13,6 +13,7 @@
 			e.preventDefault();
 			window.location.replace('/loginPage');
 		});	
+		$('body').show();
 	});
 
 

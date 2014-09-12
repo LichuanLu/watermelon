@@ -49,6 +49,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'login/login_app', 
 
 			//init login modal
 			LoginApp.loginAction();
+			$('body').show();
 			setInterval(that.autoScroll, 3000);
 
 

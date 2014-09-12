@@ -12,6 +12,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates','dust', 'dustMarione
 		},
 		events: {},
 		attachEndHandler: function() {
+			$('body').show();
 		}
 	});
 

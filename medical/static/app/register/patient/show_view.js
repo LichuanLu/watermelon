@@ -18,6 +18,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates','login/login_app','d
 		attachEndHandler: function() {
 			console.log("PatientRegisterPageLayoutView attach end ");
 			LoginApp.loginAction();
+			$('body').show();
 
 		},
 

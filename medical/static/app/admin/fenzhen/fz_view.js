@@ -87,6 +87,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'dust', 'dustMarion
 			this.initAllDiagnoseView();
 			this.initMyDiagnoseView();
 
+			$('body').show();
 
 
 		},

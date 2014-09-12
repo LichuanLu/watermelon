@@ -58,6 +58,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 
 				this.initUnFinishDiagnoseView();
 				this.initAllDiagnoseView();
+				$('body').show();
 
 			},
 			initUnFinishDiagnoseView: function() {

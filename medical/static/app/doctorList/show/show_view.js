@@ -18,6 +18,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates','login/login_app', '
 		},
 		attachEndHandler: function() {
 			LoginApp.loginAction();
+			$('body').show();
 
 
 		},

@@ -26,6 +26,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'ladda-bootstrap', 
 		attachEndHandler: function() {
 
 			this.ui.doctorActionLinks.filter("[name*='diagnoseLink']").click();
+			$('body').show();
 		},
 		doctorActionLinksHandler: function(e) {
 			e.preventDefault();

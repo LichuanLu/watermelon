@@ -303,6 +303,8 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 
 			this.initDiagnoseForms();
 
+			$('body').show();
+
 		},
 		// we need this to do init work for forms
 		initDiagnoseForms: function() {

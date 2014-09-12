@@ -26,6 +26,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates',
 			attachEndHandler: function() {
 
 				this.ui.patientActionLinks.filter("[name*='diagnoseLink']").click();
+				$('body').show();
 			},
 			patientActionLinksHandler: function(e) {
 				e.preventDefault();
@@ -327,7 +328,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates',
 							}
 
 						},
-						onError: function(data) {
+						onError: function(res) {
 							if (res.status == 2) {
 								window.location.replace('/loginPage')
 
