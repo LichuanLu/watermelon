@@ -175,44 +175,43 @@ define(['config/base/constant', 'utils/reqcmd', 'lodash', 'marionette', 'templat
 			});
 		},
 		getVerifyCode: function() {
-			// var url = Constant.AJAX_PREFIX + '/user/getverificationcode';
+			var url = "/user/mobile/sendVerifyCode";
 			var that = this;
 			$('#getVerifyCodeBtn').countDown({});
-			var params = {
-					mobile: this.mobileNumber
+			// var params = {
+			// 	mobile: this.mobileNumber
+			// }
+			$.ajax({
+				type: 'POST',
+				dataType: 'JSON',
+				contentType: 'application/json',
+				url: url,
+				success: function(data, status, request) {
+					console.log('success');
+
+					if (!(data.errorDescription && data.errorCode)) {
+						Messenger().post({
+							message: "获取验证码成功",
+							type: 'success',
+							showCloseButton: true
+						});
+						// that.ui.regSteps.eq(1).children("i").add(that.ui.lines.eq(0)).addClass("pass");
+						// that.ui.formStep02.removeClass("hide").siblings("form").addClass("hide");
+
+					} else {
+						this.onError(data);
+					}
+				},
+				onError: function(data) {
+					if (typeof data.errorDescription !== 'undefined') {
+						Messenger().post({
+							message: "%ERROR_MESSAGE:" + data.errorDescription,
+							type: 'error',
+							showCloseButton: true
+						});
+					}
 				}
-				// $.ajax({
-				// 	type: 'POST',
-				// 	dataType: 'JSON',
-				// 	contentType: 'application/json',
-				// 	data: JSON.stringify(data),
-				// 	url: url,
-				// 	success: function(data, status, request) {
-				// 		console.log('success');
-
-			// 		if (!(data.errorDescription && data.errorCode)) {
-			// 			Messenger().post({
-			// 				message: "获取验证码成功",
-			// 				type: 'success',
-			// 				showCloseButton: true
-			// 			});
-			// 			that.ui.regSteps.eq(1).children("i").add(that.ui.lines.eq(0)).addClass("pass");
-			// 			that.ui.formStep02.removeClass("hide").siblings("form").addClass("hide");
-
-			// 		} else {
-			// 			this.onError(data);
-			// 		}
-			// 	},
-			// 	onError: function(data) {
-			// 		if (typeof data.errorDescription !== 'undefined') {
-			// 			Messenger().post({
-			// 				message: "%ERROR_MESSAGE:" + data.errorDescription,
-			// 				type: 'error',
-			// 				showCloseButton: true
-			// 			});
-			// 		}
-			// 	}
-			// });
+			});
 			return true;
 		}
 	});
@@ -668,7 +667,7 @@ define(['config/base/constant', 'utils/reqcmd', 'lodash', 'marionette', 'templat
 			// 		this.selectData = DiagnoseEntity.API.getPatientDiagnoseList(params);
 			// 	}				
 			// }
-			ReqCmd.commands.execute('CreateConsultView:onShow',$select);
+			ReqCmd.commands.execute('CreateConsultView:onShow', $select);
 		},
 		ui: {
 			'submitBtn': 'button[name="submit"]',

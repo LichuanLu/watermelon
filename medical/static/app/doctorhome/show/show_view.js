@@ -1037,7 +1037,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'ladda-bootstrap', 
 					doctorId: this.model.get("doctorId"),
 					title: this.model.get("title"),
 					content: this.ui.commentsTextArea.val(),
-					source_id: this.model.get("source_id"),
+					source_id: this.model.get("id"),
 					type: this.model.get("type"),
 					diagnoseId: this.model.get("diagnoseId")
 				}

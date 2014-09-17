@@ -1,8 +1,9 @@
-define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.main', 
+define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.main',
 	'entities/doctorEntity', 'ladda-bootstrap', 'dust', 'dustMarionette',
-	 "bootstrap", 'typeahead', 'flatui.checkbox', 'flatui.radio', 'jquery-ui', 
-	 'bootstrap.select', 'flat_ui_custom', 'dust_cus_helpers', 'config/validator/config', 
-	 'bootstrap.multiselect'], function(ReqCmd, Lodash, Marionette, Templates, FileUploaderMain, DoctorEntity, ladda) {
+	"bootstrap", 'typeahead', 'flatui.checkbox', 'flatui.radio', 'jquery-ui',
+	'bootstrap.select', 'flat_ui_custom', 'dust_cus_helpers', 'config/validator/config',
+	'bootstrap.multiselect'
+], function(ReqCmd, Lodash, Marionette, Templates, FileUploaderMain, DoctorEntity, ladda) {
 	// body...
 	"use strict";
 	//var $;
@@ -98,7 +99,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 
 				// Uncomment the following to send cross-domain cookies:
 				//xhrFields: {withCredentials: true},
-				url: '/file/upload',
+				url: '/dicomfile/upload',
 				uploadTemplateId: FileUploaderMain.uploadTemplateStr,
 				downloadTemplateId: FileUploaderMain.downloadTemplateStr
 
@@ -106,14 +107,18 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 				// The example input, doesn't have to be part of the upload form:
 				var input = $('#diagnose-id-input');
 				data.formData = {
-					diagnoseId: input.val(),
-					type:0
+					diagnoseId: input.val()
 				};
+				$('#submitBtn3').hide();
+				$('#submitPendingBtn3').show();
 				// if (!data.formData.diagnoseId) {
 				//   data.context.find('button').prop('disabled', false);
 				//   input.focus();
 				//   return false;
 				// }
+			}).bind('fileuploadalways', function(e, data) {
+				$('#submitBtn3').show();
+				$('#submitPendingBtn3').hide();
 			});
 			$('#patient-medical-report-fileupload').fileupload({
 				disableImageResize: false,
@@ -123,7 +128,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 
 				// Uncomment the following to send cross-domain cookies:
 				//xhrFields: {withCredentials: true},
-				url: '/file/upload',
+				url: '/patientreport/upload',
 				uploadTemplateId: FileUploaderMain.uploadTemplateStr,
 				downloadTemplateId: FileUploaderMain.downloadTemplateStr
 
@@ -131,14 +136,18 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 				// The example input, doesn't have to be part of the upload form:
 				var input = $('#diagnose-id-input');
 				data.formData = {
-					diagnoseId: input.val(),
-					type:1
+					diagnoseId: input.val()
 				};
 				// if (!data.formData.diagnoseId) {
 				//   data.context.find('button').prop('disabled', false);
 				//   input.focus();
 				//   return false;
 				// }
+				$('#submitBtn4').hide();
+				$('#submitPendingBtn4').show();
+			}).bind('fileuploadalways', function(e, data) {
+				$('#submitBtn4').show();
+				$('#submitPendingBtn4').hide();
 			});
 
 			//init affix
@@ -467,6 +476,10 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 					}
 
 					var data = $form.serialize();
+					//for add isHospitalUser
+					if(this.isHospitalUser){
+						data+="&isHospitalUser=1"
+					}
 					if (typeof tempstr !== 'undefined' && tempstr != 'undefined') {
 						data = data + "&fileurl=" + encodeURIComponent(tempstr);
 					}
@@ -485,6 +498,10 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 					}
 
 					data = $form.serialize();
+					//for add isHospitalUser
+					if(this.isHospitalUser){
+						data+="&isHospitalUser=1"
+					}
 					var fileurl = "";
 					var fileid = "";
 					filelinks.each(function(index, element) {
