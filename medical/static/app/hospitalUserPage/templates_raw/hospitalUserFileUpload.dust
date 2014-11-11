@@ -4,6 +4,7 @@
 		<span class="ml20">就诊日期：{date}</span>
 		<span class="ml20">就诊人：{patientName}</span>
 		<span class="ml20">诊断部位：{positionName}</span>
+		<button class="btn btn-info btn-sm apply-btn">确定提交</button>
 	</h6>
 	<div class="file-group dicom-file-upload">
 		<label>
@@ -23,7 +24,7 @@
 						<span>文件大小：25M</span>
 					</div>
 					<div>
-						<a class="btn btn-warning btn-xs">重新上传</a>
+						<a class="btn btn-warning btn-xs reupload-btn" data-type="0">重新上传</a>
 					</div>
 				</div>
 
@@ -74,7 +75,7 @@
 						{:else}
 							<div class="edit-file-wrapper" style="display:none;">
 						{/if}
-						<p class="">已经上传的文件列表	<a class="btn btn-warning btn-xs">全部重新上传</a></p>
+						<p class="">已经上传的文件列表	<a class="btn btn-warning btn-xs reupload-btn" data-type="1">全部重新上传</a></p>
 								<div class="row">
 									<div class="col-md-4">
 										<a class="file-link" data-fileid="555" href="ttt">dasdasdasdas.dicom</a>

@@ -4,44 +4,100 @@
 		"selected_items":
 		[
 			[
+				"pa",
+				"padding"
+			],
+			[
+				"co",
+				"collection"
+			],
+			[
+				"req",
+				"request"
+			],
+			[
+				"Co",
+				"CollectionView"
+			],
+			[
+				"host",
+				"hospitalUserFileUpload"
+			],
+			[
 				"mar",
-				"margin-left"
+				"margin-top"
+			],
+			[
+				"e",
+				"extend"
+			],
+			[
+				"re",
+				"reset"
+			],
+			[
+				"consu",
+				"consultListItenView"
+			],
+			[
+				"MC",
+				"Marionette.CollectionView"
+			],
+			[
+				"西",
+				"西安西京医院2"
+			],
+			[
+				"Mie",
+				"Marionette.ItemView"
+			],
+			[
+				"mi",
+				"Marionette.ItemView"
+			],
+			[
+				"ex",
+				"extend"
+			],
+			[
+				"requ",
+				"require"
+			],
+			[
+				"modal",
+				"modalRegion"
+			],
+			[
+				"in",
+				"inline-block"
+			],
+			[
+				"di",
+				"display"
+			],
+			[
+				"pad",
+				"padding-top"
+			],
+			[
+				"bor",
+				"border"
+			],
+			[
+				"font",
+				"font-size"
 			],
 			[
 				"pro",
 				"prototype"
 			],
 			[
-				"pad",
-				"padding-right"
-			],
-			[
-				"font",
-				"font-weight"
-			],
-			[
-				"requ",
-				"request"
-			],
-			[
 				"exe",
 				"execute"
 			],
 			[
-				"bor",
-				"border-radius"
-			],
-			[
-				"co",
-				"color"
-			],
-			[
 				"border-r",
 				"border-right"
-			],
-			[
-				"pa",
-				"padding-top"
 			],
 			[
 				"download",
@@ -76,10 +132,6 @@
 				"text-align"
 			],
 			[
-				"req",
-				"require"
-			],
-			[
 				"marg",
 				"margin-top"
 			],
@@ -106,10 +158,6 @@
 			[
 				"import",
 				"important"
-			],
-			[
-				"in",
-				"inherit"
 			],
 			[
 				"hei",
@@ -192,10 +240,6 @@
 				"addClass	addClass"
 			],
 			[
-				"re",
-				"retiredProducts"
-			],
-			[
 				"dust",
 				"dustHelper"
 			],
@@ -220,10 +264,6 @@
 				"jQuery.get	jQuery.get"
 			],
 			[
-				"ex",
-				"express"
-			],
-			[
 				"f",
 				"fun	Function"
 			],
@@ -236,26 +276,66 @@
 	"buffers":
 	[
 		{
-			"file": "static/stylesheet/less/patient-home.less",
+			"file": "static/app/doctorhome/show/show_view.js",
 			"settings":
 			{
-				"buffer_size": 4906,
+				"buffer_size": 27868,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "static/stylesheet/less/doctor-home.less",
+			"file": "static/app/hospitalUserPage/show/show_view.js",
 			"settings":
 			{
-				"buffer_size": 2975,
+				"buffer_size": 9649,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "static/stylesheet/less/variables.less",
+			"file": "static/app/hospitalUserPage/show/show_controller.js",
 			"settings":
 			{
-				"buffer_size": 19770,
+				"buffer_size": 4180,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "server.js",
+			"settings":
+			{
+				"buffer_size": 30571,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "static/app/admin/kefu/kf_controller.js",
+			"settings":
+			{
+				"buffer_size": 17335,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "static/app/admin/kefu/kf_view.js",
+			"settings":
+			{
+				"buffer_size": 8516,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "duster.json",
+			"settings":
+			{
+				"buffer_size": 104,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "static/app/admin/kefu/templates_raw/doctorAuditListItemView.dust",
+			"settings":
+			{
+				"buffer_size": 234,
 				"line_ending": "Unix"
 			}
 		}
@@ -269,6 +349,18 @@
 			[
 				"for",
 				"Format: Javascript"
+			],
+			[
+				"pac",
+				"Package Control: Install Package"
+			],
+			[
+				"pack",
+				"Package Control: List Packages"
+			],
+			[
+				"doe",
+				"Tag: Lint Selection or Document"
 			],
 			[
 				"For",
@@ -289,10 +381,6 @@
 			[
 				"PA",
 				"Package Control: List Packages"
-			],
-			[
-				"pack",
-				"Package Control: Install Package"
 			],
 			[
 				"install",
@@ -325,10 +413,6 @@
 			[
 				"forma",
 				"Tag: Auto-Format Tags on Selection"
-			],
-			[
-				"pac",
-				"Package Control: Remove Package"
 			],
 			[
 				"list",
@@ -364,134 +448,134 @@
 	},
 	"file_history":
 	[
-		"/dev_lic/watermelon/medical/static/app/homepage/show/show_view.js",
-		"/dev_lic/watermelon/medical/server_template/home.dust",
-		"/dev_lic/watermelon/medical/duster.json",
-		"/dev_lic/watermelon/medical/static/app/doctorList/templates_raw/doctorDetailItem.dust",
-		"/dev_lic/watermelon/medical/static/stylesheet/less/doctor-list.less",
+		"/dev_lic/watermelon/medical/static/app/modal/modal_view.js",
+		"/dev_lic/watermelon/medical/static/app/patienthome/show/show_controller.js",
+		"/dev_lic/watermelon/medical/static/app/entities/userInfoEntity.js",
+		"/dev_lic/watermelon/medical/static/app/patienthome/show/show_view.js",
+		"/dev_lic/watermelon/medical/static/app/doctorhome/show/show_controller.js",
+		"/dev_lic/watermelon/medical/static/app/utils/countDown.js",
 		"/dev_lic/watermelon/medical/server.js",
+		"/dev_lic/watermelon/medical/static/app/modal/templates_raw/mobileBindModal.dust",
+		"/dev_lic/watermelon/medical/duster.json",
+		"/dev_lic/watermelon/medical/static/app/doctorhome/templates_raw/doctorAccountManageLayout.dust",
+		"/dev_lic/watermelon/medical/static/app/admin/kefu/kf_controller.js",
+		"/dev_lic/watermelon/medical/static/app/admin/kefu/templates_raw/diagnoseListItemView.dust",
+		"/dev_lic/watermelon/medical/static/app/hospitalUserPage/templates_raw/hospitalUserFileUpload.dust",
+		"/dev_lic/watermelon/medical/static/stylesheet/less/global.less",
+		"/dev_lic/watermelon/medical/static/stylesheet/less/hospital-user.less",
+		"/dev_lic/watermelon/medical/static/app/hospitalUserPage/show/show_view.js",
+		"/dev_lic/watermelon/medical/static/app/hospitalUserPage/show/show_controller.js",
+		"/dev_lic/watermelon/medical/static/app/doctorhome/show/show_view.js",
+		"/dev_lic/watermelon/medical/static/app/patienthome/templates_raw/diagnoseItem.dust",
+		"/dev_lic/watermelon/medical/static/app/patienthome/templates_raw/diagnoseLayout.dust",
+		"/dev_lic/watermelon/medical/static/app/lib/jquery.validate.js",
+		"/dev_lic/watermelon/medical/static/app/diagnose/apply/apply_view.js",
+		"/dev_lic/watermelon/medical/server_template/applyDiagnose.dust",
+		"/dev_lic/watermelon/medical/static/app/config/backbone/sync.js",
+		"/dev_lic/watermelon/medical/static/app/doctorhome/templates_raw/doctorDiagnoseItem.dust",
+		"/dev_lic/watermelon/medical/static/app/hospitalUserPage/templates_raw/hospitalUserDiagnoseItem.dust",
+		"/dev_lic/watermelon/medical/static/stylesheet/less/doctor-home.less",
+		"/dev_lic/watermelon/medical/server_template/adminKefu.dust",
+		"/dev_lic/watermelon/medical/static/app/admin/kefu/kf_view.js",
+		"/dev_lic/watermelon/medical/static/app/lib/jquery-uploader/_main.js",
+		"/dev_lic/watermelon/medical/static/app/lib/jquery-uploader/jquery.fileupload.js",
+		"/dev_lic/watermelon/medical/static/app/entities/consultEntity.js",
+		"/dev_lic/watermelon/medical/static/app/homepage/show/show_view.js",
+		"/dev_lic/watermelon/medical/server_template/basicLayout.dust",
+		"/dev_lic/watermelon/medical/static/app/about/aboutapp.js",
+		"/dev_lic/watermelon/medical/static/app/admin/admin_app.js",
+		"/dev_lic/watermelon/medical/static/app/admin/fenzhen/fz_controller.js",
+		"/dev_lic/watermelon/medical/static/app/admin/fenzhen/fz_view.js",
+		"/dev_lic/watermelon/medical/static/app/doctorList/show/show_view.js",
+		"/dev_lic/watermelon/medical/static/app/help/helpapp.js",
+		"/dev_lic/watermelon/medical/static/app/help/helpCenterApp.js",
+		"/dev_lic/watermelon/medical/static/app/register/patient/show_view.js",
+		"/dev_lic/watermelon/medical/static/app/register/doctor/show_view.js",
+		"/dev_lic/watermelon/medical/static/app/report/show/show_view.js",
+		"/dev_lic/watermelon/medical/server_template/home.dust",
+		"/dev_lic/watermelon/medical/static/app/app.js",
+		"/dev_lic/watermelon/medical/static/app/entities/diagnoseEntity.js",
+		"/dev_lic/watermelon/medical/static/app/patienthome/templates_raw/detailTrackLayout.dust",
+		"/dev_lic/watermelon/medical/static/app/templates.js",
+		"/dev_lic/watermelon/medical/static/app/main.js",
+		"/dev_lic/watermelon/medical/server_template/hospitalUser.dust",
+		"/dev_lic/watermelon/medical/static/app/entities/doctorEntity.js",
+		"/dev_lic/watermelon/medical/static/app/doctorhome/templates_raw/consultListView.dust",
+		"/dev_lic/watermelon/medical/static/stylesheet/less/mixins.less",
+		"/dev_lic/watermelon/medical/static/app/modal/templates_raw/createConsultViewModal.dust",
+		"/dev_lic/watermelon/medical/static/app/common/common_view.js",
+		"/dev_lic/watermelon/medical/static/app/doctorhome/templates_raw/consultDetailList.dust",
+		"/dev_lic/watermelon/medical/static/app/common/templates_raw/diagnoseSelectItemView.dust",
+		"/dev_lic/watermelon/medical/static/app/entities/commonEntity.js",
+		"/dev_lic/watermelon/medical/static/app/doctorhome/templates_raw/consultDiagnose.dust",
+		"/dev_lic/watermelon/medical/static/stylesheet/less/patient-home.less",
+		"/dev_lic/watermelon/medical/static/app/doctorhome/templates_raw/consultDetailLayout.dust",
+		"/dev_lic/watermelon/medical/static/app/config/base/string.js",
+		"/dev_lic/watermelon/medical/static/app/lib/messenger/build/css/messenger-theme-air.css",
+		"/dev_lic/watermelon/medical/static/app/lib/messenger/build/css/messenger-theme-ice.css",
+		"/dev_lic/watermelon/medical/server_template/doctorHome.dust",
+		"/dev_lic/watermelon/medical/static/app/doctorhome/templates_raw/consultDetailItem.dust",
+		"/dev_lic/watermelon/medical/static/app/doctorhome/templates/doctorConsultLayout.js",
+		"/dev_lic/watermelon/medical/static/stylesheet/less/doctor-list.less",
+		"/dev_lic/watermelon/medical/static/stylesheet/less/home.less",
+		"/dev_lic/watermelon/medical/static/stylesheet/less/doctor-site.less",
+		"/dev_lic/watermelon/medical/static/app/doctorhome/templates_raw/consultListItemView.dust",
+		"/dev_lic/watermelon/medical/static/app/lib/backbone.marionette/src/marionette.compositeview.js",
+		"/dev_lic/watermelon/medical/static/app/doctorhome/templates_raw/doctorConsultLayout.dust",
+		"/dev_lic/watermelon/medical/static/app/doctorhome/templates/consultDetailLayout.dust",
+		"/dev_lic/watermelon/medical/static/stylesheet/less/modules/pager.less",
+		"/dev_lic/watermelon/medical/static/app/entities/kefuEntity.js",
+		"/dev_lic/watermelon/medical/server_template/head.dust",
+		"/dev_lic/watermelon/medical/static/app/admin/kefu/templates_raw/sharingListItemView.dust",
+		"/dev_lic/watermelon/medical/static/app/admin/kefu/templates_raw/gratitudeListItemView.dust",
+		"/dev_lic/watermelon/medical/static/app/admin/kefu/templates_raw/gratitudeListView.dust",
+		"/dev_lic/watermelon/medical/static/app/admin/kefu/templates_raw/sharingListView.dust",
+		"/dev_lic/watermelon/medical/static/app/common/templates_raw/selectItemView.dust",
+		"/dev_lic/watermelon/medical/static/app/admin/kefu/templates_raw/doctorAuditListItemView.dust",
+		"/dev_lic/watermelon/medical/static/app/common/templates/selectItemView.js",
+		"/dev_lic/watermelon/medical/static/app/lib/backbone.marionette/lib/backbone.marionette.js",
+		"/dev_lic/watermelon/medical/static/app/lib/backbone/backbone.js",
+		"/dev_lic/watermelon/medical/static/app/modal/templates_raw/updateDoctorInfoModal.dust",
+		"/dev_lic/watermelon/medical/static/app/admin/kefu/templates_raw/doctorAuditListView.dust",
+		"/dev_lic/watermelon/medical/static/app/common",
+		"/dev_lic/watermelon/medical/static/stylesheet/less/kefu.less",
+		"/dev_lic/watermelon/medical/static/app/modal/templates_raw/confirmModal.dust",
+		"/dev_lic/watermelon/medical/static/stylesheet/less/modules/buttons.less",
+		"/dev_lic/watermelon/medical/static/stylesheet/less/variables.less",
+		"/dev_lic/watermelon/medical/static/app/admin/kefu/templates_raw/diagnoseListView.dust",
+		"/dev_lic/watermelon/medical/static/app/diagnose/apply/apply_controller.js",
+		"/dev_lic/watermelon/medical/static/app/admin/kefu/templates_raw/doctorListItem.dust",
+		"/dev_lic/watermelon/medical/static/app/admin/kefu/templates_raw/doctorListView.dust",
+		"/dev_lic/watermelon/medical/static/app/patienthome/templates_raw/patientAccountManageLayout.dust",
+		"/dev_lic/watermelon/medical/static/app/modal/templates/mobileBindModal.js",
+		"/dev_lic/watermelon/medical/static/app/utils/jquery.psteps.js",
+		"/dev_lic/watermelon/medical/static/stylesheet/less/steps.less",
+		"/dev_lic/watermelon/medical/static/stylesheet/lib/bootstrap.css",
+		"/dev_lic/watermelon/medical/bower.json",
+		"/dev_lic/watermelon/medical/static/app/config/jquery/ajax_setup.js",
+		"/dev_lic/watermelon/medical/static/app/doctorList/templates_raw/doctorDetailItem.dust",
 		"/dev_lic/watermelon/medical/Gruntfile.js",
 		"/dev_lic/watermelon/medical/server_template/doctorList.dust",
-		"/dev_lic/watermelon/medical/server_template/head.dust",
-		"/dev_lic/watermelon/medical/server_template/basicLayout.dust",
-		"/dev_lic/watermelon/medical/static/stylesheet/less/global.less",
 		"/dev_lic/watermelon/medical/server_template/footer.dust",
-		"/dev_lic/watermelon/medical/static/app/patienthome/templates_raw/diagnoseItem.dust",
-		"/dev_lic/watermelon/medical/static/app/patienthome/templates_raw/detailTrackLayout.dust",
 		"/dev_lic/watermelon/medical/static/app/hospitalUserPage/templates_raw/hospitalUserSubmittedDiagnoseItem.dust",
 		"/dev_lic/watermelon/medical/static/app/doctorhome/templates_raw/newDiagnoseLayout.dust",
-		"/dev_lic/watermelon/medical/static/app/doctorhome/templates_raw/doctorDiagnoseItem.dust",
-		"/dev_lic/watermelon/medical/static/app/lib/jquery-uploader/_main.js",
 		"/dev_lic/watermelon/medical/server_template/scripts.dust",
 		"/dev_lic/watermelon/medical/static/app/admin/fenzhen/templates_raw/myDiagnoseItem.dust",
 		"/dev_lic/watermelon/medical/static/app/config/jquery/file_uploader.js",
-		"/dev_lic/watermelon/medical/static/app/lib/backbone/backbone.js",
-		"/dev_lic/watermelon/medical/static/app/entities/diagnoseEntity.js",
 		"/dev_lic/watermelon/medical/static/app/doctorSite/show/show_view.js",
-		"/dev_lic/watermelon/medical/static/app/doctorList/show/show_view.js",
-		"/dev_lic/watermelon/medical/static/app/entities/doctorEntity.js",
-		"/dev_lic/watermelon/medical/static/app/config/backbone/sync.js",
-		"/dev_lic/watermelon/medical/static/app/app.js",
-		"/dev_lic/watermelon/medical/static/app/main.js",
 		"/dev_lic/watermelon/medical/static/app/config/_base.js",
-		"/dev_lic/watermelon/medical/static/stylesheet/less/home.less",
-		"/dev_lic/watermelon/medical/static/app/config/jquery/ajax_setup.js",
-		"/dev_lic/watermelon/medical/static/app/admin/fenzhen/fz_controller.js",
-		"/dev_lic/watermelon/medical/static/app/admin/fenzhen/fz_view.js",
-		"/dev_lic/watermelon/medical/static/app/admin/kefu/kf_view.js",
-		"/dev_lic/watermelon/medical/static/app/diagnose/apply/apply_view.js",
-		"/dev_lic/watermelon/medical/static/app/diagnose/apply/apply_controller.js",
-		"/dev_lic/watermelon/medical/static/app/doctorhome/show/show_controller.js",
-		"/dev_lic/watermelon/medical/static/app/doctorhome/show/show_view.js",
-		"/dev_lic/watermelon/medical/static/app/patienthome/show/show_view.js",
-		"/dev_lic/watermelon/medical/static/app/patienthome/show/show_controller.js",
 		"/dev_lic/watermelon/medical/server_template/patientRegister.dust",
 		"/dev_lic/watermelon/medical/static/app/message/templates_raw/messageItem.dust",
 		"/dev_lic/watermelon/medical/static/stylesheet/less/message.less",
-		"/dev_lic/watermelon/medical/static/stylesheet/less/patient-home.less",
 		"/dev_lic/watermelon/medical/static/app/message/show/show_view.js",
 		"/dev_lic/watermelon/medical/static/app/patienthome/templates_raw/sharingModal.dust",
 		"/dev_lic/watermelon/medical/static/app/patienthome/templates_raw/patientMessageLayout.dust",
 		"/dev_lic/watermelon/medical/static/app/login/login_app.js",
 		"/dev_lic/watermelon/medical/static/app/homepage/show/show_controller.js",
 		"/dev_lic/watermelon/medical/static/app/homepage/homepage_app.js",
-		"/dev_lic/watermelon/medical/static/app/register/doctor/show_view.js",
-		"/dev_lic/watermelon/medical/static/app/register/patient/show_view.js",
 		"/dev_lic/watermelon/medical/static/app/login/loginpage_app.js",
 		"/dev_lic/watermelon/medical/static/app/login/show/show_view.js",
-		"/dev_lic/watermelon/medical/static/app/help/helpCenterApp.js",
-		"/dev_lic/watermelon/medical/static/app/help/helpapp.js",
-		"/dev_lic/watermelon/medical/static/app/lib/jquery-uploader/jquery.fileupload-ui.js",
-		"/dev_lic/watermelon/medical/static/app/utils/followbtn.js",
-		"/dev_lic/watermelon/medical/static/dist/debug/js/yizhenduan-debug.js",
-		"/dev_lic/watermelon/medical/static/app/register/patient/show_controller.js",
-		"/dev_lic/watermelon/medical/static/stylesheet/less/variables.less",
-		"/dev_lic/watermelon/medical/static/app/diagnose/templates_raw/successSubmitDiagnoseModal.dust",
-		"/dev_lic/watermelon/medical/server_template/applyDiagnose.dust",
-		"/dev_lic/watermelon/medical/static/stylesheet/less/apply-diagnose.less",
-		"/dev_lic/watermelon/medical/server_template/adminKefu.dust",
-		"/dev_lic/watermelon/medical/static/app/admin/fenzhen/templates_raw/allDiagnoseItem.dust",
-		"/dev_lic/watermelon/medical/server_template/loginPage.dust",
-		"/dev_lic/watermelon/medical/static/stylesheet/less/doctor-home.less",
-		"/dev_lic/watermelon/medical/static/app/doctorList/templates_raw/doctorDetailList.dust",
-		"/dev_lic/watermelon/medical/server_template/iconSearch.dust",
-		"/dev_lic/watermelon/medical/static/stylesheet/atc/yizhenduan-debug-full.css",
-		"/dev_lic/watermelon/medical/static/stylesheet/atc/loginpage.css",
-		"/dev_lic/watermelon/medical/static/stylesheet/less/loginpage.less",
-		"/dev_lic/watermelon/medical/static/stylesheet/atc/apply-diagnose.css",
-		"/dev_lic/watermelon/medical/server_template/registerDoctorWarningModal.dust",
-		"/dev_lic/watermelon/medical/server_template/doctorRegister.dust",
-		"/dev_lic/watermelon/medical/static/app/register/doctor/show_controller.js",
-		"/dev_lic/watermelon/medical/server_template/helpcenter.dust",
-		"/dev_lic/watermelon/medical/server_template/helpdoc.dust",
-		"/dev_lic/watermelon/medical/server_template/about.dust",
-		"/dev_lic/watermelon/medical/server_template/doctorSite.dust",
-		"/dev_lic/watermelon/medical/static/app/patienthome/templates_raw/diagnoseLayout.dust",
-		"/dev_lic/watermelon/medical/server_template/header.dust",
-		"/dev_lic/watermelon/medical/static/assets/image/doctor1.png",
-		"/dev_lic/watermelon/medical/static/stylesheet/less/doctor-site.less",
-		"/dev_lic/watermelon/medical/static/app/register/register_app.js",
-		"/dev_lic/watermelon/medical/static/dist/debug/stylesheet/yizhenduan-debug-full.css",
-		"/dev_lic/watermelon/medical/static/stylesheet/atc/home.css",
-		"/dev_lic/watermelon/medical/static/stylesheet/atc/doctor-home.css",
-		"/dev_lic/watermelon/medical/static/stylesheet/atc/global.css",
-		"/dev_lic/watermelon/medical/static/stylesheet/atc/variables.css",
-		"/dev_lic/watermelon/medical/static/stylesheet/atc/report.css",
-		"/dev_lic/watermelon/medical/static/stylesheet/atc/register.css",
-		"/dev_lic/watermelon/medical/static/stylesheet/atc/patient-home.css",
-		"/dev_lic/watermelon/medical/static/stylesheet/atc/message.css",
-		"/dev_lic/watermelon/medical/static/stylesheet/atc/hospital-user.css",
-		"/dev_lic/watermelon/medical/static/stylesheet/atc/doctor-list.css",
-		"/dev_lic/watermelon/medical/static/stylesheet/atc/doctor-site.css",
-		"/dev_lic/watermelon/medical/static/stylesheet/atc/errorpage.css",
-		"/dev_lic/watermelon/medical/static/stylesheet/atc/fenzhen.css",
-		"/dev_lic/watermelon/medical/static/stylesheet/atc/flat-ui.css",
-		"/dev_lic/watermelon/medical/server_template/loginModal.dust",
-		"/dev_lic/watermelon/medical/static/app/lib/ladda-bootstrap/dist/ladda.js",
-		"/dev_lic/watermelon/medical/static/app/about/aboutapp.js",
-		"/dev_lic/watermelon/medical/static/stylesheet/less/help.less",
-		"/dev_lic/watermelon/medical/static/app/entities/pathologyEntity.js",
-		"/dev_lic/watermelon/medical/static/app/hospitalUserPage/show/show_view.js",
-		"/dev_lic/watermelon/medical/static/app/lib/flatui/flatui-radio.js",
-		"/dev_lic/watermelon/medical/server_template/selectDoctorModal.dust",
-		"/dev_lic/watermelon/medical/static/app/diagnose/templates_raw/selectDoctorItem.dust",
-		"/dev_lic/watermelon/medical/static/assets/Glyphs/Additional/radio-checked.svg",
-		"/dev_lic/watermelon/medical/server_template/patientHome.dust",
-		"/dev_lic/watermelon/medical/duster.js",
-		"/dev_lic/watermelon/medical/server_template/breadcrumbs.dust",
-		"/dev_lic/watermelon/medical/node_modules/dustjs-helpers/dist/dust-helpers.js",
-		"/dev_lic/watermelon/medical/server_template/hospitalUser.dust",
-		"/dev_lic/watermelon/medical/static/app/doctorList/show/show_controller.js",
-		"/dev_lic/watermelon/medical/node_modules/dustjs-linkedin/lib/dust.js",
-		"/dev_lic/watermelon/medical/static/assets/image/logo.jpg",
-		"/dev_lic/watermelon/medical/static/app/admin/kefu/kf_controller.js",
-		"/dev_lic/watermelon/medical/static/app/admin/admin_app.js",
-		"/dev_lic/watermelon/medical/static/app/admin/kefu/templates_raw/displayPayLinkModal.dust",
-		"/dev_lic/watermelon/medical/static/app/templates.js",
-		"/dev_lic/watermelon/medical/static/app/lib/jquery-uploader/jquery.fileupload.js",
-		"/dev_lic/watermelon/medical/static/app/lib/elastislide/_main.js",
-		"/Users/lichuan/Downloads/apply_view.js",
-		"/dev_lic/watermelon/medical/static/app/login/show/show_controller.js"
+		"/dev_lic/watermelon/medical/static/app/lib/jquery-uploader/jquery.fileupload-ui.js"
 	],
 	"find":
 	{
@@ -499,9 +583,16 @@
 	},
 	"find_in_files":
 	{
-		"height": 0.0,
+		"height": 93.0,
 		"where_history":
 		[
+			"/dev_lic/watermelon/medical/static/app",
+			"*.less,/dev_lic/watermelon/medical/static/app",
+			"*.js,/dev_lic/watermelon/medical/static/app",
+			"<open folders>,*.js",
+			"<open folders>,*.css",
+			"<open folders>,*.less",
+			"<open folders>",
 			"<open folders>,*.js",
 			"<open folders>,*.dust",
 			"<open folders>,*.js",
@@ -530,134 +621,134 @@
 		"case_sensitive": false,
 		"find_history":
 		[
-			"ajax",
-			"user-wrapper",
-			"window.location.replace",
-			"replace",
-			"window.location",
-			"exp-comment",
-			"Merge conflict",
-			"merge",
-			"changeInfo",
-			"下载",
-			"glyphicon glyphicon-upload",
-			"footer",
-			"main-block",
-			"footer-region",
-			"background-color",
-			"website-main-news-block",
-			"wrapError",
-			"config",
-			"sync",
-			"onerror",
-			"fetch",
-			"onError",
-			"diagnose",
-			"diagnoseList",
-			"getPatient",
-			"fetch",
-			"Backbone.sync",
-			"sync",
-			"fetch",
-			"onError",
-			"ajax",
-			"onError",
-			"login-link",
-			"LoginApp",
-			"window.location",
-			"message-link",
-			"message-content-wrapper",
-			"%ERROR_MESSAGE",
-			"ERROR_MESSAGE",
-			"onError",
-			"report",
-			"Empty file upload result",
-			"diagnoseId",
-			"admin",
-			"maxFileSize",
-			"form-group",
-			"input-wrapper",
-			"line-area",
-			"p.side-description",
-			"SuccessSubmitDiagnoseModalView",
-			"detail-content-wrapper",
-			"green-sea",
-			"exp-comment",
-			"doctor-statinfo",
-			"rowmarginbottom",
-			"actions-block",
-			"main-news-block",
-			"mainpage-feedback-block",
-			"user-wrapper",
-			"getDiagnoseList",
-			"getPatientDiagnoseList",
-			"getDiagnoseList",
-			"validate",
-			"diagnose",
-			"diagnose/list",
-			"doctorId",
-			"doctor-preview",
-			"image-preview",
-			"http://static",
-			"logo-",
-			"modal",
-			"website-actions-block",
-			"reLocation",
-			"modal",
-			"body",
-			"homepage",
-			"glyphicons-halflings-regular.ttf",
-			"glyphicons-halflings-regular.ttf ",
-			"font",
-			"jquery.min.map",
-			"submit-btn",
-			"ApplyDiagnosePageLayoutView:getRecommandedDoctor",
-			"apply",
+			"userid",
+			"doctor/draft",
+			"stauts",
+			"statuschang",
+			"statuschange",
+			"subject",
+			"needpay",
+			"department",
+			"doctor/draft",
+			"doctordraft",
+			"/hospital/user/list/",
+			"hospital",
+			"hospital\\",
+			"getUserInfo",
+			"/account/info",
+			"/account/admin",
+			"realNameInput",
+			"mobileType",
+			"mobileNumber",
+			"ajaxDefer",
+			"MobileBindModalView:submit:success",
+			"getVerifyCode",
+			"getVerifyCodeBtn",
 			"ladda",
-			"ApplyDiagnosePageLayoutView:getRecommandedDoctor",
-			"getRecommandedDoctorView",
-			"recommand",
-			"panel-title",
-			"doctor-preview-des",
-			"logo",
-			"img",
-			"more-link",
-			"ladda",
+			"params",
+			"status",
+			"content-sub-title",
+			"file-upload-item",
+			"content-sub-title",
+			"right-btn",
+			"needpay",
+			"hospitalList",
+			"/hospital/list",
+			"hospital/list",
+			"DiagnoseListItemView:payLinkHandler",
+			"pay-link",
+			" pay-link",
+			"table-text-overflow",
+			"new-comments-content",
+			"consultList",
+			"getVerifyCodeBtn",
+			"formStep02",
+			"regSteps",
+			"getVerifyCode",
+			"file/upload",
+			"isHospitalUser",
+			"formId == 2",
+			"isHospitalUser",
 			"submit",
-			"diagnoseid",
-			"initDicomInfo",
-			"selectChange:PathologyCollectionView",
-			"render",
-			"afterrender",
-			"afterrender ",
+			"#submit",
+			"submit",
+			"validator",
+			"validateor",
+			"validate",
+			"this.doctorId",
+			"getConsultCollection",
+			"consultList",
+			"/account/admin",
+			"/account/changePasswd",
+			"changepassword",
+			"resetModel",
+			"reset",
+			"resetModel",
+			"getUserInfo",
+			"resetModel",
+			"account/admin",
+			"getUserInfo",
+			"account/info",
+			"acount",
+			"getUserInfo",
+			"account/info",
+			"diagnose-id-input",
+			"hasDicom",
+			"/dicomfile/upload",
+			"diagnoseId",
+			"/dicomfile/upload",
+			"reuploadFile",
+			"btn-warning",
+			"dicom",
+			"file",
+			"id",
+			"onDomRefresh",
+			"ondomrefresh",
+			"HospitalUserUnfinishDiagnoseCollectionView:onShow",
+			"FileUploaderMain",
+			"medical-report-fileupload",
+			"doc",
+			"dicom",
+			"hospital/user",
+			"hospitaluser",
+			"hospital",
+			"detail",
+			"getHospitalUserAllDiagnose",
+			"delete-link",
+			"ajax",
+			"CreateConsultView",
+			"getSelectView",
+			"diagnoseSelectItemView",
+			"DiagnoseSelectItemView",
+			"CommonView",
+			"diagnoseSelect",
+			"createConsultViewModal",
+			"CreateConsultView",
+			"consultFilterModel",
+			"showConsultListView",
+			"ConsultDetailListView",
+			"right",
+			"UpdateDoctorInfo",
+			"CreateConsultView",
+			"CreateConsultView:onShow",
+			"CommonView",
+			"diagnosenumber",
+			"diagnose/list",
+			"hospitalList",
+			"getSelectView",
+			"hospitalList",
+			"UpdateDoctorInfo:onShow",
+			"CreateConsultView:onShow",
+			"getSelectView",
+			"UpdateDoctorInfo:onShow",
+			"UpdateDoctorInfo",
+			"updateDoctor",
 			"select",
-			"dicomAlreadyExistsSelect",
-			"dicom-already-exists-select",
-			"dicomAlreadyExistsSelect",
-			"PathologyCollectionView",
-			"changeDicomAlreadyExists",
-			"PathologyCollectionView",
-			"dicomAlreadyExistsSelect",
-			"getPathologyCollectionView",
-			"dicomAlreadyExistsSelect",
-			"changeDicomAlreadyExists",
-			"initDicomInfo:ApplyDiagnosePageLayoutView",
-			"initDicomInfo",
-			"changeDicomAlreadyExists",
-			"initPatientProfile",
-			"changePatientAlreadyExists",
-			"initPatientProfile",
-			"initPathologySelect",
-			"initPathologySelect:ApplyDiagnosePageLayoutView",
-			"getPathologyList",
-			"getPathologyList\ngetPathologyList",
-			"getPathologyList",
-			"feedback",
-			"getRecommandedDoctorView",
-			"SelectDoctorItemView",
-			"getRecommandedDoctorView",
-			"recommandedDoctorView",
-			"recommand"
+			"getDiagnoseList",
+			"/diagnose/list",
+			"getPatientDiagnoseList",
+			"/diagnose/list",
+			"diagnosenumber"
 		],
 		"highlight": false,
 		"in_selection": false,
@@ -665,6 +756,7 @@
 		"regex": false,
 		"replace_history":
 		[
+			"td",
 			"错误信息",
 			"True",
 			"False",
@@ -680,84 +772,220 @@
 	"groups":
 	[
 		{
+			"selected": 7,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "static/stylesheet/less/patient-home.less",
+					"file": "static/app/doctorhome/show/show_view.js",
 					"settings":
 					{
-						"buffer_size": 4906,
+						"buffer_size": 27868,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2357,
-								2357
+								6810,
+								6822
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/LESS/LESS.tmLanguage",
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1526.0,
+						"translation.y": 3013.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 1,
-					"file": "static/stylesheet/less/doctor-home.less",
+					"file": "static/app/hospitalUserPage/show/show_view.js",
 					"settings":
 					{
-						"buffer_size": 2975,
+						"buffer_size": 9649,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								891,
-								820
+								8085,
+								8085
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/LESS/LESS.tmLanguage",
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 275.0,
+						"translation.y": 3934.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 2,
-					"file": "static/stylesheet/less/variables.less",
+					"file": "static/app/hospitalUserPage/show/show_controller.js",
 					"settings":
 					{
-						"buffer_size": 19770,
+						"buffer_size": 4180,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								666,
-								672
+								0,
+								0
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/LESS/LESS.tmLanguage"
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 199.0,
+						"translation.y": 1071.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "server.js",
+					"settings":
+					{
+						"buffer_size": 30571,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								26429,
+								26429
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 18791.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "static/app/admin/kefu/kf_controller.js",
+					"settings":
+					{
+						"buffer_size": 17335,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								13549,
+								13549
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 6930.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "static/app/admin/kefu/kf_view.js",
+					"settings":
+					{
+						"buffer_size": 8516,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								939,
+								945
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 278.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "duster.json",
+					"settings":
+					{
+						"buffer_size": 104,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								104,
+								104
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JSON.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "static/app/admin/kefu/templates_raw/doctorAuditListItemView.dust",
+					"settings":
+					{
+						"buffer_size": 234,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								234,
+								234
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Dust.js/Syntaxes/DustJS.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -811,8 +1039,168 @@
 		"selected_items":
 		[
 			[
+				"du",
+				"duster.json"
+			],
+			[
+				"ser",
+				"server.js"
+			],
+			[
+				"hospitaluser",
+				"static/stylesheet/less/hospital-user.less"
+			],
+			[
+				"glo",
+				"static/stylesheet/less/global.less"
+			],
+			[
 				"doctor",
 				"static/stylesheet/less/doctor-home.less"
+			],
+			[
+				"fileupload",
+				"static/app/lib/jquery-uploader/jquery.fileupload.js"
+			],
+			[
+				"sync",
+				"static/app/config/backbone/sync.js"
+			],
+			[
+				"app",
+				"server_template/applyDiagnose.dust"
+			],
+			[
+				"apply",
+				"static/app/diagnose/apply/apply_view.js"
+			],
+			[
+				"jquery.va",
+				"static/app/lib/jquery.validate.js"
+			],
+			[
+				"global",
+				"static/stylesheet/less/global.less"
+			],
+			[
+				"hos",
+				"static/stylesheet/less/hospital-user.less"
+			],
+			[
+				"main",
+				"static/app/main.js"
+			],
+			[
+				"tem",
+				"static/app/templates.js"
+			],
+			[
+				"hospital",
+				"server_template/hospitalUser.dust"
+			],
+			[
+				"diagnosee",
+				"static/app/entities/diagnoseEntity.js"
+			],
+			[
+				"comm",
+				"static/app/common/common_view.js"
+			],
+			[
+				"common",
+				"static/app/common/common_view.js"
+			],
+			[
+				"te",
+				"static/app/templates.js"
+			],
+			[
+				"mix",
+				"static/stylesheet/less/mixins.less"
+			],
+			[
+				"gl",
+				"static/stylesheet/less/global.less"
+			],
+			[
+				"dus",
+				"duster.json"
+			],
+			[
+				"patient",
+				"static/stylesheet/less/patient-home.less"
+			],
+			[
+				"doctor-h",
+				"static/stylesheet/less/doctor-home.less"
+			],
+			[
+				"composite",
+				"static/app/lib/backbone.marionette/src/marionette.compositeview.js"
+			],
+			[
+				"head",
+				"server_template/head.dust"
+			],
+			[
+				"backbone",
+				"static/app/lib/backbone/backbone.js"
+			],
+			[
+				"marion",
+				"static/app/lib/backbone.marionette/lib/backbone.marionette.js"
+			],
+			[
+				"admin",
+				"server_template/adminKefu.dust"
+			],
+			[
+				"button",
+				"static/stylesheet/less/modules/buttons.less"
+			],
+			[
+				"var",
+				"static/stylesheet/less/variables.less"
+			],
+			[
+				"apply_",
+				"static/app/diagnose/apply/apply_view.js"
+			],
+			[
+				"diagnose",
+				"server_template/applyDiagnose.dust"
+			],
+			[
+				"pstep",
+				"static/app/utils/jquery.psteps.js"
+			],
+			[
+				"cou",
+				"static/app/utils/countDown.js"
+			],
+			[
+				"jquery.ps",
+				"static/app/utils/jquery.psteps.js"
+			],
+			[
+				"bootsra",
+				"static/stylesheet/lib/bootstrap.css"
+			],
+			[
+				"hed",
+				"server_template/head.dust"
+			],
+			[
+				"dust",
+				"duster.json"
+			],
+			[
+				"hea",
+				"server_template/head.dust"
+			],
+			[
+				"aja",
+				"static/app/config/jquery/ajax_setup.js"
 			],
 			[
 				"pati",
@@ -823,10 +1211,6 @@
 				"server_template/basicLayout.dust"
 			],
 			[
-				"head",
-				"server_template/head.dust"
-			],
-			[
 				"doct",
 				"server_template/doctorList.dust"
 			],
@@ -835,16 +1219,8 @@
 				"static/stylesheet/less/doctor-list.less"
 			],
 			[
-				"ser",
-				"server.js"
-			],
-			[
 				"doctor-li",
 				"static/stylesheet/less/doctor-list.less"
-			],
-			[
-				"dust",
-				"duster.json"
 			],
 			[
 				"hom",
@@ -855,28 +1231,12 @@
 				"server_template/scripts.dust"
 			],
 			[
-				"dus",
-				"duster.json"
-			],
-			[
 				"foot",
 				"server_template/footer.dust"
 			],
 			[
-				"glo",
-				"static/stylesheet/less/global.less"
-			],
-			[
 				"home",
 				"static/stylesheet/less/home.less"
-			],
-			[
-				"main",
-				"static/app/main.js"
-			],
-			[
-				"app",
-				"static/app/app.js"
 			],
 			[
 				"back",
@@ -884,10 +1244,6 @@
 			],
 			[
 				"aj",
-				"static/app/config/jquery/ajax_setup.js"
-			],
-			[
-				"aja",
 				"static/app/config/jquery/ajax_setup.js"
 			],
 			[
@@ -903,28 +1259,12 @@
 				"static/stylesheet/less/apply-diagnose.less"
 			],
 			[
-				"var",
-				"static/stylesheet/less/variables.less"
-			],
-			[
 				"appl",
 				"static/stylesheet/less/apply-diagnose.less"
 			],
 			[
-				"apply",
-				"server_template/applyDiagnose.dust"
-			],
-			[
-				"patient",
-				"static/stylesheet/less/patient-home.less"
-			],
-			[
 				"va",
 				"static/stylesheet/less/variables.less"
-			],
-			[
-				"du",
-				"duster.json"
 			],
 			[
 				"doctorhome",
@@ -933,10 +1273,6 @@
 			[
 				"grun",
 				"Gruntfile.js"
-			],
-			[
-				"diagnose",
-				"static/stylesheet/less/apply-diagnose.less"
 			],
 			[
 				"login",
@@ -961,10 +1297,6 @@
 			[
 				"header",
 				"server_template/header.dust"
-			],
-			[
-				"gl",
-				"static/stylesheet/less/global.less"
 			],
 			[
 				"doctor-s",
@@ -1031,10 +1363,6 @@
 				"node_modules/dustjs-helpers/dist/dust-helpers.js"
 			],
 			[
-				"tem",
-				"static/app/templates.js"
-			],
-			[
 				"jqueryfi",
 				"static/app/lib/jquery-uploader/jquery.fileupload.js"
 			],
@@ -1093,10 +1421,6 @@
 			[
 				"doctor-site",
 				"static/stylesheet/less/doctor-site.less"
-			],
-			[
-				"hos",
-				"static/stylesheet/less/hospital-user.less"
 			],
 			[
 				"heade",
@@ -1185,6 +1509,6 @@
 	"show_open_files": false,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 325.0,
+	"side_bar_width": 342.0,
 	"status_bar_visible": true
 }

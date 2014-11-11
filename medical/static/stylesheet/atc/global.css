@@ -151,7 +151,7 @@ body {
   color: #333;
   font-size: 18px;
   font-weight: normal;
-  line-height: 20px;
+  line-height: 30px;
 }
 .content-sub-title .action-link {
   position: absolute;
@@ -161,6 +161,14 @@ body {
 }
 .content-sub-title .action-link:hover {
   text-decoration: underline;
+}
+.action-table {
+  font-size: 15px;
+}
+.action-table.consult-table p.table-text-overflow {
+  font-size: 15px;
+  max-height: 45px;
+  max-width: 220px;
 }
 a.warning {
   color: #f1c40f;

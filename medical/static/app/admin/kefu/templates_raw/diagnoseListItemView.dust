@@ -1,7 +1,7 @@
 <tr data-id="{diagnoseId}">
 	<td>{diagnosenumber}</td>
 	<td>{doctorName}</td>
-	<td>{hispital}</td>
+	<td>{doctorHispital}</td>
 	<td>{patientName}</td>
 	<td>{mobile}</td>
 	<td>{positionName}</td>

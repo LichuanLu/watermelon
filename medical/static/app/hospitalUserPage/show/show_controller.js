@@ -5,7 +5,7 @@ define(['lodash', 'config/base/constant', 'config/controllers/_base_controller',
 		initialize: function() {
 			//render file upload view after unfinish collection on show
 			ReqCmd.reqres.setHandler("HospitalUserUnfinishDiagnoseCollectionView:onShow", Lodash.bind(function() {
-				if(this.unfinishDiagnoseCollection){
+				if (this.unfinishDiagnoseCollection) {
 					this.fileUploadListView = this.getFileUploadListView(this.unfinishDiagnoseCollection);
 					this.show(this.fileUploadListView, {
 						region: this.layoutView.fileUploadRegion,
@@ -22,14 +22,13 @@ define(['lodash', 'config/base/constant', 'config/controllers/_base_controller',
 				instance: this
 			});
 
-			
+
 
 			//instance is this controller instance
 			ReqCmd.commands.setHandler("hospitalUserPageView:attached", Lodash.bind(function(instance) {
 				console.log("attached end");
 				this.layoutView.attachEndHandler();
 			}, this));
-
 
 
 
@@ -84,7 +83,11 @@ define(['lodash', 'config/base/constant', 'config/controllers/_base_controller',
 			}, this));
 
 
-			
+			//apply submit the upload files
+			ReqCmd.commands.setHandler("FileUploadItemView:applySubmit", Lodash.bind(function($el, diagnoseId) {
+				
+
+			}, this));
 
 
 			console.log('follow controller init end');

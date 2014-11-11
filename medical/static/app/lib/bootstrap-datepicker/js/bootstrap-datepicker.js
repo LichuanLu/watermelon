@@ -1250,7 +1250,7 @@
 		delete options.inputs;
 
 		$(this.inputs)
-			.datepicker(options)
+			.datepickerBootstrap(options)
 			.bind('changeDate', $.proxy(this.dateUpdated, this));
 
 		this.pickers = $.map(this.inputs, function(i){
@@ -1350,8 +1350,8 @@
 		return out;
 	}
 
-	var old = $.fn.datepicker;
-	$.fn.datepicker = function(option){
+	var old = $.fn.datepickerBootstrap;
+	$.fn.datepickerBootstrap = function(option){
 		var args = Array.apply(null, arguments);
 		args.shift();
 		var internal_return;
@@ -1388,7 +1388,7 @@
 			return this;
 	};
 
-	var defaults = $.fn.datepicker.defaults = {
+	var defaults = $.fn.datepickerBootstrap.defaults = {
 		autoclose: false,
 		beforeShowDay: $.noop,
 		calendarWeeks: false,
@@ -1410,13 +1410,13 @@
 		todayHighlight: false,
 		weekStart: 0
 	};
-	var locale_opts = $.fn.datepicker.locale_opts = [
+	var locale_opts = $.fn.datepickerBootstrap.locale_opts = [
 		'format',
 		'rtl',
 		'weekStart'
 	];
-	$.fn.datepicker.Constructor = Datepicker;
-	var dates = $.fn.datepicker.dates = {
+	$.fn.datepickerBootstrap.Constructor = Datepicker;
+	var dates = $.fn.datepickerBootstrap.dates = {
 		en: {
 			days: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
 			daysShort: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
@@ -1637,14 +1637,14 @@
 							'</div>'+
 						'</div>';
 
-	$.fn.datepicker.DPGlobal = DPGlobal;
+	$.fn.datepickerBootstrap.DPGlobal = DPGlobal;
 
 
 	/* DATEPICKER NO CONFLICT
 	* =================== */
 
-	$.fn.datepicker.noConflict = function(){
-		$.fn.datepicker = old;
+	$.fn.datepickerBootstrap.noConflict = function(){
+		$.fn.datepickerBootstrap = old;
 		return this;
 	};
 
@@ -1661,11 +1661,11 @@
 				return;
 			e.preventDefault();
 			// component click requires us to explicitly show it
-			$this.datepicker('show');
+			$this.datepickerBootstrap('show');
 		}
 	);
 	$(function(){
-		$('[data-provide="datepicker-inline"]').datepicker();
+		$('[data-provide="datepicker-inline"]').datepickerBootstrap();
 	});
 
 }(window.jQuery));

@@ -10,7 +10,7 @@
 		<td>{status}</td>
 	{/if}
 	<td class="action-group">
-		{@if cond="'{statusId}' == '0'"}
+		{@if cond="'{statusId}' == '9'"}
 			<a href="/applyDiagnose?diagnoseid={id}" target="_blank">修改</a>
 			<a class="rm-diagnose-link action-link" href="#">删除</a>
 		{/if}
@@ -31,7 +31,7 @@
 		{/if}
 	</td>
 	<td class="detail-wrapper">
-		{@if cond="'{statusId}' != '0'"}
+		{@if cond="'{statusId}' != '9'"}
 			<a class="detail-link" href="#">
 				详细
 				<span class="fui-arrow-right"></span>

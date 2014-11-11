@@ -130,13 +130,17 @@
 							</label>
 							<div class="input-wrapper">
 
-								<div class="input-group">
+								<!-- <div class="input-group">
 									<span class="input-group-btn">
 										<button class="btn" type="button">
 											<span class="fui-calendar"></span>
 										</button>
 									</span>
-									<input type="text" class="form-control" id="birthdateinput" name="birthdate"></div>
+									<input type="text" class="form-control" id="birthdateinput" name="birthdate">
+								</div> -->
+								<div class="input-group date">
+  									<input type="text" class="form-control" id="birthdateinput" name="birthdate"><span class="input-group-addon"><i class="fui-calendar"></i></span>
+								</div>
 									<div class="right-box">
 										<div class="line-area">
 											<div class="line"></div>

@@ -394,7 +394,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates',
 				var $parent = $target.closest('.form-body');
 				var $inputField = $parent.find('input, textarea, select');
 				this.model.set($inputField.attr('name'), $inputField.val());
-				this.model.set('type', 1);
+				this.model.set('type', 2);
 				var that = this;
 
 				// console.log(data);
@@ -663,6 +663,27 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates',
 		});
 
 
+		//consult  view
+		var ConsultLayoutView = Marionette.Layout.extend({
+			initialize: function() {
+				console.log("ConsultLayoutView init");
+
+			},
+			template: "patientConsultLayout",
+			ui: {
+
+			},
+			regions: {
+				"contentRegion": "#consultLayoutContent"
+			},
+			events: {},
+			onRender: function() {},
+			onShow: function() {
+				ReqCmd.reqres.request("ConsultLayoutView:onshow");
+			}
+		});
+
+
 
 		return {
 			PatientHomePageLayoutView: PatientHomePageLayoutView,
@@ -674,6 +695,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates',
 			FavoriteCollectionView: FavoriteCollectionView,
 			FavoriteItemView: FavoriteItemView,
 			DetailTrackLayoutView: DetailTrackLayoutView,
-			DeleteDiagnoseModalView: DeleteDiagnoseModalView
+			DeleteDiagnoseModalView: DeleteDiagnoseModalView,
+			ConsultLayoutView: ConsultLayoutView
 		}
 	});

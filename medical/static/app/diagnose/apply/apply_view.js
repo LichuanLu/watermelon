@@ -2,7 +2,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 	'entities/doctorEntity', 'ladda-bootstrap', 'dust', 'dustMarionette',
 	"bootstrap", 'typeahead', 'flatui.checkbox', 'flatui.radio', 'jquery-ui',
 	'bootstrap.select', 'flat_ui_custom', 'dust_cus_helpers', 'config/validator/config',
-	'bootstrap.multiselect'
+	'bootstrap.multiselect','bootstrap-datepicker','bootstrap-datepicker.zh-CN'
 ], function(ReqCmd, Lodash, Marionette, Templates, FileUploaderMain, DoctorEntity, ladda) {
 	// body...
 	"use strict";
@@ -72,23 +72,29 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 
 			// jQuery UI Datepicker JS init
 			var datepickerSelector = '#birthdateinput';
-			$(datepickerSelector).datepicker({
-				showOtherMonths: true,
-				selectOtherMonths: true
-			}).prev('.btn').on('click', function(e) {
-				e && e.preventDefault();
-				$(datepickerSelector).focus();
+			$('.input-group.date').datepickerBootstrap({
+				language:"zh-CN",
+				format: "yyyy-mm-dd"
 			});
-			$.extend($.datepicker, {
-				_checkOffset: function(inst, offset, isFixed) {
-					return offset
-				}
-			});
+			// $(datepickerSelector).datepicker({
+			// 	showOtherMonths: true,
+			// 	selectOtherMonths: true,
+			// 	changeMonth: true,
+   //    			changeYear: true
+			// }).prev('.btn').on('click', function(e) {
+			// 	e && e.preventDefault();
+			// 	$(datepickerSelector).focus();
+			// });
+			// $.extend($.datepicker, {
+			// 	_checkOffset: function(inst, offset, isFixed) {
+			// 		return offset
+			// 	}
+			// });
 
-			// Now let's align datepicker with the prepend button
-			$(datepickerSelector).datepicker('widget').css({
-				'margin-left': -$(datepickerSelector).prev('.input-group-btn').find('.btn').outerWidth()
-			});
+			// // Now let's align datepicker with the prepend button
+			// $(datepickerSelector).datepicker('widget').css({
+			// 	'margin-left': -$(datepickerSelector).prev('.input-group-btn').find('.btn').outerWidth()
+			// });
 
 			//init file uploader
 			var temp = $('#dicomfileupload').fileupload({

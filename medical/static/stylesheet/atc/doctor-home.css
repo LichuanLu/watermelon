@@ -167,14 +167,6 @@ ul.message-list li .message-content-wrapper .btn {
   display: inline-block;
   margin-bottom: 10px;
 }
-#doctorhome-content .action-table {
-  font-size: 15px;
-}
-#doctorhome-content .action-table.consult-table p.table-text-overflow {
-  font-size: 15px;
-  max-height: 45px;
-  max-width: 220px;
-}
 #doctorhome-content .content-wrapper {
   border: 1px solid #eaeaea;
   margin-left: 0;

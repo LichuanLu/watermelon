@@ -1273,6 +1273,7 @@ app.configure(function() {
     console.log(req.query);
     if (req.query.type == 1) {
       var list = [{
+        userId:3,
         doctorId: 4,
         username: '殷红',
         identityPhone: '029-2323232'
@@ -1280,10 +1281,12 @@ app.configure(function() {
 
     } else {
       var list = [{
+        userId:3,
         doctorId: 4,
         username: '殷红',
         identityPhone: '029-2323232'
       }, {
+        userId:2,
         doctorId: 5,
         username: '殷红2',
         identityPhone: '029-8823232'
@@ -1372,7 +1375,95 @@ app.configure(function() {
   });
 
 
+//consult
+  app.get('/user/:userId/consultList', function(req, res) {
+    console.log(req.query);
+    console.log(req.params.userId);
+    if(!req.query.source_id){
+      var data = [{
+        id:1,
+        userId:12,
+        doctorId:14,
+        title:"肩周炎怎么办",
+        doctorName:"张伟平",
+        doctorTitle:"主任医师",
+        userName:"tester",
+        content:"后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。",
+        updateTime:"2014-08-30",
+        createTime:"2014-07-30",
+        status: 0,
+        parent_id:456,
+        source_id:"",
+        amount:6,
+        type:0,
+        diagnoseId:1234
+      },{
+        id:5,
+        userId:12,
+        doctorId:15,
+        title:"肩周炎怎么办啊",
+        doctorName:"张伟平",
+        doctorTitle:"主任医师",
+        userName:"tester",
+        content:"后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。",
+        updateTime:"2014-08-31",
+        createTime:"2014-07-31",
+        status: 1,
+        parent_id:426,
+        source_id:"",
+        amount:6,
+        type:0,
+        diagnoseId:""
 
+      }];
+
+    }else{
+      var data = [{
+        id:4,
+        userId:12,
+        doctorId:14,
+        doctorName:"张伟平",
+        userName:"tester",
+        title:"肩周炎怎么办",
+        doctorTitle:"主任医师",
+        avartarUrl:"/static/assets/image/young-m.png",
+        content:"怎么办啊？",
+        updateTime:"2014-08-30",
+        createTime:"2014-07-30",
+        status: 0,
+        parent_id:456,
+        source_id:1,
+        type:0,
+        diagnoseId:""
+      },{
+        id:5,
+        userId:12,
+        doctorId:15,
+        doctorName:"张伟平",
+        userName:"tester",
+        title:"肩周炎怎么办",
+        doctorTitle:"主任医师",
+        avartarUrl:"/static/assets/image/young-m.png",
+        content:"可以去医院检查",
+        updateTime:"2014-08-31",
+        createTime:"2014-07-31",
+        status: 0,
+        parent_id:426,
+        source_id:1,
+        type:1,
+        diagnoseId:1234
+      }];
+
+    }
+    
+
+
+    res.send({
+      status: 0,
+      msg: "",
+      data: data
+    });
+  });
 
 
 
@@ -1467,6 +1558,39 @@ app.configure(function() {
       data: data
     });
   });
+
+  
+  app.post('/diagnose/:diagnoseId/status', function(req, res) {
+    console.dir(req.params.diagnoseId);
+    res.send({
+      status: 0,
+      msg: "",
+      data: ""
+    });
+  });
+
+  app.post('/user/mobile/update', function(req, res) {
+    console.dir(req.body);
+    res.send({
+      status: 0,
+      msg: "",
+      data: ""
+    });
+  });
+
+  app.post('/file/disable', function(req, res) {
+    console.dir(req.body);
+    res.send({
+      status: 0,
+      msg: "",
+      data: ""
+    });
+  });
+
+
+ 
+
+
 
 
   

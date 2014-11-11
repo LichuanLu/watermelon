@@ -37,9 +37,9 @@
 						  <div class="form-group">
 						    <label for="realNameInput" class="col-md-2 control-label">姓名：</label>
 						    <div class="col-md-8 form-body">
-						    	<span class="form-content-text show-block">{userName}</span>
+						    	<span class="form-content-text show-block">{name}</span>
 						        <a href="javascript:void(0);" class="edit-btn form-content-text show-block">点击编辑</a>
-						        <input type="text" class="form-control edit-block input-sm" id="realNameInput" name="userName" placeholder="">
+						        <input type="text" class="form-control edit-block input-sm" id="realNameInput" name="name" placeholder="">
  								<a href="javascript:void(0);" class="btn btn-sm btn-default btn-cancel edit-block">取消</a>
 						        <a href="javascript:void(0);" class="btn btn-sm btn-info btn-submit edit-block">确定</a>			
 						        <span class="form-content-text warning-block"></span>

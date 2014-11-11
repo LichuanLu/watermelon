@@ -1,4 +1,4 @@
-<tr data-doctorid="{doctorId}">
+<tr data-userid="{userId}">
 	<td>{username}</td>
 	<td>{identityPhone}</td>
 	<td class="action-group">

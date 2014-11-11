@@ -381,7 +381,7 @@ define(['lodash', 'config/base/constant', 'config/controllers/_base_controller',
 					this.contentView = this.getDiagnoseListView(this.diagnoseCollection);
 
 				} else if (viewName === 'accountLink') {
-					//type = 1 means patient , type =2 means doctor
+					//type = 2 means patient , type =1 means doctor
 					var params = {
 						type: 1
 					}

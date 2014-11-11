@@ -257,8 +257,8 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'ladda-bootstrap', 
 			var $parent = $target.closest('.form-body');
 			var $inputField = $parent.find('input, textarea, select');
 			this.model.set($inputField.attr('name'), $inputField.val());
-			//type = 1 means patient , type = 2 means doctor
-			this.model.set('type', 2);
+			//type = 2 means patient , type = 1 means doctor
+			this.model.set('type', 1);
 			var that = this;
 
 			// console.log(data);

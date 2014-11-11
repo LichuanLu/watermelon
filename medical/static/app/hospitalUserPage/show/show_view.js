@@ -1,7 +1,7 @@
-define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.main',
+define(['utils/reqcmd', 'lodash', 'marionette', 'templates','ladda-bootstrap' ,'jquery.uploader.main',
 		'patienthome/show/show_view', 'dust', 'dustMarionette', "bootstrap", 'bootstrap.select', 'jquery-ui'
 	],
-	function(ReqCmd, Lodash, Marionette, Templates, FileUploaderMain, PatientHomeShowView) {
+	function(ReqCmd, Lodash, Marionette, Templates,ladda,FileUploaderMain, PatientHomeShowView) {
 		// body...
 		"use strict";
 		var HospitalUserPageView = Marionette.Layout.extend({
@@ -243,7 +243,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 						diagnoseId: that.diagnoseId,
 						type: 0
 					};
-					
+
 				});
 				this.$el.find('.medical-report-fileupload').fileupload({
 					disableImageResize: false,
@@ -262,26 +262,128 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 						diagnoseId: that.diagnoseId,
 						type: 1
 					};
-					
+
 				});
 			},
 			ui: {
-				"reuploadBtn": '.edit-file-wrapper .btn'
+				"reuploadBtn": '.edit-file-wrapper .btn',
+				"applyBtn": '.apply-btn',
 
 			},
 			events: {
-				'click @ui.reuploadBtn': "reuploadFile"
+				'click @ui.reuploadBtn': "reuploadFile",
+				"click @ui.applyBtn": "applySubmit"
 
 			},
 			onShow: function() {},
 			reuploadFile: function(e) {
 				e.preventDefault();
+				//1 means other file , 0 means dicom file  
 				var $target = $(e.target);
-				var $editWrapper = $target.closest('.edit-file-wrapper');
-				var $newWrapper = $editWrapper.siblings('.new-file-wrapper');
-				$editWrapper.hide();
-				$newWrapper.show();
-				console.log("reupload file");
+				var type = $target.data('type');
+				var data = {
+					diagnoseId: this.diagnoseId,
+					type:type
+				}
+				var url = "/file/disable";
+				var l = ladda.create(e.target);
+				l.start();
+				$.ajax({
+					url: url,
+					dataType: 'json',
+					type: 'POST',
+					data:data,
+					success: function(data) {
+						if (data.status != 0) {
+							this.onError(data);
+
+						} else {
+							Messenger().post({
+								message: '重新提交成功',
+								type: 'success',
+								showCloseButton: true
+							});
+							var $editWrapper = $target.closest('.edit-file-wrapper');
+							var $newWrapper = $editWrapper.siblings('.new-file-wrapper');
+							$editWrapper.hide();
+							$newWrapper.show();
+							console.log("reupload file");
+
+						}
+					},
+					onError: function(res) {
+						//var error = jQuery.parseJSON(data);
+						if (res.status == 2) {
+							window.location.replace('/loginPage')
+
+						} else if (res.status == 4) {
+							window.location.replace('/error')
+
+						}
+						if (typeof res.msg !== 'undefined') {
+							Messenger().post({
+								message: "错误信息:" + res.msg,
+								type: 'error',
+								showCloseButton: true
+							});
+						}
+
+					},
+					complete: function(status, request) {
+						l.stop();
+					}
+				});
+
+				
+			},
+			applySubmit: function(e) {
+				var diagnoseId = this.diagnoseId;
+				var that = this;
+				console.log("apply submit");
+				var applySubmitUrl = "/diagnose/"+diagnoseId+"/toNeedPay";
+				var l = ladda.create(e.target);
+				l.start();
+				$.ajax({
+					url: applySubmitUrl,
+					dataType: 'json',
+					type: 'POST',
+					success: function(data) {
+						if (data.status != 0) {
+							this.onError(data);
+
+						} else {
+							Messenger().post({
+								message: '文件已经提交成功',
+								type: 'success',
+								showCloseButton: true
+							});
+							that.$el.hide();
+
+						}
+					},
+					onError: function(res) {
+						//var error = jQuery.parseJSON(data);
+						if (res.status == 2) {
+							window.location.replace('/loginPage')
+
+						} else if (res.status == 4) {
+							window.location.replace('/error')
+
+						}
+						if (typeof res.msg !== 'undefined') {
+							Messenger().post({
+								message: "错误信息:" + res.msg,
+								type: 'error',
+								showCloseButton: true
+							});
+						}
+
+					},
+					complete: function(status, request) {
+						l.stop();
+					}
+				});
+
 			}
 
 		})

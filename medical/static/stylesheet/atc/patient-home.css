@@ -301,6 +301,11 @@ ul.message-list li .message-content-wrapper .btn {
 #patienthome-content #patient-action-content {
   margin-top: 20px;
 }
+#patienthome-content #patient-action-content .right-wrapper {
+  padding: 5px 0 10px;
+  text-align: right;
+  border-bottom: 1px dashed #e2e2e2;
+}
 #patienthome-content #patient-action-content .form-inline {
   padding-left: 25px;
   margin-bottom: 20px;

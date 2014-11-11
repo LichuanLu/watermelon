@@ -5,6 +5,11 @@
 #hospital-user-content .file-group span {
   font-size: 13px;
 }
+#hospital-user-content .content-sub-title .apply-btn {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
 #hospital-user-content .form-inline {
   padding-left: 25px;
   margin-bottom: 20px;

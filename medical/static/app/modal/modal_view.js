@@ -10,10 +10,12 @@ define(['config/base/constant', 'utils/reqcmd', 'lodash', 'marionette', 'templat
 
 		},
 		ui: {
-			"mobileNumberInput": "#mobileNumber"
+			"mobileNumberInput": "#mobileNumber",
+			"getVerifyCodeBtn":"#getVerifyCodeBtn"
 		},
 		events: {
-			"blur @ui.mobileNumberInput": "mobileNumberChange"
+			"blur @ui.mobileNumberInput": "mobileNumberChange",
+			"click @ui.getVerifyCodeBtn":"getVerifyCode"
 		},
 		mobileNumberChange: function(e) {
 			var mobileNum = this.ui.mobileNumberInput.val();
@@ -69,13 +71,15 @@ define(['config/base/constant', 'utils/reqcmd', 'lodash', 'marionette', 'templat
 					if (cur_step.hasClass('pstep2')) {
 						var l = ladda.create(document.querySelector('#nextBtn'));
 						l.start();
+						var verifyCode = $('#verifyCode').val();
 						var params = {
-							mobile: that.mobileNumber
+							mobile: that.mobileNumber,
+							verifyCode:verifyCode
 						}
 						return $.ajax({
-							url: "/user/mobile/checkVerifyCode",
+							url: "/user/mobile/update",
 							dataType: 'json',
-							type: 'GET',
+							type: 'POST',
 							data: params,
 							success: function(data) {
 								if (data.status != 0) {
@@ -114,54 +118,56 @@ define(['config/base/constant', 'utils/reqcmd', 'lodash', 'marionette', 'templat
 						});
 
 					} else if (cur_step.hasClass('pstep3')) {
-						var l = ladda.create(document.querySelector('#submitBtn'));
-						l.start();
-						var params = {
-							mobile: that.mobileNumber,
-							status: 0
-						}
-						return $.ajax({
-							url: "/user/mobile/update",
-							dataType: 'json',
-							type: 'POST',
-							data: params,
-							success: function(data) {
-								if (data.status != 0) {
-									this.onError(data);
+						ReqCmd.reqres.request('MobileBindModalView:submit:success');
 
-								} else {
-									Messenger().post({
-										message: 'Success Modify',
-										type: 'success',
-										showCloseButton: true
-									});
-									ReqCmd.reqres.request('MobileBindModalView:submit:success');
+						// var l = ladda.create(document.querySelector('#submitBtn'));
+						// l.start();
+						// var params = {
+						// 	mobile: that.mobileNumber,
+						// 	status: 0
+						// }
+						// return $.ajax({
+						// 	url: "/user/mobile/update",
+						// 	dataType: 'json',
+						// 	type: 'POST',
+						// 	data: params,
+						// 	success: function(data) {
+						// 		if (data.status != 0) {
+						// 			this.onError(data);
 
-								}
-							},
-							onError: function(res) {
-								// this.resetForm();
-								//var error = jQuery.parseJSON(data);
-								if (res.status == 2) {
-									window.location.replace('/loginPage')
+						// 		} else {
+						// 			Messenger().post({
+						// 				message: 'Success Modify',
+						// 				type: 'success',
+						// 				showCloseButton: true
+						// 			});
+						// 			ReqCmd.reqres.request('MobileBindModalView:submit:success');
 
-								} else if (res.status == 4) {
-									window.location.replace('/error')
+						// 		}
+						// 	},
+						// 	onError: function(res) {
+						// 		// this.resetForm();
+						// 		//var error = jQuery.parseJSON(data);
+						// 		if (res.status == 2) {
+						// 			window.location.replace('/loginPage')
 
-								}
-								if (typeof res.msg !== 'undefined') {
-									Messenger().post({
-										message: "错误信息:" + res.msg,
-										type: 'error',
-										showCloseButton: true
-									});
-								}
+						// 		} else if (res.status == 4) {
+						// 			window.location.replace('/error')
 
-							},
-							complete: function() {
-								l.stop();
-							}
-						});
+						// 		}
+						// 		if (typeof res.msg !== 'undefined') {
+						// 			Messenger().post({
+						// 				message: "错误信息:" + res.msg,
+						// 				type: 'error',
+						// 				showCloseButton: true
+						// 			});
+						// 		}
+
+						// 	},
+						// 	complete: function() {
+						// 		l.stop();
+						// 	}
+						// });
 
 					} else {
 						var dtd = $.Deferred();
@@ -608,7 +614,7 @@ define(['config/base/constant', 'utils/reqcmd', 'lodash', 'marionette', 'templat
 			}).bind('fileuploadsubmit', function(e, data) {
 				// The example input, doesn't have to be part of the upload form:
 				data.formData = {
-					doctorId: that.model.get('doctorId')
+					userId: that.model.get('userId')
 				};
 				// if (!data.formData.diagnoseId) {
 				//   data.context.find('button').prop('disabled', false);
@@ -635,7 +641,7 @@ define(['config/base/constant', 'utils/reqcmd', 'lodash', 'marionette', 'templat
 		},
 		submitHandler: function(e) {
 			var params = this.ui.doctorInfoForm.serialize();
-			params += '&doctorId=' + this.model.get('doctorId') + '&status=0'
+			params += '&userId=' + this.model.get('userId') + '&status=0'
 			ReqCmd.commands.execute('UpdateDoctorInfo:submitHandler', params);
 		}
 
