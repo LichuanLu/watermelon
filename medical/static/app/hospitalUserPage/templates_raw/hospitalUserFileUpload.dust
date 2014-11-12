@@ -18,10 +18,10 @@
 				<p class="">已经上传的文件列表</p>
 				<div class="row">
 					<div class="col-md-4">
-						<a class="file-link" data-fileid="6dasdasd66" href="ttdsadsat6">dasddsdsaadasasdasdas.dicom</a>
+						<a class="file-link" data-fileid="{dicomUrl.id}" href="{dicomUrl.url}">{dicomUrl.name}</a>
 					</div>
 					<div class="col-md-4">
-						<span>文件大小：25M</span>
+						<span>文件大小：{dicomUrl.size}</span>
 					</div>
 					<div>
 						<a class="btn btn-warning btn-xs reupload-btn" data-type="0">重新上传</a>
@@ -76,28 +76,19 @@
 							<div class="edit-file-wrapper" style="display:none;">
 						{/if}
 						<p class="">已经上传的文件列表	<a class="btn btn-warning btn-xs reupload-btn" data-type="1">全部重新上传</a></p>
+								{#docUrl}
 								<div class="row">
 									<div class="col-md-4">
-										<a class="file-link" data-fileid="555" href="ttt">dasdasdasdas.dicom</a>
+										<a class="file-link" data-fileid="{id}" href="{url}">{name}</a>
 									</div>
 									<div class="col-md-4">
-										<span>文件大小：25M</span>
+										<span>文件大小：{size}</span>
 									</div>
 									<!-- <div>
 										<a class="btn btn-warning btn-xs">重新上传</a>
 									</div> -->
 								</div>
-								<div class="row">
-									<div class="col-md-4">
-										<a class="file-link" data-fileid="666" href="ttt6">dasddsadasasdasdas.dicom</a>
-									</div>
-									<div class="col-md-4">
-										<span>文件大小：25M</span>
-									</div>
-									<!-- <div>
-										<a class="btn btn-warning btn-xs">重新上传</a>
-									</div> -->
-								</div>
+								{/docUrl}
 							</div>
 
 						{@if cond="'{hasDoc}' == 'true'"}

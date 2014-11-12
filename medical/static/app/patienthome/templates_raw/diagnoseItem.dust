@@ -11,7 +11,7 @@
 	{/if}
 	<td class="action-group">
 		{@if cond="'{statusId}' == '9'"}
-			<a href="/applyDiagnose?diagnoseid={id}" target="_blank">修改</a>
+			<a href="/applyDiagnose?diagnoseid={id}&edit=true" target="_blank">修改</a>
 			<a class="rm-diagnose-link action-link" href="#">删除</a>
 		{/if}
 		{@if cond="'{statusId}' == '7'"}

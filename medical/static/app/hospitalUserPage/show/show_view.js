@@ -1,7 +1,7 @@
-define(['utils/reqcmd', 'lodash', 'marionette', 'templates','ladda-bootstrap' ,'jquery.uploader.main',
+define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'ladda-bootstrap', 'jquery.uploader.main',
 		'patienthome/show/show_view', 'dust', 'dustMarionette', "bootstrap", 'bootstrap.select', 'jquery-ui'
 	],
-	function(ReqCmd, Lodash, Marionette, Templates,ladda,FileUploaderMain, PatientHomeShowView) {
+	function(ReqCmd, Lodash, Marionette, Templates, ladda, FileUploaderMain, PatientHomeShowView) {
 		// body...
 		"use strict";
 		var HospitalUserPageView = Marionette.Layout.extend({
@@ -283,7 +283,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates','ladda-bootstrap' ,'
 				var type = $target.data('type');
 				var data = {
 					diagnoseId: this.diagnoseId,
-					type:type
+					type: type
 				}
 				var url = "/file/disable";
 				var l = ladda.create(e.target);
@@ -292,7 +292,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates','ladda-bootstrap' ,'
 					url: url,
 					dataType: 'json',
 					type: 'POST',
-					data:data,
+					data: data,
 					success: function(data) {
 						if (data.status != 0) {
 							this.onError(data);
@@ -334,19 +334,40 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates','ladda-bootstrap' ,'
 					}
 				});
 
-				
+
 			},
 			applySubmit: function(e) {
 				var diagnoseId = this.diagnoseId;
 				var that = this;
+				var $target = $(e.target);
+				var $parent = $target.closest('.file-upload-item');
 				console.log("apply submit");
-				var applySubmitUrl = "/diagnose/"+diagnoseId+"/toNeedPay";
+				var applySubmitUrl = "/diagnose/" + diagnoseId + "/toNeedPay";
 				var l = ladda.create(e.target);
 				l.start();
+				
+				var fileIds = '';
+
+				var $fileIds = $parent.find('.file-link');
+				$fileIds.each(function(index, element) {
+					var tempIdStr = $(element).data('fileid');
+					if (typeof tempIdStr !== 'undefined' && tempIdStr != 'undefined' && tempIdStr) {
+						fileIds += "&fileIds=" + tempIdStr;
+					}
+				});
+
+				var $downloadFileLinks = $parent.find('.downloadFileLink');
+				$downloadFileLinks.each(function(index, element) {
+					var tempIdStr = $(element).data('fileid');
+					if (typeof tempIdStr !== 'undefined' && tempIdStr != 'undefined' && tempIdStr) {
+						fileIds += "&fileIds=" + tempIdStr;
+					}
+				});
 				$.ajax({
 					url: applySubmitUrl,
 					dataType: 'json',
 					type: 'POST',
+					data: fileIds,
 					success: function(data) {
 						if (data.status != 0) {
 							this.onError(data);
