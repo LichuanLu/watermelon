@@ -247,7 +247,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'ladda-bootstrap', 
 		resetModel: function(params) {
 			this.model.clear();
 			this.model.fetch({
-				data:params
+				data: params
 			});
 		},
 		submitChange: function(e) {
@@ -278,7 +278,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'ladda-bootstrap', 
 
 					} else {
 						var params = {
-							type:1
+							type: 1
 						}
 						that.resetModel(params);
 						Messenger().post({
@@ -450,6 +450,8 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'ladda-bootstrap', 
 						} else {
 							if (targetId === 'previewDiagnoseBtn') {
 								window.open('/diagnose/' + that.model.get('id') + '/pdf', '_blank');
+							} else {
+								that.closeRegionAction();
 							}
 							Messenger().post({
 								message: 'SUCCESS.Create diagnose',
@@ -488,6 +490,9 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'ladda-bootstrap', 
 		},
 		closeRegion: function(e) {
 			e.preventDefault();
+			this.closeRegionAction();
+		},
+		closeRegionAction: function() {
 			ReqCmd.reqres.request("NewDiagnoseLayoutView:closeRegion");
 		},
 		loadTemplate: function(e) {
@@ -849,6 +854,10 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'ladda-bootstrap', 
 		},
 		closeRegion: function(e) {
 			e.preventDefault();
+			this.closeRegionAction();
+			
+		},
+		closeRegionAction: function() {
 			ReqCmd.reqres.request("NewDiagnoseLayoutView:closeRegion");
 		}
 	});
@@ -1026,7 +1035,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'ladda-bootstrap', 
 			"click @ui.backLink": "backToList",
 			"click @ui.addCommentsBtn": "addComments",
 		},
-		
+
 		addComments: function(e) {
 			e.preventDefault();
 			$('.help-block').hide();

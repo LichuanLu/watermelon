@@ -1,4 +1,6 @@
-define(['lodash', 'config/base/constant', 'config/controllers/_base_controller', 'admin/fenzhen/fz_view', 'utils/reqcmd', 'entities/diagnoseEntity', 'doctorhome/show/show_view'], function(Lodash, CONSTANT, BaseController, View, ReqCmd, DiagnoseEntity, DoctorHomeShowView) {
+define(['lodash', 'config/base/constant', 'config/controllers/_base_controller', 
+	'admin/fenzhen/fz_view', 'utils/reqcmd', 'entities/diagnoseEntity', 'doctorhome/show/show_view'], 
+	function(Lodash, CONSTANT, BaseController, View, ReqCmd, DiagnoseEntity, DoctorHomeShowView) {
 	// body...
 	"use strict";
 	var FzController = BaseController.extend({

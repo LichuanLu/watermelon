@@ -22,5 +22,11 @@
   "undef": true,
   "proto": true,
   "strict": true,
-  "smarttabs": true
+  "smarttabs": true,
+  "globals": {
+    "$": false,
+    "Messenger": false,
+    "Backbone": false,
+    "define": false   
+  }
 }

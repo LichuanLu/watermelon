@@ -83,31 +83,9 @@
 					<div class="tab-pane" id="patient-user-avatar-wrapper">
 
 						<form class="form-horizontal col-md-offset-2" role="form" id="patient-user-avatar-form">
-						  
-						  <div class="form-group">
-						    <label for="originPasswordInput" class="col-md-2 control-label">原始密码：</label>
-						    <div class="col-md-8 form-body">
-						      <input type="password" class="form-control input-sm edit-block" id="originPasswordInput" placeholder="">
-						    </div>
-						  </div>
-						  <div class="form-group">
-						    <label for="newPasswordInput" class="col-md-2 control-label">新密码：</label>
-						    <div class="col-md-8 form-body">
-						      <input type="password" class="form-control input-sm edit-block" id="newPasswordInput" placeholder="">
-						    </div>
-						  </div>
-						  <div class="form-group">
-						    <label for="confirmPasswordInput" class="col-md-2 control-label">确认密码：</label>
-						    <div class="col-md-8 form-body">
-						      <input type="password" class="form-control input-sm edit-block" id="confirmPasswordInput" placeholder="">
-						    </div>
-						  </div>
-						  <div class="form-group">
-				               <div class="col-md-offset-2 col-md-10">
-				                    <button type="submit" class="btn btn-primary btn-sm submit-button">提交</button>
-				                </div>
-				           </div>
-						   
+						  	
+							<p>功能暂未上线</p>
+												
 						</form>
 					</div>
 				</div>

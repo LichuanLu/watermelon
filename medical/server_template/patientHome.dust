@@ -58,12 +58,12 @@
 	       
 		                </a>
 					</li>
-					<li>
+					<!-- <li>
 						<a href="#" class="fui-user" name="patientsLink">
 		                  <span class="nav-text">常用就诊人</span>
 	       
 		                </a>
-					</li>
+					</li> -->
 
 					<span class="h-divide"></span>
 

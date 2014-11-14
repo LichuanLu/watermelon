@@ -286,7 +286,7 @@ define(['lodash', 'config/base/constant', 'config/controllers/_base_controller',
 					}
 
 				}, this));
-
+				
 				//create consult view submit
 				ReqCmd.commands.setHandler("CreateConsultView:submitHandler", Lodash.bind(function(params) {
 					console.log("CreateConsultView:submitHandler");

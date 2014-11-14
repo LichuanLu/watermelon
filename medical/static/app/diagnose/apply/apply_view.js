@@ -2,7 +2,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 	'entities/doctorEntity', 'ladda-bootstrap', 'dust', 'dustMarionette',
 	"bootstrap", 'typeahead', 'flatui.checkbox', 'flatui.radio', 'jquery-ui',
 	'bootstrap.select', 'flat_ui_custom', 'dust_cus_helpers', 'config/validator/config',
-	'bootstrap.multiselect','bootstrap-datepicker','bootstrap-datepicker.zh-CN'
+	'bootstrap.multiselect', 'bootstrap-datepicker', 'bootstrap-datepicker.zh-CN'
 ], function(ReqCmd, Lodash, Marionette, Templates, FileUploaderMain, DoctorEntity, ladda) {
 	// body...
 	"use strict";
@@ -45,6 +45,10 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 			'click @ui.reuploadBtn': "reuploadFile"
 		},
 		attachEndHandler: function() {
+
+			//init userId
+			this.userId = $('.submit-patient-info-wrapper').data('userid');
+
 			//init flatui
 			$('.input-group').on('focus', '.form-control', function() {
 				$(this).closest('.input-group, .form-group').addClass('focus');
@@ -73,14 +77,15 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 			// jQuery UI Datepicker JS init
 			var datepickerSelector = '#birthdateinput';
 			$('.input-group.date').datepickerBootstrap({
-				language:"zh-CN",
-				format: "yyyy-mm-dd"
+				language: "zh-CN",
+				format: "yyyy-mm-dd",
+				startView: 2
 			});
 			// $(datepickerSelector).datepicker({
 			// 	showOtherMonths: true,
 			// 	selectOtherMonths: true,
 			// 	changeMonth: true,
-   //    			changeYear: true
+			//    			changeYear: true
 			// }).prev('.btn').on('click', function(e) {
 			// 	e && e.preventDefault();
 			// 	$(datepickerSelector).focus();
@@ -483,8 +488,8 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 
 					var data = $form.serialize();
 					//for add isHospitalUser
-					if(this.isHospitalUser){
-						data+="&isHospitalUser=1"
+					if (this.isHospitalUser) {
+						data += "&isHospitalUser=1"
 					}
 					if (typeof tempstr !== 'undefined' && tempstr != 'undefined') {
 						data = data + "&fileurl=" + encodeURIComponent(tempstr);
@@ -505,21 +510,24 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 
 					data = $form.serialize();
 					//for add isHospitalUser
-					if(this.isHospitalUser){
-						data+="&isHospitalUser=1"
+					if (this.isHospitalUser) {
+						data += "&isHospitalUser=1"
 					}
 					var fileurl = "";
 					var fileid = "";
-					filelinks.each(function(index, element) {
-						var tempstr = $(element).attr('href');
-						var tempIdStr = $(element).data('fileid');
-						if (typeof tempstr !== 'undefined' && tempstr != 'undefined') {
-							fileurl += "&fileurl=" + encodeURIComponent(tempstr);
-						}
-						if (typeof tempIdStr !== 'undefined' && tempIdStr != 'undefined') {
-							fileid += "&fileid=" + tempIdStr;
-						}
-					});
+					if (typeof filelinks !== 'undefined') {
+						filelinks.each(function(index, element) {
+							var tempstr = $(element).attr('href');
+							var tempIdStr = $(element).data('fileid');
+							if (typeof tempstr !== 'undefined' && tempstr != 'undefined') {
+								fileurl += "&fileurl=" + encodeURIComponent(tempstr);
+							}
+							if (typeof tempIdStr !== 'undefined' && tempIdStr != 'undefined') {
+								fileid += "&fileid=" + tempIdStr;
+							}
+						});
+					}
+
 					if (typeof fileurl !== 'undefined') {
 						data = data + fileurl;
 					}
@@ -559,6 +567,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 				});
 				var model = new ModalModel();
 				model.set('isHospitalUser', this.isHospitalUser);
+				model.set('userId', this.userId);
 				var successSubmitDiagnoseModalView = new SuccessSubmitDiagnoseModalView({
 					model: model
 				});
@@ -825,8 +834,18 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 		onShow: function() {
 
 		},
-		ui: {},
-		events: {}
+		ui: {
+			'closeBtn': 'button.close'
+		},
+		events: {
+			'click @ui.closeBtn': 'closeModal'
+		},
+		closeModal: function(e) {
+			e.preventDefault();
+			var userId = this.model.get('userId');
+			var url = '/userCenter/'+userId;
+			window.location.replace(url);
+		}
 
 	});
 
