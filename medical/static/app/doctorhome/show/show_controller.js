@@ -259,6 +259,8 @@ define(['lodash', 'config/base/constant', 'config/controllers/_base_controller',
 				//add level two consult comments
 				ReqCmd.commands.setHandler("ConsultDetailListView:addComments", Lodash.bind(function(params) {
 					console.log("ConsultDetailListView:addComments");
+					//type 1 means doctor , 0 means patient
+					params.type = 1;
 					ConsultEntity.API.addConsult(params, function() {
 						//refetch the detail collection
 						var params = {
@@ -292,7 +294,7 @@ define(['lodash', 'config/base/constant', 'config/controllers/_base_controller',
 					console.log("CreateConsultView:submitHandler");
 					var that = this;
 					console.log(params);
-					//1 means doctor start, 2 means patient start
+					//1 means doctor start, 0 means patient start
 					params+="&type=1";
 					var url = "/consult/add";
 					$.ajax({

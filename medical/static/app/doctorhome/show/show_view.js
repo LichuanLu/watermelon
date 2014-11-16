@@ -1047,7 +1047,8 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'ladda-bootstrap', 
 					title: this.model.get("title"),
 					content: this.ui.commentsTextArea.val(),
 					source_id: this.model.get("id"),
-					type: this.model.get("type"),
+					// type is not follow parent model , but has own depends on patient and doctor send
+					// type: this.model.get("type"),
 					diagnoseId: this.model.get("diagnoseId")
 				}
 				ReqCmd.commands.execute("ConsultDetailListView:addComments", params);

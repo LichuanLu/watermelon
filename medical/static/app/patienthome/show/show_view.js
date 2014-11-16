@@ -17,7 +17,8 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates',
 			el: "#patienthome-content",
 			ui: {
 				"patientActionLinks": "#patient-actions ul a",
-				"headerTitle": "#patient-action-header h6"
+				"headerTitle": "#patient-action-header h6",
+				'headerAction':'#patient-action-header .right-action'
 
 			},
 			events: {
@@ -39,7 +40,8 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates',
 				console.log($target.attr("name"));
 				this.ui.patientActionLinks.removeClass('active');
 				$target.addClass('active');
-				ReqCmd.commands.execute("patientHomePageLayoutView:changeContentView", $target.attr("name"));
+				var viewName = $target.attr("name");
+				ReqCmd.commands.execute("patientHomePageLayoutView:changeContentView", viewName);
 
 				//change title
 				var iconClass = $target.attr('class');
@@ -47,10 +49,13 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates',
 				//console.log(iconClass+','+text);
 				//console.dir(this.ui);
 				this.ui.headerTitle.html("<i class='" + iconClass + "'></i><span>" + titleText + "</span>");
-
-
-
+				if(viewName == 'diagnoseLink'){
+					this.ui.headerAction.show();
+				}else{
+					this.ui.headerAction.hide();
+				}
 			}
+
 
 
 
