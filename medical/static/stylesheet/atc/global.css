@@ -200,7 +200,7 @@ button::-moz-focus-inner {
   margin-left: -5px;
 }
 .home-header-wrapper {
-  background-color: #fcfcfc;
+  background-color: #ffffff;
   position: relative;
   z-index: 5;
   padding: 5px 0 0px;
@@ -423,7 +423,7 @@ body img {
 }
 body .container {
   padding: 0;
-  background-color: #fcfcfc;
+  background-color: #ffffff;
   overflow: hidden;
 }
 body .container .main-block {
@@ -499,7 +499,7 @@ body .container.full-width-page .main-block {
   color: #666666;
 }
 #header-region {
-  background-color: #fcfcfc;
+  background-color: #ffffff;
   border-bottom: 1px dashed #eaeaea;
   position: relative;
   z-index: 12;
@@ -515,7 +515,7 @@ body .container.full-width-page .main-block {
   margin-bottom: 0;
 }
 #header-region .navbar-default {
-  background-color: #fcfcfc;
+  background-color: #ffffff;
   padding-top: 2px;
 }
 #header-region .navbar-nav > li > a {
