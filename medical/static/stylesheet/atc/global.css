@@ -518,6 +518,9 @@ body .container.full-width-page .main-block {
   background-color: #ffffff;
   padding-top: 2px;
 }
+#header-region .navbar-nav > li.active > a {
+  border-bottom: 2px solid;
+}
 #header-region .navbar-nav > li > a {
   font-size: 13px;
   padding-top: 8px;

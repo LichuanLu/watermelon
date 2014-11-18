@@ -7,11 +7,7 @@
 	</td>
 	<td>{createTime}</td>
 	<td class="nowrap">
-		{@if cond="'{status}' == '0'"}
-			新咨询
-		{:else}
-			已读咨询
-		{/if}	
+		{statusText}
 	</td>
 	<td class="nowrap">
 		{amount}

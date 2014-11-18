@@ -1,4 +1,5 @@
-define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'dust', 'dustMarionette', "bootstrap", 'bootstrap.select', 'bootstrap-treeview', 'flat_ui_custom', 'bootstrap.multiselect'], function(ReqCmd, Lodash, Marionette, Templates) {
+define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'dust', 'dustMarionette', 
+	"bootstrap", 'bootstrap.select', 'bootstrap-treeview', 'flat_ui_custom', 'bootstrap.multiselect'], function(ReqCmd, Lodash, Marionette, Templates) {
 	// body...
 	"use strict";
 	var FzPageLayoutView = Marionette.Layout.extend({

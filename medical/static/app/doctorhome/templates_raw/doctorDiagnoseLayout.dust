@@ -35,7 +35,7 @@
 
 				</div>
 			</div>
-			<button type="submit" class="btn btn-sm btn-default submit-btn">确定</button>
+			<button type="submit" class="btn btn-sm btn-primary submit-btn">确定</button>
 		</form>
 	</div>
 	<div class="row h-padding-20">
