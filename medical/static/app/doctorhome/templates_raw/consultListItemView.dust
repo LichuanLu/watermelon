@@ -1,7 +1,11 @@
 <tr>
-	<td>{title}</td>
 	<td>
-		<p class="table-text-overflow">
+		<p class="table-text-overflow maxw80">
+			{title}
+		</p>
+	</td>
+	<td>
+		<p class="table-text-overflow maxw220">
 			{content}
 		</p>
 	</td>
