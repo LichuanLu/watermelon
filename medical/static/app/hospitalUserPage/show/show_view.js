@@ -1,7 +1,7 @@
 define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'ladda-bootstrap', 'jquery.uploader.main',
-		'patienthome/show/show_view', 'dust', 'dustMarionette', "bootstrap", 'bootstrap.select', 'jquery-ui'
+		'patienthome/show/show_view','modal/modal_view' ,'dust', 'dustMarionette', "bootstrap", 'bootstrap.select', 'jquery-ui'
 	],
-	function(ReqCmd, Lodash, Marionette, Templates, ladda, FileUploaderMain, PatientHomeShowView) {
+	function(ReqCmd, Lodash, Marionette, Templates, ladda, FileUploaderMain, PatientHomeShowView, ModalView) {
 		// body...
 		"use strict";
 		var HospitalUserPageView = Marionette.Layout.extend({
@@ -231,9 +231,13 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'ladda-bootstrap', 
 					maxFileSize: 200000000,
 					// acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
 					maxNumberOfFiles: 1,
+					acceptFileTypes: /(\.|\/)(zip|jpe?g|png|rar)$/i,
+					// locale: FileUploaderMain.zhCNLocale,
 
 					// Uncomment the following to send cross-domain cookies:
 					//xhrFields: {withCredentials: true},
+					messages:FileUploaderMain.message,
+
 					url: '/file/upload',
 					uploadTemplateId: FileUploaderMain.uploadTemplateStr,
 					downloadTemplateId: FileUploaderMain.downloadTemplateStr
@@ -243,6 +247,14 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'ladda-bootstrap', 
 						diagnoseId: that.diagnoseId,
 						type: 0
 					};
+					var fileUploadingModalView = new ModalView.FileUploadingModalView({});
+
+					that.parentsInstance.appInstance.modalRegion.show(fileUploadingModalView);
+
+
+				})
+				.bind('fileuploadalways', function(e, data) {
+					that.parentsInstance.appInstance.modalRegion.close();
 
 				});
 				this.$el.find('.medical-report-fileupload').fileupload({
@@ -250,6 +262,9 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'ladda-bootstrap', 
 					maxFileSize: 200000000,
 					// acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
 					maxNumberOfFiles: 5,
+					acceptFileTypes: /(\.|\/)(zip|jpe?g|png|rar)$/i,
+					// locale:FileUploaderMain.zhCNLocale,
+					messages:FileUploaderMain.message,
 
 					// Uncomment the following to send cross-domain cookies:
 					//xhrFields: {withCredentials: true},
@@ -262,6 +277,13 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'ladda-bootstrap', 
 						diagnoseId: that.diagnoseId,
 						type: 1
 					};
+					var fileUploadingModalView = new ModalView.FileUploadingModalView({});
+
+					that.parentsInstance.appInstance.modalRegion.show(fileUploadingModalView);
+
+				})
+				.bind('fileuploadalways', function(e, data) {
+					that.parentsInstance.appInstance.modalRegion.close();
 
 				});
 			},

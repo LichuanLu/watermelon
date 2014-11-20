@@ -583,6 +583,28 @@ define(['config/base/constant', 'utils/reqcmd', 'lodash', 'marionette', 'templat
 	});
 
 
+	//used for show user the file is uploading modal
+	var FileUploadingModalView = Marionette.ItemView.extend({
+		template: "fileUploadingModal",
+		initialize: function(options) {
+			console.log("FileUploadingModalView init");
+			
+		},
+		onRender: function() {
+			console.log("FileUploadingModalView render");
+			// get rid of that pesky wrapping-div
+			// assumes 1 child element			
+			this.$el = this.$el.children();
+			this.setElement(this.$el);
+		},
+		onShow: function() {},
+		ui: {
+		},
+		events: {
+		}
+
+	});
+
 	//update doctor info
 	var UpdateDoctorInfo = Marionette.ItemView.extend({
 		template: "updateDoctorInfoModal",
@@ -696,6 +718,7 @@ define(['config/base/constant', 'utils/reqcmd', 'lodash', 'marionette', 'templat
 		MobileBindModalView: MobileBindModalView,
 		ConfirmModalView: ConfirmModalView,
 		UpdateDoctorInfo: UpdateDoctorInfo,
-		CreateConsultView: CreateConsultView
+		CreateConsultView: CreateConsultView,
+		FileUploadingModalView:FileUploadingModalView
 	}
 });

@@ -593,28 +593,37 @@ app.configure(function() {
     if (req.query.status == 1) {
       var data = [{
         id: 1,
-        url: "diagnoseLink",
+        url: "www.baidu.com",
         title: "诊断申请",
         type: "未读消息",
         createTime: "2013-12-12 13:00",
-        content: "您有一条新的诊断申请。诊断号：34556 ｜ 诊断类型：MR ｜ 诊断部位：头部，颈部 ｜ 患者：李响"
+        content: "您有一条新的诊断申请。诊断号：34556 ｜ 诊断类型：MR ｜ 诊断部位：头部，颈部 ｜ 患者：李响",
       }, {
         id: 2,
-        url: "diagnoseLink",
+        url: "",
         title: "诊断申请",
         type: "未读消息",
         createTime: "2013-12-12 13:00",
-        content: "您有一条新的诊断申请。诊断号：34556 ｜ 诊断类型：MR ｜ 诊断部位：头部，颈部 ｜ 患者：李响"
+        content: "您有一条新的诊断申请。诊断号：34556 ｜ 诊断类型：MR ｜ 诊断部位：头部，颈部 ｜ 患者：李响",
 
       }];
     } else {
       var data = [{
         id: 1,
-        url: "diagnoseLink",
+        url: "www.baidu.com",
         title: "诊断申请",
         type: "未读消息",
         createTime: "2013-12-12 13:00",
         content: "您有一条新的诊断申请。诊断号：34556 ｜ 诊断类型：MR ｜ 诊断部位：头部，颈部 ｜ 患者：李响"
+      },
+      {
+        id: 2,
+        url: "",
+        title: "诊断申请",
+        type: "未读消息",
+        createTime: "2013-12-12 13:00",
+        content: "您有一条新的诊断申请。诊断号：34556 ｜ 诊断类型：MR ｜ 诊断部位：头部，颈部 ｜ 患者：李响",
+
       }];
     }
 

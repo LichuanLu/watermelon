@@ -1,4 +1,4 @@
-define(function(require){
+define(function(require) {
 	// body...
 	"use strict";
 
@@ -9,7 +9,7 @@ define(function(require){
 		jqueryfileuploadui = require('jquery.fileupload-ui');
 
 	if ($('html.ie').size()) {
-	    var jqueryxdr = require('jquery.xdr-transport');
+		var jqueryxdr = require('jquery.xdr-transport');
 	}
 
 	var uploadTemplateStr = "{% for (var i=0, file; file=o.files[i]; i++) { %}" +
@@ -77,8 +77,17 @@ define(function(require){
 		"</tr>" +
 		"{% } %}";
 
-		return {
-			uploadTemplateStr:uploadTemplateStr,
-			downloadTemplateStr:downloadTemplateStr
-		}
+	var message = {
+		maxNumberOfFiles: '上传文件个数超过限制',
+		acceptFileTypes: '文件类型不支持',
+		maxFileSize: '文件太大',
+		minFileSize: '文件太小'
+	}
+
+
+	return {
+		uploadTemplateStr: uploadTemplateStr,
+		downloadTemplateStr: downloadTemplateStr,
+		message:message
+	}
 });

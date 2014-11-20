@@ -9,7 +9,12 @@
 			</div>
 		</div>
 		<div class="message-content-wrapper">
-			<p>{content}</p>
+			<p>{content}
+				{@if cond="'{url}' != ''"}
+					<a href="{url}" target="_blank" class="ml20">支付宝支付链接</a>
+				{/if}
+			</p>
+			
 			<button class="btn btn-info btn-xs open-btn">展开</button>
 			<button class="btn btn-info btn-xs close-btn" style="display:none;">收起</button>
 		</div>

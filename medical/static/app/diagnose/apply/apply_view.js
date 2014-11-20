@@ -1,9 +1,9 @@
 define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.main',
-	'entities/doctorEntity', 'ladda-bootstrap', 'dust', 'dustMarionette',
+	'entities/doctorEntity', 'ladda-bootstrap', 'modal/modal_view', 'dust', 'dustMarionette',
 	"bootstrap", 'typeahead', 'flatui.checkbox', 'flatui.radio', 'jquery-ui',
 	'bootstrap.select', 'flat_ui_custom', 'dust_cus_helpers', 'config/validator/config',
 	'bootstrap.multiselect', 'bootstrap-datepicker', 'bootstrap-datepicker.zh-CN'
-], function(ReqCmd, Lodash, Marionette, Templates, FileUploaderMain, DoctorEntity, ladda) {
+], function(ReqCmd, Lodash, Marionette, Templates, FileUploaderMain, DoctorEntity, ladda, ModalView) {
 	// body...
 	"use strict";
 	//var $;
@@ -100,13 +100,15 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 			// $(datepickerSelector).datepicker('widget').css({
 			// 	'margin-left': -$(datepickerSelector).prev('.input-group-btn').find('.btn').outerWidth()
 			// });
-
+			var that = this;
 			//init file uploader
 			var temp = $('#dicomfileupload').fileupload({
 				disableImageResize: false,
 				maxFileSize: 200000000,
-				// acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+				acceptFileTypes: /(\.|\/)(zip|jpe?g|png|rar)$/i,
+				// locale:FileUploaderMain.zhCNLocale,
 				maxNumberOfFiles: 1,
+				messages:FileUploaderMain.message,
 
 				// Uncomment the following to send cross-domain cookies:
 				//xhrFields: {withCredentials: true},
@@ -127,15 +129,24 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 				//   input.focus();
 				//   return false;
 				// }
+				var fileUploadingModalView = new ModalView.FileUploadingModalView({});
+
+				that.appInstance.modalRegion.show(fileUploadingModalView);
+
 			}).bind('fileuploadalways', function(e, data) {
 				$('#submitBtn3').show();
 				$('#submitPendingBtn3').hide();
+				that.appInstance.modalRegion.close();
+
 			});
 			$('#patient-medical-report-fileupload').fileupload({
 				disableImageResize: false,
 				maxFileSize: 200000000,
 				// acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
 				maxNumberOfFiles: 5,
+				acceptFileTypes: /(\.|\/)(zip|jpe?g|png|rar)$/i,
+				// locale:FileUploaderMain.zhCNLocale,
+				messages:FileUploaderMain.message,
 
 				// Uncomment the following to send cross-domain cookies:
 				//xhrFields: {withCredentials: true},
@@ -156,9 +167,16 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 				// }
 				$('#submitBtn4').hide();
 				$('#submitPendingBtn4').show();
+				var fileUploadingModalView = new ModalView.FileUploadingModalView({});
+
+				that.appInstance.modalRegion.show(fileUploadingModalView);
+
+
 			}).bind('fileuploadalways', function(e, data) {
 				$('#submitBtn4').show();
 				$('#submitPendingBtn4').hide();
+				that.appInstance.modalRegion.close();
+
 			});
 
 			//init affix
@@ -183,21 +201,21 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 				enableFiltering: true,
 				filterPlaceholder: "搜索",
 				nonSelectedText: "没有选中"
-				// buttonWidth: '300px'
+					// buttonWidth: '300px'
 			});
 
 			$("#hospitalinput").multiselect({
 				enableFiltering: true,
 				filterPlaceholder: "搜索",
 				nonSelectedText: "没有选中"
-				// buttonWidth: '300px'
+					// buttonWidth: '300px'
 			});
 
 			$("#locationinput").multiselect({
 				enableFiltering: true,
 				filterPlaceholder: "搜索",
 				nonSelectedText: "没有选中"
-				// buttonWidth: '300px'
+					// buttonWidth: '300px'
 			});
 
 
@@ -402,9 +420,10 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 			var $form = $panel.find('form:visible');
 			var formId = $panel.data('form-id');
 			var data = this.validate($form, formId);
+			var submitBtnDom = $(e.target).closest('button').get(0);
 			//console.dir(e.target);
 			//console.dir(document.querySelector('.ladda-button'));
-			var l = ladda.create(e.target);
+			var l = ladda.create(submitBtnDom);
 			//console.dir(data);
 			if (data) {
 				//when edit , add diagnose id for the request
@@ -644,7 +663,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 		},
 		ui: {
 			"pageLinks": ".pagination-plain a"
-			// "currentLi":"li.active"
+				// "currentLi":"li.active"
 		},
 		events: {
 			"click @ui.pageLinks": "changePage"
@@ -843,7 +862,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 		closeModal: function(e) {
 			e.preventDefault();
 			var userId = this.model.get('userId');
-			var url = '/userCenter/'+userId;
+			var url = '/userCenter/' + userId;
 			window.location.replace(url);
 		}
 

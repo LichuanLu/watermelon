@@ -90,7 +90,7 @@ define(function(require) {
 		gratitudeListItemView:require('admin/kefu/templates/gratitudeListItemView'),
 
 		updateDoctorInfoModal:require('modal/templates/updateDoctorInfoModal'),
-
+		fileUploadingModal:require('modal/templates/fileUploadingModal'),
 		//common view
 		selectItemView:require('common/templates/selectItemView'),
 		diagnoseSelectItemView:require('common/templates/diagnoseSelectItemView')

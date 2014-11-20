@@ -112,12 +112,21 @@ body {
 .h120 {
   height: 120px;
 }
+.mb5 {
+  margin-bottom: 5px;
+}
 .nowrap {
   white-space: nowrap;
 }
 .table-text-overflow {
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.vertical_a_m {
+  vertical-align: middle;
+}
+.text_a_c {
+  text-align: center;
 }
 .right-20 {
   position: absolute;

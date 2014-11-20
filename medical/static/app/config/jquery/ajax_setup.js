@@ -1,10 +1,13 @@
-require(['messenger', 'messenger-theme-future'], function() {
+require(['messenger', 'messenger-theme-flat'], function() {
     // body...
     "use strict";
     Messenger.options = {
         extraClasses: 'messenger-fixed messenger-on-top',
-        theme: 'air'
+        theme: 'flat',
+        hideAfter:60
     };
+
+    
 
     $.ajaxSetup({
         headers: {

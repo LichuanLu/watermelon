@@ -312,6 +312,12 @@ define(['lodash', 'config/base/constant', 'config/controllers/_base_controller',
 									type: 'success',
 									showCloseButton: true
 								});
+								//refresh the consult list
+								var params = {
+									status: 0
+								};
+								that.consultFilterModel.set("filter", 0);
+								that.getConsultCollection(params);
 								that.appInstance.modalRegion.close();
 							}
 						},

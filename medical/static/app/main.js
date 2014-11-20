@@ -56,6 +56,8 @@ require.config({
     //messager box
     'messenger':'lib/messenger/build/js/messenger',
     'messenger-theme-future':'lib/messenger/build/js/messenger-theme-future',
+    'messenger-theme-flat':'lib/messenger/build/js/messenger-theme-flat',
+
 
     //flat ui
     'bootstrap.select':'lib/flatui/bootstrap-select',
@@ -157,6 +159,9 @@ require.config({
       deps:['jquery']
     },
     'messenger-theme-future':{
+      deps:['messenger']
+    },
+    'messenger-theme-flat':{
       deps:['messenger']
     },
     'jquery-ui':{

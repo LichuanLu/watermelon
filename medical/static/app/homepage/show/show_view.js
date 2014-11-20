@@ -1,4 +1,6 @@
-define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'login/login_app', 'dust', 'dustMarionette', "bootstrap", 'jquery.elastislide.main'], function(ReqCmd, Lodash, Marionette, Templates, LoginApp) {
+define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'login/login_app', 
+	'dust', 'dustMarionette', "bootstrap", 'jquery.elastislide.main'], 
+	function(ReqCmd, Lodash, Marionette, Templates, LoginApp) {
 	// body...
 	"use strict";
 	var HomePageLayoutView = Marionette.Layout.extend({

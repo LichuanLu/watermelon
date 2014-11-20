@@ -65,9 +65,16 @@ define([], function() {
 		"</tr>" +
 		"{% } %}";
 
+		var zhCNLocale = {
+			'File is too big': '上传文件太大超过限制',
+		    'File is too small': '上传文件太小',
+		    'Filetype not allowed': '上传文件类型不符合要求'
+		}
+
 		return {
 			uploadTemplateStr:uploadTemplateStr,
-			downloadTemplateStr:downloadTemplateStr
+			downloadTemplateStr:downloadTemplateStr,
+			zhCNLocale:zhCNLocale
 		}
 
 
