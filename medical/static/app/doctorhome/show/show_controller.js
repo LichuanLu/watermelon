@@ -1,10 +1,10 @@
 define(['lodash', 'config/base/constant', 'config/controllers/_base_controller',
 		'doctorhome/show/show_view', 'utils/reqcmd', 'entities/diagnoseEntity',
 		'entities/messageEntity', 'entities/consultEntity', 'entities/userInfoEntity',
-		'message/show/show_view', 'common/common_view','modal/modal_view'
+		'message/show/show_view', 'common/common_view', 'modal/modal_view'
 	],
 	function(Lodash, CONSTANT, BaseController, View, ReqCmd, DiagnoseEntity, MessageEntity, ConsultEntity,
-		UserInfoEntity, MessageView, CommonView,ModalView) {
+		UserInfoEntity, MessageView, CommonView, ModalView) {
 		// body...
 		"use strict";
 		var ShowController = BaseController.extend({
@@ -288,20 +288,20 @@ define(['lodash', 'config/base/constant', 'config/controllers/_base_controller',
 					}
 
 				}, this));
-				
+
 				//create consult view submit
 				ReqCmd.commands.setHandler("CreateConsultView:submitHandler", Lodash.bind(function(params) {
 					console.log("CreateConsultView:submitHandler");
 					var that = this;
 					console.log(params);
 					//1 means doctor start, 0 means patient start
-					params+="&type=1";
+					params += "&type=1";
 					var url = "/consult/add";
 					$.ajax({
 						url: url,
 						dataType: 'json',
 						type: 'POST',
-						data:params,
+						data: params,
 						success: function(data) {
 							if (data.status != 0) {
 								this.onError(data);
@@ -356,7 +356,70 @@ define(['lodash', 'config/base/constant', 'config/controllers/_base_controller',
 				}, this));
 
 
+				//for doctor roll back
+				ReqCmd.commands.setHandler("rollbackDiagnose:NewDiagnoseLayoutView", Lodash.bind(function(model) {
+					console.log("rollbackDiagnose");
 
+					var rollbackModalView = this.getRollbackModalView(model);
+					this.appInstance.modalRegion.show(rollbackModalView);
+
+				}, this));
+
+				//click submit on roll back diagnose modal
+				ReqCmd.commands.setHandler("rollbackDiagnose:RollbackModalView", Lodash.bind(function(diagnoseId, params) {
+					console.log("rollbackDiagnose RollbackModalView");
+					var that = this;
+					if (diagnoseId) {
+						$.ajax({
+							url: '/diagnose/rollback/' + diagnoseId,
+							data: params,
+							dataType: 'json',
+							type: 'POST',
+							success: function(data) {
+								if (data.status != 0) {
+									this.onError(data);
+
+								} else {
+									that.appInstance.modalRegion.close();
+									Messenger().post({
+										message: '诊断已经成功打回',
+										type: 'success',
+										showCloseButton: true
+									});
+								}
+							},
+							onError: function(res) {
+								//var error = jQuery.parseJSON(data);
+								if (res.status == 2) {
+									window.location.replace('/loginPage')
+
+								} else if (res.status == 4) {
+									window.location.replace('/error')
+
+								}
+								if (typeof res.msg !== 'undefined') {
+									Messenger().post({
+										message: "错误信息:" + res.msg,
+										type: 'error',
+										showCloseButton: true
+									});
+								}
+
+							}
+						});
+					}
+
+
+				}, this));
+
+
+			},
+
+			getRollbackModalView: function(model) {
+				var view = new View.RollbackModalView({
+					model: model
+				});
+				return view;
 			},
 			showConsultListView: function() {
 				if (this.contentView.contentRegion) {

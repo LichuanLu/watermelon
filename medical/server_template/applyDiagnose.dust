@@ -573,5 +573,5 @@
 {<footerHolder}
 {/footerHolder}
 {<ModalHolder}
-    {>registerDoctorWarningModal/} 
+    {>selectDoctorModal/} 
 {/ModalHolder}

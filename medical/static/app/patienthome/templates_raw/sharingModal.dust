@@ -17,8 +17,8 @@
                             <div class="col-md-6">
                                 <select id="score-select" name="score">
                                   <option value="0">不满意</option>
-                                  <option value="1" selected>满意</option>
-                                  <option value="2" >很满意</option>
+                                  <option value="1">满意</option>
+                                  <option value="2" selected>很满意</option>
                                 </select>
                             </div>
                         </div>

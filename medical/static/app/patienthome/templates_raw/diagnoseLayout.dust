@@ -13,6 +13,8 @@
 					</select>
 				</div>
 				<button type="submit" class="btn btn-sm btn-primary submit-btn">确定</button>
+				<a href="/applyDiagnose" target="_blank" class="btn btn-info btn-sm right-20">申请新的诊断</a>
+
 			</form>
 		</div>
 		<div class="row h-padding-20">

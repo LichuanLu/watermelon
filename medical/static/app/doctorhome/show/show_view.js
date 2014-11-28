@@ -2,9 +2,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'ladda-bootstrap', 
 	'dustMarionette', "bootstrap", 'bootstrap.select', 'bootstrap-treeview',
 	'flat_ui_custom', 'config/validator/config'
 ], function(ReqCmd, Lodash, Marionette, Templates, ladda, ModalView) {
-	// body...
 	"use strict";
-	//var $;
 	var DoctorHomePageLayoutView = Marionette.Layout.extend({
 		initialize: function() {
 			console.log("init DoctorHomePageLayoutView");

@@ -79,7 +79,8 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 			$('.input-group.date').datepickerBootstrap({
 				language: "zh-CN",
 				format: "yyyy-mm-dd",
-				startView: 2
+				startView: 2,
+				autoclose:true
 			});
 			// $(datepickerSelector).datepicker({
 			// 	showOtherMonths: true,

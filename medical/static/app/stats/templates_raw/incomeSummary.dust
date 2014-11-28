@@ -1,0 +1,9 @@
+<div>
+	<ul class="nav">
+	  <li>未可用:{ongoing}</li>
+	  <li>已可用:{payable}</li>
+	  <li>已支付:{paid}</li>
+	  <li>上月支付:{lastMonthRevenue}</li>
+	  <li><a id="applyPayBtn" class="btn btn-primary">申请提现</a></li>
+	</ul>
+</div>
