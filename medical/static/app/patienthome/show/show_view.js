@@ -18,7 +18,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates',
 			ui: {
 				"patientActionLinks": "#patient-actions ul a",
 				"headerTitle": "#patient-action-header h6",
-				'headerAction':'#patient-action-header .right-action'
+				'headerAction': '#patient-action-header .right-action'
 
 			},
 			events: {
@@ -49,13 +49,12 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates',
 				//console.log(iconClass+','+text);
 				//console.dir(this.ui);
 				this.ui.headerTitle.html("<i class='" + iconClass + "'></i><span>" + titleText + "</span>");
-				if(viewName == 'diagnoseLink'){
+				if (viewName == 'diagnoseLink') {
 					this.ui.headerAction.show();
-				}else{
+				} else {
 					this.ui.headerAction.hide();
 				}
 			}
-
 
 
 
@@ -420,7 +419,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates',
 
 						} else {
 							var params = {
-								type:2
+								type: 2
 							}
 							that.resetModel(params);
 							Messenger().post({
@@ -679,12 +678,75 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates',
 
 			},
 			regions: {
-				"contentRegion": "#consultLayoutContent"
+				"contentRegion": "#consultLayoutContent",
+				"phoneContentRegion":"#phoneConsultLayoutContent"
 			},
 			events: {},
 			onRender: function() {},
 			onShow: function() {
 				ReqCmd.reqres.request("ConsultLayoutView:onshow");
+			},
+			onDomRefresh: function() {
+				var $this = $(this);
+				console.dir($('#accountTab a'));
+				$('#accountTab a').click(function(e) {
+					e.preventDefault();
+					$(this).tab('show');
+				});
+			},
+		});
+
+
+		var PhoneConsultListView = Marionette.CompositeView.extend({
+			initialize: function(options) {
+				console.log("PhoneConsultListView init end");
+			},
+			onRender: function() {
+				console.log("PhoneConsultListView render");
+			},
+			onDomRefresh: function() {
+				$("select").selectpicker({
+					style: 'btn-sm btn-primary'
+				});
+			},
+			ui: {
+				"phoneSearchConsultForm": "#phoneSearchConsultForm",
+				"submitBtn": ".submit-btn",
+				"newConsultBtn": "#new-phone-consult-btn"
+
+			},
+			events: {
+				"click @ui.submitBtn": "searchConsult",
+				"click @ui.newConsultBtn": "addConsult"
+
+			},
+			addConsult: function(e) {
+				e.preventDefault();
+				ReqCmd.commands.execute("PhoneConsultListView:addConsult");
+			},
+			searchConsult: function(e) {
+				e.preventDefault();
+				var params = this.ui.phoneSearchConsultForm.serialize();
+				ReqCmd.commands.execute("PhoneConsultListView:searchConsult", params, $("#phoneSearchConsultForm select").val());
+			},
+			template: 'phoneConsultList',
+			itemViewContainer: '#phone-consult-tbody'
+
+		});
+
+
+		var PhoneConsultListItemView = Marionette.ItemView.extend({
+			template: "phoneConsultListItem",
+			initialize: function(options) {},
+			ui: {
+			},
+			events: {
+			},
+			onRender: function() {
+				// get rid of that pesky wrapping-div
+				// assumes 1 child element			
+				this.$el = this.$el.children();
+				this.setElement(this.$el);
 			}
 		});
 
@@ -701,6 +763,8 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates',
 			FavoriteItemView: FavoriteItemView,
 			DetailTrackLayoutView: DetailTrackLayoutView,
 			DeleteDiagnoseModalView: DeleteDiagnoseModalView,
-			ConsultLayoutView: ConsultLayoutView
+			ConsultLayoutView: ConsultLayoutView,
+			PhoneConsultListItemView:PhoneConsultListItemView,
+			PhoneConsultListView:PhoneConsultListView
 		}
 	});

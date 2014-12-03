@@ -1281,7 +1281,7 @@ window.Messenger.Events = (function() {
 define("messenger", ["jquery"], function(){});
 
 (function() {
-  var $, FutureMessage, spinner_template,
+  var $, FlatMessage, spinner_template,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -1289,40 +1289,43 @@ define("messenger", ["jquery"], function(){});
 
   spinner_template = '<div class="messenger-spinner">\n    <span class="messenger-spinner-side messenger-spinner-side-left">\n        <span class="messenger-spinner-fill"></span>\n    </span>\n    <span class="messenger-spinner-side messenger-spinner-side-right">\n        <span class="messenger-spinner-fill"></span>\n    </span>\n</div>';
 
-  FutureMessage = (function(_super) {
+  FlatMessage = (function(_super) {
 
-    __extends(FutureMessage, _super);
+    __extends(FlatMessage, _super);
 
-    function FutureMessage() {
-      return FutureMessage.__super__.constructor.apply(this, arguments);
+    function FlatMessage() {
+      return FlatMessage.__super__.constructor.apply(this, arguments);
     }
 
-    FutureMessage.prototype.template = function(opts) {
+    FlatMessage.prototype.template = function(opts) {
       var $message;
-      $message = FutureMessage.__super__.template.apply(this, arguments);
+      $message = FlatMessage.__super__.template.apply(this, arguments);
       $message.append($(spinner_template));
       return $message;
     };
 
-    return FutureMessage;
+    return FlatMessage;
 
   })(window.Messenger.Message);
 
-  window.Messenger.themes.future = {
-    Message: FutureMessage
+  window.Messenger.themes.flat = {
+    Message: FlatMessage
   };
 
 }).call(this);
 
-define("messenger-theme-future", ["messenger"], function(){});
+define("messenger-theme-flat", ["messenger"], function(){});
 
-require(['messenger', 'messenger-theme-future'], function() {
+require(['messenger', 'messenger-theme-flat'], function() {
     // body...
     
-    // Messenger.options = {
-    //     extraClasses: 'messenger-fixed messenger-on-bottom',
-    //     theme: 'future'
-    // };
+    Messenger.options = {
+        extraClasses: 'messenger-fixed messenger-on-top',
+        theme: 'flat',
+        hideAfter:60
+    };
+
+    
 
     $.ajaxSetup({
         headers: {
@@ -1411,7 +1414,17 @@ require(['messenger', 'messenger-theme-future'], function() {
                     });
                 }
             
+            //redirect if status = 2 (not login) , and status = 4 (permission deny)
+            // if(data.status == 2){
+            //     window.location.replace('/loginPage')
+
+            // }else if(data.status == 4){
+            //     window.location.replace('/error')
+
+            // }
+
             //handle error than trigger onError for each ajax request
+
             try {
                 this.onError(data);
             } catch (err) {
@@ -1427,22 +1440,37 @@ require(['messenger', 'messenger-theme-future'], function() {
 });
 define("ajax.setup", ["jquery"], function(){});
 
-//     Backbone.js 1.1.0
+//     Backbone.js 1.1.2
 
-//     (c) 2010-2011 Jeremy Ashkenas, DocumentCloud Inc.
-//     (c) 2011-2013 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+//     (c) 2010-2014 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 //     Backbone may be freely distributed under the MIT license.
 //     For all details and documentation:
 //     http://backbonejs.org
 
-(function(){
+(function(root, factory) {
+
+  // Set up Backbone appropriately for the environment. Start with AMD.
+  if (typeof define === 'function' && define.amd) {
+    define('backbone',['underscore', 'jquery', 'exports'], function(_, $, exports) {
+      // Export global even in AMD case in case this script is loaded with
+      // others that may still expect a global Backbone.
+      root.Backbone = factory(root, exports, _, $);
+    });
+
+  // Next for Node.js or CommonJS. jQuery may not be needed as a module.
+  } else if (typeof exports !== 'undefined') {
+    var _ = require('underscore');
+    factory(root, exports, _);
+
+  // Finally, as a browser global.
+  } else {
+    root.Backbone = factory(root, {}, root._, (root.jQuery || root.Zepto || root.ender || root.$));
+  }
+
+}(this, function(root, Backbone, _, $) {
 
   // Initial Setup
   // -------------
-
-  // Save a reference to the global object (`window` in the browser, `exports`
-  // on the server).
-  var root = this;
 
   // Save the previous value of the `Backbone` variable, so that it can be
   // restored later on, if `noConflict` is used.
@@ -1454,25 +1482,12 @@ define("ajax.setup", ["jquery"], function(){});
   var slice = array.slice;
   var splice = array.splice;
 
-  // The top-level namespace. All public Backbone classes and modules will
-  // be attached to this. Exported for both the browser and the server.
-  var Backbone;
-  if (typeof exports !== 'undefined') {
-    Backbone = exports;
-  } else {
-    Backbone = root.Backbone = {};
-  }
-
   // Current version of the library. Keep in sync with `package.json`.
-  Backbone.VERSION = '1.1.0';
-
-  // Require Underscore, if we're on the server, and it's not already present.
-  var _ = root._;
-  if (!_ && (typeof require !== 'undefined')) _ = require('underscore');
+  Backbone.VERSION = '1.1.2';
 
   // For Backbone's purposes, jQuery, Zepto, Ender, or My Library (kidding) owns
   // the `$` variable.
-  Backbone.$ = root.jQuery || root.Zepto || root.ender || root.$;
+  Backbone.$ = $;
 
   // Runs Backbone.js in *noConflict* mode, returning the `Backbone` variable
   // to its previous owner. Returns a reference to this Backbone object.
@@ -1538,7 +1553,7 @@ define("ajax.setup", ["jquery"], function(){});
       var retain, ev, events, names, i, l, j, k;
       if (!this._events || !eventsApi(this, 'off', name, [callback, context])) return this;
       if (!name && !callback && !context) {
-        this._events = {};
+        this._events = void 0;
         return this;
       }
       names = name ? [name] : _.keys(this._events);
@@ -1634,7 +1649,7 @@ define("ajax.setup", ["jquery"], function(){});
       case 1: while (++i < l) (ev = events[i]).callback.call(ev.ctx, a1); return;
       case 2: while (++i < l) (ev = events[i]).callback.call(ev.ctx, a1, a2); return;
       case 3: while (++i < l) (ev = events[i]).callback.call(ev.ctx, a1, a2, a3); return;
-      default: while (++i < l) (ev = events[i]).callback.apply(ev.ctx, args);
+      default: while (++i < l) (ev = events[i]).callback.apply(ev.ctx, args); return;
     }
   };
 
@@ -1779,7 +1794,7 @@ define("ajax.setup", ["jquery"], function(){});
 
       // Trigger all relevant attribute changes.
       if (!silent) {
-        if (changes.length) this._pending = true;
+        if (changes.length) this._pending = options;
         for (var i = 0, l = changes.length; i < l; i++) {
           this.trigger('change:' + changes[i], this, current[changes[i]], options);
         }
@@ -1790,6 +1805,7 @@ define("ajax.setup", ["jquery"], function(){});
       if (changing) return this;
       if (!silent) {
         while (this._pending) {
+          options = this._pending;
           this._pending = false;
           this.trigger('change', this, options);
         }
@@ -1957,9 +1973,12 @@ define("ajax.setup", ["jquery"], function(){});
     // using Backbone's restful methods, override this to change the endpoint
     // that will be called.
     url: function() {
-      var base = _.result(this, 'urlRoot') || _.result(this.collection, 'url') || urlError();
+      var base =
+        _.result(this, 'urlRoot') ||
+        _.result(this.collection, 'url') ||
+        urlError();
       if (this.isNew()) return base;
-      return base + (base.charAt(base.length - 1) === '/' ? '' : '/') + encodeURIComponent(this.id);
+      return base.replace(/([^\/])$/, '$1/') + encodeURIComponent(this.id);
     },
 
     // **parse** converts a response into the hash of attributes to be `set` on
@@ -1975,7 +1994,7 @@ define("ajax.setup", ["jquery"], function(){});
 
     // A model is new if it has never been saved to the server, and lacks an id.
     isNew: function() {
-      return this.id == null;
+      return !this.has(this.idAttribute);
     },
 
     // Check if the model is currently in a valid state.
@@ -2079,7 +2098,7 @@ define("ajax.setup", ["jquery"], function(){});
           options.index = index;
           model.trigger('remove', model, this, options);
         }
-        this._removeReference(model);
+        this._removeReference(model, options);
       }
       return singular ? models[0] : models;
     },
@@ -2105,11 +2124,11 @@ define("ajax.setup", ["jquery"], function(){});
       // Turn bare objects into model references, and prevent invalid models
       // from being added.
       for (i = 0, l = models.length; i < l; i++) {
-        attrs = models[i];
+        attrs = models[i] || {};
         if (attrs instanceof Model) {
           id = model = attrs;
         } else {
-          id = attrs[targetModel.prototype.idAttribute];
+          id = attrs[targetModel.prototype.idAttribute || 'id'];
         }
 
         // If a duplicate is found, prevent it from being added and
@@ -2129,14 +2148,13 @@ define("ajax.setup", ["jquery"], function(){});
           model = models[i] = this._prepareModel(attrs, options);
           if (!model) continue;
           toAdd.push(model);
-
-          // Listen to added models' events, and index models for lookup by
-          // `id` and by `cid`.
-          model.on('all', this._onModelEvent, this);
-          this._byId[model.cid] = model;
-          if (model.id != null) this._byId[model.id] = model;
+          this._addReference(model, options);
         }
-        if (order) order.push(existing || model);
+
+        // Do not add multiple models with the same `id`.
+        model = existing || model;
+        if (order && (model.isNew() || !modelMap[model.id])) order.push(model);
+        modelMap[model.id] = true;
       }
 
       // Remove nonexistent models if appropriate.
@@ -2174,7 +2192,7 @@ define("ajax.setup", ["jquery"], function(){});
         }
         if (sort || (order && order.length)) this.trigger('sort', this, options);
       }
-      
+
       // Return the added (or merged) model (or models).
       return singular ? models[0] : models;
     },
@@ -2186,7 +2204,7 @@ define("ajax.setup", ["jquery"], function(){});
     reset: function(models, options) {
       options || (options = {});
       for (var i = 0, l = this.models.length; i < l; i++) {
-        this._removeReference(this.models[i]);
+        this._removeReference(this.models[i], options);
       }
       options.previousModels = this.models;
       this._reset();
@@ -2227,7 +2245,7 @@ define("ajax.setup", ["jquery"], function(){});
     // Get a model from the set by id.
     get: function(obj) {
       if (obj == null) return void 0;
-      return this._byId[obj.id] || this._byId[obj.cid] || this._byId[obj];
+      return this._byId[obj] || this._byId[obj.id] || this._byId[obj.cid];
     },
 
     // Get the model at the given index.
@@ -2303,7 +2321,7 @@ define("ajax.setup", ["jquery"], function(){});
       if (!options.wait) this.add(model, options);
       var collection = this;
       var success = options.success;
-      options.success = function(model, resp, options) {
+      options.success = function(model, resp) {
         if (options.wait) collection.add(model, options);
         if (success) success(model, resp, options);
       };
@@ -2333,10 +2351,7 @@ define("ajax.setup", ["jquery"], function(){});
     // Prepare a hash of attributes (or other model) to be added to this
     // collection.
     _prepareModel: function(attrs, options) {
-      if (attrs instanceof Model) {
-        if (!attrs.collection) attrs.collection = this;
-        return attrs;
-      }
+      if (attrs instanceof Model) return attrs;
       options = options ? _.clone(options) : {};
       options.collection = this;
       var model = new this.model(attrs, options);
@@ -2345,8 +2360,16 @@ define("ajax.setup", ["jquery"], function(){});
       return false;
     },
 
+    // Internal method to create a model's ties to a collection.
+    _addReference: function(model, options) {
+      this._byId[model.cid] = model;
+      if (model.id != null) this._byId[model.id] = model;
+      if (!model.collection) model.collection = this;
+      model.on('all', this._onModelEvent, this);
+    },
+
     // Internal method to sever a model's ties to a collection.
-    _removeReference: function(model) {
+    _removeReference: function(model, options) {
       if (this === model.collection) delete model.collection;
       model.off('all', this._onModelEvent, this);
     },
@@ -2375,7 +2398,7 @@ define("ajax.setup", ["jquery"], function(){});
     'reject', 'every', 'all', 'some', 'any', 'include', 'contains', 'invoke',
     'max', 'min', 'toArray', 'size', 'first', 'head', 'take', 'initial', 'rest',
     'tail', 'drop', 'last', 'without', 'difference', 'indexOf', 'shuffle',
-    'lastIndexOf', 'isEmpty', 'chain'];
+    'lastIndexOf', 'isEmpty', 'chain', 'sample'];
 
   // Mix in each Underscore method as a proxy to `Collection#models`.
   _.each(methods, function(method) {
@@ -2387,7 +2410,7 @@ define("ajax.setup", ["jquery"], function(){});
   });
 
   // Underscore methods that take a property name as an argument.
-  var attributeMethods = ['groupBy', 'countBy', 'sortBy'];
+  var attributeMethods = ['groupBy', 'countBy', 'sortBy', 'indexBy'];
 
   // Use attributes instead of properties.
   _.each(attributeMethods, function(method) {
@@ -2609,7 +2632,9 @@ define("ajax.setup", ["jquery"], function(){});
     return xhr;
   };
 
-  var noXhrPatch = typeof window !== 'undefined' && !!window.ActiveXObject && !(window.XMLHttpRequest && (new XMLHttpRequest).dispatchEvent);
+  var noXhrPatch =
+    typeof window !== 'undefined' && !!window.ActiveXObject &&
+      !(window.XMLHttpRequest && (new XMLHttpRequest).dispatchEvent);
 
   // Map from CRUD to HTTP for our default `Backbone.sync` implementation.
   var methodMap = {
@@ -2668,12 +2693,18 @@ define("ajax.setup", ["jquery"], function(){});
       var router = this;
       Backbone.history.route(route, function(fragment) {
         var args = router._extractParameters(route, fragment);
-        callback && callback.apply(router, args);
+        router.execute(callback, args);
         router.trigger.apply(router, ['route:' + name].concat(args));
         router.trigger('route', name, args);
         Backbone.history.trigger('route', router, name, args);
       });
       return this;
+    },
+
+    // Execute a route handler with the provided parameters.  This is an
+    // excellent place to do pre-route setup or post-route cleanup.
+    execute: function(callback, args) {
+      if (callback) callback.apply(this, args);
     },
 
     // Simple proxy to `Backbone.history` to save a fragment into the history.
@@ -2700,10 +2731,10 @@ define("ajax.setup", ["jquery"], function(){});
       route = route.replace(escapeRegExp, '\\$&')
                    .replace(optionalParam, '(?:$1)?')
                    .replace(namedParam, function(match, optional) {
-                     return optional ? match : '([^\/]+)';
+                     return optional ? match : '([^/?]+)';
                    })
-                   .replace(splatParam, '(.*?)');
-      return new RegExp('^' + route + '$');
+                   .replace(splatParam, '([^?]*?)');
+      return new RegExp('^' + route + '(?:\\?([\\s\\S]*))?$');
     },
 
     // Given a route, and a URL fragment that it matches, return the array of
@@ -2711,7 +2742,9 @@ define("ajax.setup", ["jquery"], function(){});
     // treated as `null` to normalize cross-browser behavior.
     _extractParameters: function(route, fragment) {
       var params = route.exec(fragment).slice(1);
-      return _.map(params, function(param) {
+      return _.map(params, function(param, i) {
+        // Don't decode the search params.
+        if (i === params.length - 1) return param || null;
         return param ? decodeURIComponent(param) : null;
       });
     }
@@ -2749,8 +2782,8 @@ define("ajax.setup", ["jquery"], function(){});
   // Cached regex for removing a trailing slash.
   var trailingSlash = /\/$/;
 
-  // Cached regex for stripping urls of hash and query.
-  var pathStripper = /[?#].*$/;
+  // Cached regex for stripping urls of hash.
+  var pathStripper = /#.*$/;
 
   // Has the history handling already been started?
   History.started = false;
@@ -2761,6 +2794,11 @@ define("ajax.setup", ["jquery"], function(){});
     // The default interval to poll for hash changes, if necessary, is
     // twenty times a second.
     interval: 50,
+
+    // Are we at the app root?
+    atRoot: function() {
+      return this.location.pathname.replace(/[^\/]$/, '$&/') === this.root;
+    },
 
     // Gets the true hash value. Cannot use location.hash directly due to bug
     // in Firefox where location.hash will always be decoded.
@@ -2774,7 +2812,7 @@ define("ajax.setup", ["jquery"], function(){});
     getFragment: function(fragment, forcePushState) {
       if (fragment == null) {
         if (this._hasPushState || !this._wantsHashChange || forcePushState) {
-          fragment = this.location.pathname;
+          fragment = decodeURI(this.location.pathname + this.location.search);
           var root = this.root.replace(trailingSlash, '');
           if (!fragment.indexOf(root)) fragment = fragment.slice(root.length);
         } else {
@@ -2805,7 +2843,8 @@ define("ajax.setup", ["jquery"], function(){});
       this.root = ('/' + this.root + '/').replace(rootStripper, '/');
 
       if (oldIE && this._wantsHashChange) {
-        this.iframe = Backbone.$('<iframe src="javascript:0" tabindex="-1" />').hide().appendTo('body')[0].contentWindow;
+        var frame = Backbone.$('<iframe src="javascript:0" tabindex="-1">');
+        this.iframe = frame.hide().appendTo('body')[0].contentWindow;
         this.navigate(fragment);
       }
 
@@ -2823,7 +2862,6 @@ define("ajax.setup", ["jquery"], function(){});
       // opened by a non-pushState browser.
       this.fragment = fragment;
       var loc = this.location;
-      var atRoot = loc.pathname.replace(/[^\/]$/, '$&/') === this.root;
 
       // Transition from hashChange to pushState or vice versa if both are
       // requested.
@@ -2831,17 +2869,17 @@ define("ajax.setup", ["jquery"], function(){});
 
         // If we've started off with a route from a `pushState`-enabled
         // browser, but we're currently in a browser that doesn't support it...
-        if (!this._hasPushState && !atRoot) {
+        if (!this._hasPushState && !this.atRoot()) {
           this.fragment = this.getFragment(null, true);
-          this.location.replace(this.root + this.location.search + '#' + this.fragment);
+          this.location.replace(this.root + '#' + this.fragment);
           // Return immediately as browser will do redirect to new url
           return true;
 
         // Or if we've started out with a hash-based route, but we're currently
         // in a browser where it could be `pushState`-based instead...
-        } else if (this._hasPushState && atRoot && loc.hash) {
+        } else if (this._hasPushState && this.atRoot() && loc.hash) {
           this.fragment = this.getHash().replace(routeStripper, '');
-          this.history.replaceState({}, document.title, this.root + this.fragment + loc.search);
+          this.history.replaceState({}, document.title, this.root + this.fragment);
         }
 
       }
@@ -2853,7 +2891,7 @@ define("ajax.setup", ["jquery"], function(){});
     // but possibly useful for unit testing Routers.
     stop: function() {
       Backbone.$(window).off('popstate', this.checkUrl).off('hashchange', this.checkUrl);
-      clearInterval(this._checkUrlInterval);
+      if (this._checkUrlInterval) clearInterval(this._checkUrlInterval);
       History.started = false;
     },
 
@@ -2901,7 +2939,7 @@ define("ajax.setup", ["jquery"], function(){});
 
       var url = this.root + (fragment = this.getFragment(fragment || ''));
 
-      // Strip the fragment of the query and hash for matching.
+      // Strip the hash for matching.
       fragment = fragment.replace(pathStripper, '');
 
       if (this.fragment === fragment) return;
@@ -3007,14 +3045,9 @@ define("ajax.setup", ["jquery"], function(){});
     };
   };
 
-}).call(this);
+  return Backbone;
 
-define("backbone", ["jquery","underscore"], (function (global) {
-    return function () {
-        var ret, fn;
-        return ret || global.Backbone;
-    };
-}(this)));
+}));
 
 // Backbone.Wreqr (Backbone.Marionette)
 // ----------------------------------
@@ -14565,11 +14598,67 @@ require(['backbone','marionette','lodash'],function(Backbone,Marionette,lodash) 
 
 define("config/marionette/application", function(){});
 
-define('config/_base',['require','config/marionette/application'],function (require) {
+require(["backbone"], function(Backbone) {
+	// body...
+	//for jsonp callback, normal case can use successful call back of fetch
+	
+	// var _sync = Backbone.sync;
+
+
+	// Backbone.sync = function(method, entity, options) {
+	// 	// body...
+	// 	var sync;
+	// 	if (options === null) {
+	// 		options = {};
+	// 	}
+	// 	sync = _sync(method, entity, options);
+	// 	if (!entity._fetch && method === "read") {
+	// 		entity._fetch = sync;
+	// 	}
+	// 	return sync
+	// }
+
+	// var _fetch = Backbone.Collection.prototype.fetch;
+
+	Backbone.Collection.prototype.fetch = function(options) {
+		options = options ? _.clone(options) : {};
+		if (options.parse === void 0) options.parse = true;
+		var success = options.success;
+		var collection = this;
+		options.success = function(resp) {
+			if (resp.status == 2) {
+				window.location.replace('/loginPage')
+
+			} else if (resp.status == 4) {
+				window.location.replace('/error')
+
+			}
+			var method = options.reset ? 'reset' : 'set';
+			collection[method](resp, options);
+			if (success) success(collection, resp, options);
+			collection.trigger('sync', collection, resp, options);
+		};
+		wrapError(this, options);
+		return this.sync('read', this, options);
+
+	}
+	var wrapError = function(model, options) {
+		var error = options.error;
+		options.error = function(resp) {
+			if (error) error(model, resp, options);
+			model.trigger('error', model, resp, options);
+		};
+	};
+
+
+});
+define("config/backbone/sync", function(){});
+
+define('config/_base',['require','config/marionette/application','config/backbone/sync'],function (require) {
 	// body...
 	
 	var appConfig = require('config/marionette/application');
-	//var backboneSync = require('config/backbone/sync');
+	var backboneSync = require('config/backbone/sync');
 	//var entityUtil = require('entities/base/_utilities');
 });
 define('utils/reqcmd',['backbone.wreqr'], function( Wreqr ){
@@ -14745,19 +14834,19 @@ define("dust", (function (global) {
     };
 }(this)));
 
-(function(){dust.register("diagnoseItem",body_0);function body_0(chk,ctx){return chk.write("<tr><td>").reference(ctx.get(["diagnosenumber"], false),ctx,"h").write("</td><td>").reference(ctx.get(["date"], false),ctx,"h").write("</td><td>").reference(ctx.get(["doctorName"], false),ctx,"h").write("</td><td>").reference(ctx.get(["patientName"], false),ctx,"h").write("</td><!-- \t<td>").reference(ctx.get(["section"], false),ctx,"h").write("</td>-->\t").helper("if",ctx,{"else":body_1,"block":body_2},{"cond":body_3}).write("<td class=\"action-group\">").helper("if",ctx,{"block":body_4},{"cond":body_5}).helper("if",ctx,{"block":body_6},{"cond":body_7}).helper("if",ctx,{"block":body_8},{"cond":body_9}).helper("if",ctx,{"block":body_10},{"cond":body_14}).write("</td><td class=\"detail-wrapper\">").helper("if",ctx,{"block":body_15},{"cond":body_16}).write("</td></tr>");}function body_1(chk,ctx){return chk.write("<td>").reference(ctx.get(["status"], false),ctx,"h").write("</td>");}function body_2(chk,ctx){return chk.write("<td>").reference(ctx.get(["status"], false),ctx,"h").write("  <a href=\"#").reference(ctx.get(["id"], false),ctx,"h").write("\" class=\"warning\"><span class=\"fui-question\"></span></a></td>");}function body_3(chk,ctx){return chk.write("'").reference(ctx.get(["statusId"], false),ctx,"h").write("' == '7'");}function body_4(chk,ctx){return chk.write("<a href=\"/applyDiagnose?diagnoseid=").reference(ctx.get(["id"], false),ctx,"h").write("\" target=\"_blank\">修改</a><a class=\"rm-diagnose-link action-link\" href=\"#\">删除</a>");}function body_5(chk,ctx){return chk.write("'").reference(ctx.get(["statusId"], false),ctx,"h").write("' == '0'");}function body_6(chk,ctx){return chk.write("<a class=\"detail-link\" href=\"#\">查看原因</a>");}function body_7(chk,ctx){return chk.write("'").reference(ctx.get(["statusId"], false),ctx,"h").write("' == '7'");}function body_8(chk,ctx){return chk.write("<a href=\"/help/center\" target=\"_blank\">联系客服</a><a class=\"rm-diagnose-link action-link\" href=\"#\">撤销</a>");}function body_9(chk,ctx){return chk.write("'").reference(ctx.get(["statusId"], false),ctx,"h").write("' == '2'");}function body_10(chk,ctx){return chk.write("<a href=\"/diagnose/").reference(ctx.get(["id"], false),ctx,"h").write("/pdf\" target=\"_blank\">查看报告</a><a href=\"").reference(ctx.get(["reportUrl"], false),ctx,"h").write("\">下载</a>").helper("if",ctx,{"else":body_11,"block":body_12},{"cond":body_13});}function body_11(chk,ctx){return chk.write("<a href=\"#\" class=\"sharing-link action-link\">评价</a>");}function body_12(chk,ctx){return chk;}function body_13(chk,ctx){return chk.reference(ctx.get(["isFeedback"], false),ctx,"h");}function body_14(chk,ctx){return chk.write("'").reference(ctx.get(["statusId"], false),ctx,"h").write("' == '6'");}function body_15(chk,ctx){return chk.write("<a class=\"detail-link\" href=\"#\">详细<span class=\"fui-arrow-right\"></span></a>");}function body_16(chk,ctx){return chk.write("'").reference(ctx.get(["statusId"], false),ctx,"h").write("' != '0'");}return body_0;})();
+(function(){dust.register("diagnoseItem",body_0);function body_0(chk,ctx){return chk.write("<tr><td>").reference(ctx.get(["diagnosenumber"], false),ctx,"h").write("</td><td>").reference(ctx.get(["date"], false),ctx,"h").write("</td><td>").reference(ctx.get(["doctorName"], false),ctx,"h").write("</td><td>").reference(ctx.get(["patientName"], false),ctx,"h").write("</td><!-- \t<td>").reference(ctx.get(["section"], false),ctx,"h").write("</td>-->\t").helper("if",ctx,{"else":body_1,"block":body_2},{"cond":body_3}).write("<td class=\"action-group\">").helper("if",ctx,{"block":body_4},{"cond":body_5}).helper("if",ctx,{"block":body_6},{"cond":body_7}).helper("if",ctx,{"block":body_8},{"cond":body_9}).helper("if",ctx,{"block":body_10},{"cond":body_14}).write("</td><td class=\"detail-wrapper\">").helper("if",ctx,{"block":body_15},{"cond":body_16}).write("</td></tr>");}function body_1(chk,ctx){return chk.write("<td>").reference(ctx.get(["status"], false),ctx,"h").write("</td>");}function body_2(chk,ctx){return chk.write("<td>").reference(ctx.get(["status"], false),ctx,"h").write("  <a href=\"#").reference(ctx.get(["id"], false),ctx,"h").write("\" class=\"warning\"><span class=\"fui-question\"></span></a></td>");}function body_3(chk,ctx){return chk.write("'").reference(ctx.get(["statusId"], false),ctx,"h").write("' == '7'");}function body_4(chk,ctx){return chk.write("<a href=\"/applyDiagnose?diagnoseid=").reference(ctx.get(["id"], false),ctx,"h").write("&edit=true\" target=\"_blank\">修改</a><a class=\"rm-diagnose-link action-link\" href=\"#\">删除</a>");}function body_5(chk,ctx){return chk.write("'").reference(ctx.get(["statusId"], false),ctx,"h").write("' == '9'");}function body_6(chk,ctx){return chk.write("<a class=\"detail-link\" href=\"#\">查看原因</a>");}function body_7(chk,ctx){return chk.write("'").reference(ctx.get(["statusId"], false),ctx,"h").write("' == '7'");}function body_8(chk,ctx){return chk.write("<a href=\"/help/center\" target=\"_blank\">联系客服</a><a class=\"rm-diagnose-link action-link\" href=\"#\">撤销</a>");}function body_9(chk,ctx){return chk.write("'").reference(ctx.get(["statusId"], false),ctx,"h").write("' == '2'");}function body_10(chk,ctx){return chk.write("<a href=\"/diagnose/").reference(ctx.get(["id"], false),ctx,"h").write("/pdf\" target=\"_blank\">查看报告</a><a href=\"").reference(ctx.get(["reportUrl"], false),ctx,"h").write("\" target=\"_blank\">下载</a>").helper("if",ctx,{"else":body_11,"block":body_12},{"cond":body_13});}function body_11(chk,ctx){return chk.write("<a href=\"#\" class=\"sharing-link action-link\">评价</a>");}function body_12(chk,ctx){return chk;}function body_13(chk,ctx){return chk.reference(ctx.get(["isFeedback"], false),ctx,"h");}function body_14(chk,ctx){return chk.write("'").reference(ctx.get(["statusId"], false),ctx,"h").write("' == '6'");}function body_15(chk,ctx){return chk.write("<a class=\"detail-link\" href=\"#\">详细<span class=\"fui-arrow-right\"></span></a>");}function body_16(chk,ctx){return chk.write("'").reference(ctx.get(["statusId"], false),ctx,"h").write("' != '9'");}return body_0;})();
 define("patienthome/templates/diagnoseItem", function(){});
 
-(function(){dust.register("diagnoseLayout",body_0);function body_0(chk,ctx){return chk.write("<div id=\"patient-action-content\"><div id=\"diagnose-all-wrapper\"><div class=\"row\"><form class=\"form-inline\" role=\"form\"><div class=\"form-group\"><label class=\"\" for=\"\">按诊断状态筛选：</label><select><option value=\"\">全部</option><option value=\"1\">草稿</option><option value=\"2\">待付费</option><option value=\"6\">诊断完成</option><option value=\"7\">需要更新</option></select></div><button type=\"submit\" class=\"btn btn-sm btn-default submit-btn\">确定</button></form></div><div class=\"row h-padding-20\"><table class=\"table table-striped table-hover\" id=\"diagnose-table\"><thead><tr class=\"success\"><th>诊断号</th><th>就诊日期</th><th>专家</th><th>就诊人</th><!-- \t\t\t                <th>诊断部位</th>--><th>诊断状态</th><th>操作</th><th>详细</th></tr></thead><tbody id=\"diagnose-tbody\"></tbody></table></div></div></div>");}return body_0;})();
+(function(){dust.register("diagnoseLayout",body_0);function body_0(chk,ctx){return chk.write("<div id=\"patient-action-content\"><div id=\"diagnose-all-wrapper\"><div class=\"row\"><form class=\"form-inline\" role=\"form\"><div class=\"form-group\"><label class=\"\" for=\"\">按诊断状态筛选：</label><select><option value=\"\">全部</option><option value=\"9\">草稿</option><option value=\"2\">待付费</option><option value=\"6\">诊断完成</option><option value=\"7\">需要更新</option></select></div><button type=\"submit\" class=\"btn btn-sm btn-primary submit-btn\">确定</button><a href=\"/applyDiagnose\" target=\"_blank\" class=\"btn btn-info btn-sm right-20\">申请新的诊断</a></form></div><div class=\"row h-padding-20\"><table class=\"table table-striped table-hover\" id=\"diagnose-table\"><thead><tr class=\"success\"><th>诊断号</th><th>就诊日期</th><th>专家</th><th>就诊人</th><!-- \t\t\t                <th>诊断部位</th>--><th>诊断状态</th><th>操作</th><th>详细</th></tr></thead><tbody id=\"diagnose-tbody\"></tbody></table></div></div></div>");}return body_0;})();
 define("patienthome/templates/diagnoseLayout", function(){});
 
-(function(){dust.register("patientAccountManageLayout",body_0);function body_0(chk,ctx){return chk.write("<div id=\"patient-action-content\"><ul class=\"nav nav-tabs\" id=\"accountTab\"><li class=\"active\"><a href=\"#patient-user-account-wrapper\">个人信息</a></li><li><a href=\"#patient-user-password-wrapper\">修改密码</a></li><li><a href=\"#patient-user-avatar-wrapper\">上传头像</a></li></ul><div id='content' class=\"tab-content\"><div class=\"tab-pane active\" id=\"patient-user-account-wrapper\"><form class=\"form-horizontal col-md-offset-2\" role=\"form\" id=\"patient-user-account-form\"><div class=\"form-group\"><label for=\"\" class=\"col-md-2 control-label\">登录名：</label><div class=\"col-md-8 form-body\"><span class=\"form-content-text\">lulichuan628@gmail.com</span></div></div><div class=\"form-group\"><label for=\"displayNameInput\" class=\"col-md-2 control-label\">昵称：</label><div class=\"col-md-8 form-body\"><a href=\"#\" class=\"edit-btn form-content-text\">点击编辑</a><input type=\"text\" class=\"form-control input-sm edit-block\" id=\"displayNameInput\" placeholder=\"\"><a href=\"#\" class=\"btn btn-sm btn-info btn-submit edit-block\">确定</a><span class=\"form-content-text warning-block\"></span></div></div><div class=\"form-group\"><label for=\"phoneInput\" class=\"col-md-2 control-label\">手机号：</label><div class=\"col-md-8 form-body\"><span class=\"form-content-text\">152****3425</span><a href=\"#\" class=\"form-content-text\">手机绑定</a></div></div><div class=\"form-group\"><label for=\"emailInput\" class=\"col-md-2 control-label\">邮箱：</label><div class=\"col-md-8 form-body\"><span class=\"form-content-text\">lulichuan628@gmail.com</span><a href=\"#\" class=\"form-content-text\">邮箱绑定</a></div></div><div class=\"form-group\"><label for=\"realNameInput\" class=\"col-md-2 control-label\">真实姓名：</label><div class=\"col-md-8 form-body\"><a href=\"#\" class=\"edit-btn form-content-text\">点击编辑</a><input type=\"text\" class=\"form-control edit-block input-sm\" id=\"realNameInput\" placeholder=\"\"><a href=\"#\" class=\"btn btn-sm btn-info btn-submit edit-block\">确定</a><span class=\"form-content-text warning-block\"></span></div></div><div class=\"form-group\"><label for=\"identityCodeInput\" class=\"col-md-2 control-label\">身份证号：</label><div class=\"col-md-8 form-body\"><a href=\"#\" class=\"edit-btn form-content-text\">点击编辑</a><input type=\"text\" class=\"form-control edit-block input-sm\" id=\"identityCodeInput\" placeholder=\"\"><a href=\"#\" class=\"btn btn-sm btn-info btn-submit edit-block\">确定</a><span class=\"form-content-text warning-block\"></span></div></div><div class=\"form-group\"><label for=\"locationInput\" class=\"col-md-2 control-label\">详细地址：</label><div class=\"col-md-8 form-body\"><a href=\"#\" class=\"edit-btn form-content-text\">点击编辑</a><input type=\"text\" class=\"form-control edit-block input-sm\" id=\"locationInput\" placeholder=\"\"><a href=\"#\" class=\"btn btn-sm btn-info btn-submit edit-block\">确定</a><span class=\"form-content-text warning-block\"></span></div></div><div class=\"form-group\"><label for=\"medicalCartInput\" class=\"col-md-2 control-label\">医保卡：</label><div class=\"col-md-8 form-body\"><a href=\"#\" class=\"edit-btn form-content-text\">点击编辑</a><input type=\"text\" class=\"form-control edit-block input-sm\" id=\"medicalCartInput\" placeholder=\"\"><a href=\"#\" class=\"btn btn-sm btn-info btn-submit edit-block\">确定</a><span class=\"form-content-text warning-block\"></span></div></div></form></div><div class=\"tab-pane\" id=\"patient-user-password-wrapper\"><form class=\"form-horizontal col-md-offset-2\" role=\"form\" id=\"patient-user-password-form\"><div class=\"form-group\"><label for=\"originPasswordInput\" class=\"col-md-2 control-label\">原始密码：</label><div class=\"col-md-8 form-body\"><input type=\"password\" class=\"form-control input-sm edit-block\" id=\"originPasswordInput\" placeholder=\"\"></div></div><div class=\"form-group\"><label for=\"newPasswordInput\" class=\"col-md-2 control-label\">新密码：</label><div class=\"col-md-8 form-body\"><input type=\"password\" class=\"form-control input-sm edit-block\" id=\"newPasswordInput\" placeholder=\"\"></div></div><div class=\"form-group\"><label for=\"confirmPasswordInput\" class=\"col-md-2 control-label\">确认密码：</label><div class=\"col-md-8 form-body\"><input type=\"password\" class=\"form-control input-sm edit-block\" id=\"confirmPasswordInput\" placeholder=\"\"></div></div><div class=\"form-group\"><div class=\"col-md-offset-2 col-md-10\"><button type=\"submit\" class=\"btn btn-primary btn-sm submit-button\">提交</button></div></div></form></div><div class=\"tab-pane\" id=\"patient-user-avatar-wrapper\"><form class=\"form-horizontal col-md-offset-2\" role=\"form\" id=\"patient-user-avatar-form\"><div class=\"form-group\"><label for=\"originPasswordInput\" class=\"col-md-2 control-label\">原始密码：</label><div class=\"col-md-8 form-body\"><input type=\"password\" class=\"form-control input-sm edit-block\" id=\"originPasswordInput\" placeholder=\"\"></div></div><div class=\"form-group\"><label for=\"newPasswordInput\" class=\"col-md-2 control-label\">新密码：</label><div class=\"col-md-8 form-body\"><input type=\"password\" class=\"form-control input-sm edit-block\" id=\"newPasswordInput\" placeholder=\"\"></div></div><div class=\"form-group\"><label for=\"confirmPasswordInput\" class=\"col-md-2 control-label\">确认密码：</label><div class=\"col-md-8 form-body\"><input type=\"password\" class=\"form-control input-sm edit-block\" id=\"confirmPasswordInput\" placeholder=\"\"></div></div><div class=\"form-group\"><div class=\"col-md-offset-2 col-md-10\"><button type=\"submit\" class=\"btn btn-primary btn-sm submit-button\">提交</button></div></div></form></div></div></div></div>");}return body_0;})();
+(function(){dust.register("patientAccountManageLayout",body_0);function body_0(chk,ctx){return chk.write("<div id=\"patient-action-content\"><ul class=\"nav nav-tabs\" id=\"accountTab\"><li class=\"active\"><a href=\"#patient-user-account-wrapper\">个人信息</a></li><li><a href=\"#patient-user-password-wrapper\">修改密码</a></li><li><a href=\"#patient-user-avatar-wrapper\">上传头像</a></li></ul><div id='content' class=\"tab-content\"><div class=\"tab-pane active\" id=\"patient-user-account-wrapper\"><form class=\"form-horizontal col-md-offset-2\" role=\"form\" id=\"patient-user-account-form\"><div class=\"form-group\"><label for=\"phoneInput\" class=\"col-md-2 control-label\">手机号：</label><div class=\"col-md-8 form-body\"><span class=\"form-content-text\">").reference(ctx.get(["mobile"], false),ctx,"h").write("</span><a href=\"javascript:void(0);\" id=\"editMobileBtn\" class=\"form-content-text\">更改手机</a><a href=\"javascript:void(0);\" id=\"bindMobileBtn\" class=\"form-content-text\">手机绑定</a></div></div><div class=\"form-group\"><label for=\"displayNameInput\" class=\"col-md-2 control-label\">昵称：</label><div class=\"col-md-8 form-body\"><span class=\"form-content-text show-block\">").reference(ctx.get(["name"], false),ctx,"h").write("</span><a href=\"javascript:void(0);\" class=\"edit-btn form-content-text show-block\">点击编辑</a><input type=\"text\" class=\"form-control input-sm edit-block\" id=\"displayNameInput\" name=\"name\" placeholder=\"\"><a href=\"javascript:void(0);\" class=\"btn btn-sm btn-default btn-cancel edit-block\">取消</a><a href=\"javascript:void(0);\" class=\"btn btn-sm btn-info btn-submit edit-block\">确定</a><span class=\"form-content-text warning-block\"></span></div></div><div class=\"form-group\"><label for=\"emailInput\" class=\"col-md-2 control-label\">邮箱：</label><div class=\"col-md-8 form-body\"><span class=\"form-content-text show-block\">").reference(ctx.get(["email"], false),ctx,"h").write("</span><a href=\"javascript:void(0);\" class=\"edit-btn form-content-text show-block\">点击编辑</a><input type=\"text\" class=\"form-control input-sm edit-block\" id=\"emailInput\" name=\"email\" placeholder=\"\"><a href=\"javascript:void(0);\" class=\"btn btn-sm btn-default btn-cancel edit-block\">取消</a><a href=\"javascript:void(0);\" class=\"btn btn-sm btn-info btn-submit edit-block\">确定</a><span class=\"form-content-text warning-block\"></span></div></div></form></div><div class=\"tab-pane\" id=\"patient-user-password-wrapper\"><form class=\"form-horizontal col-md-offset-2\" role=\"form\" id=\"patient-user-password-form\"><div class=\"form-group\"><label for=\"originPasswordInput\" class=\"col-md-2 control-label\">原始密码：</label><div class=\"col-md-8 form-body\"><input type=\"password\" class=\"form-control input-sm edit-block\" id=\"originPasswordInput\" name=\"oldPasswd\" placeholder=\"\"></div></div><div class=\"form-group\"><label for=\"newPasswordInput\" class=\"col-md-2 control-label\">新密码：</label><div class=\"col-md-8 form-body\"><input type=\"password\" class=\"form-control input-sm edit-block\" id=\"newPasswordInput\" name=\"newPasswd\" placeholder=\"\"></div></div><div class=\"form-group\"><label for=\"confirmPasswordInput\" class=\"col-md-2 control-label\">确认密码：</label><div class=\"col-md-8 form-body\"><input type=\"password\" class=\"form-control input-sm edit-block\" id=\"confirmPasswordInput\" placeholder=\"\" name=\"newPasswd_confirm\"></div></div><div class=\"form-group\"><div class=\"col-md-offset-2 col-md-10\"><button id=\"submitPwdBtn\" type=\"submit\" class=\"btn btn-primary btn-sm submit-button\">提交</button></div></div></form></div><div class=\"tab-pane\" id=\"patient-user-avatar-wrapper\"><form class=\"form-horizontal col-md-offset-2\" role=\"form\" id=\"patient-user-avatar-form\"><p>功能暂未上线</p></form></div></div></div></div>");}return body_0;})();
 define("patienthome/templates/patientAccountManageLayout", function(){});
 
 (function(){dust.register("patientMessageLayout",body_0);function body_0(chk,ctx){return chk.write("<div id=\"patient-action-content\"><ul class=\"nav nav-pills\" id=\"messageTab\"><li class=\"active\"><a href=\"#unread-message-wrapper\">未读消息</a></li><li><a href=\"#read-message-wrapper\">已读消息</a></li></ul><div id='content' class=\"tab-content\"><div class=\"tab-pane active\" id=\"unread-message-wrapper\"><ul class=\"message-list stylenone\" id=\"unread-message-region\"></ul></div><div class=\"tab-pane\" id=\"read-message-wrapper\"><ul class=\"message-list stylenone\" id=\"read-message-region\"></ul></div></div></div></div>");}return body_0;})();
 define("patienthome/templates/patientMessageLayout", function(){});
 
-(function(){dust.register("sharingModal",body_0);function body_0(chk,ctx){return chk.write("   <div class=\"modal-dialog\"><div class=\"modal-content\"><div class=\"modal-header\"><button type=\"button\" class=\"close fui-cross\" data-dismiss=\"modal\" aria-hidden=\"true\"></button><h4 class=\"modal-title\">经验分享</h4></div><div class=\"modal-body\"><form class=\"form-horizontal\" role=\"form\" id=\"sharing-form\" autocomplete=\"off\" data-id=\"").reference(ctx.get(["id"], false),ctx,"h").write("\"><div class=\"form-group\"><label class=\"col-md-3 control-label\" for=\"\">诊断医生：</label><div class=\"col-md-6\"><span class=\"form-text\">").reference(ctx.get(["doctorName"], false),ctx,"h").write("</span></div></div><div class=\"form-group\"><label class=\"col-md-3 control-label\" for=\"score\">为本次诊断评分:</label><div class=\"col-md-6\"><select id=\"score-select\" name=\"score\"><option value=\"0\">不满意</option><option value=\"1\" selected>满意</option><option value=\"2\" >很满意</option></select></div></div><div class=\"form-group\"><label class=\"col-md-3 control-label\" for=\"content\">分享诊断经验:</label><div class=\"col-md-8\"><textarea type=\"text\" class=\"form-control\" name=\"content\"></textarea></div></div>  </form></div><div class=\"modal-footer\"><button name=\"cancel\" data-dismiss=\"modal\" class=\"btn btn-default\">取消</button><button name=\"save\" class=\"btn btn-primary\">提交</button></div></div></div> ");}return body_0;})();
+(function(){dust.register("sharingModal",body_0);function body_0(chk,ctx){return chk.write("   <div class=\"modal-dialog\"><div class=\"modal-content\"><div class=\"modal-header\"><button type=\"button\" class=\"close fui-cross\" data-dismiss=\"modal\" aria-hidden=\"true\"></button><h4 class=\"modal-title\">经验分享</h4></div><div class=\"modal-body\"><form class=\"form-horizontal\" role=\"form\" id=\"sharing-form\" autocomplete=\"off\" data-id=\"").reference(ctx.get(["id"], false),ctx,"h").write("\"><div class=\"form-group\"><label class=\"col-md-3 control-label\" for=\"\">诊断医生：</label><div class=\"col-md-6\"><span class=\"form-text\">").reference(ctx.get(["doctorName"], false),ctx,"h").write("</span></div></div><div class=\"form-group\"><label class=\"col-md-3 control-label\" for=\"score\">为本次诊断评分:</label><div class=\"col-md-6\"><select id=\"score-select\" name=\"score\"><option value=\"0\">不满意</option><option value=\"1\">满意</option><option value=\"2\" selected>很满意</option></select></div></div><div class=\"form-group\"><label class=\"col-md-3 control-label\" for=\"content\">分享诊断经验:</label><div class=\"col-md-8\"><textarea type=\"text\" class=\"form-control\" name=\"content\"></textarea></div></div>  </form></div><div class=\"modal-footer\"><button name=\"cancel\" data-dismiss=\"modal\" class=\"btn btn-default\">取消</button><button name=\"save\" class=\"btn btn-primary\">提交</button></div></div></div> ");}return body_0;})();
 define("patienthome/templates/sharingModal", function(){});
 
 (function(){dust.register("favoriteLayout",body_0);function body_0(chk,ctx){return chk.write("<div id=\"patient-action-content\"><ul class=\"nav nav-tabs\" id=\"favoriteTab\"><li class=\"active\"><a href=\"#doctor-wrapper\">医生</a></li><li><a href=\"#section-wrapper\">科室</a></li><li><a href=\"#hospital-wrapper\">医院</a></li></ul><div id='content' class=\"tab-content\"><div class=\"tab-pane active\" id=\"doctor-wrapper\"><ul id=\"doctor-list\" class=\"favorite-list\"><li style=\"display: list-item;\"><span>暂无收藏</span></li></ul></div><div class=\"tab-pane\" id=\"section-wrapper\"><ul id=\"section-list\" class=\"favorite-list\"><li style=\"display: list-item;\"><span>暂无收藏</span></li></ul></div><div class=\"tab-pane\" id=\"hospital-wrapper\"><ul id=\"hospital-list\" class=\"favorite-list\"><li style=\"display: list-item;\"><span>暂无收藏</span></li></ul></div></div></div>");}return body_0;})();
@@ -14769,7 +14858,7 @@ define("patienthome/templates/favoriteItem", function(){});
 (function(){dust.register("cancelFavoriteModalView",body_0);function body_0(chk,ctx){return chk.write("<div class=\"modal-dialog\"><div class=\"modal-content\"><div class=\"modal-header\"><button type=\"button\" class=\"close fui-cross\" data-dismiss=\"modal\" aria-hidden=\"true\"></button><h4 class=\"modal-title\">取消分享</h4></div><div class=\"modal-body\"><p>确定取消分享？</p></div><div class=\"modal-footer\"><button name=\"cancel\" data-dismiss=\"modal\" class=\"btn btn-default\">取消</button><button name=\"save\" class=\"btn btn-primary\">确定</button></div></div></div>");}return body_0;})();
 define("patienthome/templates/cancelFavoriteModalView", function(){});
 
-(function(){dust.register("detailTrackLayout",body_0);function body_0(chk,ctx){return chk.write("<div class=\"row\"><div class=\"col-md-12\"><div class=\"back-link-wrapper\"><a class=\"\" href=\"#\"> <span class=\"fui-arrow-left\"></span><span>回到列表</span></a></div><div class=\"row bs-wizard\" style=\"border-bottom:0;\">").helper("if",ctx,{"else":body_1,"block":body_2},{"cond":body_3}).write("<div class=\"text-center bs-wizard-stepnum\">申请诊断</div><div class=\"progress\"><div class=\"progress-bar\"></div></div><a href=\"#\" class=\"bs-wizard-dot\"></a><!-- \t\t\t\t<div class=\"bs-wizard-info text-center\">Lorem ipsum dolor sit amet.</div>-->\t\t\t</div>").helper("if",ctx,{"else":body_4,"block":body_5},{"cond":body_6}).write("<!-- complete --><div class=\"text-center bs-wizard-stepnum\">分诊</div><div class=\"progress\"><div class=\"progress-bar\"></div></div><a href=\"#\" class=\"bs-wizard-dot\"></a><!-- <div class=\"bs-wizard-info text-center\">Nam mollis tristique erat vel tristique. Aliquam erat volutpat. Mauris et vestibulum nisi. Duis molestie nisl sed scelerisque vestibulum. Nam placerat tristique placerat</div> --></div>").helper("if",ctx,{"else":body_7,"block":body_8},{"cond":body_9}).write("<!-- complete --><div class=\"text-center bs-wizard-stepnum\">需要更新</div><div class=\"progress\"><div class=\"progress-bar\"></div></div><a href=\"#\" class=\"bs-wizard-dot\"></a>").helper("if",ctx,{"else":body_10,"block":body_11},{"cond":body_12}).write("您提供的影像或者其他资料存在不足，需要更新资料，请查看留言。</div></div>").helper("if",ctx,{"else":body_13,"block":body_14},{"cond":body_15}).write("<!-- active --><div class=\"text-center bs-wizard-stepnum\">专家诊断</div><div class=\"progress\"><div class=\"progress-bar\"></div></div><a href=\"#\" class=\"bs-wizard-dot\"></a><!-- <div class=\"bs-wizard-info text-center\">Curabitur mollis magna at blandit vestibulum. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae</div> --></div>").helper("if",ctx,{"else":body_16,"block":body_17},{"cond":body_18}).write("<!-- active --><div class=\"text-center bs-wizard-stepnum\">诊断完成</div><div class=\"progress\"><div class=\"progress-bar\"></div></div><a href=\"#\" class=\"bs-wizard-dot\"></a><!-- <div class=\"bs-wizard-info text-center\">Curabitur mollis magna at blandit vestibulum. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae</div> --></div>").helper("if",ctx,{"else":body_19,"block":body_20},{"cond":body_21}).write("<!-- active --><div class=\"text-center bs-wizard-stepnum\">评价</div><div class=\"progress\"><div class=\"progress-bar\"></div></div><a href=\"#\" class=\"bs-wizard-dot\"></a><!-- <div class=\"bs-wizard-info text-center\">Curabitur mollis magna at blandit vestibulum. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae</div> --></div></div><div class=\"row detail-content-wrapper\"><!-- \t\t\t<h6>诊断申请详情：</h6>-->\t\t\t<div class=\"col-md-12\"><div class=\"col-md-6 left-side\"><div><span class=\"head\">申请编号：</span><span>").reference(ctx.get(["diagnosenumber"], false),ctx,"h").write("</span></div><div><span class=\"head\">申请时间：</span><span>").reference(ctx.get(["applyTime"], false),ctx,"h").write("</span></div><div><span class=\"head\">申请诊断专家：</span><span>").reference(ctx.get(["doctorName"], false),ctx,"h").write("</span></div><h6 class=\"second-title\">详细信息：</h6><div><span class=\"head\">姓名：</span><span>").reference(ctx.get(["patientName"], false),ctx,"h").write("</span></div><div><span class=\"head\">性别：</span><span>").reference(ctx.get(["gender"], false),ctx,"h").write("</span></div><div><span class=\"head\">出生日期：</span><span>").reference(ctx.get(["birthDate"], false),ctx,"h").write("</span></div><div><span class=\"head\">诊断部位：</span><p>").reference(ctx.get(["positionName"], false),ctx,"h").write("</p></div><div><span class=\"head\">诊断类型：</span><span>").reference(ctx.get(["diagnoseType"], false),ctx,"h").write("</span></div><div><span class=\"head\">DICOM文件：</span><a href=\"").reference(ctx.get(["dicomUrl"], false),ctx,"h").write("\">点击下载</a></div><div><span class=\"head\">曾就诊医院：</span><a href=\"/hospital/").reference(ctx.get(["hospitalId"], false),ctx,"h").write("\">").reference(ctx.get(["hospitalHistory"], false),ctx,"h").write("</a></div><div><span class=\"head\">病史：</span><p>").reference(ctx.get(["caseHistory"], false),ctx,"h").write("</p></div><div><span class=\"head\">诊断相关文件：</span>").section(ctx.get(["docUrl"], false),ctx,{"block":body_22},null).write("</div></div><div class=\"col-md-6 right-side\"><div class=\"top-wrapper\">").helper("if",ctx,{"else":body_23,"block":body_36},{"cond":body_37}).write("</div><h6 class=\"second-title\">诊断跟踪：</h6><div class=\"bottom-wrapper\">").section(ctx.get(["actions"], false),ctx,{"block":body_38},null).write("</div></div></div></div></div></div>");}function body_1(chk,ctx){return chk.write("<div class=\"col-xs-2 bs-wizard-step disabled\">");}function body_2(chk,ctx){return chk.write("<div class=\"col-xs-2 bs-wizard-step active\">");}function body_3(chk,ctx){return chk.write("'").reference(ctx.get(["diagnoseStatus"], false),ctx,"h").write("' == '2' && '").reference(ctx.get(["isFeedback"], false),ctx,"h").write("' == 'False'");}function body_4(chk,ctx){return chk.write("<div class=\"col-xs-2 bs-wizard-step disabled\">");}function body_5(chk,ctx){return chk.write("<div class=\"col-xs-2 bs-wizard-step active\">");}function body_6(chk,ctx){return chk.write("'").reference(ctx.get(["diagnoseStatus"], false),ctx,"h").write("' == '3' && '").reference(ctx.get(["isFeedback"], false),ctx,"h").write("' == 'False'");}function body_7(chk,ctx){return chk.write("<div class=\"col-xs-2 bs-wizard-step disabled\">");}function body_8(chk,ctx){return chk.write("<div class=\"col-xs-2 bs-wizard-step active\">");}function body_9(chk,ctx){return chk.write("'").reference(ctx.get(["diagnoseStatus"], false),ctx,"h").write("' == '7' && '").reference(ctx.get(["isFeedback"], false),ctx,"h").write("' == 'False'");}function body_10(chk,ctx){return chk.write("<div class=\"bs-wizard-info text-center\" style=\"display:none;color:red;\">");}function body_11(chk,ctx){return chk.write("<div class=\"bs-wizard-info text-center\" style=\"color:red;\">");}function body_12(chk,ctx){return chk.write("'").reference(ctx.get(["diagnoseStatus"], false),ctx,"h").write("' == '7' && '").reference(ctx.get(["isFeedback"], false),ctx,"h").write("' == 'False'");}function body_13(chk,ctx){return chk.write("<div class=\"col-xs-2 bs-wizard-step disabled\">");}function body_14(chk,ctx){return chk.write("<div class=\"col-xs-2 bs-wizard-step active\">");}function body_15(chk,ctx){return chk.write("'").reference(ctx.get(["diagnoseStatus"], false),ctx,"h").write("' == '5' && '").reference(ctx.get(["isFeedback"], false),ctx,"h").write("' == 'False'");}function body_16(chk,ctx){return chk.write("<div class=\"col-xs-2 bs-wizard-step disabled\">");}function body_17(chk,ctx){return chk.write("<div class=\"col-xs-2 bs-wizard-step active\">");}function body_18(chk,ctx){return chk.write("'").reference(ctx.get(["diagnoseStatus"], false),ctx,"h").write("' == '6' && '").reference(ctx.get(["isFeedback"], false),ctx,"h").write("' == 'False'");}function body_19(chk,ctx){return chk.write("<div class=\"col-xs-2 bs-wizard-step disabled\">");}function body_20(chk,ctx){return chk.write("<div class=\"col-xs-2 bs-wizard-step active\">");}function body_21(chk,ctx){return chk.write("'").reference(ctx.get(["isFeedback"], false),ctx,"h").write("' == 'True'");}function body_22(chk,ctx){return chk.write("<a href=\"").reference(ctx.getPath(true, []),ctx,"h").write("\">文件下载</a>\n");}function body_23(chk,ctx){return chk.helper("if",ctx,{"block":body_24},{"cond":body_25}).helper("if",ctx,{"block":body_26},{"cond":body_27}).helper("if",ctx,{"block":body_28},{"cond":body_29}).helper("if",ctx,{"block":body_30},{"cond":body_31}).helper("if",ctx,{"block":body_32},{"cond":body_33}).helper("if",ctx,{"block":body_34},{"cond":body_35});}function body_24(chk,ctx){return chk.write("<h6><span class=\"fui-check-inverted\"></span>申请诊断成功，请等待客服联系</h6><span>您可以：<a href=\"/help/center\">联系客服</a></span>");}function body_25(chk,ctx){return chk.write("'").reference(ctx.get(["diagnoseStatus"], false),ctx,"h").write("' == '2'");}function body_26(chk,ctx){return chk.write("<h6><span class=\"fui-check-inverted\"></span>申请正在处理，等待分诊医生分诊</h6>");}function body_27(chk,ctx){return chk.write("'").reference(ctx.get(["diagnoseStatus"], false),ctx,"h").write("' == '3'");}function body_28(chk,ctx){return chk.write("<h6><span class=\"fui-alert\"></span>申请资料需要更新并重新提交</h6><span>您可以：<a href=\"#\">更新申请资料</a></span>");}function body_29(chk,ctx){return chk.write("'").reference(ctx.get(["diagnoseStatus"], false),ctx,"h").write("' == '7'");}function body_30(chk,ctx){return chk.write("<h6><span class=\"fui-check-inverted\"></span>分诊完成，专家正在诊断</h6>");}function body_31(chk,ctx){return chk.write("'").reference(ctx.get(["diagnoseStatus"], false),ctx,"h").write("' == '5'");}function body_32(chk,ctx){return chk.write("<h6><span class=\"fui-check-inverted\"></span>专家诊断完成，诊断报告已经生成</h6><span>您可以：<a href=\"#\">在线查看</a><a href=\"#\">下载</a><a href=\"#\">评价</a></span>");}function body_33(chk,ctx){return chk.write("'").reference(ctx.get(["diagnoseStatus"], false),ctx,"h").write("' == '6'");}function body_34(chk,ctx){return chk.write("<h6><span class=\"fui-check-inverted\"></span>评价完成，感谢分享</h6><span>您可以：<a href=\"#\">写感谢信</a><a href=\"#\">在线查看</a><a href=\"#\">下载</a></span>");}function body_35(chk,ctx){return chk.write("'").reference(ctx.get(["isFeedback"], false),ctx,"h").write("' == 'True'");}function body_36(chk,ctx){return chk.write("<h6><span class=\"fui-check-inverted\"></span>评价完成，感谢分享</h6><span>您可以：<a href=\"#\">写感谢信</a><a href=\"#\">在线查看</a><a href=\"#\">下载</a></span>");}function body_37(chk,ctx){return chk.write("'").reference(ctx.get(["isFeedback"], false),ctx,"h").write("' == 'True'");}function body_38(chk,ctx){return chk.write("<div class=\"record-text\"><span class=\"fui-play\"></span><span class=\"content-text\">").reference(ctx.get(["title"], false),ctx,"h").write("</span><span class=\"time\">").reference(ctx.get(["time"], false),ctx,"h").write("</span></div>").helper("if",ctx,{"block":body_39},{"cond":body_40});}function body_39(chk,ctx){return chk.write("<div class=\"comments\"><div class=\"popover right\"><div class=\"arrow\"></div><div class=\"popover-content\"><p>").reference(ctx.get(["comments"], false),ctx,"h").write("</p></div></div><span class=\"des-text\">医生 ").reference(ctx.get(["name"], false),ctx,"h").write(" 留言</span></div>");}function body_40(chk,ctx){return chk.write("'").reference(ctx.get(["comments"], false),ctx,"h").write("'.length");}return body_0;})();
+(function(){dust.register("detailTrackLayout",body_0);function body_0(chk,ctx){return chk.write("<div class=\"row\"><div class=\"col-md-12\"><div class=\"back-link-wrapper\"><a class=\"\" href=\"#\"> <span class=\"fui-arrow-left\"></span><span>回到列表</span></a></div><div class=\"row bs-wizard\" style=\"border-bottom:0;\">").helper("if",ctx,{"else":body_1,"block":body_2},{"cond":body_3}).write("<div class=\"text-center bs-wizard-stepnum\">申请诊断</div><div class=\"progress\"><div class=\"progress-bar\"></div></div><a href=\"#\" class=\"bs-wizard-dot\"></a><!-- \t\t\t\t<div class=\"bs-wizard-info text-center\">Lorem ipsum dolor sit amet.</div>-->\t\t\t</div>").helper("if",ctx,{"else":body_4,"block":body_5},{"cond":body_6}).write("<!-- complete --><div class=\"text-center bs-wizard-stepnum\">分诊</div><div class=\"progress\"><div class=\"progress-bar\"></div></div><a href=\"#\" class=\"bs-wizard-dot\"></a><!-- <div class=\"bs-wizard-info text-center\">Nam mollis tristique erat vel tristique. Aliquam erat volutpat. Mauris et vestibulum nisi. Duis molestie nisl sed scelerisque vestibulum. Nam placerat tristique placerat</div> --></div>").helper("if",ctx,{"else":body_7,"block":body_8},{"cond":body_9}).write("<!-- complete --><div class=\"text-center bs-wizard-stepnum\">需要更新</div><div class=\"progress\"><div class=\"progress-bar\"></div></div><a href=\"#\" class=\"bs-wizard-dot\"></a>").helper("if",ctx,{"else":body_10,"block":body_11},{"cond":body_12}).write("您提供的影像或者其他资料存在不足，需要更新资料，请查看留言。</div></div>").helper("if",ctx,{"else":body_13,"block":body_14},{"cond":body_15}).write("<!-- active --><div class=\"text-center bs-wizard-stepnum\">专家诊断</div><div class=\"progress\"><div class=\"progress-bar\"></div></div><a href=\"#\" class=\"bs-wizard-dot\"></a><!-- <div class=\"bs-wizard-info text-center\">Curabitur mollis magna at blandit vestibulum. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae</div> --></div>").helper("if",ctx,{"else":body_16,"block":body_17},{"cond":body_18}).write("<!-- active --><div class=\"text-center bs-wizard-stepnum\">诊断完成</div><div class=\"progress\"><div class=\"progress-bar\"></div></div><a href=\"#\" class=\"bs-wizard-dot\"></a><!-- <div class=\"bs-wizard-info text-center\">Curabitur mollis magna at blandit vestibulum. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae</div> --></div>").helper("if",ctx,{"else":body_19,"block":body_20},{"cond":body_21}).write("<!-- active --><div class=\"text-center bs-wizard-stepnum\">评价</div><div class=\"progress\"><div class=\"progress-bar\"></div></div><a href=\"#\" class=\"bs-wizard-dot\"></a><!-- <div class=\"bs-wizard-info text-center\">Curabitur mollis magna at blandit vestibulum. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae</div> --></div></div><div class=\"row detail-content-wrapper\"><!-- \t\t\t<h6>诊断申请详情：</h6>-->\t\t\t<div class=\"col-md-12\"><div class=\"col-md-6 left-side\"><div><span class=\"head\">申请编号：</span><span>").reference(ctx.get(["diagnosenumber"], false),ctx,"h").write("</span></div><div><span class=\"head\">申请时间：</span><span>").reference(ctx.get(["applyTime"], false),ctx,"h").write("</span></div><div><span class=\"head\">申请诊断专家：</span><span>").reference(ctx.get(["doctorName"], false),ctx,"h").write("</span></div><h6 class=\"second-title\">详细信息：</h6><div><span class=\"head\">姓名：</span><span>").reference(ctx.get(["patientName"], false),ctx,"h").write("</span></div><div><span class=\"head\">性别：</span><span>").reference(ctx.get(["gender"], false),ctx,"h").write("</span></div><div><span class=\"head\">出生日期：</span><span>").reference(ctx.get(["birthDate"], false),ctx,"h").write("</span></div><div><span class=\"head\">诊断部位：</span><p>").reference(ctx.get(["positionName"], false),ctx,"h").write("</p></div><div><span class=\"head\">诊断类型：</span><span>").reference(ctx.get(["diagnoseType"], false),ctx,"h").write("</span></div><div><span class=\"head\">DICOM文件：</span><a href=\"").reference(ctx.get(["dicomUrl"], false),ctx,"h").write("\" target=\"_blank\">点击下载</a></div><div><span class=\"head\">曾就诊医院：</span><a href=\"/hospital/").reference(ctx.get(["hospitalId"], false),ctx,"h").write("\">").reference(ctx.get(["hospitalHistory"], false),ctx,"h").write("</a></div><div><span class=\"head\">病史：</span><p>").reference(ctx.get(["caseHistory"], false),ctx,"h").write("</p></div><div><span class=\"head\">诊断相关文件：</span>").section(ctx.get(["docUrl"], false),ctx,{"block":body_22},null).write("</div></div><div class=\"col-md-6 right-side\"><div class=\"top-wrapper\">").helper("if",ctx,{"else":body_23,"block":body_36},{"cond":body_37}).write("</div><h6 class=\"second-title\">诊断跟踪：</h6><div class=\"bottom-wrapper\">").section(ctx.get(["actions"], false),ctx,{"block":body_38},null).write("</div></div></div></div></div></div>");}function body_1(chk,ctx){return chk.write("<div class=\"col-xs-2 bs-wizard-step disabled\">");}function body_2(chk,ctx){return chk.write("<div class=\"col-xs-2 bs-wizard-step active\">");}function body_3(chk,ctx){return chk.write("'").reference(ctx.get(["diagnoseStatus"], false),ctx,"h").write("' == '2' && '").reference(ctx.get(["isFeedback"], false),ctx,"h").write("' == 'False'");}function body_4(chk,ctx){return chk.write("<div class=\"col-xs-2 bs-wizard-step disabled\">");}function body_5(chk,ctx){return chk.write("<div class=\"col-xs-2 bs-wizard-step active\">");}function body_6(chk,ctx){return chk.write("'").reference(ctx.get(["diagnoseStatus"], false),ctx,"h").write("' == '3' && '").reference(ctx.get(["isFeedback"], false),ctx,"h").write("' == 'False'");}function body_7(chk,ctx){return chk.write("<div class=\"col-xs-2 bs-wizard-step disabled\">");}function body_8(chk,ctx){return chk.write("<div class=\"col-xs-2 bs-wizard-step active\">");}function body_9(chk,ctx){return chk.write("'").reference(ctx.get(["diagnoseStatus"], false),ctx,"h").write("' == '7' && '").reference(ctx.get(["isFeedback"], false),ctx,"h").write("' == 'False'");}function body_10(chk,ctx){return chk.write("<div class=\"bs-wizard-info text-center\" style=\"display:none;color:red;\">");}function body_11(chk,ctx){return chk.write("<div class=\"bs-wizard-info text-center\" style=\"color:red;\">");}function body_12(chk,ctx){return chk.write("'").reference(ctx.get(["diagnoseStatus"], false),ctx,"h").write("' == '7' && '").reference(ctx.get(["isFeedback"], false),ctx,"h").write("' == 'False'");}function body_13(chk,ctx){return chk.write("<div class=\"col-xs-2 bs-wizard-step disabled\">");}function body_14(chk,ctx){return chk.write("<div class=\"col-xs-2 bs-wizard-step active\">");}function body_15(chk,ctx){return chk.write("'").reference(ctx.get(["diagnoseStatus"], false),ctx,"h").write("' == '5' && '").reference(ctx.get(["isFeedback"], false),ctx,"h").write("' == 'False'");}function body_16(chk,ctx){return chk.write("<div class=\"col-xs-2 bs-wizard-step disabled\">");}function body_17(chk,ctx){return chk.write("<div class=\"col-xs-2 bs-wizard-step active\">");}function body_18(chk,ctx){return chk.write("'").reference(ctx.get(["diagnoseStatus"], false),ctx,"h").write("' == '6' && '").reference(ctx.get(["isFeedback"], false),ctx,"h").write("' == 'False'");}function body_19(chk,ctx){return chk.write("<div class=\"col-xs-2 bs-wizard-step disabled\">");}function body_20(chk,ctx){return chk.write("<div class=\"col-xs-2 bs-wizard-step active\">");}function body_21(chk,ctx){return chk.write("'").reference(ctx.get(["isFeedback"], false),ctx,"h").write("' == 'True'");}function body_22(chk,ctx){return chk.write("<a href=\"").reference(ctx.getPath(true, []),ctx,"h").write("\" target=\"_blank\">文件下载</a>\n");}function body_23(chk,ctx){return chk.helper("if",ctx,{"block":body_24},{"cond":body_25}).helper("if",ctx,{"block":body_26},{"cond":body_27}).helper("if",ctx,{"block":body_28},{"cond":body_29}).helper("if",ctx,{"block":body_30},{"cond":body_31}).helper("if",ctx,{"block":body_32},{"cond":body_33}).helper("if",ctx,{"block":body_34},{"cond":body_35});}function body_24(chk,ctx){return chk.write("<h6><span class=\"fui-check-inverted\"></span>申请诊断成功，请等待客服联系</h6><span>您可以：<a href=\"/help/center\" target=\"_blank\">联系客服</a></span>");}function body_25(chk,ctx){return chk.write("'").reference(ctx.get(["diagnoseStatus"], false),ctx,"h").write("' == '2'");}function body_26(chk,ctx){return chk.write("<h6><span class=\"fui-check-inverted\"></span>申请正在处理，等待分诊医生分诊</h6>");}function body_27(chk,ctx){return chk.write("'").reference(ctx.get(["diagnoseStatus"], false),ctx,"h").write("' == '3'");}function body_28(chk,ctx){return chk.write("<h6><span class=\"fui-alert\"></span>申请资料需要更新并重新提交</h6><span>您可以：<a href=\"/applyDiagnose?diagnoseid=").reference(ctx.get(["id"], false),ctx,"h").write("&edit=true\" target=\"_blank\">更新申请资料</a></span>");}function body_29(chk,ctx){return chk.write("'").reference(ctx.get(["diagnoseStatus"], false),ctx,"h").write("' == '7'");}function body_30(chk,ctx){return chk.write("<h6><span class=\"fui-check-inverted\"></span>分诊完成，专家正在诊断</h6>");}function body_31(chk,ctx){return chk.write("'").reference(ctx.get(["diagnoseStatus"], false),ctx,"h").write("' == '5'");}function body_32(chk,ctx){return chk.write("<h6><span class=\"fui-check-inverted\"></span>专家诊断完成，诊断报告已经生成</h6><span>您可以：<a href=\"/diagnose/").reference(ctx.get(["id"], false),ctx,"h").write("/pdf\" target=\"_blank\">在线查看</a><a href=\"").reference(ctx.get(["reportUrl"], false),ctx,"h").write("\" target=\"_blank\">下载</a></span>");}function body_33(chk,ctx){return chk.write("'").reference(ctx.get(["diagnoseStatus"], false),ctx,"h").write("' == '6'");}function body_34(chk,ctx){return chk.write("<h6><span class=\"fui-check-inverted\"></span>评价完成，感谢分享</h6><span>您可以：<a href=\"/doctor/site/").reference(ctx.get(["doctorUserId"], false),ctx,"h").write("\" target=\"_blank\">写感谢信</a><a href=\"/diagnose/").reference(ctx.get(["id"], false),ctx,"h").write("/pdf\" target=\"_blank\">在线查看</a><a href=\"").reference(ctx.get(["reportUrl"], false),ctx,"h").write("\" target=\"_blank\">下载</a></span>");}function body_35(chk,ctx){return chk.write("'").reference(ctx.get(["isFeedback"], false),ctx,"h").write("' == 'True'");}function body_36(chk,ctx){return chk.write("<h6><span class=\"fui-check-inverted\"></span>评价完成，感谢分享</h6><span>您可以：<a href=\"/doctor/site/").reference(ctx.get(["doctorUserId"], false),ctx,"h").write("\" target=\"_blank\">写感谢信</a><a href=\"/diagnose/").reference(ctx.get(["id"], false),ctx,"h").write("/pdf\" target=\"_blank\">在线查看</a><a href=\"").reference(ctx.get(["reportUrl"], false),ctx,"h").write("\" target=\"_blank\">下载</a></span>");}function body_37(chk,ctx){return chk.write("'").reference(ctx.get(["isFeedback"], false),ctx,"h").write("' == 'True'");}function body_38(chk,ctx){return chk.write("<div class=\"record-text\"><span class=\"fui-play\"></span><span class=\"content-text\">").reference(ctx.get(["title"], false),ctx,"h").write("</span><span class=\"time\">").reference(ctx.get(["time"], false),ctx,"h").write("</span></div>").helper("if",ctx,{"block":body_39},{"cond":body_40});}function body_39(chk,ctx){return chk.write("<div class=\"comments\"><div class=\"popover right\"><div class=\"arrow\"></div><div class=\"popover-content\"><p>").reference(ctx.get(["comments"], false),ctx,"h").write("</p></div></div><span class=\"des-text\">医生 ").reference(ctx.get(["name"], false),ctx,"h").write(" 留言</span></div>");}function body_40(chk,ctx){return chk.write("'").reference(ctx.get(["comments"], false),ctx,"h").write("'.length");}return body_0;})();
 define("patienthome/templates/detailTrackLayout", function(){});
 
 (function(){dust.register("deleteDiagnoseModal",body_0);function body_0(chk,ctx){return chk.write("   <div class=\"modal-dialog\"><div class=\"modal-content\"><div class=\"modal-header\"><button type=\"button\" class=\"close fui-cross\" data-dismiss=\"modal\" aria-hidden=\"true\"></button><h4 class=\"modal-title\">撤销诊断请求</h4></div><div class=\"modal-body\" id=\"confirm-form\" data-id=\"").reference(ctx.get(["id"], false),ctx,"h").write("\"><p>您确定需要撤销诊断请求吗？一旦撤销后将无法恢复。</p></div><div class=\"modal-footer\"><button name=\"cancel\" data-dismiss=\"modal\" class=\"btn btn-default\">取消</button><button name=\"save\" class=\"btn btn-primary\">确定</button></div></div></div> ");}return body_0;})();
@@ -14790,13 +14879,13 @@ define("diagnose/templates/dicomInfo", function(){});
 (function(){dust.register("pathologyItem",body_0);function body_0(chk,ctx){return chk.write("<option value=\"").reference(ctx.get(["id"], false),ctx,"h").write("\">").reference(ctx.get(["name"], false),ctx,"h").write("</option>");}return body_0;})();
 define("diagnose/templates/pathologyItem", function(){});
 
-(function(){dust.register("successSubmitDiagnoseModal",body_0);function body_0(chk,ctx){return chk.write("<div class=\"modal-dialog\"><div class=\"modal-content\"><div class=\"modal-header\"><button type=\"button\" class=\"close fui-cross\" data-dismiss=\"modal\" aria-hidden=\"true\"></button><h4 class=\"modal-title\">申请成功！</h4></div><div class=\"modal-body\"><div id=\"success-submit-diagnose-modal-wrapper\">").helper("if",ctx,{"else":body_1,"block":body_2},{"cond":body_3}).write("</div></div></div></div>");}function body_1(chk,ctx){return chk.write("<p>您好：</p><p>您已经成功申请诊断，客服人员会一天内联系您，并且确认申请信息。</p><div class=\"button-wrapper\" style=\"margin-bottom:20px;\"><span>您还可以：</span><a class=\"btn btn-info btn-sm\" style=\"margin-left:10px;\" href=\"/patienthome\">进入个人中心</a><a class=\"btn btn-warning btn-sm\" style=\"margin-left:20px;\" href=\"/applyDiagnose\">申请新的诊断</a></div>");}function body_2(chk,ctx){return chk.write("<p>您好：</p><p>您已经成功申请诊断，请继续申请诊断或者批量上传影像文件。</p><div class=\"button-wrapper\"><span>链接：</span><a class=\"btn btn-info\" href=\"/hospital/user\">个人中心</a><a class=\"btn btn-warning\" href=\"/applyDiagnose?type=1\">申请新的诊断</a></div>");}function body_3(chk,ctx){return chk.write("'").reference(ctx.get(["isHospitalUser"], false),ctx,"h").write("' == '1'");}return body_0;})();
+(function(){dust.register("successSubmitDiagnoseModal",body_0);function body_0(chk,ctx){return chk.write("<div class=\"modal-dialog\"><div class=\"modal-content\"><div class=\"modal-header\"><button type=\"button\" class=\"close fui-cross\" aria-hidden=\"true\"></button><h4 class=\"modal-title\">申请成功！</h4></div><div class=\"modal-body\"><div id=\"success-submit-diagnose-modal-wrapper\">").helper("if",ctx,{"else":body_1,"block":body_2},{"cond":body_3}).write("</div></div></div></div>");}function body_1(chk,ctx){return chk.write("<p>您好：</p><p>您已经成功申请诊断，客服人员会一天内联系您，并且确认申请信息。</p><div class=\"button-wrapper\" style=\"margin-bottom:20px;\"><span>您还可以：</span><a class=\"btn btn-info btn-sm\" style=\"margin-left:10px;\" href=\"/patienthome\">进入个人中心</a><a class=\"btn btn-warning btn-sm\" style=\"margin-left:20px;\" href=\"/applyDiagnose\">申请新的诊断</a></div>");}function body_2(chk,ctx){return chk.write("<p>您好：</p><p>您已经成功申请诊断，请继续申请诊断或者批量上传影像文件。</p><div class=\"button-wrapper\"><span>链接：</span><a class=\"btn btn-info\" href=\"/hospital/user\">个人中心</a><a class=\"btn btn-warning\" href=\"/applyDiagnose?type=1\">申请新的诊断</a></div>");}function body_3(chk,ctx){return chk.write("'").reference(ctx.get(["isHospitalUser"], false),ctx,"h").write("' == '1'");}return body_0;})();
 define("diagnose/templates/successSubmitDiagnoseModal", function(){});
 
-(function(){dust.register("allDiagnoseItem",body_0);function body_0(chk,ctx){return chk.write("<tr><td>").reference(ctx.get(["diagnosenumber"], false),ctx,"h").write("</td><td>").reference(ctx.get(["date"], false),ctx,"h").write("</td><td>").reference(ctx.get(["doctorName"], false),ctx,"h").write("</td><td>").reference(ctx.get(["hispital"], false),ctx,"h").write("</td><td>").reference(ctx.get(["patientName"], false),ctx,"h").write("</td><td>").reference(ctx.get(["positionName"], false),ctx,"h").write("</td><td class=\"action-group\"><a id=\"get-diagnose-link\" href=\"#\" class=\"\">领取</a></td></tr>");}return body_0;})();
+(function(){dust.register("allDiagnoseItem",body_0);function body_0(chk,ctx){return chk.write("<tr><td>").reference(ctx.get(["diagnosenumber"], false),ctx,"h").write("</td><td>").reference(ctx.get(["date"], false),ctx,"h").write("</td><td>").reference(ctx.get(["doctorName"], false),ctx,"h").write("</td><td>").reference(ctx.get(["doctorHispital"], false),ctx,"h").write("</td><td>").reference(ctx.get(["patientName"], false),ctx,"h").write("</td><td>").reference(ctx.get(["positionName"], false),ctx,"h").write("</td><td class=\"action-group\"><a id=\"get-diagnose-link\" href=\"#\" class=\"\">领取</a></td></tr>");}return body_0;})();
 define("admin/fenzhen/templates/allDiagnoseItem", function(){});
 
-(function(){dust.register("myDiagnoseItem",body_0);function body_0(chk,ctx){return chk.write("<tr><td>").reference(ctx.get(["diagnosenumber"], false),ctx,"h").write("</td><td>").reference(ctx.get(["date"], false),ctx,"h").write("</td><td>").reference(ctx.get(["doctorName"], false),ctx,"h").write("</td><td>").reference(ctx.get(["hispital"], false),ctx,"h").write("</td><td>").reference(ctx.get(["patientName"], false),ctx,"h").write("</td><td>").reference(ctx.get(["positionName"], false),ctx,"h").write("</td><td>").reference(ctx.get(["status"], false),ctx,"h").write("</td><td class=\"action-group\">").helper("if",ctx,{"block":body_1},{"cond":body_2}).write("</td></tr>");}function body_1(chk,ctx){return chk.write("<a id=\"start-diagnose-link\" href=\"#\" class=\"\">初诊断</a><a href=\"").reference(ctx.get(["dicomUrl"], false),ctx,"h").write("\" class=\"\">下载DICOM</a>");}function body_2(chk,ctx){return chk.write("'").reference(ctx.get(["statusId"], false),ctx,"h").write("' == '4'");}return body_0;})();
+(function(){dust.register("myDiagnoseItem",body_0);function body_0(chk,ctx){return chk.write("<tr><td>").reference(ctx.get(["diagnosenumber"], false),ctx,"h").write("</td><td>").reference(ctx.get(["date"], false),ctx,"h").write("</td><td>").reference(ctx.get(["doctorName"], false),ctx,"h").write("</td><td>").reference(ctx.get(["doctorHispital"], false),ctx,"h").write("</td><td>").reference(ctx.get(["patientName"], false),ctx,"h").write("</td><td>").reference(ctx.get(["positionName"], false),ctx,"h").write("</td><td>").reference(ctx.get(["status"], false),ctx,"h").write("</td><td class=\"action-group\">").helper("if",ctx,{"block":body_1},{"cond":body_2}).write("</td></tr>");}function body_1(chk,ctx){return chk.write("<a id=\"start-diagnose-link\" href=\"#\" class=\"\">初诊断</a><a href=\"").reference(ctx.get(["dicomUrl"], false),ctx,"h").write("\" target=\"_blank\" class=\"\">下载DICOM</a>");}function body_2(chk,ctx){return chk.write("'").reference(ctx.get(["statusId"], false),ctx,"h").write("' == '4'");}return body_0;})();
 define("admin/fenzhen/templates/myDiagnoseItem", function(){});
 
 (function(){dust.register("rollbackDiagnoseModal",body_0);function body_0(chk,ctx){return chk.write("   <div class=\"modal-dialog\"><div class=\"modal-content\"><div class=\"modal-header\"><button type=\"button\" class=\"close fui-cross\" data-dismiss=\"modal\" aria-hidden=\"true\"></button><h4 class=\"modal-title\">打回诊断</h4></div><div class=\"modal-body\"><form class=\"form-horizontal\" role=\"form\" id=\"rollback-form\" data-id=\"").reference(ctx.get(["id"], false),ctx,"h").write("\"><div class=\"form-group\"><label class=\"col-md-3 control-label\" for=\"\">就诊人：</label><div class=\"col-md-6\"><span class=\"form-text\">").reference(ctx.get(["patientName"], false),ctx,"h").write("</span></div></div><div class=\"form-group\"><label class=\"col-md-3 control-label\" for=\"\">性别：</label><div class=\"col-md-6\"><span class=\"form-text\">").reference(ctx.get(["gender"], false),ctx,"h").write("</span></div></div><div class=\"form-group\"><label class=\"col-md-3 control-label\" for=\"\">出生日期：</label><div class=\"col-md-6\"><span class=\"form-text\">").reference(ctx.get(["birthDate"], false),ctx,"h").write("</span></div></div><div class=\"form-group\"><label class=\"col-md-3 control-label\" for=\"\">就诊时间：</label><div class=\"col-md-6\"><span class=\"form-text\">").reference(ctx.get(["date"], false),ctx,"h").write("</span></div></div><div class=\"form-group\"><label class=\"col-md-3 control-label\" for=\"comments\">详细打回原因:</label><div class=\"col-md-8\"><textarea type=\"text\" class=\"form-control\" name=\"comments\"></textarea></div></div>  </form></div><div class=\"modal-footer\"><button name=\"cancel\" data-dismiss=\"modal\" class=\"btn btn-default\">取消</button><button name=\"save\" class=\"btn btn-primary\">提交</button></div></div></div> ");}return body_0;})();
@@ -14805,16 +14894,16 @@ define("admin/fenzhen/templates/rollbackDiagnoseModal", function(){});
 (function(){dust.register("displayPayLinkModal",body_0);function body_0(chk,ctx){return chk.write("   <div class=\"modal-dialog\"><div class=\"modal-content\"><div class=\"modal-header\"><button type=\"button\" class=\"close fui-cross\" data-dismiss=\"modal\" aria-hidden=\"true\"></button><h4 class=\"modal-title\">支付宝链接</h4></div><div class=\"modal-body\"><p>").reference(ctx.get(["paylink"], false),ctx,"h").write("</p></div></div></div> ");}return body_0;})();
 define("admin/kefu/templates/displayPayLinkModal", function(){});
 
-(function(){dust.register("doctorAccountManageLayout",body_0);function body_0(chk,ctx){return chk.write("<div id=\"doctor-action-content\"><ul class=\"nav nav-tabs\" id=\"accountTab\"><li class=\"active\"><a href=\"#doctor-user-account-wrapper\">个人信息</a></li><li><a href=\"#doctor-user-password-wrapper\">修改密码</a></li><li><a href=\"#doctor-user-avatar-wrapper\">上传头像</a></li></ul><div id='content' class=\"tab-content\"><div class=\"tab-pane active\" id=\"doctor-user-account-wrapper\"><form class=\"form-horizontal col-md-offset-2\" role=\"form\" id=\"doctor-user-account-form\"><div class=\"form-group\"><label for=\"\" class=\"col-md-2 control-label\">登录名：</label><div class=\"col-md-8 form-body\"><span class=\"form-content-text\">lulichuan628@gmail.com</span></div></div><div class=\"form-group\"><label for=\"phoneInput\" class=\"col-md-2 control-label\">手机号：</label><div class=\"col-md-8 form-body\"><span class=\"form-content-text\">152****3425</span><a href=\"#\" class=\"form-content-text\">手机绑定</a></div></div><div class=\"form-group\"><label for=\"emailInput\" class=\"col-md-2 control-label\">邮箱：</label><div class=\"col-md-8 form-body\"><span class=\"form-content-text\">lulichuan628@gmail.com</span><a href=\"#\" class=\"form-content-text\">邮箱绑定</a></div></div><div class=\"form-group\"><label for=\"realNameInput\" class=\"col-md-2 control-label\">真实姓名：</label><div class=\"col-md-8 form-body\"><a href=\"#\" class=\"edit-btn form-content-text\">点击编辑</a><input type=\"text\" class=\"form-control edit-block input-sm\" id=\"realNameInput\" placeholder=\"\"><a href=\"#\" class=\"btn btn-sm btn-info btn-submit edit-block\">确定</a><span class=\"form-content-text warning-block\"></span></div></div><div class=\"form-group\"><label for=\"phoneInput\" class=\"col-md-2 control-label\">办公电话：</label><div class=\"col-md-8 form-body\"><span class=\"form-content-text\">029-82****25</span><a href=\"#\" class=\"form-content-text\">修改</a></div></div><div class=\"form-group\"><label for=\"identityCodeInput\" class=\"col-md-2 control-label\">身份证号：</label><div class=\"col-md-8 form-body\"><a href=\"#\" class=\"edit-btn form-content-text\">点击编辑</a><input type=\"text\" class=\"form-control edit-block input-sm\" id=\"identityCodeInput\" placeholder=\"\"><a href=\"#\" class=\"btn btn-sm btn-info btn-submit edit-block\">确定</a><span class=\"form-content-text warning-block\"></span></div></div><div class=\"form-group\"><label for=\"locationInput\" class=\"col-md-2 control-label\">详细地址：</label><div class=\"col-md-8 form-body\"><a href=\"#\" class=\"edit-btn form-content-text\">点击编辑</a><input type=\"text\" class=\"form-control edit-block input-sm\" id=\"locationInput\" placeholder=\"\"><a href=\"#\" class=\"btn btn-sm btn-info btn-submit edit-block\">确定</a><span class=\"form-content-text warning-block\"></span></div></div></form></div><div class=\"tab-pane\" id=\"doctor-user-password-wrapper\"><form class=\"form-horizontal col-md-offset-2\" role=\"form\" id=\"doctor-user-password-form\"><div class=\"form-group\"><label for=\"originPasswordInput\" class=\"col-md-2 control-label\">原始密码：</label><div class=\"col-md-8 form-body\"><input type=\"password\" class=\"form-control input-sm edit-block\" id=\"originPasswordInput\" placeholder=\"\"></div></div><div class=\"form-group\"><label for=\"newPasswordInput\" class=\"col-md-2 control-label\">新密码：</label><div class=\"col-md-8 form-body\"><input type=\"password\" class=\"form-control input-sm edit-block\" id=\"newPasswordInput\" placeholder=\"\"></div></div><div class=\"form-group\"><label for=\"confirmPasswordInput\" class=\"col-md-2 control-label\">确认密码：</label><div class=\"col-md-8 form-body\"><input type=\"password\" class=\"form-control input-sm edit-block\" id=\"confirmPasswordInput\" placeholder=\"\"></div></div><div class=\"form-group\"><div class=\"col-md-offset-2 col-md-10\"><button type=\"submit\" class=\"btn btn-primary btn-sm submit-button\">提交</button></div></div></form></div><div class=\"tab-pane\" id=\"doctor-user-avatar-wrapper\"><form class=\"form-horizontal col-md-offset-2\" role=\"form\" id=\"doctor-user-avatar-form\"><div class=\"form-group\"><label for=\"originPasswordInput\" class=\"col-md-2 control-label\">原始密码：</label><div class=\"col-md-8 form-body\"><input type=\"password\" class=\"form-control input-sm edit-block\" id=\"originPasswordInput\" placeholder=\"\"></div></div><div class=\"form-group\"><label for=\"newPasswordInput\" class=\"col-md-2 control-label\">新密码：</label><div class=\"col-md-8 form-body\"><input type=\"password\" class=\"form-control input-sm edit-block\" id=\"newPasswordInput\" placeholder=\"\"></div></div><div class=\"form-group\"><label for=\"confirmPasswordInput\" class=\"col-md-2 control-label\">确认密码：</label><div class=\"col-md-8 form-body\"><input type=\"password\" class=\"form-control input-sm edit-block\" id=\"confirmPasswordInput\" placeholder=\"\"></div></div><div class=\"form-group\"><div class=\"col-md-offset-2 col-md-10\"><button type=\"submit\" class=\"btn btn-primary btn-sm submit-button\">提交</button></div></div></form></div></div></div></div>");}return body_0;})();
+(function(){dust.register("doctorAccountManageLayout",body_0);function body_0(chk,ctx){return chk.write("<div id=\"doctor-action-content\"><ul class=\"nav nav-tabs\" id=\"accountTab\"><li class=\"active\"><a href=\"#doctor-user-account-wrapper\">个人信息</a></li><li><a href=\"#doctor-user-password-wrapper\">修改密码</a></li><li><a href=\"#doctor-user-avatar-wrapper\">上传头像</a></li></ul><div id='content' class=\"tab-content\"><div class=\"tab-pane active\" id=\"doctor-user-account-wrapper\"><form class=\"form-horizontal col-md-offset-2\" role=\"form\" id=\"doctor-user-account-form\"><div class=\"form-group\"><label for=\"phoneInput\" class=\"col-md-2 control-label\">手机号：</label><div class=\"col-md-8 form-body\"><span class=\"form-content-text\">").reference(ctx.get(["mobile"], false),ctx,"h").write("</span><a href=\"javascript:void(0);\" id=\"editMobileBtn\" class=\"form-content-text\">更改手机</a><a href=\"javascript:void(0);\" id=\"bindMobileBtn\" class=\"form-content-text\">手机绑定</a></div></div><div class=\"form-group\"><label for=\"emailInput\" class=\"col-md-2 control-label\">邮箱：</label><div class=\"col-md-8 form-body\"><span class=\"form-content-text show-block\">").reference(ctx.get(["email"], false),ctx,"h").write("</span><a href=\"javascript:void(0);\" class=\"edit-btn form-content-text show-block\">点击编辑</a><input type=\"text\" class=\"form-control input-sm edit-block\" id=\"emailInput\" name=\"email\" placeholder=\"\"><a href=\"javascript:void(0);\" class=\"btn btn-sm btn-default btn-cancel edit-block\">取消</a><a href=\"javascript:void(0);\" class=\"btn btn-sm btn-info btn-submit edit-block\">确定</a><span class=\"form-content-text warning-block\"></span></div></div><div class=\"form-group\"><label for=\"realNameInput\" class=\"col-md-2 control-label\">姓名：</label><div class=\"col-md-8 form-body\"><span class=\"form-content-text show-block\">").reference(ctx.get(["name"], false),ctx,"h").write("</span><a href=\"javascript:void(0);\" class=\"edit-btn form-content-text show-block\">点击编辑</a><input type=\"text\" class=\"form-control edit-block input-sm\" id=\"realNameInput\" name=\"name\" placeholder=\"\"><a href=\"javascript:void(0);\" class=\"btn btn-sm btn-default btn-cancel edit-block\">取消</a><a href=\"javascript:void(0);\" class=\"btn btn-sm btn-info btn-submit edit-block\">确定</a>\t\t\t<span class=\"form-content-text warning-block\"></span></div></div><div class=\"form-group\"><label for=\"identityPhoneInput\" class=\"col-md-2 control-label\">办公电话：</label><div class=\"col-md-8 form-body\"><span class=\"form-content-text show-block\">").reference(ctx.get(["identityPhone"], false),ctx,"h").write("</span><a href=\"javascript:void(0);\" class=\"edit-btn form-content-text show-block\">点击编辑</a><input type=\"text\" class=\"form-control edit-block input-sm\" id=\"identityPhoneInput\" name=\"identityPhone\" placeholder=\"\"><a href=\"javascript:void(0);\" class=\"btn btn-sm btn-default btn-cancel edit-block\">取消</a><a href=\"javascript:void(0);\" class=\"btn btn-sm btn-info btn-submit edit-block\">确定</a>\t\t\t<span class=\"form-content-text warning-block\"></span></div></div>  </form></div><div class=\"tab-pane\" id=\"doctor-user-password-wrapper\"><form class=\"form-horizontal col-md-offset-2\" role=\"form\" id=\"doctor-user-password-form\"><div class=\"form-group\"><label for=\"originPasswordInput\" class=\"col-md-2 control-label\">原始密码：</label><div class=\"col-md-8 form-body\"><input type=\"password\" class=\"form-control input-sm edit-block\" id=\"originPasswordInput\" placeholder=\"\" name=\"oldPasswd\"></div></div><div class=\"form-group\"><label for=\"newPasswordInput\" class=\"col-md-2 control-label\">新密码：</label><div class=\"col-md-8 form-body\"><input type=\"password\" class=\"form-control input-sm edit-block\" id=\"newPasswordInput\" name=\"newPasswd\" placeholder=\"\"></div></div><div class=\"form-group\"><label for=\"confirmPasswordInput\" class=\"col-md-2 control-label\">确认密码：</label><div class=\"col-md-8 form-body\"><input type=\"password\" class=\"form-control input-sm edit-block\" id=\"confirmPasswordInput\" placeholder=\"\" name=\"newPasswd_confirm\"></div></div><div class=\"form-group\"><div class=\"col-md-offset-2 col-md-10\"><button id=\"submitPwdBtn\" type=\"submit\" class=\"btn btn-primary btn-sm submit-button\">提交</button></div></div></form></div><div class=\"tab-pane\" id=\"doctor-user-avatar-wrapper\"><form class=\"form-horizontal col-md-offset-2\" role=\"form\" id=\"doctor-user-avatar-form\"><p>功能暂未上线</p></form></div></div></div></div>");}return body_0;})();
 define("doctorhome/templates/doctorAccountManageLayout", function(){});
 
-(function(){dust.register("doctorDiagnoseItem",body_0);function body_0(chk,ctx){return chk.write("<tr><td>").reference(ctx.get(["diagnosenumber"], false),ctx,"h").write("</td><td>").reference(ctx.get(["date"], false),ctx,"h").write("</td><td>").reference(ctx.get(["doctorName"], false),ctx,"h").write("</td><td>").reference(ctx.get(["patientName"], false),ctx,"h").write("</td><!-- \t<td>").reference(ctx.get(["section"], false),ctx,"h").write("</td>-->\t<td>").reference(ctx.get(["status"], false),ctx,"h").write("</td><td class=\"action-group\">").helper("if",ctx,{"block":body_1},{"cond":body_2}).helper("if",ctx,{"block":body_3},{"cond":body_4}).write("</td></tr>");}function body_1(chk,ctx){return chk.write("<a href=\"#\">诊断</a>");}function body_2(chk,ctx){return chk.write("'").reference(ctx.get(["statusId"], false),ctx,"h").write("' == '5'");}function body_3(chk,ctx){return chk.write("<a href=\"/diagnose/").reference(ctx.get(["id"], false),ctx,"h").write("/pdf\" target=\"_blank\">查看报告</a><a href=\"").reference(ctx.get(["reportUrl"], false),ctx,"h").write("\">下载</a>");}function body_4(chk,ctx){return chk.write("'").reference(ctx.get(["statusId"], false),ctx,"h").write("' == '6'");}return body_0;})();
+(function(){dust.register("doctorDiagnoseItem",body_0);function body_0(chk,ctx){return chk.write("<tr><td>").reference(ctx.get(["diagnosenumber"], false),ctx,"h").write("</td><td>").reference(ctx.get(["date"], false),ctx,"h").write("</td><td>").reference(ctx.get(["doctorName"], false),ctx,"h").write("</td><td>").reference(ctx.get(["patientName"], false),ctx,"h").write("</td><!-- \t<td>").reference(ctx.get(["section"], false),ctx,"h").write("</td>-->\t<td>").reference(ctx.get(["status"], false),ctx,"h").write("</td><td class=\"action-group\">").helper("if",ctx,{"block":body_1},{"cond":body_2}).helper("if",ctx,{"block":body_3},{"cond":body_4}).write("</td></tr>");}function body_1(chk,ctx){return chk.write("<a href=\"#\">诊断</a>");}function body_2(chk,ctx){return chk.write("'").reference(ctx.get(["statusId"], false),ctx,"h").write("' == '5'");}function body_3(chk,ctx){return chk.write("<a href=\"/diagnose/").reference(ctx.get(["id"], false),ctx,"h").write("/pdf\" target=\"_blank\">查看报告</a><a href=\"").reference(ctx.get(["reportUrl"], false),ctx,"h").write("\" target=\"_blank\">下载</a>");}function body_4(chk,ctx){return chk.write("'").reference(ctx.get(["statusId"], false),ctx,"h").write("' == '6'");}return body_0;})();
 define("doctorhome/templates/doctorDiagnoseItem", function(){});
 
-(function(){dust.register("doctorDiagnoseLayout",body_0);function body_0(chk,ctx){return chk.write("<div id=\"doctor-action-content\"><div class=\"row\"><form class=\"form-inline\" role=\"form\"><div class=\"form-group\"><label class=\"\" for=\"\">诊断状态：</label><select nam=\"type\" name=\"type\" title='选择筛选条件...' data-width=\"120px\"><option value=\"\">全部</option><option value=\"5\" selected=\"selected\">待诊断</option><option value=\"6\">诊断完成</option></select></div><div class=\"form-group\"><label class=\"\" for=\"\" style=\"vertical-align:top;\">就诊时间：</label><div class=\"input-wrapper\"><div class=\"input-group\"><span class=\"input-group-btn\"><button class=\"btn btn-xs\" type=\"button\"><span class=\"fui-calendar\"></span></button></span><input type=\"text\" class=\"form-control input-sm\" id=\"startDateinput\" name=\"startDate\"></div></div><label style=\"vertical-align:top;margin-left:10px;\">－</label><div class=\"input-wrapper\"><div class=\"input-group\"><span class=\"input-group-btn\"><button class=\"btn btn-xs\" type=\"button\"><span class=\"fui-calendar\"></span></button></span><input type=\"text\" class=\"form-control input-sm\" id=\"endDateinput\" name=\"endDate\"></div></div></div><button type=\"submit\" class=\"btn btn-sm btn-default submit-btn\">确定</button></form></div><div class=\"row h-padding-20\"><table class=\"table table-striped table-hover\" id=\"diagnose-table\"><thead><tr class=\"success\"><th>诊断号</th><th>就诊日期</th><th>专家</th><th>就诊人</th><!-- \t\t\t                <th>诊断部位</th>--><th>诊断状态</th><th>操作</th></tr></thead><tbody id=\"diagnose-tbody\"></tbody></table></div></div>");}return body_0;})();
+(function(){dust.register("doctorDiagnoseLayout",body_0);function body_0(chk,ctx){return chk.write("<div id=\"doctor-action-content\"><div class=\"row\"><form class=\"form-inline\" role=\"form\"><div class=\"form-group\"><label class=\"\" for=\"\">诊断状态：</label><select nam=\"type\" name=\"type\" title='选择筛选条件...' data-width=\"120px\"><option value=\"\">全部</option><option value=\"5\" selected=\"selected\">待诊断</option><option value=\"6\">诊断完成</option></select></div><div class=\"form-group\"><label class=\"\" for=\"\" style=\"vertical-align:top;\">就诊时间：</label><div class=\"input-wrapper\"><div class=\"input-group\"><span class=\"input-group-btn\"><button class=\"btn btn-xs\" type=\"button\"><span class=\"fui-calendar\"></span></button></span><input type=\"text\" class=\"form-control input-sm\" id=\"startDateinput\" name=\"startDate\"></div></div><label style=\"vertical-align:top;margin-left:10px;\">－</label><div class=\"input-wrapper\"><div class=\"input-group\"><span class=\"input-group-btn\"><button class=\"btn btn-xs\" type=\"button\"><span class=\"fui-calendar\"></span></button></span><input type=\"text\" class=\"form-control input-sm\" id=\"endDateinput\" name=\"endDate\"></div></div></div><button type=\"submit\" class=\"btn btn-sm btn-primary submit-btn\">确定</button></form></div><div class=\"row h-padding-20\"><table class=\"table table-striped table-hover\" id=\"diagnose-table\"><thead><tr class=\"success\"><th>诊断号</th><th>就诊日期</th><th>专家</th><th>就诊人</th><!-- \t\t\t                <th>诊断部位</th>--><th>诊断状态</th><th>操作</th></tr></thead><tbody id=\"diagnose-tbody\"></tbody></table></div></div>");}return body_0;})();
 define("doctorhome/templates/doctorDiagnoseLayout", function(){});
 
-(function(){dust.register("newDiagnoseLayout",body_0);function body_0(chk,ctx){return chk.write("<div id=\"new-diagnose-wrapper\"><div class=\"row header\"><div class=\"\"><span class=\"title\">编辑诊断报告</span><span>诊断日期：").reference(ctx.get(["date"], false),ctx,"h").write("</span><!-- <span>就诊者：").reference(ctx.get(["patientName"], false),ctx,"h").write("</span><span>部位：").reference(ctx.get(["section"], false),ctx,"h").write("</span> --><div class=\"right\"><a id=\"rollback-link\" href=\"#\">打回诊断<span class=\"fui-alert\"></span></a><a href=\"#\">下载DICOM软件<span class=\"fui-alert\"></span></a><a href=\"#\" class=\"close-link\">关闭</a></div></div><!-- <div class=\"alert alert-warning\"><button type=\"button\" class=\"close fui-cross\" data-dismiss=\"alert\"></button><h4>未保存的数据将会丢失，确定关闭？</h4><a href=\"#\" class=\"btn btn-primary\"><span class=\"fui-check-inverted\"></span>确定关闭</a><a href=\"#\" class=\"btn btn-default btn-info\">取消</a></div>--></div><div class=\"row content\"><div id=\"\" class=\"col-md-4\"><div class=\"patient-info\"><span class=\"side-title\">就诊人档案</span><div><span class=\"head\">姓名：</span><span>").reference(ctx.get(["patientName"], false),ctx,"h").write("</span></div><div><span class=\"head\">性别：</span><span>").reference(ctx.get(["gender"], false),ctx,"h").write("</span></div><div><span class=\"head\">出生日期：</span><span>").reference(ctx.get(["birthDate"], false),ctx,"h").write("</span></div><div><span class=\"head\">诊断部位：</span><p>").reference(ctx.get(["positionName"], false),ctx,"h").write("</p></div><div><span class=\"head\">诊断类型：</span><span>").reference(ctx.get(["diagnoseType"], false),ctx,"h").write("</span></div><div><span class=\"head\">DICOM文件：</span><a href=\"").reference(ctx.get(["dicomUrl"], false),ctx,"h").write("\">点击下载</a></div><div><span class=\"head\">曾就诊医院：</span><a href=\"/hospital/").reference(ctx.get(["hospitalId"], false),ctx,"h").write("\">").reference(ctx.get(["hospitalHistory"], false),ctx,"h").write("</a></div><div><span class=\"head\">病史：</span><p>").reference(ctx.get(["caseHistory"], false),ctx,"h").write("</p></div><div><span class=\"head\">诊断相关文件：</span>").section(ctx.get(["docUrl"], false),ctx,{"block":body_1},null).write("</div></div><div class=\"tree-top\"><span class=\"tree-title\">影像诊断模版：</span><a class=\"btn btn-info btn-xs load-template-btn load-btn\">载入模版</a><a class=\"btn btn-default btn-xs load-template-btn loading-btn\" disabled=\"true\" style=\"display:none;\">载入中...</a></div><div id=\"tree\"></div></div><div class=\"col-md-8 form-wrapper\"><span class=\"side-title\">诊断结果：</span><form class=\"form-horizontal\" role=\"form\" id=\"new-diagnose-form\" data-report-id=\"").reference(ctx.get(["reportId"], false),ctx,"h").write("\"><div class=\"form-group\"><label for=\"techDes\" class=\"col-md-3 control-label\">检查技术描述：</label><div class=\"col-md-9 form-body\"><textarea id=\"techDes\" name=\"techDesc\" class=\"form-control\">").reference(ctx.get(["techDes"], false),ctx,"h").write("</textarea></div></div><div class=\"form-group\"><label for=\"imageDes\" class=\"col-md-3 control-label\">影像描述：</label><div class=\"col-md-9 form-body\"><textarea id=\"imageDes\" name=\"imageDesc\" class=\"form-control\">").reference(ctx.get(["imageDes"], false),ctx,"h").write("</textarea></div></div><div class=\"form-group\"><label for=\"diagnoseResult\" class=\"col-md-3 control-label\">诊断意见：</label><div class=\"col-md-9 form-body\"><textarea id=\"diagnoseResult\" name=\"diagnoseDesc\" class=\"form-control\">").reference(ctx.get(["diagnoseResult"], false),ctx,"h").write("</textarea></div></div><div class=\"form-group\"><div class=\"col-md-offset-3 col-md-9\"><button id=\"saveDiagnoseBtn\" type=\"submit\" class=\"btn btn-primary btn-sm submit-btn\">保存草稿</button><button id=\"previewDiagnoseBtn\" type=\"submit\" class=\"btn btn-primary btn-sm submit-btn\">预览诊断书</button><button id=\"submitDiagnoseBtn\" type=\"submit\" class=\"btn btn-primary btn-sm submit-btn\">提交诊断书</button></div></div></form></div></div></div>");}function body_1(chk,ctx){return chk.write("<a href=\"").reference(ctx.getPath(true, []),ctx,"h").write("\">文件下载</a>\n");}return body_0;})();
+(function(){dust.register("newDiagnoseLayout",body_0);function body_0(chk,ctx){return chk.write("<div id=\"new-diagnose-wrapper\"><div class=\"row header\"><div class=\"\"><span class=\"title\">编辑诊断报告</span><span>诊断日期：").reference(ctx.get(["date"], false),ctx,"h").write("</span><!-- <span>就诊者：").reference(ctx.get(["patientName"], false),ctx,"h").write("</span><span>部位：").reference(ctx.get(["section"], false),ctx,"h").write("</span> --><div class=\"right\"><a id=\"rollback-link\" href=\"#\">打回诊断<span class=\"fui-alert\"></span></a><a href=\"#\">下载DICOM软件<span class=\"fui-alert\"></span></a><a href=\"#\" class=\"close-link\">关闭</a></div></div><!-- <div class=\"alert alert-warning\"><button type=\"button\" class=\"close fui-cross\" data-dismiss=\"alert\"></button><h4>未保存的数据将会丢失，确定关闭？</h4><a href=\"#\" class=\"btn btn-primary\"><span class=\"fui-check-inverted\"></span>确定关闭</a><a href=\"#\" class=\"btn btn-default btn-info\">取消</a></div>--></div><div class=\"row content\"><div id=\"\" class=\"col-md-4\"><div class=\"patient-info\"><span class=\"side-title\">就诊人档案</span><div><span class=\"head\">姓名：</span><span>").reference(ctx.get(["patientName"], false),ctx,"h").write("</span></div><div><span class=\"head\">性别：</span><span>").reference(ctx.get(["gender"], false),ctx,"h").write("</span></div><div><span class=\"head\">出生日期：</span><span>").reference(ctx.get(["birthDate"], false),ctx,"h").write("</span></div><div><span class=\"head\">诊断部位：</span><p>").reference(ctx.get(["positionName"], false),ctx,"h").write("</p></div><div><span class=\"head\">诊断类型：</span><span>").reference(ctx.get(["diagnoseType"], false),ctx,"h").write("</span></div><div><span class=\"head\">DICOM文件：</span><a href=\"").reference(ctx.get(["dicomUrl"], false),ctx,"h").write("\" target=\"_blank\">点击下载</a></div><div><span class=\"head\">曾就诊医院：</span><a href=\"/hospital/").reference(ctx.get(["hospitalId"], false),ctx,"h").write("\">").reference(ctx.get(["hospitalHistory"], false),ctx,"h").write("</a></div><div><span class=\"head\">病史：</span><p>").reference(ctx.get(["caseHistory"], false),ctx,"h").write("</p></div><div><span class=\"head\">诊断相关文件：</span>").section(ctx.get(["docUrl"], false),ctx,{"block":body_1},null).write("</div></div><div class=\"tree-top\"><span class=\"tree-title\">影像诊断模版：</span><a class=\"btn btn-info btn-xs load-template-btn load-btn\">载入模版</a><a class=\"btn btn-default btn-xs load-template-btn loading-btn\" disabled=\"true\" style=\"display:none;\">载入中...</a></div><div id=\"tree\"></div></div><div class=\"col-md-8 form-wrapper\"><span class=\"side-title\">诊断结果：</span><form class=\"form-horizontal\" role=\"form\" id=\"new-diagnose-form\" data-report-id=\"").reference(ctx.get(["reportId"], false),ctx,"h").write("\"><div class=\"form-group\"><label for=\"techDes\" class=\"col-md-3 control-label\">检查技术描述：</label><div class=\"col-md-9 form-body\"><textarea id=\"techDes\" name=\"techDesc\" class=\"form-control\">").reference(ctx.get(["techDes"], false),ctx,"h").write("</textarea></div></div><div class=\"form-group\"><label for=\"imageDes\" class=\"col-md-3 control-label\">影像描述：</label><div class=\"col-md-9 form-body\"><textarea id=\"imageDes\" name=\"imageDesc\" class=\"form-control\">").reference(ctx.get(["imageDes"], false),ctx,"h").write("</textarea></div></div><div class=\"form-group\"><label for=\"diagnoseResult\" class=\"col-md-3 control-label\">诊断意见：</label><div class=\"col-md-9 form-body\"><textarea id=\"diagnoseResult\" name=\"diagnoseDesc\" class=\"form-control\">").reference(ctx.get(["diagnoseResult"], false),ctx,"h").write("</textarea></div></div><div class=\"form-group\"><div class=\"col-md-offset-3 col-md-9\"><button id=\"saveDiagnoseBtn\" type=\"submit\" class=\"btn btn-primary btn-sm submit-btn\">保存草稿</button><button id=\"previewDiagnoseBtn\" type=\"submit\" class=\"btn btn-primary btn-sm submit-btn\">预览诊断书</button><button id=\"submitDiagnoseBtn\" type=\"submit\" class=\"btn btn-primary btn-sm submit-btn\">提交诊断书</button></div></div></form></div></div></div>");}function body_1(chk,ctx){return chk.write("<a href=\"").reference(ctx.getPath(true, []),ctx,"h").write("\" target=\"_blank\">文件下载</a>\n");}return body_0;})();
 define("doctorhome/templates/newDiagnoseLayout", function(){});
 
 (function(){dust.register("newAuditLayout",body_0);function body_0(chk,ctx){return chk.write("<div id=\"new-audit-wrapper\"><div class=\"row header\"><div class=\"\"><span class=\"title\">审核诊断报告</span><span>日期：").reference(ctx.get(["date"], false),ctx,"h").write("</span><span>就诊者：").reference(ctx.get(["patientName"], false),ctx,"h").write("</span><span>部位：").reference(ctx.get(["section"], false),ctx,"h").write("</span><a href=\"#").reference(ctx.get(["id"], false),ctx,"h").write("\">下载DICOM影像</a><a href=\"#\" class=\"close-link\">关闭</a></div><!-- <div class=\"alert alert-warning\"><button type=\"button\" class=\"close fui-cross\" data-dismiss=\"alert\"></button><h4>未保存的数据将会丢失，确定关闭？</h4><a href=\"#\" class=\"btn btn-primary\"><span class=\"fui-check-inverted\"></span>确定关闭</a><a href=\"#\" class=\"btn btn-default btn-info\">取消</a></div> --></div><div class=\"row content\"><div id=\"exists-diagnose-wrapper\" class=\"col-md-offset-2 col-md-8\"><form class=\"form-horizontal\" role=\"form\" id=\"exists-diagnose-form\"><div class=\"form-group\"><label class=\"col-md-3 control-label\">诊断医生：</label><div class=\"col-md-9 form-body\"><p id=\"diagnose-doctor-name\"  class=\"\"><a href=\"#").reference(ctx.get(["diagnoseDoctorId"], false),ctx,"h").write("\" target=\"_blank\">").reference(ctx.get(["diagnoseDoctorName"], false),ctx,"h").write(" ").reference(ctx.get(["diagnoseDoctorTitle"], false),ctx,"h").write("</a></p></div></div><div class=\"form-group\"><label class=\"col-md-3 control-label\">检查技术描述：</label><div class=\"col-md-9 form-body\"><p id=\"exists-techDes\"  class=\"\">").reference(ctx.get(["techDes"], false),ctx,"h").write("</p></div></div><div class=\"form-group\"><label for=\"\" class=\"col-md-3 control-label\">影像描述：</label><div class=\"col-md-9 form-body\"><p id=\"exists-imageDes\"  class=\"\">").reference(ctx.get(["imageDes"], false),ctx,"h").write("</p></div></div><div class=\"form-group\"><label class=\"col-md-3 control-label\">诊断意见：</label><div class=\"col-md-9 form-body\"><p id=\"exists-diagnoseResult\" class=\"\">").reference(ctx.get(["diagnoseResult"], false),ctx,"h").write("</p></div></div></form><form class=\"form-horizontal\" role=\"form\" id=\"new-audit-form\"><div class=\"form-group\"><label for=\"auditText\" class=\"col-md-3 control-label\">审核意见：</label><div class=\"col-md-9 form-body\"><textarea id=\"auditText\" name=\"auditText\" class=\"form-control\"></textarea></div></div><div class=\"form-group\"><div class=\"col-md-offset-3 col-md-9\"><button id=\"saveAuditBtn\" type=\"submit\" class=\"btn btn-primary btn-sm submit-btn\">保存草稿</button><button id=\"previewAuditBtn\" type=\"submit\" class=\"btn btn-primary btn-sm submit-btn\">预览诊断书</button><button id=\"submitAuditBtn\" type=\"submit\" class=\"btn btn-primary btn-sm submit-btn\">提交诊断书</button></div></div></form></div></div></div>");}return body_0;})();
@@ -14823,25 +14912,109 @@ define("doctorhome/templates/newAuditLayout", function(){});
 (function(){dust.register("doctorMessageLayout",body_0);function body_0(chk,ctx){return chk.write("<div id=\"doctor-action-content\"><ul class=\"nav nav-pills\" id=\"messageTab\"><li class=\"active\"><a href=\"#unread-message-wrapper\">未读消息</a></li><li><a href=\"#read-message-wrapper\">已读消息</a></li></ul><div id='content' class=\"tab-content\"><div class=\"tab-pane active\" id=\"unread-message-wrapper\"><ul class=\"message-list stylenone\" id=\"unread-message-region\"></ul></div><div class=\"tab-pane\" id=\"read-message-wrapper\"><ul class=\"message-list stylenone\" id=\"read-message-region\"></ul></div></div></div></div>");}return body_0;})();
 define("doctorhome/templates/doctorMessageLayout", function(){});
 
-(function(){dust.register("doctorConsultLayout",body_0);function body_0(chk,ctx){return chk.write("<div id=\"doctor-action-content\"><ul class=\"nav nav-tabs\" id=\"consultTab\"><li class=\"active\"><a href=\"#doctor-consult-wrapper\">我的咨询</a></li></ul><div id='content' class=\"tab-content\"><div class=\"tab-pane active\" id=\"doctor-consult-wrapper\"><p class=\"no-consult\">暂无新的咨询</p></div></div></div></div>");}return body_0;})();
+(function(){dust.register("doctorConsultLayout",body_0);function body_0(chk,ctx){return chk.write("<div id=\"doctor-action-content\"><div id=\"consultLayoutContent\"></div></div>");}return body_0;})();
 define("doctorhome/templates/doctorConsultLayout", function(){});
 
-(function(){dust.register("doctorDetailItem",body_0);function body_0(chk,ctx){return chk.write("<li><div class=\"col-md-6 doctor-detail-preview\" data-user-id=\"").reference(ctx.get(["userId"], false),ctx,"h").write("\"><div class=\"image-preview\"><a href=\"/doctor/site/").reference(ctx.get(["userId"], false),ctx,"h").write("\" target=\"_blank\"><img id=\"\" src=\"").reference(ctx.get(["avatarUrl"], false),ctx,"h").write("\"></a></div><div class=\"doctor-preview-des\"><h6><a href=\"/doctor/site/").reference(ctx.get(["userId"], false),ctx,"h").write("\" target=\"_blank\">").reference(ctx.get(["doctorname"], false),ctx,"h").write("</a><span>").reference(ctx.get(["doctortitle"], false),ctx,"h").write("</span></h6><div class=\"des-wrapper\"><span>医院：</span><a href=\"#\">").reference(ctx.get(["hospitalname"], false),ctx,"h").write("</a></div><div class=\"skill-wrapper\"><span>擅长：</span><span>").reference(ctx.get(["skill"], false),ctx,"h").write("</span></div></div></div><div class=\"col-md-4 doctor-statinfo\"><div class=\"exp-comment\"><p class=\"number\">").reference(ctx.get(["sharingNumber"], false),ctx,"h").write("</p><p>经验分享</p></div><img alt=\"\" src=\"/static/assets/Icons/SVG/retina.svg\"></img><div class=\"feedback-comment\"><p>诊断：").reference(ctx.get(["diagnoseNumber"], false),ctx,"h").write("</p><p>好评：").reference(ctx.get(["goodFeedbackNumber"], false),ctx,"h").write("</p></div></div><div class=\"col-md-2 doctor-action\"><a class=\"btn btn-primary btn-sm apply-btn\" href=\"/applyDiagnose?doctorid=").reference(ctx.get(["id"], false),ctx,"h").write("\" target=\"_blank\">请求诊断</a></div></li>");}return body_0;})();
+(function(){dust.register("patientConsultLayout",body_0);function body_0(chk,ctx){return chk.write("<div id=\"patient-action-content\"><ul class=\"nav nav-tabs\" id=\"accountTab\"><li class=\"active\"><a href=\"#consultLayoutContent\">留言咨询</a></li><li><a href=\"#phoneConsultLayoutContent\">电话咨询</a></li></ul><div id='content' class=\"tab-content\"><div class=\"tab-pane active\" id=\"consultLayoutContent\"></div><div class=\"tab-pane\" id=\"phoneConsultLayoutContent\"></div></div></div>");}return body_0;})();
+define("patienthome/templates/patientConsultLayout", function(){});
+
+(function(){dust.register("consultListView",body_0);function body_0(chk,ctx){return chk.write("<div class=\"row\"><form id=\"searchConsultForm\" class=\"form-inline\" role=\"form\"><div class=\"form-group\"><label class=\"\" for=\"\">咨询状态：</label><select name=\"status\" title='选择筛选条件...'><option value=\"-1\" ").helper("if",ctx,{"block":body_1},{"cond":body_2}).write(">全部</option><option value=\"0\" ").helper("if",ctx,{"block":body_3},{"cond":body_4}).write(">新咨询</option><option value=\"2\" ").helper("if",ctx,{"block":body_5},{"cond":body_6}).write(">已读咨询</option></select></div><button type=\"submit\" class=\"btn btn-sm btn-primary submit-btn\">确定</button><button id=\"new-consult-btn\" class=\"btn btn-info btn-sm right-20\">发起新的咨询</button></form></div><table class=\"table table-striped table-hover action-table consult-table\" id=\"consult-table\"><thead><tr class=\"success\"><th>标题</th><th>问题描述</th><th>咨询时间</th><th class=\"nowrap\">状态</th><th class=\"nowrap\">回复</th><th class=\"nowrap\">操作</th></tr></thead><tbody id=\"consult-tbody\"></tbody></table>");}function body_1(chk,ctx){return chk.write("selected=\"selected\"");}function body_2(chk,ctx){return chk.write("'").reference(ctx.get(["filter"], false),ctx,"h").write("' == '-1'");}function body_3(chk,ctx){return chk.write("selected=\"selected\"");}function body_4(chk,ctx){return chk.write("'").reference(ctx.get(["filter"], false),ctx,"h").write("' == '0'");}function body_5(chk,ctx){return chk.write("selected=\"selected\"");}function body_6(chk,ctx){return chk.write("'").reference(ctx.get(["filter"], false),ctx,"h").write("' == '2'");}return body_0;})();
+define("doctorhome/templates/consultListView", function(){});
+
+(function(){dust.register("consultListItemView",body_0);function body_0(chk,ctx){return chk.write("<tr><td><p class=\"table-text-overflow maxw80\">").reference(ctx.get(["title"], false),ctx,"h").write("</p></td><td><p class=\"table-text-overflow maxw220\">").reference(ctx.get(["content"], false),ctx,"h").write("</p></td><td>").reference(ctx.get(["createTime"], false),ctx,"h").write("</td><td class=\"nowrap\">").reference(ctx.get(["statusText"], false),ctx,"h").write("</td><td class=\"nowrap\">").reference(ctx.get(["amount"], false),ctx,"h").write("</td><td class=\"action-group nowrap\"><a class=\"check-link\" href=\"javascript:void(0);\">查看</a></td></tr>");}return body_0;})();
+define("doctorhome/templates/consultListItemView", function(){});
+
+(function(){dust.register("consultDetailLayout",body_0);function body_0(chk,ctx){return chk.write("<div id=\"consult-detail-layout\"><div id=\"diagnoseContent\"></div><div id=\"consultListContent\"></div></div>");}return body_0;})();
+define("doctorhome/templates/consultDetailLayout", function(){});
+
+(function(){dust.register("consultDetailList",body_0);function body_0(chk,ctx){return chk.write("<div id=\"doctor-action-content\"><div id=\"consultDetailLayoutContent\"><h6 class=\"content-sub-title\">所有留言<a href=\"javascript:void(0);\" class=\"action-link back-link\">回到咨询列表</a></h6><div class=\"consult-comments-wrapper sharing-list-wrapper detail-wrapper\"><ul id=\"comments-wrapper\"></ul></div><textarea class=\"form-control\" id=\"new-comments-content\" placeholder=\"新的留言...\"></textarea><span class=\"help-block\" style=\"display:none;\">回复不能为空</span><div class=\"right-wrapper\"><button class=\"btn btn-info btn-xs\" id=\"add-comments-btn\">提交回复</button></div></div></div>");}return body_0;})();
+define("doctorhome/templates/consultDetailList", function(){});
+
+(function(){dust.register("consultDetailItem",body_0);function body_0(chk,ctx){return chk.write("<li><span class=\"image\"><img src=\"").reference(ctx.get(["avartarUrl"], false),ctx,"h").write("\" alt=\"\"></span><dl><dt><span class=\"des-text\">标题：").reference(ctx.get(["title"], false),ctx,"h").write("</span></dt><dd class=\"mt10\">").reference(ctx.get(["content"], false),ctx,"h").write("</dd><div class=\"time\">").helper("if",ctx,{"else":body_1,"block":body_2},{"cond":body_3}).write("&nbsp于").reference(ctx.get(["createTime"], false),ctx,"h").write("&nbsp留言</div></dl></li>");}function body_1(chk,ctx){return chk.reference(ctx.get(["doctorName"], false),ctx,"h").write("&nbsp").reference(ctx.get(["doctorTitle"], false),ctx,"h");}function body_2(chk,ctx){return chk.reference(ctx.get(["userName"], false),ctx,"h");}function body_3(chk,ctx){return chk.write("'").reference(ctx.get(["type"], false),ctx,"h").write("' == '0'");}return body_0;})();
+define("doctorhome/templates/consultDetailItem", function(){});
+
+(function(){dust.register("consultDiagnose",body_0);function body_0(chk,ctx){return chk.write("<div class=\"row diagnose-detail-group\"><h6 class=\"content-sub-title\">相关的诊断详情</h6><div class=\"col-md-12\"><div class=\"col-md-6 left-side\"><div><span class=\"head\">申请编号：</span><span>").reference(ctx.get(["diagnosenumber"], false),ctx,"h").write("</span></div><div><span class=\"head\">姓名：</span><span>").reference(ctx.get(["patientName"], false),ctx,"h").write("</span></div><div><span class=\"head\">性别：</span><span>").reference(ctx.get(["gender"], false),ctx,"h").write("</span></div><div><span class=\"head\">出生日期：</span><span>").reference(ctx.get(["birthDate"], false),ctx,"h").write("</span></div><div><span class=\"head\">诊断部位：</span><p>").reference(ctx.get(["positionName"], false),ctx,"h").write("</p></div></div><div class=\"col-md-6 right-side\"><div><span class=\"head\">诊断类型：</span><span>").reference(ctx.get(["diagnoseType"], false),ctx,"h").write("</span></div><div><span class=\"head\">DICOM文件：</span><a href=\"").reference(ctx.get(["dicomUrl"], false),ctx,"h").write("\" target=\"_blank\">点击下载</a></div><div><span class=\"head\">曾就诊医院：</span><a href=\"/hospital/").reference(ctx.get(["hospitalId"], false),ctx,"h").write("\">").reference(ctx.get(["hospitalHistory"], false),ctx,"h").write("</a></div><div><span class=\"head\">病史：</span><p>").reference(ctx.get(["caseHistory"], false),ctx,"h").write("</p></div><div><span class=\"head\">诊断相关文件：</span>").section(ctx.get(["docUrl"], false),ctx,{"block":body_1},null).write("</div></div></div></div>");}function body_1(chk,ctx){return chk.write("<a href=\"").reference(ctx.getPath(true, []),ctx,"h").write("\" target=\"_blank\">文件下载</a>\n");}return body_0;})();
+define("doctorhome/templates/consultDiagnose", function(){});
+
+(function(){dust.register("phoneConsultList",body_0);function body_0(chk,ctx){return chk.write("<div class=\"row\"><form id=\"phoneSearchConsultForm\" class=\"form-inline\" role=\"form\"><div class=\"form-group\"><label class=\"\" for=\"\">咨询状态：</label><select name=\"status\" title='选择筛选条件...'><option value=\"-1\" ").helper("if",ctx,{"block":body_1},{"cond":body_2}).write(">全部</option><option value=\"0\" ").helper("if",ctx,{"block":body_3},{"cond":body_4}).write(">申请中</option><option value=\"2\" ").helper("if",ctx,{"block":body_5},{"cond":body_6}).write(">咨询完成</option></select></div><button type=\"submit\" class=\"btn btn-sm btn-primary submit-btn\">确定</button><button id=\"new-phone-consult-btn\" class=\"btn btn-info btn-sm right-20\">发起电话咨询</button></form></div><table class=\"table table-striped table-hover action-table consult-table\" id=\"phone-consult-table\"><thead><tr class=\"success\"><th>诊断号</th><th>咨询时间</th><th>费用</th><th class=\"nowrap\">状态</th><th class=\"nowrap\">操作</th></tr></thead><tbody id=\"phone-consult-tbody\"></tbody></table>");}function body_1(chk,ctx){return chk.write("selected=\"selected\"");}function body_2(chk,ctx){return chk.write("'").reference(ctx.get(["filter"], false),ctx,"h").write("' == '-1'");}function body_3(chk,ctx){return chk.write("selected=\"selected\"");}function body_4(chk,ctx){return chk.write("'").reference(ctx.get(["filter"], false),ctx,"h").write("' == '0'");}function body_5(chk,ctx){return chk.write("selected=\"selected\"");}function body_6(chk,ctx){return chk.write("'").reference(ctx.get(["filter"], false),ctx,"h").write("' == '2'");}return body_0;})();
+define("patienthome/templates/phoneConsultList", function(){});
+
+(function(){dust.register("phoneConsultListItem",body_0);function body_0(chk,ctx){return chk.write("<tr><td>").reference(ctx.get(["seriesNumber"], false),ctx,"h").write("</td><td>").reference(ctx.get(["consultTime"], false),ctx,"h").write("</td><td class=\"nowrap\">").reference(ctx.get(["cash"], false),ctx,"h").write("</td><td class=\"nowrap\">").reference(ctx.get(["statusText"], false),ctx,"h").write("</td><td class=\"action-group nowrap\"><a class=\"check-link\" href=\"javascript:void(0);\">查看</a></td></tr>");}return body_0;})();
+define("patienthome/templates/phoneConsultListItem", function(){});
+
+(function(){dust.register("doctorDetailItem",body_0);function body_0(chk,ctx){return chk.write("<li><div class=\"col-md-6 doctor-detail-preview\" data-user-id=\"").reference(ctx.get(["userId"], false),ctx,"h").write("\"><div class=\"image-preview\"><a href=\"/doctor/site/").reference(ctx.get(["userId"], false),ctx,"h").write("\" target=\"_blank\"><img id=\"\" src=\"").reference(ctx.get(["avatarUrl"], false),ctx,"h").write("\"></a></div><div class=\"doctor-preview-des\"><h6><a href=\"/doctor/site/").reference(ctx.get(["userId"], false),ctx,"h").write("\" target=\"_blank\">").reference(ctx.get(["doctorname"], false),ctx,"h").write("</a><span>").reference(ctx.get(["doctortitle"], false),ctx,"h").write("</span></h6><div class=\"des-wrapper\"><span>医院：</span><a href=\"#\">").reference(ctx.get(["hospitalname"], false),ctx,"h").write("</a></div><div class=\"skill-wrapper\"><span>擅长：</span><span>").reference(ctx.get(["skill"], false),ctx,"h").write("</span></div></div></div><div class=\"col-md-4 doctor-statinfo\"><div class=\"exp-comment\"><p class=\"number\">").reference(ctx.get(["diagnoseNumber"], false),ctx,"h").write("</p><p>诊断量</p></div><img alt=\"\" src=\"/static/assets/Icons/SVG/retina.svg\"></img><div class=\"feedback-comment\"><p>感谢信：<span class=\"number\">2</span></p><p>好评：<span class=\"number\">").reference(ctx.get(["goodFeedbackNumber"], false),ctx,"h").write("</span></p></div></div><div class=\"col-md-2 doctor-action\"><a class=\"btn btn-primary btn-sm apply-btn\" href=\"/applyDiagnose?doctorid=").reference(ctx.get(["id"], false),ctx,"h").write("\" target=\"_blank\">请求诊断</a></div></li>");}return body_0;})();
 define("doctorList/templates/doctorDetailItem", function(){});
 
 (function(){dust.register("doctorDetailList",body_0);function body_0(chk,ctx){return chk.write("<div id=\"doctor-detail-list-wrapper\" class=\"\"><ul class=\"result-list stylenone\"></ul></div><ul class=\"pagination-plain\"><li class=\"previous\"><a href=\"#\">向前</a></li>").helper("pager",ctx,{},{"first":"1","current":body_1,"last":body_2}).write("<li class=\"next\"><a href=\"#\">向后</a></li></ul>");}function body_1(chk,ctx){return chk.reference(ctx.get(["currentPage"], false),ctx,"h");}function body_2(chk,ctx){return chk.reference(ctx.get(["pageNumber"], false),ctx,"h");}return body_0;})();
 define("doctorList/templates/doctorDetailList", function(){});
 
-(function(){dust.register("hospitalUserDiagnoseItem",body_0);function body_0(chk,ctx){return chk.write("<tr><td>").reference(ctx.get(["diagnosenumber"], false),ctx,"h").write("</td><td>").reference(ctx.get(["date"], false),ctx,"h").write("</td><td>").reference(ctx.get(["doctorName"], false),ctx,"h").write("</td><td>").reference(ctx.get(["patientName"], false),ctx,"h").write("</td><td>").reference(ctx.get(["positionName"], false),ctx,"h").write("</td><td>").reference(ctx.get(["status"], false),ctx,"h").write("</td>").helper("if",ctx,{"else":body_1,"block":body_2},{"cond":body_3}).write("<td class=\"action-group\"><a id=\"submit-diagnose-link\" href=\"/applyDiagnose?diagnoseid=").reference(ctx.get(["id"], false),ctx,"h").write("\" target=\"_blank\" class=\"\">修改</a><a class=\"rm-diagnose-link\" href=\"#\" class=\"\">撤销</a></td></tr>");}function body_1(chk,ctx){return chk.write("<td class=\"dicom-file-group\">等待DICOM文件上传</td>");}function body_2(chk,ctx){return chk.write("<td class=\"dicom-file-group\"><a href=\"").reference(ctx.get(["dicomUrl"], false),ctx,"h").write("\" class=\"\">").reference(ctx.get(["dicomFileName"], false),ctx,"h").write("</a></td>");}function body_3(chk,ctx){return chk.write("'").reference(ctx.get(["hasDicom"], false),ctx,"h").write("' == 'true'");}return body_0;})();
+(function(){dust.register("hospitalUserDiagnoseItem",body_0);function body_0(chk,ctx){return chk.write("<tr><td>").reference(ctx.get(["diagnosenumber"], false),ctx,"h").write("</td><td>").reference(ctx.get(["date"], false),ctx,"h").write("</td><td>").reference(ctx.get(["doctorName"], false),ctx,"h").write("</td><td>").reference(ctx.get(["patientName"], false),ctx,"h").write("</td><td>").reference(ctx.get(["positionName"], false),ctx,"h").write("</td><td>").reference(ctx.get(["status"], false),ctx,"h").write("</td>").helper("if",ctx,{"else":body_1,"block":body_2},{"cond":body_3}).helper("if",ctx,{"else":body_4,"block":body_5},{"cond":body_7}).write("<td class=\"action-group\"><a id=\"submit-diagnose-link\" href=\"/applyDiagnose?diagnoseid=").reference(ctx.get(["id"], false),ctx,"h").write("&type=1&edit=true\" target=\"_blank\" class=\"\">修改</a>").helper("if",ctx,{"else":body_8,"block":body_9},{"cond":body_10}).write("</td></tr>");}function body_1(chk,ctx){return chk.write("<td class=\"dicom-file-group\">等待上传</td>");}function body_2(chk,ctx){return chk.write("<td class=\"dicom-file-group\"><a href=\"").reference(ctx.get(["dicomUrl"], false),ctx,"h").write("\" class=\"\">Dicom文件</a></td>");}function body_3(chk,ctx){return chk.write("'").reference(ctx.get(["hasDicom"], false),ctx,"h").write("' == 'true'");}function body_4(chk,ctx){return chk.write("<td class=\"doc-file-group\">等待上传</td>");}function body_5(chk,ctx){return chk.write("<td class=\"doc-file-group\">").section(ctx.get(["docUrl"], false),ctx,{"block":body_6},null).write("</td>");}function body_6(chk,ctx){return chk.write("<a href=\"").reference(ctx.getPath(true, []),ctx,"h").write("\" target=\"_blank\">文件").helper("math",ctx,{},{"key":ctx.get(["$idx"], false),"method":"add","operand":"1"}).write("</a>\n");}function body_7(chk,ctx){return chk.write("'").reference(ctx.get(["hasDoc"], false),ctx,"h").write("' == 'true'");}function body_8(chk,ctx){return chk.write("<a class=\"rm-diagnose-link\" href=\"#\" class=\"\">撤销</a>");}function body_9(chk,ctx){return chk.write("<a class=\"detail-diagnose-link\" href=\"#\" class=\"\">详细</a>");}function body_10(chk,ctx){return chk.write("'").reference(ctx.get(["statusId"], false),ctx,"h").write("' == '7'");}return body_0;})();
 define("hospitalUserPage/templates/hospitalUserDiagnoseItem", function(){});
 
-(function(){dust.register("hospitalUserSubmittedDiagnoseItem",body_0);function body_0(chk,ctx){return chk.write("<tr><td>").reference(ctx.get(["diagnosenumber"], false),ctx,"h").write("</td><td>").reference(ctx.get(["date"], false),ctx,"h").write("</td><td>").reference(ctx.get(["doctorName"], false),ctx,"h").write("</td><td>").reference(ctx.get(["hispital"], false),ctx,"h").write("</td><td>").reference(ctx.get(["patientName"], false),ctx,"h").write("</td><td>").reference(ctx.get(["positionName"], false),ctx,"h").write("</td><td>").reference(ctx.get(["status"], false),ctx,"h").write("</td><td class=\"action-group\">").helper("if",ctx,{"block":body_1},{"cond":body_2}).write("</td></tr>");}function body_1(chk,ctx){return chk.write("<a href=\"/diagnose/").reference(ctx.get(["id"], false),ctx,"h").write("/pdf\" target=\"_blank\">查看报告</a><a href=\"").reference(ctx.get(["reportUrl"], false),ctx,"h").write("\">下载</a>");}function body_2(chk,ctx){return chk.write("'").reference(ctx.get(["statusId"], false),ctx,"h").write("' == '6'");}return body_0;})();
+(function(){dust.register("hospitalUserSubmittedDiagnoseItem",body_0);function body_0(chk,ctx){return chk.write("<tr><td>").reference(ctx.get(["diagnosenumber"], false),ctx,"h").write("</td><td>").reference(ctx.get(["date"], false),ctx,"h").write("</td><td>").reference(ctx.get(["doctorName"], false),ctx,"h").write("</td><td>").reference(ctx.get(["hispital"], false),ctx,"h").write("</td><td>").reference(ctx.get(["patientName"], false),ctx,"h").write("</td><td>").reference(ctx.get(["positionName"], false),ctx,"h").write("</td><td>").reference(ctx.get(["status"], false),ctx,"h").write("</td><td class=\"action-group\">").helper("if",ctx,{"block":body_1},{"cond":body_2}).write("</td></tr>");}function body_1(chk,ctx){return chk.write("<a href=\"/diagnose/").reference(ctx.get(["id"], false),ctx,"h").write("/pdf\" target=\"_blank\">查看报告</a><a href=\"").reference(ctx.get(["reportUrl"], false),ctx,"h").write("\" target=\"_blank\">下载</a>");}function body_2(chk,ctx){return chk.write("'").reference(ctx.get(["statusId"], false),ctx,"h").write("' == '6'");}return body_0;})();
 define("hospitalUserPage/templates/hospitalUserSubmittedDiagnoseItem", function(){});
 
-(function(){dust.register("messageItem",body_0);function body_0(chk,ctx){return chk.write("<li class=\"message-item\" data-id=\"").reference(ctx.get(["id"], false),ctx,"h").write("\"><a href=\"").reference(ctx.get(["url"], false),ctx,"h").write("\" class=\"message-link\"><div class=\"icon\"><img alt=\"\" src=\"/static/assets/Icons/PNG/clipboard.png\"></div><div class=\"top-wrapper\"><span class=\"title\">").reference(ctx.get(["title"], false),ctx,"h").write("</span><div class=\"right-content\"><span class=\"date\">").reference(ctx.get(["createTime"], false),ctx,"h").write("</span></div></div><div class=\"message-content-wrapper\"><p>").reference(ctx.get(["content"], false),ctx,"h").write("</p></div></a></li>");}return body_0;})();
+(function(){dust.register("hospitalUserFileUpload",body_0);function body_0(chk,ctx){return chk.write("<div class=\"file-upload-item\"><h6 class=\"content-sub-title\"><span>诊断号：#").reference(ctx.get(["diagnosenumber"], false),ctx,"h").write("</span><span class=\"ml20\">就诊日期：").reference(ctx.get(["date"], false),ctx,"h").write("</span><span class=\"ml20\">就诊人：").reference(ctx.get(["patientName"], false),ctx,"h").write("</span><span class=\"ml20\">诊断部位：").reference(ctx.get(["positionName"], false),ctx,"h").write("</span><button class=\"btn btn-info btn-sm apply-btn\">确定提交</button></h6><div class=\"file-group dicom-file-upload\"><label>1.DICOM影像文件：</label>").helper("if",ctx,{"else":body_1,"block":body_2},{"cond":body_3}).write("<p class=\"\">已经上传的文件列表</p><div class=\"row\"><div class=\"col-md-4\"><a class=\"file-link\" data-fileid=\"").reference(ctx.getPath(false, ["dicomUrl","id"]),ctx,"h").write("\" href=\"").reference(ctx.getPath(false, ["dicomUrl","url"]),ctx,"h").write("\">").reference(ctx.getPath(false, ["dicomUrl","name"]),ctx,"h").write("</a></div><div class=\"col-md-4\"><span>文件大小：").reference(ctx.getPath(false, ["dicomUrl","size"]),ctx,"h").write("</span></div><div><a class=\"btn btn-warning btn-xs reupload-btn\" data-type=\"0\">重新上传</a></div></div></div>").helper("if",ctx,{"else":body_4,"block":body_5},{"cond":body_6}).write("<p class=\"\">必须包含有效的影像文件</p><div class=\"row fileupload-buttonbar upload-file-wrapper\"><div class=\"col-md-4\"><!-- The fileinput-button span is used to style the file input field as button --><span class=\"btn btn-success fileinput-button\"> <i class=\"glyphicon glyphicon-plus\"></i><span>上传文件...</span><input class=\"dicom-file-input\" type=\"file\" name=\"files[]\" multiple=\"\"></span><!-- The global file processing state --><span class=\"fileupload-process\"></span></div><!-- The global progress state --><div class=\"col-md-8 fileupload-progress fade\"><!-- The global progress bar --><div class=\"progress progress-striped active\" role=\"progressbar\" aria-valuemin=\"0\" aria-valuemax=\"100\"><div class=\"progress-bar progress-bar-success\" style=\"width:0%;\"></div></div><!-- The extended global progress state --><div class=\"progress-extended\">&nbsp;</div></div></div><!-- The table listing the files available for upload/download --><div class=\"full-width\"><table role=\"presentation\" class=\"table table-striped\"><tbody class=\"files\"></tbody></table></div></div></div><div class=\"file-group medical-report-fileupload\"><label>2.其他文件（诊断书等）：<span class=\"required-text\"></span></label>").helper("if",ctx,{"else":body_7,"block":body_8},{"cond":body_9}).write("<p class=\"\">已经上传的文件列表\t<a class=\"btn btn-warning btn-xs reupload-btn\" data-type=\"1\">全部重新上传</a></p>").section(ctx.get(["docUrl"], false),ctx,{"block":body_10},null).write("</div>").helper("if",ctx,{"else":body_11,"block":body_12},{"cond":body_13}).write("<p class=\"\">需要清晰的扫描件或者照片</p><div class=\"row fileupload-buttonbar upload-file-wrapper\"><div class=\"col-md-4\"><!-- The fileinput-button span is used to style the file input field as button --><span class=\"btn btn-success fileinput-button\"> <i class=\"glyphicon glyphicon-plus\"></i><span>上传文件...</span><input class=\"medical-report-file-input\" type=\"file\" name=\"files[]\" multiple=\"\"></span><!-- The global file processing state --><span class=\"fileupload-process\"></span></div><!-- The global progress state --><div class=\"col-md-8 fileupload-progress fade\"><!-- The global progress bar --><div class=\"progress progress-striped active\" role=\"progressbar\" aria-valuemin=\"0\" aria-valuemax=\"100\"><div class=\"progress-bar progress-bar-success\" style=\"width:0%;\"></div></div><!-- The extended global progress state --><div class=\"progress-extended\">&nbsp;</div></div></div><!-- The table listing the files available for upload/download --><div class=\"full-width\"><table role=\"presentation\" class=\"table table-striped\"><tbody class=\"files\"></tbody></table></div></div></div></div>");}function body_1(chk,ctx){return chk.write("<div class=\"edit-file-wrapper\" style=\"display:none;\">");}function body_2(chk,ctx){return chk.write("<div class=\"edit-file-wrapper\">");}function body_3(chk,ctx){return chk.write("'").reference(ctx.get(["hasDicom"], false),ctx,"h").write("' == 'true'");}function body_4(chk,ctx){return chk.write("<div class=\"new-file-wrapper\">");}function body_5(chk,ctx){return chk.write("<div class=\"new-file-wrapper\" style=\"display:none;\">");}function body_6(chk,ctx){return chk.write("'").reference(ctx.get(["hasDicom"], false),ctx,"h").write("' == 'true'");}function body_7(chk,ctx){return chk.write("<div class=\"edit-file-wrapper\" style=\"display:none;\">");}function body_8(chk,ctx){return chk.write("<div class=\"edit-file-wrapper\">");}function body_9(chk,ctx){return chk.write("'").reference(ctx.get(["hasDoc"], false),ctx,"h").write("' == 'true'");}function body_10(chk,ctx){return chk.write("<div class=\"row\"><div class=\"col-md-4\"><a class=\"file-link\" data-fileid=\"").reference(ctx.get(["id"], false),ctx,"h").write("\" href=\"").reference(ctx.get(["url"], false),ctx,"h").write("\">").reference(ctx.get(["name"], false),ctx,"h").write("</a></div><div class=\"col-md-4\"><span>文件大小：").reference(ctx.get(["size"], false),ctx,"h").write("</span></div><!-- <div><a class=\"btn btn-warning btn-xs\">重新上传</a></div> --></div>");}function body_11(chk,ctx){return chk.write("<div class=\"new-file-wrapper\">");}function body_12(chk,ctx){return chk.write("<div class=\"new-file-wrapper\" style=\"display:none;\">");}function body_13(chk,ctx){return chk.write("'").reference(ctx.get(["hasDoc"], false),ctx,"h").write("' == 'true'");}return body_0;})();
+define("hospitalUserPage/templates/hospitalUserFileUpload", function(){});
+
+(function(){dust.register("messageItem",body_0);function body_0(chk,ctx){return chk.write("<li class=\"message-item\" data-id=\"").reference(ctx.get(["id"], false),ctx,"h").write("\"><div class=\"message-link\"><div class=\"icon\"><img alt=\"\" src=\"/static/assets/Icons/PNG/clipboard.png\"></div><div class=\"top-wrapper\"><span class=\"title\">").reference(ctx.get(["title"], false),ctx,"h").write("</span><div class=\"right-content\"><span class=\"date\">").reference(ctx.get(["createTime"], false),ctx,"h").write("</span></div></div><div class=\"message-content-wrapper\"><p>").reference(ctx.get(["content"], false),ctx,"h").helper("if",ctx,{"block":body_1},{"cond":body_2}).write("</p><button class=\"btn btn-info btn-xs open-btn\">展开</button><button class=\"btn btn-info btn-xs close-btn\" style=\"display:none;\">收起</button></div></div></li>");}function body_1(chk,ctx){return chk.write("<a href=\"").reference(ctx.get(["url"], false),ctx,"h").write("\" target=\"_blank\" class=\"ml20\">支付宝支付链接</a>");}function body_2(chk,ctx){return chk.write("'").reference(ctx.get(["url"], false),ctx,"h").write("' != ''");}return body_0;})();
 define("message/templates/messageItem", function(){});
 
-define('templates',['require','patienthome/templates/diagnoseItem','patienthome/templates/diagnoseLayout','patienthome/templates/patientAccountManageLayout','patienthome/templates/patientMessageLayout','patienthome/templates/sharingModal','patienthome/templates/favoriteLayout','patienthome/templates/favoriteItem','patienthome/templates/cancelFavoriteModalView','patienthome/templates/detailTrackLayout','patienthome/templates/deleteDiagnoseModal','diagnose/templates/selectDoctorItem','diagnose/templates/selectDoctorList','diagnose/templates/patientProfile','diagnose/templates/dicomInfo','diagnose/templates/pathologyItem','diagnose/templates/successSubmitDiagnoseModal','admin/fenzhen/templates/allDiagnoseItem','admin/fenzhen/templates/myDiagnoseItem','admin/fenzhen/templates/rollbackDiagnoseModal','admin/kefu/templates/displayPayLinkModal','doctorhome/templates/doctorAccountManageLayout','doctorhome/templates/doctorDiagnoseItem','doctorhome/templates/doctorDiagnoseLayout','doctorhome/templates/newDiagnoseLayout','doctorhome/templates/newAuditLayout','doctorhome/templates/doctorMessageLayout','doctorhome/templates/doctorConsultLayout','doctorList/templates/doctorDetailItem','doctorList/templates/doctorDetailList','hospitalUserPage/templates/hospitalUserDiagnoseItem','hospitalUserPage/templates/hospitalUserSubmittedDiagnoseItem','message/templates/messageItem'],function(require) {
+(function(){dust.register("mobileBindModal",body_0);function body_0(chk,ctx){return chk.write("<div class=\"modal-dialog\"><div class=\"modal-content\"><div class=\"modal-header\"><button type=\"button\" class=\"close fui-cross\" data-dismiss=\"modal\" aria-hidden=\"true\"></button>").helper("if",ctx,{"else":body_1,"block":body_2},{"cond":body_3}).write("</div><div class=\"modal-body pd60\"><!-- <div class=\"row bs-wizard\" style=\"border-bottom:0;\"><div class=\"col-xs-4 bs-wizard-step active\"><div class=\"text-center bs-wizard-stepnum\">手机信息</div><div class=\"progress\"><div class=\"progress-bar\"></div></div><a href=\"javascript:void(0);\" class=\"bs-wizard-dot\"></a></div><div class=\"col-xs-4 bs-wizard-step disabled\"><div class=\"text-center bs-wizard-stepnum\">输入验证码</div><div class=\"progress\"><div class=\"progress-bar\"></div></div><a href=\"javascript:void(0);\" class=\"bs-wizard-dot\"></a></div><div class=\"col-xs-4 bs-wizard-step disabled\"><div class=\"text-center bs-wizard-stepnum\">完成</div><div class=\"progress\"><div class=\"progress-bar\"></div></div><a href=\"javascript:void(0);\" class=\"bs-wizard-dot\"></a></div></div><div class=\"step-content\"><div id=\"step-01-content\"></div><div id=\"step-02-content\"></div><div id=\"step-03-content\"></div></div>--><div id=\"mobileSteps\" class=\"pf-form\"><div class=\"row-fluid\"><div class=\"psteps_circle_titles span4\"><div class=\"step-title circle-step\"><span class=\"step-order\">1</span><span class=\"step-name hide\">手机信息</span></div><div class=\"step-line\"></div><div class=\"step-title circle-step\"><span class=\"step-order\">2</span><span class=\"step-name hide\">输入验证码</span></div><div class=\"step-line\"></div><div class=\"step-title circle-step\"><span class=\"step-order\">3</span><span class=\"step-name hide\">绑定完成</span></div></div></div><div class=\"row-fluid\"><div class=\"span4 clearfix psteps_circle_contents\"><div class=\"step-content\"><form class=\"form-horizontal\" role=\"form\"><div class=\"form-group\"><label for=\"\" class=\"col-md-2 control-label\">手机号：</label><div class=\"col-md-8 form-body\"><span class=\"mobile-text\">").reference(ctx.get(["mobile"], false),ctx,"h").write("</span> </div></div></form><p class=\"des\">点击下一步获得手机短信验证码</p></div><div class=\"step-content\"><form class=\"form-horizontal\" role=\"form\"><div class=\"form-group\"><label for=\"verifyCode\" class=\"col-md-2 control-label\">验证码</label><div class=\"col-md-8 form-body inline-body\"><input id=\"verifyCode\" type=\"text\" class=\"form-control input-sm col-md-4\" value=\"\" placeholder=\"请输入验证码\"><button type=\"button\" class=\"btn btn-primary btn-sm ml20\" id=\"getVerifyCodeBtn\">重新获取</button><br/><span id=\"verifyCodeErrorMsg\" class=\"help-block text-warning\"></span></div></div><div class=\"form-group\">").helper("if",ctx,{"block":body_4},{"cond":body_5}).write("</div></form><p class=\"des\">点击下一步提交验证码</p></div><div class=\"step-content\"><p>手机绑定完成，点击完成退出。</p></div><button id=\"nextBtn\" class=\"next-button btn btn-wait-ajax\">下一步</button><button id=\"submitBtn\" class=\"submit-button btn btn-wait-ajax\">完成</button><button class=\"back-button btn\">上一步</button></div></div></div></div></div></div>");}function body_1(chk,ctx){return chk.write("<h4 class=\"modal-title\">修改手机号</h4>");}function body_2(chk,ctx){return chk.write("<h4 class=\"modal-title\">绑定手机</h4>");}function body_3(chk,ctx){return chk.write("'").reference(ctx.get(["mobileType"], false),ctx,"h").write("' == '1'");}function body_4(chk,ctx){return chk.write("<label for=\"\" class=\"col-md-2 control-label\">手机号：</label><div class=\"col-md-8 form-body\"><input type=\"text\" class=\"form-control input-sm\" id=\"mobileNumber\" placeholder=\"请输入新的手机号码\"></div>");}function body_5(chk,ctx){return chk.write("'").reference(ctx.get(["mobileType"], false),ctx,"h").write("' == '2'");}return body_0;})();
+define("modal/templates/mobileBindModal", function(){});
+
+(function(){dust.register("confirmModal",body_0);function body_0(chk,ctx){return chk.write("<div class=\"modal-dialog\"><div class=\"modal-content\"><div class=\"modal-header\"><button type=\"button\" class=\"close fui-cross\" data-dismiss=\"modal\" aria-hidden=\"true\"></button><h4 class=\"modal-title\">确认提交</h4></div><div class=\"modal-body confirm-modal\"><p class=\"\">您确认需要").reference(ctx.get(["content"], false),ctx,"h").write("？确认请点击确认按钮，否则请点击取消按钮。</p></div><div class=\"modal-footer\"><button name=\"cancel\" data-dismiss=\"modal\" class=\"btn btn-default\">取消</button><button name=\"submit\" class=\"btn btn-primary\">确认</button></div></div></div>");}return body_0;})();
+define("modal/templates/confirmModal", function(){});
+
+(function(){dust.register("createConsultViewModal",body_0);function body_0(chk,ctx){return chk.write("<div class=\"modal-dialog\"><div class=\"modal-content\"><div class=\"modal-header\"><button type=\"button\" class=\"close fui-cross\" data-dismiss=\"modal\" aria-hidden=\"true\"></button><h4 class=\"modal-title\">发起新的咨询</h4></div><div class=\"modal-body new-consult-modal\"><form id=\"consultForm\" class=\"form-horizontal\" role=\"form\"><input type=\"hidden\" name=\"doctorId\" value=\"").reference(ctx.get(["doctorId"], false),ctx,"h").write("\">").helper("if",ctx,{"block":body_1},{"cond":body_5}).write("<div class=\"form-group\"><label for=\"\" class=\"col-md-2 control-label\">标题：</label><div class=\"col-md-8 form-body\"><input type=\"text\" class=\"form-control input-sm\" id=\"titleInput\" name=\"title\" placeholder=\"咨询的主题，少于20字\"></div></div><div class=\"form-group\"><label for=\"\" class=\"col-md-2 control-label\">内容：</label><div class=\"col-md-8 form-body\"><textarea class=\"form-control h120\" id=\"commentsInput\" name=\"content\" placeholder=\"请填写与影像诊断以及后续治疗相关的咨询\"></textarea></div></div></form></div><div class=\"modal-footer\"><button name=\"cancel\" data-dismiss=\"modal\" class=\"btn btn-default\">取消</button><button name=\"submit\" class=\"btn btn-primary\">提交</button></div></div></div>");}function body_1(chk,ctx){return chk.write("<div class=\"form-group\"><label for=\"\" class=\"col-md-2 control-label\">诊断号：</label><div class=\"col-md-8 form-body\">").helper("if",ctx,{"else":body_2,"block":body_3},{"cond":body_4}).write("</div></div>");}function body_2(chk,ctx){return chk.write("<select id=\"diagnoseSelect\" name=\"diagnoseId\"></select>");}function body_3(chk,ctx){return chk.write("<input type=\"text\" class=\"form-control input-sm\" id=\"diagnoseInput\" name=\"diagnoseId\" value=\"").reference(ctx.get(["diagnoseId"], false),ctx,"h").write("\" disabled>");}function body_4(chk,ctx){return chk.reference(ctx.get(["diagnoseId"], false),ctx,"h");}function body_5(chk,ctx){return chk.reference(ctx.get(["hasDiagnose"], false),ctx,"h");}return body_0;})();
+define("modal/templates/createConsultViewModal", function(){});
+
+(function(){dust.register("diagnoseLogsModal",body_0);function body_0(chk,ctx){return chk.write("<div class=\"modal-dialog\"><div class=\"modal-content\"><div class=\"modal-header\"><button type=\"button\" class=\"close fui-cross\" data-dismiss=\"modal\" aria-hidden=\"true\"></button><h4 class=\"modal-title\">诊断状态历史记录</h4></div><div class=\"modal-body\"><div class=\"ezd_diagnose_logs_field\">").section(ctx.get(["actions"], false),ctx,{"block":body_1},null).write("</div></div><div class=\"modal-footer\"><button name=\"cancel\" data-dismiss=\"modal\" class=\"btn btn-default\">关闭</button></div></div></div>");}function body_1(chk,ctx){return chk.write("<div class=\"record-text\"><span class=\"fui-play\"></span><span class=\"content-text\">").reference(ctx.get(["title"], false),ctx,"h").write("</span><span class=\"time\">").reference(ctx.get(["time"], false),ctx,"h").write("</span></div>").helper("if",ctx,{"block":body_2},{"cond":body_3});}function body_2(chk,ctx){return chk.write("<div class=\"comments\"><div class=\"popover right\"><div class=\"arrow\"></div><div class=\"popover-content\"><p>").reference(ctx.get(["comments"], false),ctx,"h").write("</p></div></div><span class=\"des-text\">医生 ").reference(ctx.get(["name"], false),ctx,"h").write(" 留言</span></div>");}function body_3(chk,ctx){return chk.write("'").reference(ctx.get(["comments"], false),ctx,"h").write("'.length");}return body_0;})();
+define("modal/templates/diagnoseLogsModal", function(){});
+
+(function(){dust.register("diagnoseListView",body_0);function body_0(chk,ctx){return chk.write("<p class=\"amount\">申请个数：<span class=\"number\">").reference(ctx.get(["amount"], false),ctx,"h").write("</span>&nbsp;条</p><table class=\"table table-striped table-hover result-table table-small-font\" id=\"diagnose-manage-table\"><thead><tr class=\"success\"><th>诊断号</th><th>专家</th><th>专家所属医院</th><th>就诊人</th><th>就诊人电话</th><th>诊断部位</th><th>诊断类型</th><th>总金额</th><th>操作</th></tr></thead><tbody id=\"diagnose-manage-tbody\"></tbody></table>");}return body_0;})();
+define("admin/kefu/templates/diagnoseListView", function(){});
+
+(function(){dust.register("diagnoseListItemView",body_0);function body_0(chk,ctx){return chk.write("<tr data-id=\"").reference(ctx.get(["diagnoseId"], false),ctx,"h").write("\"><td>").reference(ctx.get(["diagnosenumber"], false),ctx,"h").write("</td><td>").reference(ctx.get(["doctorName"], false),ctx,"h").write("</td><td>").reference(ctx.get(["doctorHispital"], false),ctx,"h").write("</td><td>").reference(ctx.get(["patientName"], false),ctx,"h").write("</td><td>").reference(ctx.get(["mobile"], false),ctx,"h").write("</td><td>").reference(ctx.get(["positionName"], false),ctx,"h").write("</td><td>").reference(ctx.get(["diagnoseMethod"], false),ctx,"h").write("</td><td>").reference(ctx.get(["payAmount"], false),ctx,"h").write("元</td><td class=\"action-group\"><a class=\"btn btn-info btn-xs pay-link\">通过</a></td></tr>");}return body_0;})();
+define("admin/kefu/templates/diagnoseListItemView", function(){});
+
+(function(){dust.register("doctorAuditListItemView",body_0);function body_0(chk,ctx){return chk.write("<tr data-userid=\"").reference(ctx.get(["userId"], false),ctx,"h").write("\"><td>").reference(ctx.get(["username"], false),ctx,"h").write("</td><td>").reference(ctx.get(["identityPhone"], false),ctx,"h").write("</td><td class=\"action-group\"><a class=\"btn btn-info btn-xs confirm-register\">通过</a><a class=\"btn btn-danger btn-xs delete-register ml10\">删除</a></td></tr>");}return body_0;})();
+define("admin/kefu/templates/doctorAuditListItemView", function(){});
+
+(function(){dust.register("doctorAuditListView",body_0);function body_0(chk,ctx){return chk.write("<p class=\"amount\">申请个数：<span class=\"number\">").reference(ctx.get(["amount"], false),ctx,"h").write("</span>&nbsp;条</p><table class=\"table table-striped table-hover result-table table-small-font\" id=\"user-manage-table\"><thead><tr class=\"success\"><th>医生姓名</th><th>工作电话</th><th>操作</th></tr></thead><tbody id=\"user-manage-tbody\"></tbody></table>");}return body_0;})();
+define("admin/kefu/templates/doctorAuditListView", function(){});
+
+(function(){dust.register("sharingListView",body_0);function body_0(chk,ctx){return chk.write("<p class=\"amount\">分享个数：<span class=\"number\">").reference(ctx.get(["amount"], false),ctx,"h").write("</span>&nbsp;条</p><table class=\"table table-striped table-hover result-table table-small-font\" id=\"sharing-manage-table\"><thead><tr class=\"success\"><th>时间</th><th>评价</th><th>内容</th><th>操作</th></tr></thead><tbody id=\"sharing-manage-tbody\"></tbody></table>");}return body_0;})();
+define("admin/kefu/templates/sharingListView", function(){});
+
+(function(){dust.register("sharingListItemView",body_0);function body_0(chk,ctx){return chk.write("<tr data-id=\"").reference(ctx.get(["id"], false),ctx,"h").write("\"><td>").reference(ctx.get(["createTime"], false),ctx,"h").write("</td><td>").reference(ctx.get(["scoreName"], false),ctx,"h").write("</td><td>").reference(ctx.get(["content"], false),ctx,"h").write("</td><td class=\"action-group\"><a class=\"btn btn-info btn-xs accept-link\">通过</a><a class=\"btn btn-danger btn-xs delete-link ml10\">删除</a></td></tr>");}return body_0;})();
+define("admin/kefu/templates/sharingListItemView", function(){});
+
+(function(){dust.register("gratitudeListView",body_0);function body_0(chk,ctx){return chk.write("<p class=\"amount\">感谢信个数：<span class=\"number\">").reference(ctx.get(["amount"], false),ctx,"h").write("</span>&nbsp;条</p><table class=\"table table-striped table-hover result-table table-small-font\" id=\"gratitude-manage-table\"><thead><tr class=\"success\"><th>时间</th><th>内容</th><th>操作</th></tr></thead><tbody id=\"gratitude-manage-tbody\"></tbody></table>");}return body_0;})();
+define("admin/kefu/templates/gratitudeListView", function(){});
+
+(function(){dust.register("gratitudeListItemView",body_0);function body_0(chk,ctx){return chk.write("<tr data-id=\"").reference(ctx.get(["id"], false),ctx,"h").write("\"><td>").reference(ctx.get(["createTime"], false),ctx,"h").write("</td><td>").reference(ctx.get(["content"], false),ctx,"h").write("</td><td class=\"action-group\"><a class=\"btn btn-info btn-xs accept-link\">通过</a><a class=\"btn btn-danger btn-xs delete-link ml10\">删除</a></td></tr>");}return body_0;})();
+define("admin/kefu/templates/gratitudeListItemView", function(){});
+
+(function(){dust.register("updateDoctorInfoModal",body_0);function body_0(chk,ctx){return chk.write("<div class=\"modal-dialog\"><div class=\"modal-content\"><div class=\"modal-header\"><button type=\"button\" class=\"close fui-cross\" data-dismiss=\"modal\" aria-hidden=\"true\"></button><h4 class=\"modal-title\">添加医生信息</h4></div><div class=\"modal-body confirm-modal\"><form id=\"doctorInfoForm\" class=\"form-horizontal\" role=\"form\" data-doctorId=\"").reference(ctx.get(["doctorId"], false),ctx,"h").write("\"><div class=\"form-group\"><label for=\"\" class=\"col-md-2 control-label\">医院：</label><div class=\"col-md-8 form-body\"><select id=\"hospitalSelect\" name=\"hospital\" class=\"multiselect\"></select></div></div><div class=\"form-group\"><label for=\"\" class=\"col-md-2 control-label\">科室：</label><div class=\"col-md-8 form-body\"><select id=\"departmentSelect\" name=\"department\" class=\"multiselect\"></select></div></div><div class=\"form-group\"><label for=\"\" class=\"col-md-2 control-label\">擅长：</label><div class=\"col-md-8 form-body\"><select id=\"skillSelect\" name=\"skill\" class=\"multiselect\" multiple=\"multiple\"></select></div></div><div class=\"form-group\"><label for=\"\" class=\"col-md-2 control-label\">职位：</label><div class=\"col-md-8 form-body\"><input type=\"text\" class=\"form-control input-sm\" id=\"titleInput\" name=\"title\" placeholder=\"主任医师／教授，副主任医师\"></div></div><div class=\"form-group\" id=\"avatarUpload\"><label class=\"col-md-2 control-label\" for=\"avatarInput\">头像：</label><div><div class=\"row fileupload-buttonbar upload-file-wrapper\"><div class=\"col-md-4\"><!-- The fileinput-button span is used to style the file input field as button --><span class=\"btn btn-success fileinput-button\"> <i class=\"glyphicon glyphicon-plus\"></i><span>上传文件...</span><input id=\"avatarInput\" type=\"file\" name=\"files[]\" multiple=\"\"></span><!-- The global file processing state --><span class=\"fileupload-process\"></span></div><!-- The global progress state --><div class=\"col-md-8 fileupload-progress fade\"><!-- The global progress bar --><div class=\"progress progress-striped active\" role=\"progressbar\" aria-valuemin=\"0\" aria-valuemax=\"100\"><div class=\"progress-bar progress-bar-success\" style=\"width:0%;\"></div></div><!-- The extended global progress state --><div class=\"progress-extended\">&nbsp;</div></div></div><!-- The table listing the files available for upload/download --><div class=\"full-width\"><table role=\"presentation\" class=\"table table-striped\"><tbody class=\"files\"></tbody></table></div></div></div></form></div><div class=\"modal-footer\"><button name=\"cancel\" data-dismiss=\"modal\" class=\"btn btn-default\">取消</button><button name=\"submit\" class=\"btn btn-primary\">确认</button></div></div></div>");}return body_0;})();
+define("modal/templates/updateDoctorInfoModal", function(){});
+
+(function(){dust.register("fileUploadingModal",body_0);function body_0(chk,ctx){return chk.write("<div class=\"modal-dialog\"><div class=\"modal-content\"><div class=\"modal-header\"><button type=\"button\" class=\"close fui-cross\" data-dismiss=\"modal\" aria-hidden=\"true\"></button><h4 class=\"modal-title\">文件正在上传</h4></div><div class=\"modal-body confirm-modal text_a_c\"><p class=\"\">文件上传中<i class=\"fa fa-refresh fa-spin vertical_a_m ml10 mb5\"></i></p><p>上传完成后此窗口会自动关闭</p></div></div></div>");}return body_0;})();
+define("modal/templates/fileUploadingModal", function(){});
+
+(function(){dust.register("selectItemView",body_0);function body_0(chk,ctx){return chk.write(" <option value=\"").reference(ctx.get(["id"], false),ctx,"h").write("\">").reference(ctx.get(["name"], false),ctx,"h").write("</option>");}return body_0;})();
+define("common/templates/selectItemView", function(){});
+
+(function(){dust.register("diagnoseSelectItemView",body_0);function body_0(chk,ctx){return chk.write(" <option value=\"").reference(ctx.get(["id"], false),ctx,"h").write("\">").reference(ctx.get(["diagnosenumber"], false),ctx,"h").write("</option>");}return body_0;})();
+define("common/templates/diagnoseSelectItemView", function(){});
+
+(function(){dust.register("incomeLayout",body_0);function body_0(chk,ctx){return chk.write("<div id=\"doctor-action-content\"><div id=\"summaryRegionContent\"></div><div id=\"detailRegionContent\"></div></div>");}return body_0;})();
+define("stats/templates/incomeLayout", function(){});
+
+(function(){dust.register("incomeSummary",body_0);function body_0(chk,ctx){return chk.write("<div><ul class=\"nav\"><li>未可用:").reference(ctx.get(["ongoing"], false),ctx,"h").write("</li><li>已可用:").reference(ctx.get(["payable"], false),ctx,"h").write("</li><li>已支付:").reference(ctx.get(["paid"], false),ctx,"h").write("</li><li>上月支付:").reference(ctx.get(["lastMonthRevenue"], false),ctx,"h").write("</li><li><a id=\"applyPayBtn\" class=\"btn btn-primary\">申请提现</a></li></ul></div>");}return body_0;})();
+define("stats/templates/incomeSummary", function(){});
+
+define('templates',['require','patienthome/templates/diagnoseItem','patienthome/templates/diagnoseLayout','patienthome/templates/patientAccountManageLayout','patienthome/templates/patientMessageLayout','patienthome/templates/sharingModal','patienthome/templates/favoriteLayout','patienthome/templates/favoriteItem','patienthome/templates/cancelFavoriteModalView','patienthome/templates/detailTrackLayout','patienthome/templates/deleteDiagnoseModal','diagnose/templates/selectDoctorItem','diagnose/templates/selectDoctorList','diagnose/templates/patientProfile','diagnose/templates/dicomInfo','diagnose/templates/pathologyItem','diagnose/templates/successSubmitDiagnoseModal','admin/fenzhen/templates/allDiagnoseItem','admin/fenzhen/templates/myDiagnoseItem','admin/fenzhen/templates/rollbackDiagnoseModal','admin/kefu/templates/displayPayLinkModal','doctorhome/templates/doctorAccountManageLayout','doctorhome/templates/doctorDiagnoseItem','doctorhome/templates/doctorDiagnoseLayout','doctorhome/templates/newDiagnoseLayout','doctorhome/templates/newAuditLayout','doctorhome/templates/doctorMessageLayout','doctorhome/templates/doctorConsultLayout','patienthome/templates/patientConsultLayout','doctorhome/templates/consultListView','doctorhome/templates/consultListItemView','doctorhome/templates/consultDetailLayout','doctorhome/templates/consultDetailList','doctorhome/templates/consultDetailItem','doctorhome/templates/consultDiagnose','patienthome/templates/phoneConsultList','patienthome/templates/phoneConsultListItem','doctorList/templates/doctorDetailItem','doctorList/templates/doctorDetailList','hospitalUserPage/templates/hospitalUserDiagnoseItem','hospitalUserPage/templates/hospitalUserSubmittedDiagnoseItem','hospitalUserPage/templates/hospitalUserFileUpload','message/templates/messageItem','modal/templates/mobileBindModal','modal/templates/confirmModal','modal/templates/createConsultViewModal','modal/templates/diagnoseLogsModal','admin/kefu/templates/diagnoseListView','admin/kefu/templates/diagnoseListItemView','admin/kefu/templates/doctorAuditListItemView','admin/kefu/templates/doctorAuditListView','admin/kefu/templates/sharingListView','admin/kefu/templates/sharingListItemView','admin/kefu/templates/gratitudeListView','admin/kefu/templates/gratitudeListItemView','modal/templates/updateDoctorInfoModal','modal/templates/fileUploadingModal','common/templates/selectItemView','common/templates/diagnoseSelectItemView','stats/templates/incomeLayout','stats/templates/incomeSummary'],function(require) {
 	
 	return {
 		// _localeView: require('project_setup/templates/localeItem'),
@@ -14893,7 +15066,20 @@ define('templates',['require','patienthome/templates/diagnoseItem','patienthome/
 		newDiagnoseLayout:require('doctorhome/templates/newDiagnoseLayout'),
 		newAuditLayout:require('doctorhome/templates/newAuditLayout'),
 		doctorMessageLayout:require('doctorhome/templates/doctorMessageLayout'),
+
 		doctorConsultLayout:require('doctorhome/templates/doctorConsultLayout'),
+		patientConsultLayout:require('patienthome/templates/patientConsultLayout'),
+
+		consultListView:require('doctorhome/templates/consultListView'),
+		consultListItemView:require('doctorhome/templates/consultListItemView'),
+		consultDetailLayout:require('doctorhome/templates/consultDetailLayout'),
+		consultDetailList:require('doctorhome/templates/consultDetailList'),
+		consultDetailItem:require('doctorhome/templates/consultDetailItem'),
+		consultDiagnose:require('doctorhome/templates/consultDiagnose'),
+		phoneConsultList:require('patienthome/templates/phoneConsultList'),
+		phoneConsultListItem:require('patienthome/templates/phoneConsultListItem'),
+
+
 
 		doctorDetailItem:require('doctorList/templates/doctorDetailItem'),
 		doctorDetailList:require('doctorList/templates/doctorDetailList'),
@@ -14901,12 +15087,38 @@ define('templates',['require','patienthome/templates/diagnoseItem','patienthome/
 
 		hospitalUserDignoseItem:require('hospitalUserPage/templates/hospitalUserDiagnoseItem'),
 		hospitalUserSubmittedDignoseItem:require('hospitalUserPage/templates/hospitalUserSubmittedDiagnoseItem'),
+		hospitalUserFileUpload:require('hospitalUserPage/templates/hospitalUserFileUpload'),
 
 
-		messageItem:require('message/templates/messageItem')
+		messageItem:require('message/templates/messageItem'),
+
+		//model view
+		mobileBindModal:require('modal/templates/mobileBindModal'),
+		confirmModal:require('modal/templates/confirmModal'),
+		createConsultViewModal:require("modal/templates/createConsultViewModal"),
+		diagnoseLogsModal:require("modal/templates/diagnoseLogsModal"),
 
 
-		
+		//kefu view
+		kfDiagnoseListView:require('admin/kefu/templates/diagnoseListView'),
+		kfDiagnoseListItemView:require('admin/kefu/templates/diagnoseListItemView'),
+		doctorAuditListItemView:require('admin/kefu/templates/doctorAuditListItemView'),
+		doctorAuditListView:require('admin/kefu/templates/doctorAuditListView'),
+
+		sharingListView:require('admin/kefu/templates/sharingListView'),
+		sharingListItemView:require('admin/kefu/templates/sharingListItemView'),
+		gratitudeListView:require('admin/kefu/templates/gratitudeListView'),
+		gratitudeListItemView:require('admin/kefu/templates/gratitudeListItemView'),
+
+		updateDoctorInfoModal:require('modal/templates/updateDoctorInfoModal'),
+		fileUploadingModal:require('modal/templates/fileUploadingModal'),
+		//common view
+		selectItemView:require('common/templates/selectItemView'),
+		diagnoseSelectItemView:require('common/templates/diagnoseSelectItemView'),
+
+		//stats view
+		incomeLayout:require('stats/templates/incomeLayout'),
+		incomeSummary:require('stats/templates/incomeSummary')
 
 		
 
@@ -14954,20 +15166,22 @@ b[c>>>5]|=128<<24-c%32;b[(c+64>>>9<<4)+14]=k.floor(a/4294967296);b[(c+64>>>9<<4)
 
 define("crypto-sha256", ["crypto-core"], function(){});
 
-define('login/login_app',['ladda-bootstrap','crypto-sha256'], function(ladda) {
+define('login/login_app',['ladda-bootstrap', 'crypto-sha256'], function(ladda) {
 	// body...
 	
 	var loginAction = function(returnuri) {
 		var $form = $('#loginForm');
 		var $loginBtn = $form.find('.login-btn');
+
 		$loginBtn.click(function(e) {
 			e.preventDefault();
+
 			// if ($('#register-form').valid()) {
 			var l = ladda.create(document.querySelector('#submit'));
 
 			var data = validate($form);
-			if(returnuri){
-				data+= "&returnuri="+returnuri;
+			if (returnuri) {
+				data += "&returnuri=" + returnuri;
 			}
 			console.dir(data);
 			if (data) {
@@ -14983,7 +15197,7 @@ define('login/login_app',['ladda-bootstrap','crypto-sha256'], function(ladda) {
 							this.onError(data);
 						} else {
 							// this.resetForm();
-							console.log("msg:"+data.msg);
+							console.log("msg:" + data.msg);
 							this.reLocation(data.msg);
 							Messenger().post({
 								message: 'SUCCESS. Product import started. Check back periodically.',
@@ -15005,7 +15219,7 @@ define('login/login_app',['ladda-bootstrap','crypto-sha256'], function(ladda) {
 						}
 
 					},
-					complete: function(status,request) {
+					complete: function(status, request) {
 
 						l.stop();
 					},
@@ -16795,7 +17009,9 @@ define('jquery.elastislide.main',['require','jquery.elastislide','jquerypp.custo
 		mordernizr = require('modernizr.custom.17475');
 
 });
-define('homepage/show/show_view',['utils/reqcmd', 'lodash', 'marionette', 'templates', 'login/login_app', 'dust', 'dustMarionette', "bootstrap", 'jquery.elastislide.main'], function(ReqCmd, Lodash, Marionette, Templates, LoginApp) {
+define('homepage/show/show_view',['utils/reqcmd', 'lodash', 'marionette', 'templates', 'login/login_app', 
+	'dust', 'dustMarionette', "bootstrap", 'jquery.elastislide.main'], 
+	function(ReqCmd, Lodash, Marionette, Templates, LoginApp) {
 	// body...
 	
 	var HomePageLayoutView = Marionette.Layout.extend({
@@ -16829,12 +17045,14 @@ define('homepage/show/show_view',['utils/reqcmd', 'lodash', 'marionette', 'templ
 				onClick: function(el, pos, evt) {
 					that.changeImage(el, pos);
 					evt.preventDefault();
-				},
-				onHover: function(el, pos, evt) {
-					that.changeImage(el, pos);
-					//evt.preventDefault();
 					that.changeInfo(el,pos);
-				}
+
+				},
+				// onHover: function(el, pos, evt) {
+				// 	that.changeImage(el, pos);
+				// 	//evt.preventDefault();
+				// 	that.changeInfo(el,pos);
+				// }
 			});
 			//console.dir(myCarousel);
 			//init flatui
@@ -16846,6 +17064,7 @@ define('homepage/show/show_view',['utils/reqcmd', 'lodash', 'marionette', 'templ
 
 			//init login modal
 			LoginApp.loginAction();
+			$('body').show();
 			setInterval(that.autoScroll, 3000);
 
 
@@ -16877,8 +17096,8 @@ define('homepage/show/show_view',['utils/reqcmd', 'lodash', 'marionette', 'templ
 		},
 		changeInfo: function(el, pos) {
 			this.ui.previewWrapper.find('h6').html(el.find('h6').html());
-			this.ui.previewWrapper.find('.hospital').html(el.find('.hospital').html());
-			this.ui.previewWrapper.find('.skill').html(el.find('.skill').html());
+			this.ui.previewWrapper.find('.hospital span').html(el.find('.hospital').html());
+			this.ui.previewWrapper.find('.skill span').html(el.find('.skill').html());
 			this.ui.previewWrapper.find('.doctor-link').attr('href',el.find('.doctor-link').html())
 		}
 
@@ -21573,7 +21792,7 @@ $.each( { show: "fadeIn", hide: "fadeOut" }, function( method, defaultEffect ) {
     }
 }));
 
-define('jquery.uploader.main',['require','tmpl','load-image','canvas-to-blob','jquery.iframe-transport','jquery.fileupload-ui','jquery.xdr-transport'],function(require){
+define('jquery.uploader.main',['require','tmpl','load-image','canvas-to-blob','jquery.iframe-transport','jquery.fileupload-ui','jquery.xdr-transport'],function(require) {
 	// body...
 	
 
@@ -21584,7 +21803,7 @@ define('jquery.uploader.main',['require','tmpl','load-image','canvas-to-blob','j
 		jqueryfileuploadui = require('jquery.fileupload-ui');
 
 	if ($('html.ie').size()) {
-	    var jqueryxdr = require('jquery.xdr-transport');
+		var jqueryxdr = require('jquery.xdr-transport');
 	}
 
 	var uploadTemplateStr = "{% for (var i=0, file; file=o.files[i]; i++) { %}" +
@@ -21593,20 +21812,20 @@ define('jquery.uploader.main',['require','tmpl','load-image','canvas-to-blob','j
 		"<strong class=\"error text-danger\"></strong>" +
 		"</td>" +
 		"<td>" +
-		"<p class=\"size\">Processing...</p>" +
+		"<p class=\"size\">处理中...</p>" +
 		"<div class=\"progress progress-striped active\" role=\"progressbar\" aria-valuemin=\"0\" aria-valuemax=\"100\" aria-valuenow=\"0\"><div class=\"progress-bar progress-bar-success\" style=\"width:0%;\"></div></div>" +
 		"</td>" +
 		"<td>" +
 		"{% if (!i && !o.options.autoUpload) { %}" +
 		"<button class=\"btn btn-primary start\" disabled>" +
 		"<i class=\"glyphicon glyphicon-upload\"></i>" +
-		"<span>Start</span>" +
+		"<span>开始</span>" +
 		"</button>" +
 		"{% } %}" +
 		"{% if (!i) { %}" +
 		"<button class=\"btn btn-warning cancel\">" +
 		"<i class=\"glyphicon glyphicon-ban-circle\"></i>" +
-		"<span>Cancel</span>" +
+		"<span>取消</span>" +
 		"</button>" +
 		"{% } %}" +
 		"</td>" +
@@ -21640,22 +21859,31 @@ define('jquery.uploader.main',['require','tmpl','load-image','canvas-to-blob','j
 		"{% if (file.deleteUrl && deleteURLMatch(file.deleteUrl)) { %}" +
 		"<button class=\"btn btn-danger delete\" data-type=\"{%=file.deleteType%}\" data-url=\"{%=file.deleteUrl%}\"{% if (file.deleteWithCredentials) { %} data-xhr-fields='{\"withCredentials\":true}'{% } %}>" +
 		"<i class=\"glyphicon glyphicon-trash\"></i>" +
-		"<span>Delete</span>" +
+		"<span>删除</span>" +
 		"</button>" +
 		"{% } else { %}" +
 		"<button class=\"btn btn-warning cancel\">" +
 		"<i class=\"glyphicon glyphicon-ban-circle\"></i>" +
-		"<span>Cancel</span>" +
+		"<span>取消</span>" +
 		"</button>" +
 		"{% } %}" +
 		"</td>" +
 		"</tr>" +
 		"{% } %}";
 
-		return {
-			uploadTemplateStr:uploadTemplateStr,
-			downloadTemplateStr:downloadTemplateStr
-		}
+	var message = {
+		maxNumberOfFiles: '上传文件个数超过限制',
+		acceptFileTypes: '文件类型不支持',
+		maxFileSize: '文件太大',
+		minFileSize: '文件太小'
+	}
+
+
+	return {
+		uploadTemplateStr: uploadTemplateStr,
+		downloadTemplateStr: downloadTemplateStr,
+		message:message
+	}
 });
 define('entities/doctorEntity',["backbone", "marionette", "config/base/constant", "utils/reqcmd"], function(Backbone, Marionette, Constant, ReqCmd) {
 	// body...
@@ -21751,6 +21979,4876 @@ define('entities/doctorEntity',["backbone", "marionette", "config/base/constant"
 
 	}
 
+});
+/*!
+ * jQuery Validation Plugin 1.11.1
+ *
+ * http://bassistance.de/jquery-plugins/jquery-plugin-validation/
+ * http://docs.jquery.com/Plugins/Validation
+ *
+ * Copyright 2013 JÃ¶rn Zaefferer
+ * Released under the MIT license:
+ *   http://www.opensource.org/licenses/mit-license.php
+ */
+
+(function($) {
+
+$.extend($.fn, {
+	// http://docs.jquery.com/Plugins/Validation/validate
+	validate: function( options ) {
+
+		// if nothing is selected, return nothing; can't chain anyway
+		if ( !this.length ) {
+			if ( options && options.debug && window.console ) {
+				console.warn( "Nothing selected, can't validate, returning nothing." );
+			}
+			return;
+		}
+
+		// check if a validator for this form was already created
+		var validator = $.data( this[0], "validator" );
+		if ( validator ) {
+			return validator;
+		}
+
+		// Add novalidate tag if HTML5.
+		this.attr( "novalidate", "novalidate" );
+
+		validator = new $.validator( options, this[0] );
+		$.data( this[0], "validator", validator );
+
+		if ( validator.settings.onsubmit ) {
+
+			this.validateDelegate( ":submit", "click", function( event ) {
+				if ( validator.settings.submitHandler ) {
+					validator.submitButton = event.target;
+				}
+				// allow suppressing validation by adding a cancel class to the submit button
+				if ( $(event.target).hasClass("cancel") ) {
+					validator.cancelSubmit = true;
+				}
+
+				// allow suppressing validation by adding the html5 formnovalidate attribute to the submit button
+				if ( $(event.target).attr("formnovalidate") !== undefined ) {
+					validator.cancelSubmit = true;
+				}
+			});
+
+			// validate the form on submit
+			this.submit( function( event ) {
+				if ( validator.settings.debug ) {
+					// prevent form submit to be able to see console output
+					event.preventDefault();
+				}
+				function handle() {
+					var hidden;
+					if ( validator.settings.submitHandler ) {
+						if ( validator.submitButton ) {
+							// insert a hidden input as a replacement for the missing submit button
+							hidden = $("<input type='hidden'/>").attr("name", validator.submitButton.name).val( $(validator.submitButton).val() ).appendTo(validator.currentForm);
+						}
+						validator.settings.submitHandler.call( validator, validator.currentForm, event );
+						if ( validator.submitButton ) {
+							// and clean up afterwards; thanks to no-block-scope, hidden can be referenced
+							hidden.remove();
+						}
+						return false;
+					}
+					return true;
+				}
+
+				// prevent submit for invalid forms or custom submit handlers
+				if ( validator.cancelSubmit ) {
+					validator.cancelSubmit = false;
+					return handle();
+				}
+				if ( validator.form() ) {
+					if ( validator.pendingRequest ) {
+						validator.formSubmitted = true;
+						return false;
+					}
+					return handle();
+				} else {
+					validator.focusInvalid();
+					return false;
+				}
+			});
+		}
+
+		return validator;
+	},
+	// http://docs.jquery.com/Plugins/Validation/valid
+	valid: function() {
+		if ( $(this[0]).is("form")) {
+			return this.validate().form();
+		} else {
+			var valid = true;
+			var validator = $(this[0].form).validate();
+			this.each(function() {
+				valid = valid && validator.element(this);
+			});
+			return valid;
+		}
+	},
+	// attributes: space seperated list of attributes to retrieve and remove
+	removeAttrs: function( attributes ) {
+		var result = {},
+			$element = this;
+		$.each(attributes.split(/\s/), function( index, value ) {
+			result[value] = $element.attr(value);
+			$element.removeAttr(value);
+		});
+		return result;
+	},
+	// http://docs.jquery.com/Plugins/Validation/rules
+	rules: function( command, argument ) {
+		var element = this[0];
+
+		if ( command ) {
+			var settings = $.data(element.form, "validator").settings;
+			var staticRules = settings.rules;
+			var existingRules = $.validator.staticRules(element);
+			switch(command) {
+			case "add":
+				$.extend(existingRules, $.validator.normalizeRule(argument));
+				// remove messages from rules, but allow them to be set separetely
+				delete existingRules.messages;
+				staticRules[element.name] = existingRules;
+				if ( argument.messages ) {
+					settings.messages[element.name] = $.extend( settings.messages[element.name], argument.messages );
+				}
+				break;
+			case "remove":
+				if ( !argument ) {
+					delete staticRules[element.name];
+					return existingRules;
+				}
+				var filtered = {};
+				$.each(argument.split(/\s/), function( index, method ) {
+					filtered[method] = existingRules[method];
+					delete existingRules[method];
+				});
+				return filtered;
+			}
+		}
+
+		var data = $.validator.normalizeRules(
+		$.extend(
+			{},
+			$.validator.classRules(element),
+			$.validator.attributeRules(element),
+			$.validator.dataRules(element),
+			$.validator.staticRules(element)
+		), element);
+
+		// make sure required is at front
+		if ( data.required ) {
+			var param = data.required;
+			delete data.required;
+			data = $.extend({required: param}, data);
+		}
+
+		return data;
+	}
+});
+
+// Custom selectors
+$.extend($.expr[":"], {
+	// http://docs.jquery.com/Plugins/Validation/blank
+	blank: function( a ) { return !$.trim("" + $(a).val()); },
+	// http://docs.jquery.com/Plugins/Validation/filled
+	filled: function( a ) { return !!$.trim("" + $(a).val()); },
+	// http://docs.jquery.com/Plugins/Validation/unchecked
+	unchecked: function( a ) { return !$(a).prop("checked"); }
+});
+
+// constructor for validator
+$.validator = function( options, form ) {
+	this.settings = $.extend( true, {}, $.validator.defaults, options );
+	this.currentForm = form;
+	this.init();
+};
+
+$.validator.format = function( source, params ) {
+	if ( arguments.length === 1 ) {
+		return function() {
+			var args = $.makeArray(arguments);
+			args.unshift(source);
+			return $.validator.format.apply( this, args );
+		};
+	}
+	if ( arguments.length > 2 && params.constructor !== Array  ) {
+		params = $.makeArray(arguments).slice(1);
+	}
+	if ( params.constructor !== Array ) {
+		params = [ params ];
+	}
+	$.each(params, function( i, n ) {
+		source = source.replace( new RegExp("\\{" + i + "\\}", "g"), function() {
+			return n;
+		});
+	});
+	return source;
+};
+
+$.extend($.validator, {
+
+	defaults: {
+		messages: {},
+		groups: {},
+		rules: {},
+		errorClass: "error",
+		validClass: "valid",
+		errorElement: "label",
+		focusInvalid: true,
+		errorContainer: $([]),
+		errorLabelContainer: $([]),
+		onsubmit: true,
+		ignore: ":hidden",
+		ignoreTitle: false,
+		onfocusin: function( element, event ) {
+			this.lastActive = element;
+
+			// hide error label and remove error class on focus if enabled
+			if ( this.settings.focusCleanup && !this.blockFocusCleanup ) {
+				if ( this.settings.unhighlight ) {
+					this.settings.unhighlight.call( this, element, this.settings.errorClass, this.settings.validClass );
+				}
+				this.addWrapper(this.errorsFor(element)).hide();
+			}
+		},
+		onfocusout: function( element, event ) {
+			if ( !this.checkable(element) && (element.name in this.submitted || !this.optional(element)) ) {
+				this.element(element);
+			}
+		},
+		onkeyup: function( element, event ) {
+			if ( event.which === 9 && this.elementValue(element) === "" ) {
+				return;
+			} else if ( element.name in this.submitted || element === this.lastElement ) {
+				this.element(element);
+			}
+		},
+		onclick: function( element, event ) {
+			// click on selects, radiobuttons and checkboxes
+			if ( element.name in this.submitted ) {
+				this.element(element);
+			}
+			// or option elements, check parent select in that case
+			else if ( element.parentNode.name in this.submitted ) {
+				this.element(element.parentNode);
+			}
+		},
+		highlight: function( element, errorClass, validClass ) {
+			if ( element.type === "radio" ) {
+				this.findByName(element.name).addClass(errorClass).removeClass(validClass);
+			} else {
+				$(element).addClass(errorClass).removeClass(validClass);
+			}
+		},
+		unhighlight: function( element, errorClass, validClass ) {
+			if ( element.type === "radio" ) {
+				this.findByName(element.name).removeClass(errorClass).addClass(validClass);
+			} else {
+				$(element).removeClass(errorClass).addClass(validClass);
+			}
+		}
+	},
+
+	// http://docs.jquery.com/Plugins/Validation/Validator/setDefaults
+	setDefaults: function( settings ) {
+		$.extend( $.validator.defaults, settings );
+	},
+
+	messages: {
+		required: "This field is required.",
+		remote: "Please fix this field.",
+		email: "Please enter a valid email address.",
+		url: "Please enter a valid URL.",
+		date: "Please enter a valid date.",
+		dateISO: "Please enter a valid date (ISO).",
+		number: "Please enter a valid number.",
+		digits: "Please enter only digits.",
+		creditcard: "Please enter a valid credit card number.",
+		equalTo: "Please enter the same value again.",
+		maxlength: $.validator.format("Please enter no more than {0} characters."),
+		minlength: $.validator.format("Please enter at least {0} characters."),
+		rangelength: $.validator.format("Please enter a value between {0} and {1} characters long."),
+		range: $.validator.format("Please enter a value between {0} and {1}."),
+		max: $.validator.format("Please enter a value less than or equal to {0}."),
+		min: $.validator.format("Please enter a value greater than or equal to {0}.")
+	},
+
+	autoCreateRanges: false,
+
+	prototype: {
+
+		init: function() {
+			this.labelContainer = $(this.settings.errorLabelContainer);
+			this.errorContext = this.labelContainer.length && this.labelContainer || $(this.currentForm);
+			this.containers = $(this.settings.errorContainer).add( this.settings.errorLabelContainer );
+			this.submitted = {};
+			this.valueCache = {};
+			this.pendingRequest = 0;
+			this.pending = {};
+			this.invalid = {};
+			this.reset();
+
+			var groups = (this.groups = {});
+			$.each(this.settings.groups, function( key, value ) {
+				if ( typeof value === "string" ) {
+					value = value.split(/\s/);
+				}
+				$.each(value, function( index, name ) {
+					groups[name] = key;
+				});
+			});
+			var rules = this.settings.rules;
+			$.each(rules, function( key, value ) {
+				rules[key] = $.validator.normalizeRule(value);
+			});
+
+			function delegate(event) {
+				var validator = $.data(this[0].form, "validator"),
+					eventType = "on" + event.type.replace(/^validate/, "");
+				if ( validator.settings[eventType] ) {
+					validator.settings[eventType].call(validator, this[0], event);
+				}
+			}
+			$(this.currentForm)
+				.validateDelegate(":text, [type='password'], [type='file'], select, textarea, " +
+					"[type='number'], [type='search'] ,[type='tel'], [type='url'], " +
+					"[type='email'], [type='datetime'], [type='date'], [type='month'], " +
+					"[type='week'], [type='time'], [type='datetime-local'], " +
+					"[type='range'], [type='color'] ",
+					"focusin focusout keyup", delegate)
+				.validateDelegate("[type='radio'], [type='checkbox'], select, option", "click", delegate);
+
+			if ( this.settings.invalidHandler ) {
+				$(this.currentForm).bind("invalid-form.validate", this.settings.invalidHandler);
+			}
+		},
+
+		// http://docs.jquery.com/Plugins/Validation/Validator/form
+		form: function() {
+			this.checkForm();
+			$.extend(this.submitted, this.errorMap);
+			this.invalid = $.extend({}, this.errorMap);
+			if ( !this.valid() ) {
+				$(this.currentForm).triggerHandler("invalid-form", [this]);
+			}
+			this.showErrors();
+			return this.valid();
+		},
+
+		checkForm: function() {
+			this.prepareForm();
+			for ( var i = 0, elements = (this.currentElements = this.elements()); elements[i]; i++ ) {
+				this.check( elements[i] );
+			}
+			return this.valid();
+		},
+
+		// http://docs.jquery.com/Plugins/Validation/Validator/element
+		element: function( element ) {
+			element = this.validationTargetFor( this.clean( element ) );
+			this.lastElement = element;
+			this.prepareElement( element );
+			this.currentElements = $(element);
+			var result = this.check( element ) !== false;
+			if ( result ) {
+				delete this.invalid[element.name];
+			} else {
+				this.invalid[element.name] = true;
+			}
+			if ( !this.numberOfInvalids() ) {
+				// Hide error containers on last error
+				this.toHide = this.toHide.add( this.containers );
+			}
+			this.showErrors();
+			return result;
+		},
+
+		// http://docs.jquery.com/Plugins/Validation/Validator/showErrors
+		showErrors: function( errors ) {
+			if ( errors ) {
+				// add items to error list and map
+				$.extend( this.errorMap, errors );
+				this.errorList = [];
+				for ( var name in errors ) {
+					this.errorList.push({
+						message: errors[name],
+						element: this.findByName(name)[0]
+					});
+				}
+				// remove items from success list
+				this.successList = $.grep( this.successList, function( element ) {
+					return !(element.name in errors);
+				});
+			}
+			if ( this.settings.showErrors ) {
+				this.settings.showErrors.call( this, this.errorMap, this.errorList );
+			} else {
+				this.defaultShowErrors();
+			}
+		},
+
+		// http://docs.jquery.com/Plugins/Validation/Validator/resetForm
+		resetForm: function() {
+			if ( $.fn.resetForm ) {
+				$(this.currentForm).resetForm();
+			}
+			this.submitted = {};
+			this.lastElement = null;
+			this.prepareForm();
+			this.hideErrors();
+			this.elements().removeClass( this.settings.errorClass ).removeData( "previousValue" );
+		},
+
+		numberOfInvalids: function() {
+			return this.objectLength(this.invalid);
+		},
+
+		objectLength: function( obj ) {
+			var count = 0;
+			for ( var i in obj ) {
+				count++;
+			}
+			return count;
+		},
+
+		hideErrors: function() {
+			this.addWrapper( this.toHide ).hide();
+		},
+
+		valid: function() {
+			return this.size() === 0;
+		},
+
+		size: function() {
+			return this.errorList.length;
+		},
+
+		focusInvalid: function() {
+			if ( this.settings.focusInvalid ) {
+				try {
+					$(this.findLastActive() || this.errorList.length && this.errorList[0].element || [])
+					.filter(":visible")
+					.focus()
+					// manually trigger focusin event; without it, focusin handler isn't called, findLastActive won't have anything to find
+					.trigger("focusin");
+				} catch(e) {
+					// ignore IE throwing errors when focusing hidden elements
+				}
+			}
+		},
+
+		findLastActive: function() {
+			var lastActive = this.lastActive;
+			return lastActive && $.grep(this.errorList, function( n ) {
+				return n.element.name === lastActive.name;
+			}).length === 1 && lastActive;
+		},
+
+		elements: function() {
+			var validator = this,
+				rulesCache = {};
+
+			// select all valid inputs inside the form (no submit or reset buttons)
+			return $(this.currentForm)
+			.find("input, select, textarea")
+			.not(":submit, :reset, :image, [disabled]")
+			.not( this.settings.ignore )
+			.filter(function() {
+				if ( !this.name && validator.settings.debug && window.console ) {
+					console.error( "%o has no name assigned", this);
+				}
+
+				// select only the first element for each name, and only those with rules specified
+				if ( this.name in rulesCache || !validator.objectLength($(this).rules()) ) {
+					return false;
+				}
+
+				rulesCache[this.name] = true;
+				return true;
+			});
+		},
+
+		clean: function( selector ) {
+			return $(selector)[0];
+		},
+
+		errors: function() {
+			var errorClass = this.settings.errorClass.replace(" ", ".");
+			return $(this.settings.errorElement + "." + errorClass, this.errorContext);
+		},
+
+		reset: function() {
+			this.successList = [];
+			this.errorList = [];
+			this.errorMap = {};
+			this.toShow = $([]);
+			this.toHide = $([]);
+			this.currentElements = $([]);
+		},
+
+		prepareForm: function() {
+			this.reset();
+			this.toHide = this.errors().add( this.containers );
+		},
+
+		prepareElement: function( element ) {
+			this.reset();
+			this.toHide = this.errorsFor(element);
+		},
+
+		elementValue: function( element ) {
+			var type = $(element).attr("type"),
+				val = $(element).val();
+
+			if ( type === "radio" || type === "checkbox" ) {
+				return $("input[name='" + $(element).attr("name") + "']:checked").val();
+			}
+
+			if ( typeof val === "string" ) {
+				return val.replace(/\r/g, "");
+			}
+			return val;
+		},
+
+		check: function( element ) {
+			element = this.validationTargetFor( this.clean( element ) );
+
+			var rules = $(element).rules();
+			var dependencyMismatch = false;
+			var val = this.elementValue(element);
+			var result;
+
+			for (var method in rules ) {
+				var rule = { method: method, parameters: rules[method] };
+				try {
+
+					result = $.validator.methods[method].call( this, val, element, rule.parameters );
+
+					// if a method indicates that the field is optional and therefore valid,
+					// don't mark it as valid when there are no other rules
+					if ( result === "dependency-mismatch" ) {
+						dependencyMismatch = true;
+						continue;
+					}
+					dependencyMismatch = false;
+
+					if ( result === "pending" ) {
+						this.toHide = this.toHide.not( this.errorsFor(element) );
+						return;
+					}
+
+					if ( !result ) {
+						this.formatAndAdd( element, rule );
+						return false;
+					}
+				} catch(e) {
+					if ( this.settings.debug && window.console ) {
+						console.log( "Exception occurred when checking element " + element.id + ", check the '" + rule.method + "' method.", e );
+					}
+					throw e;
+				}
+			}
+			if ( dependencyMismatch ) {
+				return;
+			}
+			if ( this.objectLength(rules) ) {
+				this.successList.push(element);
+			}
+			return true;
+		},
+
+		// return the custom message for the given element and validation method
+		// specified in the element's HTML5 data attribute
+		customDataMessage: function( element, method ) {
+			return $(element).data("msg-" + method.toLowerCase()) || (element.attributes && $(element).attr("data-msg-" + method.toLowerCase()));
+		},
+
+		// return the custom message for the given element name and validation method
+		customMessage: function( name, method ) {
+			var m = this.settings.messages[name];
+			return m && (m.constructor === String ? m : m[method]);
+		},
+
+		// return the first defined argument, allowing empty strings
+		findDefined: function() {
+			for(var i = 0; i < arguments.length; i++) {
+				if ( arguments[i] !== undefined ) {
+					return arguments[i];
+				}
+			}
+			return undefined;
+		},
+
+		defaultMessage: function( element, method ) {
+			return this.findDefined(
+				this.customMessage( element.name, method ),
+				this.customDataMessage( element, method ),
+				// title is never undefined, so handle empty string as undefined
+				!this.settings.ignoreTitle && element.title || undefined,
+				$.validator.messages[method],
+				"<strong>Warning: No message defined for " + element.name + "</strong>"
+			);
+		},
+
+		formatAndAdd: function( element, rule ) {
+			var message = this.defaultMessage( element, rule.method ),
+				theregex = /\$?\{(\d+)\}/g;
+			if ( typeof message === "function" ) {
+				message = message.call(this, rule.parameters, element);
+			} else if (theregex.test(message)) {
+				message = $.validator.format(message.replace(theregex, "{$1}"), rule.parameters);
+			}
+			this.errorList.push({
+				message: message,
+				element: element
+			});
+
+			this.errorMap[element.name] = message;
+			this.submitted[element.name] = message;
+		},
+
+		addWrapper: function( toToggle ) {
+			if ( this.settings.wrapper ) {
+				toToggle = toToggle.add( toToggle.parent( this.settings.wrapper ) );
+			}
+			return toToggle;
+		},
+
+		defaultShowErrors: function() {
+			var i, elements;
+			for ( i = 0; this.errorList[i]; i++ ) {
+				var error = this.errorList[i];
+				if ( this.settings.highlight ) {
+					this.settings.highlight.call( this, error.element, this.settings.errorClass, this.settings.validClass );
+				}
+				this.showLabel( error.element, error.message );
+			}
+			if ( this.errorList.length ) {
+				this.toShow = this.toShow.add( this.containers );
+			}
+			if ( this.settings.success ) {
+				for ( i = 0; this.successList[i]; i++ ) {
+					this.showLabel( this.successList[i] );
+				}
+			}
+			if ( this.settings.unhighlight ) {
+				for ( i = 0, elements = this.validElements(); elements[i]; i++ ) {
+					this.settings.unhighlight.call( this, elements[i], this.settings.errorClass, this.settings.validClass );
+				}
+			}
+			this.toHide = this.toHide.not( this.toShow );
+			this.hideErrors();
+			this.addWrapper( this.toShow ).show();
+		},
+
+		validElements: function() {
+			return this.currentElements.not(this.invalidElements());
+		},
+
+		invalidElements: function() {
+			return $(this.errorList).map(function() {
+				return this.element;
+			});
+		},
+
+		showLabel: function( element, message ) {
+			var label = this.errorsFor( element );
+			if ( label.length ) {
+				// refresh error/success class
+				label.removeClass( this.settings.validClass ).addClass( this.settings.errorClass );
+				// replace message on existing label
+				label.html(message);
+			} else {
+				// create label
+				label = $("<" + this.settings.errorElement + ">")
+					.attr("for", this.idOrName(element))
+					.addClass(this.settings.errorClass)
+					.html(message || "");
+				if ( this.settings.wrapper ) {
+					// make sure the element is visible, even in IE
+					// actually showing the wrapped element is handled elsewhere
+					label = label.hide().show().wrap("<" + this.settings.wrapper + "/>").parent();
+				}
+				if ( !this.labelContainer.append(label).length ) {
+					if ( this.settings.errorPlacement ) {
+						this.settings.errorPlacement(label, $(element) );
+					} else {
+						label.insertAfter(element);
+					}
+				}
+			}
+			if ( !message && this.settings.success ) {
+				label.text("");
+				if ( typeof this.settings.success === "string" ) {
+					label.addClass( this.settings.success );
+				} else {
+					this.settings.success( label, element );
+				}
+			}
+			this.toShow = this.toShow.add(label);
+		},
+
+		errorsFor: function( element ) {
+			var name = this.idOrName(element);
+			return this.errors().filter(function() {
+				return $(this).attr("for") === name;
+			});
+		},
+
+		idOrName: function( element ) {
+			return this.groups[element.name] || (this.checkable(element) ? element.name : element.id || element.name);
+		},
+
+		validationTargetFor: function( element ) {
+			// if radio/checkbox, validate first element in group instead
+			if ( this.checkable(element) ) {
+				element = this.findByName( element.name ).not(this.settings.ignore)[0];
+			}
+			return element;
+		},
+
+		checkable: function( element ) {
+			return (/radio|checkbox/i).test(element.type);
+		},
+
+		findByName: function( name ) {
+			return $(this.currentForm).find("[name='" + name + "']");
+		},
+
+		getLength: function( value, element ) {
+			switch( element.nodeName.toLowerCase() ) {
+			case "select":
+				return $("option:selected", element).length;
+			case "input":
+				if ( this.checkable( element) ) {
+					return this.findByName(element.name).filter(":checked").length;
+				}
+			}
+			return value.length;
+		},
+
+		depend: function( param, element ) {
+			return this.dependTypes[typeof param] ? this.dependTypes[typeof param](param, element) : true;
+		},
+
+		dependTypes: {
+			"boolean": function( param, element ) {
+				return param;
+			},
+			"string": function( param, element ) {
+				return !!$(param, element.form).length;
+			},
+			"function": function( param, element ) {
+				return param(element);
+			}
+		},
+
+		optional: function( element ) {
+			var val = this.elementValue(element);
+			return !$.validator.methods.required.call(this, val, element) && "dependency-mismatch";
+		},
+
+		startRequest: function( element ) {
+			if ( !this.pending[element.name] ) {
+				this.pendingRequest++;
+				this.pending[element.name] = true;
+			}
+		},
+
+		stopRequest: function( element, valid ) {
+			this.pendingRequest--;
+			// sometimes synchronization fails, make sure pendingRequest is never < 0
+			if ( this.pendingRequest < 0 ) {
+				this.pendingRequest = 0;
+			}
+			delete this.pending[element.name];
+			if ( valid && this.pendingRequest === 0 && this.formSubmitted && this.form() ) {
+				$(this.currentForm).submit();
+				this.formSubmitted = false;
+			} else if (!valid && this.pendingRequest === 0 && this.formSubmitted) {
+				$(this.currentForm).triggerHandler("invalid-form", [this]);
+				this.formSubmitted = false;
+			}
+		},
+
+		previousValue: function( element ) {
+			return $.data(element, "previousValue") || $.data(element, "previousValue", {
+				old: null,
+				valid: true,
+				message: this.defaultMessage( element, "remote" )
+			});
+		}
+
+	},
+
+	classRuleSettings: {
+		required: {required: true},
+		email: {email: true},
+		url: {url: true},
+		date: {date: true},
+		dateISO: {dateISO: true},
+		number: {number: true},
+		digits: {digits: true},
+		creditcard: {creditcard: true}
+	},
+
+	addClassRules: function( className, rules ) {
+		if ( className.constructor === String ) {
+			this.classRuleSettings[className] = rules;
+		} else {
+			$.extend(this.classRuleSettings, className);
+		}
+	},
+
+	classRules: function( element ) {
+		var rules = {};
+		var classes = $(element).attr("class");
+		if ( classes ) {
+			$.each(classes.split(" "), function() {
+				if ( this in $.validator.classRuleSettings ) {
+					$.extend(rules, $.validator.classRuleSettings[this]);
+				}
+			});
+		}
+		return rules;
+	},
+
+	attributeRules: function( element ) {
+		var rules = {};
+		var $element = $(element);
+		var type = $element[0].getAttribute("type");
+
+		for (var method in $.validator.methods) {
+			var value;
+
+			// support for <input required> in both html5 and older browsers
+			if ( method === "required" ) {
+				value = $element.get(0).getAttribute(method);
+				// Some browsers return an empty string for the required attribute
+				// and non-HTML5 browsers might have required="" markup
+				if ( value === "" ) {
+					value = true;
+				}
+				// force non-HTML5 browsers to return bool
+				value = !!value;
+			} else {
+				value = $element.attr(method);
+			}
+
+			// convert the value to a number for number inputs, and for text for backwards compability
+			// allows type="date" and others to be compared as strings
+			if ( /min|max/.test( method ) && ( type === null || /number|range|text/.test( type ) ) ) {
+				value = Number(value);
+			}
+
+			if ( value ) {
+				rules[method] = value;
+			} else if ( type === method && type !== 'range' ) {
+				// exception: the jquery validate 'range' method
+				// does not test for the html5 'range' type
+				rules[method] = true;
+			}
+		}
+
+		// maxlength may be returned as -1, 2147483647 (IE) and 524288 (safari) for text inputs
+		if ( rules.maxlength && /-1|2147483647|524288/.test(rules.maxlength) ) {
+			delete rules.maxlength;
+		}
+
+		return rules;
+	},
+
+	dataRules: function( element ) {
+		var method, value,
+			rules = {}, $element = $(element);
+		for (method in $.validator.methods) {
+			value = $element.data("rule-" + method.toLowerCase());
+			if ( value !== undefined ) {
+				rules[method] = value;
+			}
+		}
+		return rules;
+	},
+
+	staticRules: function( element ) {
+		var rules = {};
+		var validator = $.data(element.form, "validator");
+		if ( validator.settings.rules ) {
+			rules = $.validator.normalizeRule(validator.settings.rules[element.name]) || {};
+		}
+		return rules;
+	},
+
+	normalizeRules: function( rules, element ) {
+		// handle dependency check
+		$.each(rules, function( prop, val ) {
+			// ignore rule when param is explicitly false, eg. required:false
+			if ( val === false ) {
+				delete rules[prop];
+				return;
+			}
+			if ( val.param || val.depends ) {
+				var keepRule = true;
+				switch (typeof val.depends) {
+				case "string":
+					keepRule = !!$(val.depends, element.form).length;
+					break;
+				case "function":
+					keepRule = val.depends.call(element, element);
+					break;
+				}
+				if ( keepRule ) {
+					rules[prop] = val.param !== undefined ? val.param : true;
+				} else {
+					delete rules[prop];
+				}
+			}
+		});
+
+		// evaluate parameters
+		$.each(rules, function( rule, parameter ) {
+			rules[rule] = $.isFunction(parameter) ? parameter(element) : parameter;
+		});
+
+		// clean number parameters
+		$.each(['minlength', 'maxlength'], function() {
+			if ( rules[this] ) {
+				rules[this] = Number(rules[this]);
+			}
+		});
+		$.each(['rangelength', 'range'], function() {
+			var parts;
+			if ( rules[this] ) {
+				if ( $.isArray(rules[this]) ) {
+					rules[this] = [Number(rules[this][0]), Number(rules[this][1])];
+				} else if ( typeof rules[this] === "string" ) {
+					parts = rules[this].split(/[\s,]+/);
+					rules[this] = [Number(parts[0]), Number(parts[1])];
+				}
+			}
+		});
+
+		if ( $.validator.autoCreateRanges ) {
+			// auto-create ranges
+			if ( rules.min && rules.max ) {
+				rules.range = [rules.min, rules.max];
+				delete rules.min;
+				delete rules.max;
+			}
+			if ( rules.minlength && rules.maxlength ) {
+				rules.rangelength = [rules.minlength, rules.maxlength];
+				delete rules.minlength;
+				delete rules.maxlength;
+			}
+		}
+
+		return rules;
+	},
+
+	// Converts a simple string to a {string: true} rule, e.g., "required" to {required:true}
+	normalizeRule: function( data ) {
+		if ( typeof data === "string" ) {
+			var transformed = {};
+			$.each(data.split(/\s/), function() {
+				transformed[this] = true;
+			});
+			data = transformed;
+		}
+		return data;
+	},
+
+	// http://docs.jquery.com/Plugins/Validation/Validator/addMethod
+	addMethod: function( name, method, message ) {
+		$.validator.methods[name] = method;
+		$.validator.messages[name] = message !== undefined ? message : $.validator.messages[name];
+		if ( method.length < 3 ) {
+			$.validator.addClassRules(name, $.validator.normalizeRule(name));
+		}
+	},
+
+	methods: {
+
+		// http://docs.jquery.com/Plugins/Validation/Methods/required
+		required: function( value, element, param ) {
+			// check if dependency is met
+			if ( !this.depend(param, element) ) {
+				return "dependency-mismatch";
+			}
+			if ( element.nodeName.toLowerCase() === "select" ) {
+				// could be an array for select-multiple or a string, both are fine this way
+				var val = $(element).val();
+				return val && val.length > 0;
+			}
+			if ( this.checkable(element) ) {
+				return this.getLength(value, element) > 0;
+			}
+			return $.trim(value).length > 0;
+		},
+
+		// http://docs.jquery.com/Plugins/Validation/Methods/email
+		email: function( value, element ) {
+			// contributed by Scott Gonzalez: http://projects.scottsplayground.com/email_address_validation/
+			return this.optional(element) || /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))$/i.test(value);
+		},
+
+		// http://docs.jquery.com/Plugins/Validation/Methods/url
+		url: function( value, element ) {
+			// contributed by Scott Gonzalez: http://projects.scottsplayground.com/iri/
+			return this.optional(element) || /^(https?|s?ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(value);
+		},
+
+		// http://docs.jquery.com/Plugins/Validation/Methods/date
+		date: function( value, element ) {
+			return this.optional(element) || !/Invalid|NaN/.test(new Date(value).toString());
+		},
+
+		// http://docs.jquery.com/Plugins/Validation/Methods/dateISO
+		dateISO: function( value, element ) {
+			return this.optional(element) || /^\d{4}[\/\-]\d{1,2}[\/\-]\d{1,2}$/.test(value);
+		},
+
+		// http://docs.jquery.com/Plugins/Validation/Methods/number
+		number: function( value, element ) {
+			return this.optional(element) || /^-?(?:\d+|\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$/.test(value);
+		},
+
+		// http://docs.jquery.com/Plugins/Validation/Methods/digits
+		digits: function( value, element ) {
+			return this.optional(element) || /^\d+$/.test(value);
+		},
+
+		// http://docs.jquery.com/Plugins/Validation/Methods/creditcard
+		// based on http://en.wikipedia.org/wiki/Luhn
+		creditcard: function( value, element ) {
+			if ( this.optional(element) ) {
+				return "dependency-mismatch";
+			}
+			// accept only spaces, digits and dashes
+			if ( /[^0-9 \-]+/.test(value) ) {
+				return false;
+			}
+			var nCheck = 0,
+				nDigit = 0,
+				bEven = false;
+
+			value = value.replace(/\D/g, "");
+
+			for (var n = value.length - 1; n >= 0; n--) {
+				var cDigit = value.charAt(n);
+				nDigit = parseInt(cDigit, 10);
+				if ( bEven ) {
+					if ( (nDigit *= 2) > 9 ) {
+						nDigit -= 9;
+					}
+				}
+				nCheck += nDigit;
+				bEven = !bEven;
+			}
+
+			return (nCheck % 10) === 0;
+		},
+
+		// http://docs.jquery.com/Plugins/Validation/Methods/minlength
+		minlength: function( value, element, param ) {
+			var length = $.isArray( value ) ? value.length : this.getLength($.trim(value), element);
+			return this.optional(element) || length >= param;
+		},
+
+		// http://docs.jquery.com/Plugins/Validation/Methods/maxlength
+		maxlength: function( value, element, param ) {
+			var length = $.isArray( value ) ? value.length : this.getLength($.trim(value), element);
+			return this.optional(element) || length <= param;
+		},
+
+		// http://docs.jquery.com/Plugins/Validation/Methods/rangelength
+		rangelength: function( value, element, param ) {
+			var length = $.isArray( value ) ? value.length : this.getLength($.trim(value), element);
+			return this.optional(element) || ( length >= param[0] && length <= param[1] );
+		},
+
+		// http://docs.jquery.com/Plugins/Validation/Methods/min
+		min: function( value, element, param ) {
+			return this.optional(element) || value >= param;
+		},
+
+		// http://docs.jquery.com/Plugins/Validation/Methods/max
+		max: function( value, element, param ) {
+			return this.optional(element) || value <= param;
+		},
+
+		// http://docs.jquery.com/Plugins/Validation/Methods/range
+		range: function( value, element, param ) {
+			return this.optional(element) || ( value >= param[0] && value <= param[1] );
+		},
+
+		// http://docs.jquery.com/Plugins/Validation/Methods/equalTo
+		equalTo: function( value, element, param ) {
+			// bind to the blur event of the target in order to revalidate whenever the target field is updated
+			// TODO find a way to bind the event just once, avoiding the unbind-rebind overhead
+			var target = $(param);
+			if ( this.settings.onfocusout ) {
+				target.unbind(".validate-equalTo").bind("blur.validate-equalTo", function() {
+					$(element).valid();
+				});
+			}
+			return value === target.val();
+		},
+
+		// http://docs.jquery.com/Plugins/Validation/Methods/remote
+		remote: function( value, element, param ) {
+			if ( this.optional(element) ) {
+				return "dependency-mismatch";
+			}
+
+			var previous = this.previousValue(element);
+			if (!this.settings.messages[element.name] ) {
+				this.settings.messages[element.name] = {};
+			}
+			previous.originalMessage = this.settings.messages[element.name].remote;
+			this.settings.messages[element.name].remote = previous.message;
+
+			param = typeof param === "string" && {url:param} || param;
+
+			if ( previous.old === value ) {
+				return previous.valid;
+			}
+
+			previous.old = value;
+			var validator = this;
+			this.startRequest(element);
+			var data = {};
+			data[element.name] = value;
+			$.ajax($.extend(true, {
+				url: param,
+				mode: "abort",
+				port: "validate" + element.name,
+				dataType: "json",
+				data: data,
+				success: function( response ) {
+					validator.settings.messages[element.name].remote = previous.originalMessage;
+					var valid = response === true || response === "true";
+					if ( valid ) {
+						var submitted = validator.formSubmitted;
+						validator.prepareElement(element);
+						validator.formSubmitted = submitted;
+						validator.successList.push(element);
+						delete validator.invalid[element.name];
+						validator.showErrors();
+					} else {
+						var errors = {};
+						var message = response || validator.defaultMessage( element, "remote" );
+						errors[element.name] = previous.message = $.isFunction(message) ? message(value) : message;
+						validator.invalid[element.name] = true;
+						validator.showErrors(errors);
+					}
+					previous.valid = valid;
+					validator.stopRequest(element, valid);
+				}
+			}, param));
+			return "pending";
+		}
+
+	}
+
+});
+
+// deprecated, use $.validator.format instead
+$.format = $.validator.format;
+
+}(jQuery));
+
+// ajax mode: abort
+// usage: $.ajax({ mode: "abort"[, port: "uniqueport"]});
+// if mode:"abort" is used, the previous request on that port (port can be undefined) is aborted via XMLHttpRequest.abort()
+(function($) {
+	var pendingRequests = {};
+	// Use a prefilter if available (1.5+)
+	if ( $.ajaxPrefilter ) {
+		$.ajaxPrefilter(function( settings, _, xhr ) {
+			var port = settings.port;
+			if ( settings.mode === "abort" ) {
+				if ( pendingRequests[port] ) {
+					pendingRequests[port].abort();
+				}
+				pendingRequests[port] = xhr;
+			}
+		});
+	} else {
+		// Proxy ajax
+		var ajax = $.ajax;
+		$.ajax = function( settings ) {
+			var mode = ( "mode" in settings ? settings : $.ajaxSettings ).mode,
+				port = ( "port" in settings ? settings : $.ajaxSettings ).port;
+			if ( mode === "abort" ) {
+				if ( pendingRequests[port] ) {
+					pendingRequests[port].abort();
+				}
+				pendingRequests[port] = ajax.apply(this, arguments);
+				return pendingRequests[port];
+			}
+			return ajax.apply(this, arguments);
+		};
+	}
+}(jQuery));
+
+// provides delegate(type: String, delegate: Selector, handler: Callback) plugin for easier event delegation
+// handler is only called when $(event.target).is(delegate), in the scope of the jquery-object for event.target
+(function($) {
+	$.extend($.fn, {
+		validateDelegate: function( delegate, type, handler ) {
+			return this.bind(type, function( event ) {
+				var target = $(event.target);
+				if ( target.is(delegate) ) {
+					return handler.apply(target, arguments);
+				}
+			});
+		}
+	});
+}(jQuery));
+define("jquery.validate", function(){});
+
+require(['lodash','jquery.validate'], function(Lodash) {
+	$.validator.addMethod(
+		"multipleSelectOptionsSelected",
+		function(value, element, param) {
+			//console.log("test");
+			if (this.optional(element)) {
+				return true;
+			}
+
+			var selectedOptions = 0;
+			$('option:selected', element).each(function() {
+				if (this.value != '') {
+					selectedOptions++;
+				}
+			});
+			return selectedOptions >= param;
+		},
+		'Should select at least {0} locale.');
+
+	$.validator.addMethod(
+		"userEmail",
+		function(value, element, param) {
+			//console.log("test");
+			if (this.optional(element)) {
+				return true
+			}
+			if (value == "") {
+				return true
+			} else {
+				var regex = /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))$/i;
+				var emails = value.split(',');
+				var valid = true;
+				Lodash(emails).forEach(function(email) {
+					// body...
+					var temp = email;
+					//var temp = UnderscoreStr.trim(email);
+					if (temp != "") {
+						valid = regex.test(temp);
+					}
+
+				})
+				return valid
+
+			}
+		},
+		'Please input valid email address.');
+
+		jQuery.extend(jQuery.validator.messages, {
+		  required: "必选字段",
+		  remote: "请修正该字段",
+		  email: "请输入正确格式的电子邮件",
+		  url: "请输入合法的网址",
+		  date: "请输入合法的日期",
+		  dateISO: "请输入合法的日期 (ISO).",
+		  number: "请输入合法的数字",
+		  digits: "只能输入整数",
+		  creditcard: "请输入合法的信用卡号",
+		  equalTo: "请再次输入相同的值",
+		  accept: "请输入拥有合法后缀名的字符串",
+		  maxlength: jQuery.validator.format("请输入一个 长度最多是 {0} 的字符串"),
+		  minlength: jQuery.validator.format("请输入一个 长度最少是 {0} 的字符串"),
+		  rangelength: jQuery.validator.format("请输入 一个长度介于 {0} 和 {1} 之间的字符串"),
+		  range: jQuery.validator.format("请输入一个介于 {0} 和 {1} 之间的值"),
+		  max: jQuery.validator.format("请输入一个最大为{0} 的值"),
+		  min: jQuery.validator.format("请输入一个最小为{0} 的值")
+		});
+});
+define("config/validator/config", function(){});
+
+/*
+ * jQuery Pines Steps (psteps) Plugin 0.0.1alpha
+ *
+ * http://pinesframework.org/psteps/
+ * Copyright (c) 2012 Angela Murrell
+ *
+ * Triple license under the GPL, LGPL, and MPL:
+ *	  http://www.gnu.org/licenses/gpl.html
+ *	  http://www.gnu.org/licenses/lgpl.html
+ *	  http://www.mozilla.org/MPL/MPL-1.1.html
+ */
+
+(function($) {
+	$.fn.psteps = function(options) {
+		// Build main options before element iteration.
+		var opts = $.extend({}, $.fn.psteps.defaults, options);
+
+		// Iterate and transform each matched element.
+		var all_elements = this;
+		all_elements.each(function() {
+			var psteps = $(this);
+			psteps.psteps_version = "0.0.1alpha";
+
+			// Check for the psteps class. If it has it, we've already transformed this element.
+			if (psteps.hasClass("steps-transformed")) return true;
+			// Add the psteps class.
+			psteps.addClass("steps-transformed");
+
+			psteps.opts = opts;
+
+			// All arrays and objects in our options need to be copied,
+			// since they just have a pointer to the defaults if we don't.
+			//psteps.example_property = psteps.example_property.slice();
+
+			// Step submit and next button variables
+			var all_steps = psteps.find('.step-content'),
+				all_titles = psteps.find('.step-title'),
+				step_names = psteps.find('.step-name'),
+				next_button = psteps.find('.next-button'),
+				back_button = psteps.find('.back-button'),
+				send_button = psteps.find('.submit-button'),
+				toggle_buttons = psteps.find('.next-button, .submit-button'),
+				num_steps = psteps.find('.step-title').length,
+				first_time = true;
+
+
+			psteps.get_max_height = function(elements) {
+				var max = -1;
+				elements.each(function() {
+					var h = $(this).height();
+					max = h > max ? h : max;
+				});
+				return max;
+			}
+
+			if (!opts.step_order)
+				psteps.find('.step-order').hide();
+
+			// Function that takes step names from titles and makes a heading in
+			// the step content.
+			psteps.make_step_content_headings = function() {
+				psteps.find('.step-title').each(function(r) {
+					var step_name = $(this).find('.step-name'),
+						step_content = psteps.find('.step-content').eq(r);
+					if (step_name.length == 1) {
+						var hr = opts.content_headings_hr ? '<hr/>' : '',
+							heading = '<div class="step-content-name"><' + opts.content_headings_element + '>' + step_name.html() + '</' + opts.content_headings_element + '>' + hr + '</div>'
+						if (opts.content_headings_after != false && step_content.find(opts.content_headings_after).length > 0)
+							step_content.find(opts.content_headings_after).after(heading)
+						else
+							step_content.prepend(heading);
+					}
+				});
+			};
+
+			// Window Resize
+			if (opts.content_height_equalize || opts.steps_height_equalize || opts.steps_width_percentage || opts.shrink_step_names) {
+				// Get original max height for equalizing title heights.
+				if (opts.steps_height_equalize) {
+					var titles = psteps.find('.step-title'),
+						original_height = psteps.get_max_height(titles);
+				}
+				if (opts.content_height_equalize) {
+					// going to use a time out here too, so the height is fully determined.
+					var step_content = psteps.find('.step-content');
+					step_content.addClass('clearfix');
+					var original_content_height = psteps.get_max_height(step_content);
+				}
+				$(window).resize(function() {
+					// Ensure horizontal step widths always look good (responsive/mobile)
+					if (opts.steps_width_percentage) {
+						var percentage = (100 / num_steps) - 1;
+						if ($(window).width() < parseInt(opts.alter_width_at_viewport))
+							psteps.find('.step-title').css({
+								'width': percentage + '%',
+								'padding-left': '0',
+								'padding-right': '0'
+							});
+					}
+
+					// When viewport is small, do not display step names. Show numbers only.
+					if (opts.shrink_step_names) {
+						// Time outs needed so that the following can remove content names.
+						if ($(window).width() <= parseInt(opts.alter_names_at_viewport)) {
+							setTimeout(function() {
+								psteps.find('.step-content-name').remove();
+								psteps.find('.step-name').hide();
+								psteps.find('.step-order').show();
+								psteps.make_step_content_headings();
+							}, 200);
+						} else {
+							setTimeout(function() {
+								psteps.find('.step-content-name').remove();
+								if (!opts.step_order)
+									psteps.find('.step-order').hide();
+								if (opts.step_names)
+									psteps.find('.step-name').show();
+								if (opts.content_headings)
+									psteps.make_step_content_headings();
+							}, 200);
+						}
+					}
+
+					// Equalize title heights
+					if (opts.steps_height_equalize) {
+						var titles = psteps.find('.step-title');
+						titles.css('min-height', original_height);
+						titles.css('min-height', psteps.get_max_height(titles));
+					}
+
+					// Equalize content heights
+					if (opts.content_height_equalize) {
+						setTimeout(function() {
+							var step_content = psteps.find('.step-content');
+							step_content.css('min-height', original_content_height);
+							step_content.css('min-height', psteps.get_max_height(step_content));
+						}, 2000);
+					}
+				}).resize();
+			}
+
+			// Function for adjusting progress title bars on textarea change.
+			// All Validation happens here.
+			psteps.check_progress_titles = function() {
+				psteps.find('.step-content').each(function(i) {
+					var cur_step = $(this),
+						class_to_add = 'pstep' + (i + 1);
+					cur_step.addClass(class_to_add);
+					// this title matches the content
+					var title = psteps.find('.step-title').eq(i);
+					title.addClass(class_to_add);
+					// Titles are always colored to indicate progress for present/past steps
+					// If you can click titles, colored progress will indicate for future steps too.
+					// Custom traversal still searches steps-visited to know what to validate for, and remember this part does not handle traversal, but validation.
+					// We want to validate for steps besides the custom ones, we just dont want users to go to steps that havent been saved yet (and refreshed to just a view.).
+					var validate_result;
+					if ((opts.traverse_titles == 'visited' && title.hasClass('step-visited')) || (opts.traverse_titles == 'custom' && title.hasClass('step-visited')) || (opts.traverse_titles == 'never' && title.hasClass('step-visited')) || opts.traverse_titles == 'always') {
+						validate_result = opts.validation_rule.call(cur_step);
+						if (validate_result == 'warning') {
+							title.removeClass('step-error btn-info btn-success btn-warning btn-danger step-info-error step-info-incomplete').addClass('step-warning step-info-warning');
+							psteps.trigger_error(cur_step);
+						} else if (validate_result == 'error') {
+							title.removeClass('step-warning btn-info btn-success btn-warning btn-danger step-info-incomplete step-info-warning').addClass('step-error step-info-error');
+							psteps.trigger_error(cur_step);
+						} else if (validate_result) {
+							title.removeClass('step-warning btn-info btn-warning btn-danger step-error step-info-error step-info-incomplete step-info-warning').addClass('btn-success')
+							if (opts.check_marks)
+								title.find('i.step-mark').remove().end().prepend('<i class="icon-ok step-mark"></i> ');
+						} else if (!validate_result) {
+							title.removeClass('step-warning btn-info btn-success btn-danger btn-warning step-error step-info-error step-info-warning')
+								.addClass('btn-info step-info-incomplete')
+								.find('i.step-mark').remove();
+						}
+					} else {
+						validate_result = opts.validation_rule.call(cur_step);
+						if (validate_result == 'warning') {
+							title.removeClass('step-info-incomplete step-info-error').addClass('step-info-warning');
+						} else if (validate_result == 'error') {
+							title.removeClass('step-info-incomplete step-info-warning').addClass('step-info-error');
+							psteps.trigger_error(cur_step);
+						} else if (validate_result) {
+							title.removeClass('step-info-error step-info-incomplete step-info-warning');
+						} else if (!validate_result) {
+							title.removeClass('step-info-error step-info-warning').addClass('step-info-incomplete')
+						}
+					}
+				});
+				psteps.toggle_buttons_function();
+				psteps.trigger('validation_complete.psteps');
+			};
+
+			// Function for toggling send/next buttons as btn-success or btn-info.
+			psteps.toggle_buttons_function = function() {
+				// Get proper button name
+				var next_name = next_button.attr('data-btn-name'),
+					send_name = send_button.attr('data-btn-name'),
+					back_name = back_button.attr('data-btn-name');
+
+				if (next_name != undefined && next_name.length)
+					next_button.html(next_name);
+				if (send_name != undefined && send_name.length)
+					send_button.html(send_name);
+				if (back_name != undefined && back_name.length)
+					back_button.html(back_name);
+
+				// Toggle whether to show send or next.
+				if (psteps.find('.step-content').last().hasClass('step-active')) {
+					if (!next_button.hasClass('btn-manual'))
+						next_button.hide();
+					if (!send_button.hasClass('btn-manual'))
+						send_button.show();
+				} else {
+					if (!next_button.hasClass('btn-manual'))
+						next_button.show();
+					if (!send_button.hasClass('btn-manual'))
+						send_button.hide();
+				}
+
+				// Changes color of send/next buttons based upon completion.
+				var active_title = psteps.find('.step-title.step-active');
+				if (active_title.hasClass('btn-success') || active_title.hasClass('step-warning'))
+					toggle_buttons.removeClass('btn-info').addClass('btn-success');
+				else if (active_title.hasClass('btn-info'))
+					toggle_buttons.removeClass('btn-success').addClass('btn-info');
+				else if (active_title.hasClass('step-error'))
+					toggle_buttons.removeClass('btn-success btn-info').addClass('btn-danger');
+
+				// Check submit button for all steps if necessary
+				if (opts.validate_submit_all_steps) {
+					if (all_titles.filter('.btn-info').length || (all_titles.filter('.step-error').length && !opts.ignore_errors_on_submit))
+						send_button.removeClass('btn-success').addClass('btn-info');
+				}
+
+				// Back Button
+				if (opts.back && !back_button.hasClass('btn-manual')) {
+					if (psteps.find('.step-title').first().hasClass('step-active'))
+						back_button.hide();
+					else {
+						var previous_title = psteps.find('.step-title.step-active').prevAll('.step-title:first');
+						if (previous_title.hasClass('btn-info'))
+							back_button.removeClass('btn-success btn-warning btn-danger').addClass('btn-info').css('cursor', 'pointer');
+						else if (previous_title.hasClass('btn-success'))
+							back_button.removeClass('btn-info btn-warning btn-danger').addClass('btn-success').css('cursor', 'pointer');
+						else if (previous_title.hasClass('btn-warning'))
+							back_button.removeClass('btn-info btn-success btn-danger').addClass('btn-warning').css('cursor', 'pointer');
+						else if (previous_title.hasClass('btn-danger'))
+							back_button.removeClass('btn-success btn-warning btn-info').addClass('btn-danger').css('cursor', 'pointer');
+
+						back_button.show();
+					}
+				} else if (!back_button.hasClass('btn-manual'))
+					back_button.hide();
+			};
+
+			// Function to go to a certain step
+			psteps.go_to_step = function(step_num) {
+				var last_active_title = psteps.find('.step-title.last-active'),
+					last_active_content = psteps.find('.step-content.last-active'),
+					active_step = psteps.find('.step-content.step-active'),
+					active_title = psteps.find('.step-title.step-active');
+
+				if (step_num > num_steps)
+					return;
+
+				var show_step = psteps.find('.step-content').eq(step_num - 1),
+					show_title = psteps.find('.step-title').eq(step_num - 1);
+
+				// If you're at go to step, and there's step-resumes, the step-transition-processing
+				// was not removed. Remove step-resume class if you don't want to remove the step
+				// transition processing class.
+				if (psteps.find('.step-resume').length) {
+					psteps.find('.step-transition-processing').removeClass('step-transition-processing');
+				}
+				if (active_title.hasClass('step-transition') && !psteps.find('.step-resume').length && !first_time)
+					opts.steps_transition.call(active_step);
+				if (active_title.hasClass('step-transition-processing')) {
+					psteps.find('.step-resume').removeClass('step-resume');
+					show_title.addClass('step-resume');
+					return;
+				} else
+					psteps.find('.step-resume').removeClass('step-resume');
+
+				if (!first_time)
+					opts.steps_hide.call(active_step);
+
+				last_active_title.removeClass('last-active');
+				last_active_content.removeClass('last-active');
+
+				active_step.hide().removeClass('step-active').addClass('last-active');
+				show_step.show().addClass('step-active step-visited');
+
+				active_title.removeClass('step-active').addClass('disabled last-active');
+				show_title.addClass('step-active step-visited').removeClass('disabled');
+
+				// Every step before this one must get step-visited now. This is because if I had step traversal set to visited
+				// and I started on step3, I could never see step1 and step2, which if that was the desired affect, those steps should
+				// instead be given a no-traverse class. I should be able to to "go back" to steps prior to the one I am on.
+				show_step.prevAll('.step-content').addClass('step-visited');
+				show_title.prevAll('.step-title').addClass('step-visited');
+
+				if (!show_step.hasClass('step-loaded'))
+					opts.steps_onload.call(show_step);
+
+				show_step.addClass('step-loaded');
+
+				opts.steps_show.call(show_step);
+
+				// If visited traversing,
+				if (opts.traverse_titles == 'visited') {
+					show_title.prevAll('.step-title').andSelf().css('cursor', 'pointer');
+				}
+
+				// Don't validate upon loading the first time.
+				if (first_time)
+					first_time = false;
+				else
+					psteps.trigger('validate.psteps');
+				psteps.toggle_buttons_function();
+			};
+
+			// Function to go to the next step (calls go to step)
+			psteps.go_to_next_step = function() {
+				var preceeding_titles = psteps.find('.step-title.step-active').prevAll('.step-title');
+				if (opts.skip_no_traverse_on_next) {
+					var next_step = psteps.find('.step-title').eq(preceeding_titles.length + 1);
+					if (next_step.hasClass('step-notraverse')) {
+						var new_next_step = next_step.nextAll('.step-title:not(.step-notraverse)').first().prevAll('.step-title').length + 1;
+						psteps.go_to_step(new_next_step);
+					} else
+						psteps.go_to_step(preceeding_titles.length + 2);
+				} else
+					psteps.go_to_step(preceeding_titles.length + 2);
+
+			};
+
+			// Function to go to the previous step (calls go to step)
+			psteps.go_to_prev_step = function() {
+				var preceeding_titles = psteps.find('.step-title.step-active').prevAll('.step-title');
+				if (opts.skip_no_traverse_on_next) {
+					var prev_step = psteps.find('.step-title').eq(preceeding_titles.length - 1);
+					if (prev_step.hasClass('step-notraverse')) {
+						var new_prev_step = prev_step.prevAll('.step-title:not(.step-notraverse)').first().prevAll('.step-title').length + 1;
+						psteps.go_to_step(new_prev_step);
+					} else {
+						psteps.go_to_step(preceeding_titles.length);
+					}
+				} else {
+					psteps.go_to_step(preceeding_titles.length);
+				}
+			};
+
+			// Function to set or change the way titles are traversed. Used by
+			// the binding events that can be triggered to change the type.
+			psteps.change_traverse = function(type) {
+				var custom = opts.custom_traverse_class;
+				var step_titles = psteps.find('.step-title');
+				psteps.off('click', '.step-title:not(.step-notraverse)');
+				psteps.off('click', '.step-title.step-active:not(.step-notraverse)');
+				psteps.off('click', '.step-title.step-visited:not(.step-notraverse)');
+				if (type == 'always') {
+					step_titles.css('cursor', 'pointer');
+					psteps.on('click', '.step-title:not(.step-notraverse)', function() {
+						var clicked_title = $(this),
+							all_prev = clicked_title.prevAll('.step-title');
+						psteps.go_to_step(all_prev.length + 1);
+					});
+				} else if (type == 'custom') {
+					var selector1 = "." + custom;
+					var selector2 = ".step-title." + custom + ":not(.step-notraverse)";
+					step_titles.css('cursor', 'default').filter(selector1).css('cursor', 'pointer');
+					psteps.on('click', selector2, function() {
+						var clicked_title = $(this);
+						// if the title is the "next" title from the current view,
+						// trigger next.
+						// if the title is the "previous" title from the current view,
+						// trigger previous.
+						if (clicked_title.prevAll('.step-title:first').hasClass('step-active'))
+							psteps.go_to_next_step();
+						else if (clicked_title.nextAll('.step-title:first').hasClass('step-active'))
+							psteps.go_to_prev_step();
+						else {
+							var all_prev = clicked_title.prevAll('.step-title');
+							psteps.go_to_step(all_prev.length + 1);
+						}
+					});
+				} else if (type == 'visited') {
+					step_titles.css('cursor', 'default').filter('.step-visited').css('cursor', 'pointer');
+					psteps.on('click', '.step-title.step-visited:not(.step-notraverse)', function() {
+						var clicked_title = $(this);
+						// if the title is the "next" title from the current view,
+						// trigger next.
+						// if the title is the "previous" title from the current view,
+						// trigger previous.
+						if (clicked_title.prevAll('.step-title:first').hasClass('step-active'))
+							psteps.go_to_next_step();
+						else if (clicked_title.nextAll('.step-title:first').hasClass('step-active'))
+							psteps.go_to_prev_step();
+						else {
+							var all_prev = clicked_title.prevAll('.step-title');
+							psteps.go_to_step(all_prev.length + 1);
+						}
+					});
+				} else if (type == 'never') {
+					step_titles.css('cursor', 'default');
+					// this is for never, which this is actually super useful.
+					// It allows the user to click on the current step, which
+					// may trigger the alert for why a step is showing a warning
+					// or an error. Because the "next" button on errors will
+					// trigger a click on this step (which shows the error message)
+					// from the validation rule. This allows for unique error
+					// messages to show on the next button.
+					psteps.on('click', '.step-title.step-active:not(.step-notraverse)', function() {
+						var clicked_title = $(this),
+							all_prev = clicked_title.prevAll('.step-title');
+						psteps.go_to_step(all_prev.length + 1);
+					});
+				}
+				step_titles.filter('.step-notraverse').css('cursor', 'default');
+			};
+
+
+			// Trigger Error in Title
+			psteps.trigger_error = function(step) {
+				var step_num = step.prevAll('.step-content').length + 1,
+					title = psteps.find('.step-title').eq(step_num - 1);
+				if (title.hasClass('step-warning')) {
+					title.removeClass('btn-info btn-success').addClass('btn-warning')
+					if (opts.check_marks)
+						title.find('i.step-mark').remove().end().prepend('<i class="icon-remove step-mark"></i> ');
+				} else if (title.hasClass('step-error')) {
+					title.removeClass('btn-info btn-success').addClass('btn-danger')
+					if (opts.check_marks)
+						title.find('i.step-mark').remove().end().prepend('<i class="icon-remove step-mark"></i> ');
+				}
+			};
+
+			// Load necessary classes
+			all_steps.hide().first().addClass('step-visited step-active').show();
+			all_titles.addClass('disabled btn').first().addClass('step-visited step-active').removeClass('disabled');
+			if (!opts.step_names)
+				step_names.hide();
+			// Load functions
+			psteps.change_traverse(opts.traverse_titles);
+			psteps.check_progress_titles();
+			if (opts.content_headings)
+				psteps.make_step_content_headings();
+
+			// Load the default step
+			var last;
+			if (opts.start_incomplete_step) {
+				var incomplete = psteps.find('.step-title.step-info-incomplete').first();
+				if (incomplete.length)
+					psteps.go_to_step(incomplete.prevAll('.step-title').length + 1);
+				else {
+					last = psteps.find('.step-title.btn-success').last(); // it will go to the last completed if nothing is incomplete
+					psteps.go_to_step(last.prevAll('.step-title').length + 1);
+				}
+			} else if (opts.start_warning_step) {
+				var warning = psteps.find('.step-title.step-info-warning').first();
+				if (warning.length)
+					psteps.go_to_step(warning.prevAll('.step-title').length + 1);
+				else {
+					last = psteps.find('.step-title.btn-success').last(); // it will go to the last completed if nothing is incomplete
+					psteps.go_to_step(last.prevAll('.step-title').length + 1);
+				}
+			} else if (opts.start_error_step) {
+				var error = psteps.find('.step-title.step-info-error').first();
+				if (error.length)
+					psteps.go_to_step(error.prevAll('.step-title').length + 1);
+				else {
+					last = psteps.find('.step-title.btn-success').last(); // it will go to the last completed if nothing is incomplete
+					psteps.go_to_step(last.prevAll('.step-title').length + 1);
+				}
+			} else
+				psteps.go_to_step(opts.step_start);
+
+
+			// Event Triggers
+			back_button.click(function() {
+				if (opts.use_custom_back_button) {
+					var previous_step_num = psteps.find('.step-title.step-active').prevAll('.step-title').length;
+					opts.custom_back_button_click.call(undefined, previous_step_num);
+				} else {
+					psteps.go_to_prev_step();
+				}
+			});
+
+			// Extremely useful for instant validation, for example, after a
+			// user has completed an input on a step.
+			var last_val_timestamp = 0;
+			psteps.bind('validate.psteps', function(e) {
+				// Validation throttling: validation events called within 500ms
+				// should be considered the same event.
+				if (e.timeStamp < (last_val_timestamp + 500)) {
+					e.preventDefault();
+					e.stopPropagation();
+					return;
+				}
+				last_val_timestamp = e.timeStamp;
+				psteps.check_progress_titles();
+			});
+
+			// An event that triggers a change on how titles will be traversed.
+			psteps.bind('traverse_never.psteps', function() {
+				psteps.change_traverse('never');
+			});
+
+			// An event that triggers a change on how titles will be traversed.
+			psteps.bind('traverse_always.psteps', function() {
+				psteps.change_traverse('always');
+			});
+
+			// An event that triggers a change on how titles will be traversed.
+			psteps.bind('traverse_visited.psteps', function() {
+				psteps.change_traverse('visited');
+			});
+
+			// An event that triggers a change on how titles will be traversed.
+			psteps.bind('traverse_custom.psteps', function() {
+				psteps.change_traverse('custom');
+			});
+
+			// Loads the call back for what happens after steps, probably
+			// when a submit button is pressed.
+			psteps.bind('load_after_steps.psteps', function() {
+				opts.load_after_steps.call(psteps);
+			});
+
+			// Have yet to find a use for this, but maybe it will be to someone.
+			psteps.on('step_error.psteps', '.step-content', function() {
+				psteps.trigger_error($(this));
+			});
+
+			// When triggered on a step, it will go there, despite traversal settings.
+			psteps.on('go_to_step.psteps', '.step-title', function() {
+				var cur_step = $(this),
+					preceeding_titles = cur_step.prevAll('.step-title');
+				psteps.go_to_step(preceeding_titles.length + 1);
+			});
+
+			// When triggered on psteps object, it goes to the first incomplete step. Or the last completed if none are incomplete.
+			psteps.bind('go_to_first_incomplete.psteps', function() {
+				var incomplete = psteps.find('.step-title.step-info-incomplete').first();
+				if (incomplete.length)
+					psteps.go_to_step(incomplete.prevAll('.step-title').length + 1);
+				else {
+					last = psteps.find('.step-title.btn-success').last(); // it will go to the last completed if nothing is incomplete
+					psteps.go_to_step(last.prevAll('.step-title').length + 1);
+				}
+			});
+
+			// When triggered on psteps object, it goes to the first step with an warning. Or the last completed if none are warnings.
+			psteps.bind('go_to_first_warning.psteps', function() {
+				var warning = psteps.find('.step-title.step-info-warning').first();
+				if (warning.length)
+					psteps.go_to_step(warning.prevAll('.step-title').length + 1);
+				else {
+					last = psteps.find('.step-title.btn-success').last(); // it will go to the last completed if nothing is incomplete
+					psteps.go_to_step(last.prevAll('.step-title').length + 1);
+				}
+			});
+
+			// When triggered on psteps object, it goes to the first step with an error. Or the last completed if none are errors.
+			psteps.bind('go_to_first_error.psteps', function() {
+				var error = psteps.find('.step-title.step-info-error').first();
+				if (error.length)
+					psteps.go_to_step(error.prevAll('.step-title').length + 1);
+				else {
+					last = psteps.find('.step-title.btn-success').last(); // it will go to the last completed if nothing is incomplete
+					psteps.go_to_step(last.prevAll('.step-title').length + 1);
+				}
+			});
+
+			// Submit or Next. Checks for success in order to progress. Stops submit if fails.
+			toggle_buttons.click(function(e) {
+				var this_button = $(this);
+				if (this_button.hasClass(opts.btn_wait_class)) {
+					setTimeout(function() {
+						// Just to make sure that the validation ran and titles are correct run check titles.
+						psteps.trigger('validate.psteps');
+						var active_title = psteps.find('.step-title.step-active');
+						if (active_title.hasClass('step-error') && opts.validate_errors && !opts.validate_next_step) {
+							if (opts.validate_use_error_msg)
+								alert(opts.validate_error_msg)
+							else
+								active_title.click();
+						} else if (active_title.hasClass('step-error') && opts.validate_next_step && !opts.ignore_errors_on_next)
+							$.noop(); //do nothing.
+						else if (active_title.hasClass('step-error') && opts.ignore_errors_on_next)
+							psteps.go_to_next_step();
+						else if (this_button.hasClass('btn-success'))
+							psteps.go_to_next_step();
+						else if (this_button.hasClass('submit-button') && (opts.validate_submit_all_steps || opts.validate_next_step)) {
+							if (opts.use_before_submit)
+								alert(opts.before_submit);
+							e.preventDefault();
+						} else if (opts.validate_next_step && opts.use_before_next)
+							alert(opts.before_next);
+						else
+							psteps.go_to_next_step();
+					}, opts.btn_wait_time);
+				} else if (this_button.hasClass(opts.btn_wait_ajax_class)) {
+					//lichuan modify for ajax call back
+					var activedStep = psteps.find('.step-active.step-content');
+					$.when(opts.ajaxDefer.call(activedStep)).done(function(data) {
+						console.log(data);
+						if(typeof data !== 'undefined' && data.status != 0){
+							console.log("error"+data.status);
+
+
+						}else{
+							// Just to make sure that the validation ran and titles are correct run check titles.
+							psteps.trigger('validate.psteps');
+							var active_title = psteps.find('.step-title.step-active');
+							if (active_title.hasClass('step-error') && opts.validate_errors && !opts.validate_next_step) {
+								if (opts.validate_use_error_msg)
+									alert(opts.validate_error_msg)
+								else
+									active_title.click();
+							} else if (active_title.hasClass('step-error') && opts.validate_next_step && !opts.ignore_errors_on_next)
+								$.noop(); //do nothing.
+							else if (active_title.hasClass('step-error') && opts.ignore_errors_on_next)
+								psteps.go_to_next_step();
+							else if (this_button.hasClass('btn-success'))
+								psteps.go_to_next_step();
+							else if (this_button.hasClass('submit-button') && (opts.validate_submit_all_steps || opts.validate_next_step)) {
+								if (opts.use_before_submit)
+									alert(opts.before_submit);
+								e.preventDefault();
+							} else if (opts.validate_next_step && opts.use_before_next)
+								alert(opts.before_next);
+							else
+								psteps.go_to_next_step();
+
+						}
+						
+
+					}).fail(function() {
+						alert('call back error')
+					});
+
+				} else {
+					// Just to make sure that the validation ran and titles are correct run check titles.
+					psteps.trigger('validate.psteps');
+					var active_title = psteps.find('.step-title.step-active');
+					if (active_title.hasClass('step-error') && opts.validate_errors && !opts.validate_next_step) {
+						if (opts.validate_use_error_msg)
+							alert(opts.validate_error_msg)
+						else
+							active_title.click();
+					} else if (active_title.hasClass('step-error') && opts.validate_next_step && !opts.ignore_errors_on_next)
+						$.noop(); //do nothing.
+					else if (active_title.hasClass('step-error') && opts.ignore_errors_on_next)
+						psteps.go_to_next_step();
+					else if (this_button.hasClass('btn-success'))
+						psteps.go_to_next_step();
+					else if (this_button.hasClass('submit-button') && (opts.validate_submit_all_steps || opts.validate_next_step)) {
+						if (opts.use_before_submit)
+							alert(opts.before_submit);
+						e.preventDefault();
+					} else if (opts.validate_next_step && opts.use_before_next)
+						alert(opts.before_next);
+					else
+						psteps.go_to_next_step();
+				}
+
+			});
+
+			// Save the ptags object in the DOM, so we can access it.
+			this.pines_steps = psteps;
+		});
+
+		return all_elements;
+	};
+
+	$.fn.psteps.defaults = {
+		// Set how progress titles can be traversed.
+		// 'always' = always have the ability to traverse all steps.
+		// 'visited' = visited means the user has gone backwards and can
+		// traverse steps already visited.
+		// 'never' = never means the user cannot traverse steps other
+		// than through progression.
+		// If set to 'custom', only steps with your custom_traverse_class will be traversable.
+		traverse_titles: 'never',
+		// Custom class you can put on your step titles to use to limit traversal. Set traverse_titles to 'custom'. 
+		custom_traverse_class: 'custom-traverse',
+		// Always have access the first incomplete step always, regardless of step traversal settings.// TO DO
+		//traverse_first_incomplete: true, TO DO
+		// If step title has step-notraverse, do not allow the previous step to get to it, instead have it go to the next available.
+		skip_no_traverse_on_next: true,
+		// If step names should be copied to step content and used as headings
+		content_headings: false,
+		// The element inside the content headings div to wrap around the step name. ie h4
+		content_headings_element: 'h4',
+		// If the content headings have an hr after them.
+		content_headings_hr: true,
+		// The placement for the content headings using after. ie '.some_class'
+		// False if not used.
+		// If a selector is specified but doesn't exist for every step or at all in the DOM tree, then
+		// it will display at the beginning of a step by default.
+		content_headings_after: false,
+		// Step order is part of the step titles, defined by a class of "step-order".
+		// When step order is true, step-order shows all the time. If shrink_step_names
+		// is true, step order will show at specified viewport sizes even when step
+		// order is false.
+		step_order: true,
+		// Step names will be hidden always if this statement is set to false,
+		// but you can still specify step names so that content headings can still exist.
+		step_names: true,
+		// An option for checkmarks when things are completed.
+		check_marks: true,
+		// At specified screen size, steps_width_percentage will execute.
+		alter_width_at_viewport: '1000',
+		// Make width of step titles an even percentage for the number of steps.
+		steps_width_percentage: false,
+		// Make step title height equal the biggest height
+		steps_height_equalize: false,
+		// Make the step content height equal the biggest height
+		content_height_equalize: false,
+		// At specified screen size, shrink_step_names will execute.
+		alter_names_at_viewport: '650',
+		// Do not display step names in small viewports, just numbers.
+		shrink_step_names: true,
+		// Set if there is a back button.
+		back: true,
+		// Set if you want to use a special back button function callback on the click event
+		use_custom_back_button: false,
+		// the function passes the previous step num in the num
+		custom_back_button_click: function() {},
+		// Set the default step.
+		step_start: "1",
+		// Use the steps onload function to customize events that happen
+		// when a step is loaded, or rather viewed the first time. (First time only).
+		steps_onload: function() {},
+		// The steps_show option is similar to the steps_onload function except that
+		// it runs every time you go to a step. Be aware that the step shows and then calls this function.
+		steps_show: function() {},
+		// Execute this function right before we hide the active step (hiding this step to show another)
+		steps_hide: function() {},
+		// This function is used for creating transitions between steps. It is ran before steps_hide. You need
+		// to add the class 'step-transition' to the step-title you are transitioning from for this to be called.
+		// You also need to add the class in this function 'step-transition-processing' to prevent the transition.
+		// Which ever step that was going to be transitioned to will have a 'step-resume' class on the title.
+		// Once you remove 'step-transition-processing and trigger the event go_to_step.psteps on the step-resume title, 
+		// you'll have transitioned. This function definitely has a manual operation to it, but it is useful
+		steps_transition: function() {},
+		// Go to the first incomplete step
+		start_incomplete_step: false,
+		// Go to the first step with a warning
+		start_warning_step: false,
+		// Go to the first step with an error
+		start_error_step: false,
+		// Function to determine that progress has been made (For titles
+		// and for progression). This function received an argument 'step' which is
+		// The current step it's checking for validation.
+		// Making it really easy to do something like:
+		// return (step.find('textarea').val() != '')
+		// You can return true, false, 'warning', 'error'.
+		// each step has a class of pstep# ie (pstep1). You can check if the step
+		// has the class and then write a specific validation rule for that step.
+		// you can throw errors by returning 'error' and an alert. You can use that
+		// alert error message in place of the default by setting validate_use_error_msg
+		// to false. That way you can create custom alert messages and have them work
+		// as the alert when clicking next.
+		validation_rule: function() {
+			return true;
+		},
+		// Validate the current step before advancing to the next step. must receive a return
+		// true from the validation rule.
+		validate_next_step: true,
+		// Validate all steps before submitting.
+		validate_submit_all_steps: true,
+		// Validation for errors. If validating next step is off, this is still true.
+		// Also if validating for next step, and this is false, then it will use the normal
+		// next_step validation. Unless you use the option ignore_errors_on_next.
+		// This will not affect traversing titles.
+		validate_errors: true,
+		// Ignores validating errors on next. so if validate_next_step is true, but this
+		// option is set to true, it will completely ignore the error. Useful for allowing
+		// progression but showing incorrect answers (on a test).
+		ignore_errors_on_next: false,
+		// Option to ignore errors on submit (corresponds to validate_submit_all_steps)
+		ignore_errors_on_submit: false,
+		// Default validation error message. You can change it...
+		validate_error_msg: 'There was an error processing the step.',
+		// Use validate error message. If you don't use it, but you DO
+		// use the validate_errors option, the error message will be
+		// whatever alert you used on that step, if you used one.
+		validate_use_error_msg: true,
+		// If we want use alerts/notices before submit.
+		use_before_submit: true,
+		// The alert text to display to the user when the steps fail validation.
+		before_submit: 'Please complete all of the required steps before submitting.',
+		// If we want use alerts/notices before next
+		use_before_next: true,
+		// The alert text to display to the user when the step fails validation.
+		before_next: 'Please complete this step before advancing to the next step.',
+		// Add a specific class to the submit, back, next buttons to wait.
+		btn_wait_class: 'btn-wait',
+		// Specify the amount of time to wait before executing the button's task if the btn_wait_class has been applied.
+		btn_wait_time: 1000,
+		// This function callback is triggered when the event "load_after_steps"
+		// fired on the psteps object. Ideally, you'd use this on the submit button.
+		// In the function you could write an ajax call to submit the form, but then
+		// display to the user a message, maybe depending on the success or failure
+		// of the ajax call to save the form contents.
+		load_after_steps: function() {},
+		//lichuan add for ajax call back
+		btn_wait_ajax_class: 'btn-wait-ajax',
+		ajaxDefer: function() {}
+	};
+})(jQuery);
+define("jquery.psteps", ["jquery"], function(){});
+
+/*
+Uploadify v3.2.1
+Copyright (c) 2012 Reactive Apps, Ronnie Garcia
+Released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
+
+SWFUpload: http://www.swfupload.org, http://swfupload.googlecode.com
+mmSWFUpload 1.0: Flash upload dialog - http://profandesign.se/swfupload/,  http://www.vinterwebb.se/
+SWFUpload is (c) 2006-2007 Lars Huring, Olov Nilzén and Mammon Media and is released under the MIT License:
+http://www.opensource.org/licenses/mit-license.php
+SWFUpload 2 is (c) 2007-2008 Jake Roberts and is released under the MIT License:
+http://www.opensource.org/licenses/mit-license.php
+
+SWFObject v2.2 <http://code.google.com/p/swfobject/> 
+is released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
+*/
+;var swfobject=function(){var aq="undefined",aD="object",ab="Shockwave Flash",X="ShockwaveFlash.ShockwaveFlash",aE="application/x-shockwave-flash",ac="SWFObjectExprInst",ax="onreadystatechange",af=window,aL=document,aB=navigator,aa=false,Z=[aN],aG=[],ag=[],al=[],aJ,ad,ap,at,ak=false,aU=false,aH,an,aI=true,ah=function(){var a=typeof aL.getElementById!=aq&&typeof aL.getElementsByTagName!=aq&&typeof aL.createElement!=aq,e=aB.userAgent.toLowerCase(),c=aB.platform.toLowerCase(),h=c?/win/.test(c):/win/.test(e),j=c?/mac/.test(c):/mac/.test(e),g=/webkit/.test(e)?parseFloat(e.replace(/^.*webkit\/(\d+(\.\d+)?).*$/,"$1")):false,d=!+"\v1",f=[0,0,0],k=null;if(typeof aB.plugins!=aq&&typeof aB.plugins[ab]==aD){k=aB.plugins[ab].description;if(k&&!(typeof aB.mimeTypes!=aq&&aB.mimeTypes[aE]&&!aB.mimeTypes[aE].enabledPlugin)){aa=true;d=false;k=k.replace(/^.*\s+(\S+\s+\S+$)/,"$1");f[0]=parseInt(k.replace(/^(.*)\..*$/,"$1"),10);f[1]=parseInt(k.replace(/^.*\.(.*)\s.*$/,"$1"),10);f[2]=/[a-zA-Z]/.test(k)?parseInt(k.replace(/^.*[a-zA-Z]+(.*)$/,"$1"),10):0;}}else{if(typeof af.ActiveXObject!=aq){try{var i=new ActiveXObject(X);if(i){k=i.GetVariable("$version");if(k){d=true;k=k.split(" ")[1].split(",");f=[parseInt(k[0],10),parseInt(k[1],10),parseInt(k[2],10)];}}}catch(b){}}}return{w3:a,pv:f,wk:g,ie:d,win:h,mac:j};}(),aK=function(){if(!ah.w3){return;}if((typeof aL.readyState!=aq&&aL.readyState=="complete")||(typeof aL.readyState==aq&&(aL.getElementsByTagName("body")[0]||aL.body))){aP();}if(!ak){if(typeof aL.addEventListener!=aq){aL.addEventListener("DOMContentLoaded",aP,false);}if(ah.ie&&ah.win){aL.attachEvent(ax,function(){if(aL.readyState=="complete"){aL.detachEvent(ax,arguments.callee);aP();}});if(af==top){(function(){if(ak){return;}try{aL.documentElement.doScroll("left");}catch(a){setTimeout(arguments.callee,0);return;}aP();})();}}if(ah.wk){(function(){if(ak){return;}if(!/loaded|complete/.test(aL.readyState)){setTimeout(arguments.callee,0);return;}aP();})();}aC(aP);}}();function aP(){if(ak){return;}try{var b=aL.getElementsByTagName("body")[0].appendChild(ar("span"));b.parentNode.removeChild(b);}catch(a){return;}ak=true;var d=Z.length;for(var c=0;c<d;c++){Z[c]();}}function aj(a){if(ak){a();}else{Z[Z.length]=a;}}function aC(a){if(typeof af.addEventListener!=aq){af.addEventListener("load",a,false);}else{if(typeof aL.addEventListener!=aq){aL.addEventListener("load",a,false);}else{if(typeof af.attachEvent!=aq){aM(af,"onload",a);}else{if(typeof af.onload=="function"){var b=af.onload;af.onload=function(){b();a();};}else{af.onload=a;}}}}}function aN(){if(aa){Y();}else{am();}}function Y(){var d=aL.getElementsByTagName("body")[0];var b=ar(aD);b.setAttribute("type",aE);var a=d.appendChild(b);if(a){var c=0;(function(){if(typeof a.GetVariable!=aq){var e=a.GetVariable("$version");if(e){e=e.split(" ")[1].split(",");ah.pv=[parseInt(e[0],10),parseInt(e[1],10),parseInt(e[2],10)];}}else{if(c<10){c++;setTimeout(arguments.callee,10);return;}}d.removeChild(b);a=null;am();})();}else{am();}}function am(){var g=aG.length;if(g>0){for(var h=0;h<g;h++){var c=aG[h].id;var l=aG[h].callbackFn;var a={success:false,id:c};if(ah.pv[0]>0){var i=aS(c);if(i){if(ao(aG[h].swfVersion)&&!(ah.wk&&ah.wk<312)){ay(c,true);if(l){a.success=true;a.ref=av(c);l(a);}}else{if(aG[h].expressInstall&&au()){var e={};e.data=aG[h].expressInstall;e.width=i.getAttribute("width")||"0";e.height=i.getAttribute("height")||"0";if(i.getAttribute("class")){e.styleclass=i.getAttribute("class");}if(i.getAttribute("align")){e.align=i.getAttribute("align");}var f={};var d=i.getElementsByTagName("param");var k=d.length;for(var j=0;j<k;j++){if(d[j].getAttribute("name").toLowerCase()!="movie"){f[d[j].getAttribute("name")]=d[j].getAttribute("value");}}ae(e,f,c,l);}else{aF(i);if(l){l(a);}}}}}else{ay(c,true);if(l){var b=av(c);if(b&&typeof b.SetVariable!=aq){a.success=true;a.ref=b;}l(a);}}}}}function av(b){var d=null;var c=aS(b);if(c&&c.nodeName=="OBJECT"){if(typeof c.SetVariable!=aq){d=c;}else{var a=c.getElementsByTagName(aD)[0];if(a){d=a;}}}return d;}function au(){return !aU&&ao("6.0.65")&&(ah.win||ah.mac)&&!(ah.wk&&ah.wk<312);}function ae(f,d,h,e){aU=true;ap=e||null;at={success:false,id:h};var a=aS(h);if(a){if(a.nodeName=="OBJECT"){aJ=aO(a);ad=null;}else{aJ=a;ad=h;}f.id=ac;if(typeof f.width==aq||(!/%$/.test(f.width)&&parseInt(f.width,10)<310)){f.width="310";}if(typeof f.height==aq||(!/%$/.test(f.height)&&parseInt(f.height,10)<137)){f.height="137";}aL.title=aL.title.slice(0,47)+" - Flash Player Installation";var b=ah.ie&&ah.win?"ActiveX":"PlugIn",c="MMredirectURL="+af.location.toString().replace(/&/g,"%26")+"&MMplayerType="+b+"&MMdoctitle="+aL.title;if(typeof d.flashvars!=aq){d.flashvars+="&"+c;}else{d.flashvars=c;}if(ah.ie&&ah.win&&a.readyState!=4){var g=ar("div");h+="SWFObjectNew";g.setAttribute("id",h);a.parentNode.insertBefore(g,a);a.style.display="none";(function(){if(a.readyState==4){a.parentNode.removeChild(a);}else{setTimeout(arguments.callee,10);}})();}aA(f,d,h);}}function aF(a){if(ah.ie&&ah.win&&a.readyState!=4){var b=ar("div");a.parentNode.insertBefore(b,a);b.parentNode.replaceChild(aO(a),b);a.style.display="none";(function(){if(a.readyState==4){a.parentNode.removeChild(a);}else{setTimeout(arguments.callee,10);}})();}else{a.parentNode.replaceChild(aO(a),a);}}function aO(b){var d=ar("div");if(ah.win&&ah.ie){d.innerHTML=b.innerHTML;}else{var e=b.getElementsByTagName(aD)[0];if(e){var a=e.childNodes;if(a){var f=a.length;for(var c=0;c<f;c++){if(!(a[c].nodeType==1&&a[c].nodeName=="PARAM")&&!(a[c].nodeType==8)){d.appendChild(a[c].cloneNode(true));}}}}}return d;}function aA(e,g,c){var d,a=aS(c);if(ah.wk&&ah.wk<312){return d;}if(a){if(typeof e.id==aq){e.id=c;}if(ah.ie&&ah.win){var f="";for(var i in e){if(e[i]!=Object.prototype[i]){if(i.toLowerCase()=="data"){g.movie=e[i];}else{if(i.toLowerCase()=="styleclass"){f+=' class="'+e[i]+'"';}else{if(i.toLowerCase()!="classid"){f+=" "+i+'="'+e[i]+'"';}}}}}var h="";for(var j in g){if(g[j]!=Object.prototype[j]){h+='<param name="'+j+'" value="'+g[j]+'" />';}}a.outerHTML='<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"'+f+">"+h+"</object>";ag[ag.length]=e.id;d=aS(e.id);}else{var b=ar(aD);b.setAttribute("type",aE);for(var k in e){if(e[k]!=Object.prototype[k]){if(k.toLowerCase()=="styleclass"){b.setAttribute("class",e[k]);}else{if(k.toLowerCase()!="classid"){b.setAttribute(k,e[k]);}}}}for(var l in g){if(g[l]!=Object.prototype[l]&&l.toLowerCase()!="movie"){aQ(b,l,g[l]);}}a.parentNode.replaceChild(b,a);d=b;}}return d;}function aQ(b,d,c){var a=ar("param");a.setAttribute("name",d);a.setAttribute("value",c);b.appendChild(a);}function aw(a){var b=aS(a);if(b&&b.nodeName=="OBJECT"){if(ah.ie&&ah.win){b.style.display="none";(function(){if(b.readyState==4){aT(a);}else{setTimeout(arguments.callee,10);}})();}else{b.parentNode.removeChild(b);}}}function aT(a){var b=aS(a);if(b){for(var c in b){if(typeof b[c]=="function"){b[c]=null;}}b.parentNode.removeChild(b);}}function aS(a){var c=null;try{c=aL.getElementById(a);}catch(b){}return c;}function ar(a){return aL.createElement(a);}function aM(a,c,b){a.attachEvent(c,b);al[al.length]=[a,c,b];}function ao(a){var b=ah.pv,c=a.split(".");c[0]=parseInt(c[0],10);c[1]=parseInt(c[1],10)||0;c[2]=parseInt(c[2],10)||0;return(b[0]>c[0]||(b[0]==c[0]&&b[1]>c[1])||(b[0]==c[0]&&b[1]==c[1]&&b[2]>=c[2]))?true:false;}function az(b,f,a,c){if(ah.ie&&ah.mac){return;}var e=aL.getElementsByTagName("head")[0];if(!e){return;}var g=(a&&typeof a=="string")?a:"screen";if(c){aH=null;an=null;}if(!aH||an!=g){var d=ar("style");d.setAttribute("type","text/css");d.setAttribute("media",g);aH=e.appendChild(d);if(ah.ie&&ah.win&&typeof aL.styleSheets!=aq&&aL.styleSheets.length>0){aH=aL.styleSheets[aL.styleSheets.length-1];}an=g;}if(ah.ie&&ah.win){if(aH&&typeof aH.addRule==aD){aH.addRule(b,f);}}else{if(aH&&typeof aL.createTextNode!=aq){aH.appendChild(aL.createTextNode(b+" {"+f+"}"));}}}function ay(a,c){if(!aI){return;}var b=c?"visible":"hidden";if(ak&&aS(a)){aS(a).style.visibility=b;}else{az("#"+a,"visibility:"+b);}}function ai(b){var a=/[\\\"<>\.;]/;var c=a.exec(b)!=null;return c&&typeof encodeURIComponent!=aq?encodeURIComponent(b):b;}var aR=function(){if(ah.ie&&ah.win){window.attachEvent("onunload",function(){var a=al.length;for(var b=0;b<a;b++){al[b][0].detachEvent(al[b][1],al[b][2]);}var d=ag.length;for(var c=0;c<d;c++){aw(ag[c]);}for(var e in ah){ah[e]=null;}ah=null;for(var f in swfobject){swfobject[f]=null;}swfobject=null;});}}();return{registerObject:function(a,e,c,b){if(ah.w3&&a&&e){var d={};d.id=a;d.swfVersion=e;d.expressInstall=c;d.callbackFn=b;aG[aG.length]=d;ay(a,false);}else{if(b){b({success:false,id:a});}}},getObjectById:function(a){if(ah.w3){return av(a);}},embedSWF:function(k,e,h,f,c,a,b,i,g,j){var d={success:false,id:e};if(ah.w3&&!(ah.wk&&ah.wk<312)&&k&&e&&h&&f&&c){ay(e,false);aj(function(){h+="";f+="";var q={};if(g&&typeof g===aD){for(var o in g){q[o]=g[o];}}q.data=k;q.width=h;q.height=f;var n={};if(i&&typeof i===aD){for(var p in i){n[p]=i[p];}}if(b&&typeof b===aD){for(var l in b){if(typeof n.flashvars!=aq){n.flashvars+="&"+l+"="+b[l];}else{n.flashvars=l+"="+b[l];}}}if(ao(c)){var m=aA(q,n,e);if(q.id==e){ay(e,true);}d.success=true;d.ref=m;}else{if(a&&au()){q.data=a;ae(q,n,e,j);return;}else{ay(e,true);}}if(j){j(d);}});}else{if(j){j(d);}}},switchOffAutoHideShow:function(){aI=false;},ua:ah,getFlashPlayerVersion:function(){return{major:ah.pv[0],minor:ah.pv[1],release:ah.pv[2]};},hasFlashPlayerVersion:ao,createSWF:function(a,b,c){if(ah.w3){return aA(a,b,c);}else{return undefined;}},showExpressInstall:function(b,a,d,c){if(ah.w3&&au()){ae(b,a,d,c);}},removeSWF:function(a){if(ah.w3){aw(a);}},createCSS:function(b,a,c,d){if(ah.w3){az(b,a,c,d);}},addDomLoadEvent:aj,addLoadEvent:aC,getQueryParamValue:function(b){var a=aL.location.search||aL.location.hash;if(a){if(/\?/.test(a)){a=a.split("?")[1];}if(b==null){return ai(a);}var c=a.split("&");for(var d=0;d<c.length;d++){if(c[d].substring(0,c[d].indexOf("="))==b){return ai(c[d].substring((c[d].indexOf("=")+1)));}}}return"";},expressInstallCallback:function(){if(aU){var a=aS(ac);if(a&&aJ){a.parentNode.replaceChild(aJ,a);if(ad){ay(ad,true);if(ah.ie&&ah.win){aJ.style.display="block";}}if(ap){ap(at);}}aU=false;}}};}();var SWFUpload;if(SWFUpload==undefined){SWFUpload=function(b){this.initSWFUpload(b);};}SWFUpload.prototype.initSWFUpload=function(c){try{this.customSettings={};this.settings=c;this.eventQueue=[];this.movieName="SWFUpload_"+SWFUpload.movieCount++;this.movieElement=null;SWFUpload.instances[this.movieName]=this;this.initSettings();this.loadFlash();this.displayDebugInfo();}catch(d){delete SWFUpload.instances[this.movieName];throw d;}};SWFUpload.instances={};SWFUpload.movieCount=0;SWFUpload.version="2.2.0 2009-03-25";SWFUpload.QUEUE_ERROR={QUEUE_LIMIT_EXCEEDED:-100,FILE_EXCEEDS_SIZE_LIMIT:-110,ZERO_BYTE_FILE:-120,INVALID_FILETYPE:-130};SWFUpload.UPLOAD_ERROR={HTTP_ERROR:-200,MISSING_UPLOAD_URL:-210,IO_ERROR:-220,SECURITY_ERROR:-230,UPLOAD_LIMIT_EXCEEDED:-240,UPLOAD_FAILED:-250,SPECIFIED_FILE_ID_NOT_FOUND:-260,FILE_VALIDATION_FAILED:-270,FILE_CANCELLED:-280,UPLOAD_STOPPED:-290};SWFUpload.FILE_STATUS={QUEUED:-1,IN_PROGRESS:-2,ERROR:-3,COMPLETE:-4,CANCELLED:-5};SWFUpload.BUTTON_ACTION={SELECT_FILE:-100,SELECT_FILES:-110,START_UPLOAD:-120};SWFUpload.CURSOR={ARROW:-1,HAND:-2};SWFUpload.WINDOW_MODE={WINDOW:"window",TRANSPARENT:"transparent",OPAQUE:"opaque"};SWFUpload.completeURL=function(e){if(typeof(e)!=="string"||e.match(/^https?:\/\//i)||e.match(/^\//)){return e;}var f=window.location.protocol+"//"+window.location.hostname+(window.location.port?":"+window.location.port:"");var d=window.location.pathname.lastIndexOf("/");if(d<=0){path="/";}else{path=window.location.pathname.substr(0,d)+"/";}return path+e;};SWFUpload.prototype.initSettings=function(){this.ensureDefault=function(c,d){this.settings[c]=(this.settings[c]==undefined)?d:this.settings[c];};this.ensureDefault("upload_url","");this.ensureDefault("preserve_relative_urls",false);this.ensureDefault("file_post_name","Filedata");this.ensureDefault("post_params",{});this.ensureDefault("use_query_string",false);this.ensureDefault("requeue_on_error",false);this.ensureDefault("http_success",[]);this.ensureDefault("assume_success_timeout",0);this.ensureDefault("file_types","*.*");this.ensureDefault("file_types_description","All Files");this.ensureDefault("file_size_limit",0);this.ensureDefault("file_upload_limit",0);this.ensureDefault("file_queue_limit",0);this.ensureDefault("flash_url","swfupload.swf");this.ensureDefault("prevent_swf_caching",true);this.ensureDefault("button_image_url","");this.ensureDefault("button_width",1);this.ensureDefault("button_height",1);this.ensureDefault("button_text","");this.ensureDefault("button_text_style","color: #000000; font-size: 16pt;");this.ensureDefault("button_text_top_padding",0);this.ensureDefault("button_text_left_padding",0);this.ensureDefault("button_action",SWFUpload.BUTTON_ACTION.SELECT_FILES);this.ensureDefault("button_disabled",false);this.ensureDefault("button_placeholder_id","");this.ensureDefault("button_placeholder",null);this.ensureDefault("button_cursor",SWFUpload.CURSOR.ARROW);this.ensureDefault("button_window_mode",SWFUpload.WINDOW_MODE.WINDOW);this.ensureDefault("debug",false);this.settings.debug_enabled=this.settings.debug;this.settings.return_upload_start_handler=this.returnUploadStart;this.ensureDefault("swfupload_loaded_handler",null);this.ensureDefault("file_dialog_start_handler",null);this.ensureDefault("file_queued_handler",null);this.ensureDefault("file_queue_error_handler",null);this.ensureDefault("file_dialog_complete_handler",null);this.ensureDefault("upload_start_handler",null);this.ensureDefault("upload_progress_handler",null);this.ensureDefault("upload_error_handler",null);this.ensureDefault("upload_success_handler",null);this.ensureDefault("upload_complete_handler",null);this.ensureDefault("debug_handler",this.debugMessage);this.ensureDefault("custom_settings",{});this.customSettings=this.settings.custom_settings;if(!!this.settings.prevent_swf_caching){this.settings.flash_url=this.settings.flash_url+(this.settings.flash_url.indexOf("?")<0?"?":"&")+"preventswfcaching="+new Date().getTime();}if(!this.settings.preserve_relative_urls){this.settings.upload_url=SWFUpload.completeURL(this.settings.upload_url);this.settings.button_image_url=SWFUpload.completeURL(this.settings.button_image_url);}delete this.ensureDefault;};SWFUpload.prototype.loadFlash=function(){var d,c;if(document.getElementById(this.movieName)!==null){throw"ID "+this.movieName+" is already in use. The Flash Object could not be added";}d=document.getElementById(this.settings.button_placeholder_id)||this.settings.button_placeholder;if(d==undefined){throw"Could not find the placeholder element: "+this.settings.button_placeholder_id;}c=document.createElement("div");c.innerHTML=this.getFlashHTML();d.parentNode.replaceChild(c.firstChild,d);if(window[this.movieName]==undefined){window[this.movieName]=this.getMovieElement();}};SWFUpload.prototype.getFlashHTML=function(){return['<object id="',this.movieName,'" type="application/x-shockwave-flash" data="',this.settings.flash_url,'" width="',this.settings.button_width,'" height="',this.settings.button_height,'" class="swfupload">','<param name="wmode" value="',this.settings.button_window_mode,'" />','<param name="movie" value="',this.settings.flash_url,'" />','<param name="quality" value="high" />','<param name="menu" value="false" />','<param name="allowScriptAccess" value="always" />','<param name="flashvars" value="'+this.getFlashVars()+'" />',"</object>"].join("");};SWFUpload.prototype.getFlashVars=function(){var c=this.buildParamString();var d=this.settings.http_success.join(",");return["movieName=",encodeURIComponent(this.movieName),"&amp;uploadURL=",encodeURIComponent(this.settings.upload_url),"&amp;useQueryString=",encodeURIComponent(this.settings.use_query_string),"&amp;requeueOnError=",encodeURIComponent(this.settings.requeue_on_error),"&amp;httpSuccess=",encodeURIComponent(d),"&amp;assumeSuccessTimeout=",encodeURIComponent(this.settings.assume_success_timeout),"&amp;params=",encodeURIComponent(c),"&amp;filePostName=",encodeURIComponent(this.settings.file_post_name),"&amp;fileTypes=",encodeURIComponent(this.settings.file_types),"&amp;fileTypesDescription=",encodeURIComponent(this.settings.file_types_description),"&amp;fileSizeLimit=",encodeURIComponent(this.settings.file_size_limit),"&amp;fileUploadLimit=",encodeURIComponent(this.settings.file_upload_limit),"&amp;fileQueueLimit=",encodeURIComponent(this.settings.file_queue_limit),"&amp;debugEnabled=",encodeURIComponent(this.settings.debug_enabled),"&amp;buttonImageURL=",encodeURIComponent(this.settings.button_image_url),"&amp;buttonWidth=",encodeURIComponent(this.settings.button_width),"&amp;buttonHeight=",encodeURIComponent(this.settings.button_height),"&amp;buttonText=",encodeURIComponent(this.settings.button_text),"&amp;buttonTextTopPadding=",encodeURIComponent(this.settings.button_text_top_padding),"&amp;buttonTextLeftPadding=",encodeURIComponent(this.settings.button_text_left_padding),"&amp;buttonTextStyle=",encodeURIComponent(this.settings.button_text_style),"&amp;buttonAction=",encodeURIComponent(this.settings.button_action),"&amp;buttonDisabled=",encodeURIComponent(this.settings.button_disabled),"&amp;buttonCursor=",encodeURIComponent(this.settings.button_cursor)].join("");};SWFUpload.prototype.getMovieElement=function(){if(this.movieElement==undefined){this.movieElement=document.getElementById(this.movieName);}if(this.movieElement===null){throw"Could not find Flash element";}return this.movieElement;};SWFUpload.prototype.buildParamString=function(){var f=this.settings.post_params;var d=[];if(typeof(f)==="object"){for(var e in f){if(f.hasOwnProperty(e)){d.push(encodeURIComponent(e.toString())+"="+encodeURIComponent(f[e].toString()));}}}return d.join("&amp;");};SWFUpload.prototype.destroy=function(){try{this.cancelUpload(null,false);var g=null;g=this.getMovieElement();if(g&&typeof(g.CallFunction)==="unknown"){for(var j in g){try{if(typeof(g[j])==="function"){g[j]=null;}}catch(h){}}try{g.parentNode.removeChild(g);}catch(f){}}window[this.movieName]=null;SWFUpload.instances[this.movieName]=null;delete SWFUpload.instances[this.movieName];this.movieElement=null;this.settings=null;this.customSettings=null;this.eventQueue=null;this.movieName=null;return true;}catch(i){return false;}};SWFUpload.prototype.displayDebugInfo=function(){this.debug(["---SWFUpload Instance Info---\n","Version: ",SWFUpload.version,"\n","Movie Name: ",this.movieName,"\n","Settings:\n","\t","upload_url:               ",this.settings.upload_url,"\n","\t","flash_url:                ",this.settings.flash_url,"\n","\t","use_query_string:         ",this.settings.use_query_string.toString(),"\n","\t","requeue_on_error:         ",this.settings.requeue_on_error.toString(),"\n","\t","http_success:             ",this.settings.http_success.join(", "),"\n","\t","assume_success_timeout:   ",this.settings.assume_success_timeout,"\n","\t","file_post_name:           ",this.settings.file_post_name,"\n","\t","post_params:              ",this.settings.post_params.toString(),"\n","\t","file_types:               ",this.settings.file_types,"\n","\t","file_types_description:   ",this.settings.file_types_description,"\n","\t","file_size_limit:          ",this.settings.file_size_limit,"\n","\t","file_upload_limit:        ",this.settings.file_upload_limit,"\n","\t","file_queue_limit:         ",this.settings.file_queue_limit,"\n","\t","debug:                    ",this.settings.debug.toString(),"\n","\t","prevent_swf_caching:      ",this.settings.prevent_swf_caching.toString(),"\n","\t","button_placeholder_id:    ",this.settings.button_placeholder_id.toString(),"\n","\t","button_placeholder:       ",(this.settings.button_placeholder?"Set":"Not Set"),"\n","\t","button_image_url:         ",this.settings.button_image_url.toString(),"\n","\t","button_width:             ",this.settings.button_width.toString(),"\n","\t","button_height:            ",this.settings.button_height.toString(),"\n","\t","button_text:              ",this.settings.button_text.toString(),"\n","\t","button_text_style:        ",this.settings.button_text_style.toString(),"\n","\t","button_text_top_padding:  ",this.settings.button_text_top_padding.toString(),"\n","\t","button_text_left_padding: ",this.settings.button_text_left_padding.toString(),"\n","\t","button_action:            ",this.settings.button_action.toString(),"\n","\t","button_disabled:          ",this.settings.button_disabled.toString(),"\n","\t","custom_settings:          ",this.settings.custom_settings.toString(),"\n","Event Handlers:\n","\t","swfupload_loaded_handler assigned:  ",(typeof this.settings.swfupload_loaded_handler==="function").toString(),"\n","\t","file_dialog_start_handler assigned: ",(typeof this.settings.file_dialog_start_handler==="function").toString(),"\n","\t","file_queued_handler assigned:       ",(typeof this.settings.file_queued_handler==="function").toString(),"\n","\t","file_queue_error_handler assigned:  ",(typeof this.settings.file_queue_error_handler==="function").toString(),"\n","\t","upload_start_handler assigned:      ",(typeof this.settings.upload_start_handler==="function").toString(),"\n","\t","upload_progress_handler assigned:   ",(typeof this.settings.upload_progress_handler==="function").toString(),"\n","\t","upload_error_handler assigned:      ",(typeof this.settings.upload_error_handler==="function").toString(),"\n","\t","upload_success_handler assigned:    ",(typeof this.settings.upload_success_handler==="function").toString(),"\n","\t","upload_complete_handler assigned:   ",(typeof this.settings.upload_complete_handler==="function").toString(),"\n","\t","debug_handler assigned:             ",(typeof this.settings.debug_handler==="function").toString(),"\n"].join(""));};SWFUpload.prototype.addSetting=function(d,f,e){if(f==undefined){return(this.settings[d]=e);}else{return(this.settings[d]=f);}};SWFUpload.prototype.getSetting=function(b){if(this.settings[b]!=undefined){return this.settings[b];}return"";};SWFUpload.prototype.callFlash=function(functionName,argumentArray){argumentArray=argumentArray||[];var movieElement=this.getMovieElement();var returnValue,returnString;try{returnString=movieElement.CallFunction('<invoke name="'+functionName+'" returntype="javascript">'+__flash__argumentsToXML(argumentArray,0)+"</invoke>");returnValue=eval(returnString);}catch(ex){throw"Call to "+functionName+" failed";}if(returnValue!=undefined&&typeof returnValue.post==="object"){returnValue=this.unescapeFilePostParams(returnValue);}return returnValue;};SWFUpload.prototype.selectFile=function(){this.callFlash("SelectFile");};SWFUpload.prototype.selectFiles=function(){this.callFlash("SelectFiles");};SWFUpload.prototype.startUpload=function(b){this.callFlash("StartUpload",[b]);};SWFUpload.prototype.cancelUpload=function(d,c){if(c!==false){c=true;}this.callFlash("CancelUpload",[d,c]);};SWFUpload.prototype.stopUpload=function(){this.callFlash("StopUpload");};SWFUpload.prototype.getStats=function(){return this.callFlash("GetStats");};SWFUpload.prototype.setStats=function(b){this.callFlash("SetStats",[b]);};SWFUpload.prototype.getFile=function(b){if(typeof(b)==="number"){return this.callFlash("GetFileByIndex",[b]);}else{return this.callFlash("GetFile",[b]);}};SWFUpload.prototype.addFileParam=function(e,d,f){return this.callFlash("AddFileParam",[e,d,f]);};SWFUpload.prototype.removeFileParam=function(d,c){this.callFlash("RemoveFileParam",[d,c]);};SWFUpload.prototype.setUploadURL=function(b){this.settings.upload_url=b.toString();this.callFlash("SetUploadURL",[b]);};SWFUpload.prototype.setPostParams=function(b){this.settings.post_params=b;this.callFlash("SetPostParams",[b]);};SWFUpload.prototype.addPostParam=function(d,c){this.settings.post_params[d]=c;this.callFlash("SetPostParams",[this.settings.post_params]);};SWFUpload.prototype.removePostParam=function(b){delete this.settings.post_params[b];this.callFlash("SetPostParams",[this.settings.post_params]);};SWFUpload.prototype.setFileTypes=function(d,c){this.settings.file_types=d;this.settings.file_types_description=c;this.callFlash("SetFileTypes",[d,c]);};SWFUpload.prototype.setFileSizeLimit=function(b){this.settings.file_size_limit=b;this.callFlash("SetFileSizeLimit",[b]);};SWFUpload.prototype.setFileUploadLimit=function(b){this.settings.file_upload_limit=b;this.callFlash("SetFileUploadLimit",[b]);};SWFUpload.prototype.setFileQueueLimit=function(b){this.settings.file_queue_limit=b;this.callFlash("SetFileQueueLimit",[b]);};SWFUpload.prototype.setFilePostName=function(b){this.settings.file_post_name=b;this.callFlash("SetFilePostName",[b]);};SWFUpload.prototype.setUseQueryString=function(b){this.settings.use_query_string=b;this.callFlash("SetUseQueryString",[b]);};SWFUpload.prototype.setRequeueOnError=function(b){this.settings.requeue_on_error=b;this.callFlash("SetRequeueOnError",[b]);};SWFUpload.prototype.setHTTPSuccess=function(b){if(typeof b==="string"){b=b.replace(" ","").split(",");}this.settings.http_success=b;this.callFlash("SetHTTPSuccess",[b]);};SWFUpload.prototype.setAssumeSuccessTimeout=function(b){this.settings.assume_success_timeout=b;this.callFlash("SetAssumeSuccessTimeout",[b]);};SWFUpload.prototype.setDebugEnabled=function(b){this.settings.debug_enabled=b;this.callFlash("SetDebugEnabled",[b]);};SWFUpload.prototype.setButtonImageURL=function(b){if(b==undefined){b="";}this.settings.button_image_url=b;this.callFlash("SetButtonImageURL",[b]);};SWFUpload.prototype.setButtonDimensions=function(f,e){this.settings.button_width=f;this.settings.button_height=e;var d=this.getMovieElement();if(d!=undefined){d.style.width=f+"px";d.style.height=e+"px";}this.callFlash("SetButtonDimensions",[f,e]);};SWFUpload.prototype.setButtonText=function(b){this.settings.button_text=b;this.callFlash("SetButtonText",[b]);};SWFUpload.prototype.setButtonTextPadding=function(c,d){this.settings.button_text_top_padding=d;this.settings.button_text_left_padding=c;this.callFlash("SetButtonTextPadding",[c,d]);};SWFUpload.prototype.setButtonTextStyle=function(b){this.settings.button_text_style=b;this.callFlash("SetButtonTextStyle",[b]);};SWFUpload.prototype.setButtonDisabled=function(b){this.settings.button_disabled=b;this.callFlash("SetButtonDisabled",[b]);};SWFUpload.prototype.setButtonAction=function(b){this.settings.button_action=b;this.callFlash("SetButtonAction",[b]);};SWFUpload.prototype.setButtonCursor=function(b){this.settings.button_cursor=b;this.callFlash("SetButtonCursor",[b]);};SWFUpload.prototype.queueEvent=function(d,f){if(f==undefined){f=[];}else{if(!(f instanceof Array)){f=[f];}}var e=this;if(typeof this.settings[d]==="function"){this.eventQueue.push(function(){this.settings[d].apply(this,f);});setTimeout(function(){e.executeNextEvent();},0);}else{if(this.settings[d]!==null){throw"Event handler "+d+" is unknown or is not a function";}}};SWFUpload.prototype.executeNextEvent=function(){var b=this.eventQueue?this.eventQueue.shift():null;if(typeof(b)==="function"){b.apply(this);}};SWFUpload.prototype.unescapeFilePostParams=function(l){var j=/[$]([0-9a-f]{4})/i;var i={};var k;if(l!=undefined){for(var h in l.post){if(l.post.hasOwnProperty(h)){k=h;var g;while((g=j.exec(k))!==null){k=k.replace(g[0],String.fromCharCode(parseInt("0x"+g[1],16)));}i[k]=l.post[h];}}l.post=i;}return l;};SWFUpload.prototype.testExternalInterface=function(){try{return this.callFlash("TestExternalInterface");}catch(b){return false;}};SWFUpload.prototype.flashReady=function(){var b=this.getMovieElement();if(!b){this.debug("Flash called back ready but the flash movie can't be found.");return;}this.cleanUp(b);this.queueEvent("swfupload_loaded_handler");};SWFUpload.prototype.cleanUp=function(f){try{if(this.movieElement&&typeof(f.CallFunction)==="unknown"){this.debug("Removing Flash functions hooks (this should only run in IE and should prevent memory leaks)");for(var h in f){try{if(typeof(f[h])==="function"){f[h]=null;}}catch(e){}}}}catch(g){}window.__flash__removeCallback=function(c,b){try{if(c){c[b]=null;}}catch(a){}};};SWFUpload.prototype.fileDialogStart=function(){this.queueEvent("file_dialog_start_handler");};SWFUpload.prototype.fileQueued=function(b){b=this.unescapeFilePostParams(b);this.queueEvent("file_queued_handler",b);};SWFUpload.prototype.fileQueueError=function(e,f,d){e=this.unescapeFilePostParams(e);this.queueEvent("file_queue_error_handler",[e,f,d]);};SWFUpload.prototype.fileDialogComplete=function(d,f,e){this.queueEvent("file_dialog_complete_handler",[d,f,e]);};SWFUpload.prototype.uploadStart=function(b){b=this.unescapeFilePostParams(b);this.queueEvent("return_upload_start_handler",b);};SWFUpload.prototype.returnUploadStart=function(d){var c;if(typeof this.settings.upload_start_handler==="function"){d=this.unescapeFilePostParams(d);c=this.settings.upload_start_handler.call(this,d);}else{if(this.settings.upload_start_handler!=undefined){throw"upload_start_handler must be a function";}}if(c===undefined){c=true;}c=!!c;this.callFlash("ReturnUploadStart",[c]);};SWFUpload.prototype.uploadProgress=function(e,f,d){e=this.unescapeFilePostParams(e);this.queueEvent("upload_progress_handler",[e,f,d]);};SWFUpload.prototype.uploadError=function(e,f,d){e=this.unescapeFilePostParams(e);this.queueEvent("upload_error_handler",[e,f,d]);};SWFUpload.prototype.uploadSuccess=function(d,e,f){d=this.unescapeFilePostParams(d);this.queueEvent("upload_success_handler",[d,e,f]);};SWFUpload.prototype.uploadComplete=function(b){b=this.unescapeFilePostParams(b);this.queueEvent("upload_complete_handler",b);};SWFUpload.prototype.debug=function(b){this.queueEvent("debug_handler",b);};SWFUpload.prototype.debugMessage=function(h){if(this.settings.debug){var f,g=[];if(typeof h==="object"&&typeof h.name==="string"&&typeof h.message==="string"){for(var e in h){if(h.hasOwnProperty(e)){g.push(e+": "+h[e]);}}f=g.join("\n")||"";g=f.split("\n");f="EXCEPTION: "+g.join("\nEXCEPTION: ");SWFUpload.Console.writeLine(f);}else{SWFUpload.Console.writeLine(h);}}};SWFUpload.Console={};SWFUpload.Console.writeLine=function(g){var e,f;try{e=document.getElementById("SWFUpload_Console");if(!e){f=document.createElement("form");document.getElementsByTagName("body")[0].appendChild(f);e=document.createElement("textarea");e.id="SWFUpload_Console";e.style.fontFamily="monospace";e.setAttribute("wrap","off");e.wrap="off";e.style.overflow="auto";e.style.width="700px";e.style.height="350px";e.style.margin="5px";f.appendChild(e);}e.value+=g+"\n";e.scrollTop=e.scrollHeight-e.clientHeight;}catch(h){alert("Exception: "+h.name+" Message: "+h.message);}};(function(c){var b={init:function(d,e){return this.each(function(){var n=c(this);var m=n.clone();var j=c.extend({id:n.attr("id"),swf:"uploadify.swf",uploader:"uploadify.php",auto:true,buttonClass:"",buttonCursor:"hand",buttonImage:null,buttonText:"SELECT FILES",checkExisting:false,debug:false,fileObjName:"Filedata",fileSizeLimit:0,fileTypeDesc:"All Files",fileTypeExts:"*.*",height:30,itemTemplate:false,method:"post",multi:true,formData:{},preventCaching:true,progressData:"percentage",queueID:false,queueSizeLimit:999,removeCompleted:true,removeTimeout:3,requeueErrors:false,successTimeout:30,uploadLimit:0,width:120,overrideEvents:[]},d);var g={assume_success_timeout:j.successTimeout,button_placeholder_id:j.id,button_width:j.width,button_height:j.height,button_text:null,button_text_style:null,button_text_top_padding:0,button_text_left_padding:0,button_action:(j.multi?SWFUpload.BUTTON_ACTION.SELECT_FILES:SWFUpload.BUTTON_ACTION.SELECT_FILE),button_disabled:false,button_cursor:(j.buttonCursor=="arrow"?SWFUpload.CURSOR.ARROW:SWFUpload.CURSOR.HAND),button_window_mode:SWFUpload.WINDOW_MODE.TRANSPARENT,debug:j.debug,requeue_on_error:j.requeueErrors,file_post_name:j.fileObjName,file_size_limit:j.fileSizeLimit,file_types:j.fileTypeExts,file_types_description:j.fileTypeDesc,file_queue_limit:j.queueSizeLimit,file_upload_limit:j.uploadLimit,flash_url:j.swf,prevent_swf_caching:j.preventCaching,post_params:j.formData,upload_url:j.uploader,use_query_string:(j.method=="get"),file_dialog_complete_handler:a.onDialogClose,file_dialog_start_handler:a.onDialogOpen,file_queued_handler:a.onSelect,file_queue_error_handler:a.onSelectError,swfupload_loaded_handler:j.onSWFReady,upload_complete_handler:a.onUploadComplete,upload_error_handler:a.onUploadError,upload_progress_handler:a.onUploadProgress,upload_start_handler:a.onUploadStart,upload_success_handler:a.onUploadSuccess};if(e){g=c.extend(g,e);}g=c.extend(g,j);var o=swfobject.getFlashPlayerVersion();var h=(o.major>=9);if(h){window["uploadify_"+j.id]=new SWFUpload(g);var i=window["uploadify_"+j.id];n.data("uploadify",i);var l=c("<div />",{id:j.id,"class":"uploadify",css:{height:j.height+"px",width:j.width+"px"}});c("#"+i.movieName).wrap(l);l=c("#"+j.id);l.data("uploadify",i);var f=c("<div />",{id:j.id+"-button","class":"uploadify-button "+j.buttonClass});if(j.buttonImage){f.css({"background-image":"url('"+j.buttonImage+"')","text-indent":"-9999px"});}f.html('<span class="uploadify-button-text">'+j.buttonText+"</span>").css({height:j.height+"px","line-height":j.height+"px",width:j.width+"px"});l.append(f);c("#"+i.movieName).css({position:"absolute","z-index":1});if(!j.queueID){var k=c("<div />",{id:j.id+"-queue","class":"uploadify-queue"});l.after(k);i.settings.queueID=j.id+"-queue";i.settings.defaultQueue=true;}i.queueData={files:{},filesSelected:0,filesQueued:0,filesReplaced:0,filesCancelled:0,filesErrored:0,uploadsSuccessful:0,uploadsErrored:0,averageSpeed:0,queueLength:0,queueSize:0,uploadSize:0,queueBytesUploaded:0,uploadQueue:[],errorMsg:"Some files were not added to the queue:"};i.original=m;i.wrapper=l;i.button=f;i.queue=k;if(j.onInit){j.onInit.call(n,i);}}else{if(j.onFallback){j.onFallback.call(n);}}});},cancel:function(d,f){var e=arguments;this.each(function(){var l=c(this),i=l.data("uploadify"),j=i.settings,h=-1;if(e[0]){if(e[0]=="*"){var g=i.queueData.queueLength;c("#"+j.queueID).find(".uploadify-queue-item").each(function(){h++;if(e[1]===true){i.cancelUpload(c(this).attr("id"),false);}else{i.cancelUpload(c(this).attr("id"));}c(this).find(".data").removeClass("data").html(" - Cancelled");c(this).find(".uploadify-progress-bar").remove();c(this).delay(1000+100*h).fadeOut(500,function(){c(this).remove();});});i.queueData.queueSize=0;i.queueData.queueLength=0;if(j.onClearQueue){j.onClearQueue.call(l,g);}}else{for(var m=0;m<e.length;m++){i.cancelUpload(e[m]);c("#"+e[m]).find(".data").removeClass("data").html(" - Cancelled");c("#"+e[m]).find(".uploadify-progress-bar").remove();c("#"+e[m]).delay(1000+100*m).fadeOut(500,function(){c(this).remove();});}}}else{var k=c("#"+j.queueID).find(".uploadify-queue-item").get(0);$item=c(k);i.cancelUpload($item.attr("id"));$item.find(".data").removeClass("data").html(" - Cancelled");$item.find(".uploadify-progress-bar").remove();$item.delay(1000).fadeOut(500,function(){c(this).remove();});}});},destroy:function(){this.each(function(){var f=c(this),d=f.data("uploadify"),e=d.settings;d.destroy();if(e.defaultQueue){c("#"+e.queueID).remove();}c("#"+e.id).replaceWith(d.original);if(e.onDestroy){e.onDestroy.call(this);}delete d;});},disable:function(d){this.each(function(){var g=c(this),e=g.data("uploadify"),f=e.settings;if(d){e.button.addClass("disabled");if(f.onDisable){f.onDisable.call(this);}}else{e.button.removeClass("disabled");if(f.onEnable){f.onEnable.call(this);}}e.setButtonDisabled(d);});},settings:function(e,g,h){var d=arguments;var f=g;this.each(function(){var k=c(this),i=k.data("uploadify"),j=i.settings;if(typeof(d[0])=="object"){for(var l in g){setData(l,g[l]);}}if(d.length===1){f=j[e];}else{switch(e){case"uploader":i.setUploadURL(g);break;case"formData":if(!h){g=c.extend(j.formData,g);}i.setPostParams(j.formData);break;case"method":if(g=="get"){i.setUseQueryString(true);}else{i.setUseQueryString(false);}break;case"fileObjName":i.setFilePostName(g);break;case"fileTypeExts":i.setFileTypes(g,j.fileTypeDesc);break;case"fileTypeDesc":i.setFileTypes(j.fileTypeExts,g);break;case"fileSizeLimit":i.setFileSizeLimit(g);break;case"uploadLimit":i.setFileUploadLimit(g);break;case"queueSizeLimit":i.setFileQueueLimit(g);break;case"buttonImage":i.button.css("background-image",settingValue);break;case"buttonCursor":if(g=="arrow"){i.setButtonCursor(SWFUpload.CURSOR.ARROW);}else{i.setButtonCursor(SWFUpload.CURSOR.HAND);}break;case"buttonText":c("#"+j.id+"-button").find(".uploadify-button-text").html(g);break;case"width":i.setButtonDimensions(g,j.height);break;case"height":i.setButtonDimensions(j.width,g);break;case"multi":if(g){i.setButtonAction(SWFUpload.BUTTON_ACTION.SELECT_FILES);}else{i.setButtonAction(SWFUpload.BUTTON_ACTION.SELECT_FILE);}break;}j[e]=g;}});if(d.length===1){return f;}},stop:function(){this.each(function(){var e=c(this),d=e.data("uploadify");d.queueData.averageSpeed=0;d.queueData.uploadSize=0;d.queueData.bytesUploaded=0;d.queueData.uploadQueue=[];d.stopUpload();});},upload:function(){var d=arguments;this.each(function(){var f=c(this),e=f.data("uploadify");e.queueData.averageSpeed=0;e.queueData.uploadSize=0;e.queueData.bytesUploaded=0;e.queueData.uploadQueue=[];if(d[0]){if(d[0]=="*"){e.queueData.uploadSize=e.queueData.queueSize;e.queueData.uploadQueue.push("*");e.startUpload();}else{for(var g=0;g<d.length;g++){e.queueData.uploadSize+=e.queueData.files[d[g]].size;e.queueData.uploadQueue.push(d[g]);}e.startUpload(e.queueData.uploadQueue.shift());}}else{e.startUpload();}});}};var a={onDialogOpen:function(){var d=this.settings;this.queueData.errorMsg="Some files were not added to the queue:";this.queueData.filesReplaced=0;this.queueData.filesCancelled=0;if(d.onDialogOpen){d.onDialogOpen.call(this);}},onDialogClose:function(d,f,g){var e=this.settings;this.queueData.filesErrored=d-f;this.queueData.filesSelected=d;this.queueData.filesQueued=f-this.queueData.filesCancelled;this.queueData.queueLength=g;if(c.inArray("onDialogClose",e.overrideEvents)<0){if(this.queueData.filesErrored>0){alert(this.queueData.errorMsg);}}if(e.onDialogClose){e.onDialogClose.call(this,this.queueData);}if(e.auto){c("#"+e.id).uploadify("upload","*");}},onSelect:function(h){var i=this.settings;var f={};for(var g in this.queueData.files){f=this.queueData.files[g];if(f.uploaded!=true&&f.name==h.name){var e=confirm('The file named "'+h.name+'" is already in the queue.\nDo you want to replace the existing item in the queue?');if(!e){this.cancelUpload(h.id);this.queueData.filesCancelled++;return false;}else{c("#"+f.id).remove();this.cancelUpload(f.id);this.queueData.filesReplaced++;}}}var j=Math.round(h.size/1024);var o="KB";if(j>1000){j=Math.round(j/1000);o="MB";}var l=j.toString().split(".");j=l[0];if(l.length>1){j+="."+l[1].substr(0,2);}j+=o;var k=h.name;if(k.length>25){k=k.substr(0,25)+"...";}itemData={fileID:h.id,instanceID:i.id,fileName:k,fileSize:j};if(i.itemTemplate==false){i.itemTemplate='<div id="${fileID}" class="uploadify-queue-item">					<div class="cancel">						<a href="javascript:$(\'#${instanceID}\').uploadify(\'cancel\', \'${fileID}\')">X</a>					</div>					<span class="fileName">${fileName} (${fileSize})</span><span class="data"></span>					<div class="uploadify-progress">						<div class="uploadify-progress-bar"><!--Progress Bar--></div>					</div>				</div>';}if(c.inArray("onSelect",i.overrideEvents)<0){itemHTML=i.itemTemplate;for(var m in itemData){itemHTML=itemHTML.replace(new RegExp("\\$\\{"+m+"\\}","g"),itemData[m]);}c("#"+i.queueID).append(itemHTML);}this.queueData.queueSize+=h.size;this.queueData.files[h.id]=h;if(i.onSelect){i.onSelect.apply(this,arguments);}},onSelectError:function(d,g,f){var e=this.settings;if(c.inArray("onSelectError",e.overrideEvents)<0){switch(g){case SWFUpload.QUEUE_ERROR.QUEUE_LIMIT_EXCEEDED:if(e.queueSizeLimit>f){this.queueData.errorMsg+="\nThe number of files selected exceeds the remaining upload limit ("+f+").";}else{this.queueData.errorMsg+="\nThe number of files selected exceeds the queue size limit ("+e.queueSizeLimit+").";}break;case SWFUpload.QUEUE_ERROR.FILE_EXCEEDS_SIZE_LIMIT:this.queueData.errorMsg+='\nThe file "'+d.name+'" exceeds the size limit ('+e.fileSizeLimit+").";break;case SWFUpload.QUEUE_ERROR.ZERO_BYTE_FILE:this.queueData.errorMsg+='\nThe file "'+d.name+'" is empty.';break;case SWFUpload.QUEUE_ERROR.FILE_EXCEEDS_SIZE_LIMIT:this.queueData.errorMsg+='\nThe file "'+d.name+'" is not an accepted file type ('+e.fileTypeDesc+").";break;}}if(g!=SWFUpload.QUEUE_ERROR.QUEUE_LIMIT_EXCEEDED){delete this.queueData.files[d.id];}if(e.onSelectError){e.onSelectError.apply(this,arguments);}},onQueueComplete:function(){if(this.settings.onQueueComplete){this.settings.onQueueComplete.call(this,this.settings.queueData);}},onUploadComplete:function(f){var g=this.settings,d=this;var e=this.getStats();this.queueData.queueLength=e.files_queued;if(this.queueData.uploadQueue[0]=="*"){if(this.queueData.queueLength>0){this.startUpload();}else{this.queueData.uploadQueue=[];if(g.onQueueComplete){g.onQueueComplete.call(this,this.queueData);}}}else{if(this.queueData.uploadQueue.length>0){this.startUpload(this.queueData.uploadQueue.shift());}else{this.queueData.uploadQueue=[];if(g.onQueueComplete){g.onQueueComplete.call(this,this.queueData);}}}if(c.inArray("onUploadComplete",g.overrideEvents)<0){if(g.removeCompleted){switch(f.filestatus){case SWFUpload.FILE_STATUS.COMPLETE:setTimeout(function(){if(c("#"+f.id)){d.queueData.queueSize-=f.size;d.queueData.queueLength-=1;delete d.queueData.files[f.id];c("#"+f.id).fadeOut(500,function(){c(this).remove();});}},g.removeTimeout*1000);break;case SWFUpload.FILE_STATUS.ERROR:if(!g.requeueErrors){setTimeout(function(){if(c("#"+f.id)){d.queueData.queueSize-=f.size;d.queueData.queueLength-=1;delete d.queueData.files[f.id];c("#"+f.id).fadeOut(500,function(){c(this).remove();});}},g.removeTimeout*1000);}break;}}else{f.uploaded=true;}}if(g.onUploadComplete){g.onUploadComplete.call(this,f);}},onUploadError:function(e,i,h){var f=this.settings;var g="Error";switch(i){case SWFUpload.UPLOAD_ERROR.HTTP_ERROR:g="HTTP Error ("+h+")";break;case SWFUpload.UPLOAD_ERROR.MISSING_UPLOAD_URL:g="Missing Upload URL";break;case SWFUpload.UPLOAD_ERROR.IO_ERROR:g="IO Error";break;case SWFUpload.UPLOAD_ERROR.SECURITY_ERROR:g="Security Error";break;case SWFUpload.UPLOAD_ERROR.UPLOAD_LIMIT_EXCEEDED:alert("The upload limit has been reached ("+h+").");g="Exceeds Upload Limit";break;case SWFUpload.UPLOAD_ERROR.UPLOAD_FAILED:g="Failed";break;case SWFUpload.UPLOAD_ERROR.SPECIFIED_FILE_ID_NOT_FOUND:break;case SWFUpload.UPLOAD_ERROR.FILE_VALIDATION_FAILED:g="Validation Error";break;case SWFUpload.UPLOAD_ERROR.FILE_CANCELLED:g="Cancelled";this.queueData.queueSize-=e.size;this.queueData.queueLength-=1;if(e.status==SWFUpload.FILE_STATUS.IN_PROGRESS||c.inArray(e.id,this.queueData.uploadQueue)>=0){this.queueData.uploadSize-=e.size;}if(f.onCancel){f.onCancel.call(this,e);}delete this.queueData.files[e.id];break;case SWFUpload.UPLOAD_ERROR.UPLOAD_STOPPED:g="Stopped";break;}if(c.inArray("onUploadError",f.overrideEvents)<0){if(i!=SWFUpload.UPLOAD_ERROR.FILE_CANCELLED&&i!=SWFUpload.UPLOAD_ERROR.UPLOAD_STOPPED){c("#"+e.id).addClass("uploadify-error");}c("#"+e.id).find(".uploadify-progress-bar").css("width","1px");if(i!=SWFUpload.UPLOAD_ERROR.SPECIFIED_FILE_ID_NOT_FOUND&&e.status!=SWFUpload.FILE_STATUS.COMPLETE){c("#"+e.id).find(".data").html(" - "+g);}}var d=this.getStats();this.queueData.uploadsErrored=d.upload_errors;if(f.onUploadError){f.onUploadError.call(this,e,i,h,g);}},onUploadProgress:function(g,m,j){var h=this.settings;var e=new Date();var n=e.getTime();var k=n-this.timer;if(k>500){this.timer=n;}var i=m-this.bytesLoaded;this.bytesLoaded=m;var d=this.queueData.queueBytesUploaded+m;var p=Math.round(m/j*100);var o="KB/s";var l=0;var f=(i/1024)/(k/1000);f=Math.floor(f*10)/10;if(this.queueData.averageSpeed>0){this.queueData.averageSpeed=Math.floor((this.queueData.averageSpeed+f)/2);}else{this.queueData.averageSpeed=Math.floor(f);}if(f>1000){l=(f*0.001);this.queueData.averageSpeed=Math.floor(l);o="MB/s";}if(c.inArray("onUploadProgress",h.overrideEvents)<0){if(h.progressData=="percentage"){c("#"+g.id).find(".data").html(" - "+p+"%");}else{if(h.progressData=="speed"&&k>500){c("#"+g.id).find(".data").html(" - "+this.queueData.averageSpeed+o);}}c("#"+g.id).find(".uploadify-progress-bar").css("width",p+"%");}if(h.onUploadProgress){h.onUploadProgress.call(this,g,m,j,d,this.queueData.uploadSize);}},onUploadStart:function(d){var e=this.settings;var f=new Date();this.timer=f.getTime();this.bytesLoaded=0;if(this.queueData.uploadQueue.length==0){this.queueData.uploadSize=d.size;}if(e.checkExisting){c.ajax({type:"POST",async:false,url:e.checkExisting,data:{filename:d.name},success:function(h){if(h==1){var g=confirm('A file with the name "'+d.name+'" already exists on the server.\nWould you like to replace the existing file?');if(!g){this.cancelUpload(d.id);c("#"+d.id).remove();if(this.queueData.uploadQueue.length>0&&this.queueData.queueLength>0){if(this.queueData.uploadQueue[0]=="*"){this.startUpload();}else{this.startUpload(this.queueData.uploadQueue.shift());}}}}}});}if(e.onUploadStart){e.onUploadStart.call(this,d);}},onUploadSuccess:function(f,h,d){var g=this.settings;var e=this.getStats();this.queueData.uploadsSuccessful=e.successful_uploads;this.queueData.queueBytesUploaded+=f.size;if(c.inArray("onUploadSuccess",g.overrideEvents)<0){c("#"+f.id).find(".data").html(" - Complete");}if(g.onUploadSuccess){g.onUploadSuccess.call(this,f,h,d);}}};c.fn.uploadify=function(d){if(b[d]){return b[d].apply(this,Array.prototype.slice.call(arguments,1));}else{if(typeof d==="object"||!d){return b.init.apply(this,arguments);}else{c.error("The method "+d+" does not exist in $.uploadify");}}};})($);
+define("jquery.uploadify", ["jquery"], function(){});
+
+/*
+ * imgAreaSelect jQuery plugin
+ * version 0.9.10
+ *
+ * Copyright (c) 2008-2013 Michal Wojciechowski (odyniec.net)
+ *
+ * Dual licensed under the MIT (MIT-LICENSE.txt)
+ * and GPL (GPL-LICENSE.txt) licenses.
+ *
+ * http://odyniec.net/projects/imgareaselect/
+ *
+ */
+
+(function($) {
+
+/*
+ * Math functions will be used extensively, so it's convenient to make a few
+ * shortcuts
+ */    
+var abs = Math.abs,
+    max = Math.max,
+    min = Math.min,
+    round = Math.round;
+
+/**
+ * Create a new HTML div element
+ * 
+ * @return A jQuery object representing the new element
+ */
+function div() {
+    return $('<div/>');
+}
+
+/**
+ * imgAreaSelect initialization
+ * 
+ * @param img
+ *            A HTML image element to attach the plugin to
+ * @param options
+ *            An options object
+ */
+$.imgAreaSelect = function (img, options) {
+    var 
+        /* jQuery object representing the image */ 
+        $img = $(img),
+        
+        /* Has the image finished loading? */
+        imgLoaded,
+        
+        /* Plugin elements */
+        
+        /* Container box */
+        $box = div(),
+        /* Selection area */
+        $area = div(),
+        /* Border (four divs) */
+        $border = div().add(div()).add(div()).add(div()),
+        /* Outer area (four divs) */
+        $outer = div().add(div()).add(div()).add(div()),
+        /* Handles (empty by default, initialized in setOptions()) */
+        $handles = $([]),
+        
+        /*
+         * Additional element to work around a cursor problem in Opera
+         * (explained later)
+         */
+        $areaOpera,
+        
+        /* Image position (relative to viewport) */
+        left, top,
+        
+        /* Image offset (as returned by .offset()) */
+        imgOfs = { left: 0, top: 0 },
+        
+        /* Image dimensions (as returned by .width() and .height()) */
+        imgWidth, imgHeight,
+        
+        /*
+         * jQuery object representing the parent element that the plugin
+         * elements are appended to
+         */
+        $parent,
+        
+        /* Parent element offset (as returned by .offset()) */
+        parOfs = { left: 0, top: 0 },
+        
+        /* Base z-index for plugin elements */
+        zIndex = 0,
+                
+        /* Plugin elements position */
+        position = 'absolute',
+        
+        /* X/Y coordinates of the starting point for move/resize operations */ 
+        startX, startY,
+        
+        /* Horizontal and vertical scaling factors */
+        scaleX, scaleY,
+        
+        /* Current resize mode ("nw", "se", etc.) */
+        resize,
+        
+        /* Selection area constraints */
+        minWidth, minHeight, maxWidth, maxHeight,
+        
+        /* Aspect ratio to maintain (floating point number) */
+        aspectRatio,
+        
+        /* Are the plugin elements currently displayed? */
+        shown,
+        
+        /* Current selection (relative to parent element) */
+        x1, y1, x2, y2,
+        
+        /* Current selection (relative to scaled image) */
+        selection = { x1: 0, y1: 0, x2: 0, y2: 0, width: 0, height: 0 },
+        
+        /* Document element */
+        docElem = document.documentElement,
+
+        /* User agent */
+        ua = navigator.userAgent,
+        
+        /* Various helper variables used throughout the code */ 
+        $p, d, i, o, w, h, adjusted;
+
+    /*
+     * Translate selection coordinates (relative to scaled image) to viewport
+     * coordinates (relative to parent element)
+     */
+    
+    /**
+     * Translate selection X to viewport X
+     * 
+     * @param x
+     *            Selection X
+     * @return Viewport X
+     */
+    function viewX(x) {
+        return x + imgOfs.left - parOfs.left;
+    }
+
+    /**
+     * Translate selection Y to viewport Y
+     * 
+     * @param y
+     *            Selection Y
+     * @return Viewport Y
+     */
+    function viewY(y) {
+        return y + imgOfs.top - parOfs.top;
+    }
+
+    /*
+     * Translate viewport coordinates to selection coordinates
+     */
+    
+    /**
+     * Translate viewport X to selection X
+     * 
+     * @param x
+     *            Viewport X
+     * @return Selection X
+     */
+    function selX(x) {
+        return x - imgOfs.left + parOfs.left;
+    }
+
+    /**
+     * Translate viewport Y to selection Y
+     * 
+     * @param y
+     *            Viewport Y
+     * @return Selection Y
+     */
+    function selY(y) {
+        return y - imgOfs.top + parOfs.top;
+    }
+    
+    /*
+     * Translate event coordinates (relative to document) to viewport
+     * coordinates
+     */
+    
+    /**
+     * Get event X and translate it to viewport X
+     * 
+     * @param event
+     *            The event object
+     * @return Viewport X
+     */
+    function evX(event) {
+        return event.pageX - parOfs.left;
+    }
+
+    /**
+     * Get event Y and translate it to viewport Y
+     * 
+     * @param event
+     *            The event object
+     * @return Viewport Y
+     */
+    function evY(event) {
+        return event.pageY - parOfs.top;
+    }
+
+    /**
+     * Get the current selection
+     * 
+     * @param noScale
+     *            If set to <code>true</code>, scaling is not applied to the
+     *            returned selection
+     * @return Selection object
+     */
+    function getSelection(noScale) {
+        var sx = noScale || scaleX, sy = noScale || scaleY;
+        
+        return { x1: round(selection.x1 * sx),
+            y1: round(selection.y1 * sy),
+            x2: round(selection.x2 * sx),
+            y2: round(selection.y2 * sy),
+            width: round(selection.x2 * sx) - round(selection.x1 * sx),
+            height: round(selection.y2 * sy) - round(selection.y1 * sy) };
+    }
+    
+    /**
+     * Set the current selection
+     * 
+     * @param x1
+     *            X coordinate of the upper left corner of the selection area
+     * @param y1
+     *            Y coordinate of the upper left corner of the selection area
+     * @param x2
+     *            X coordinate of the lower right corner of the selection area
+     * @param y2
+     *            Y coordinate of the lower right corner of the selection area
+     * @param noScale
+     *            If set to <code>true</code>, scaling is not applied to the
+     *            new selection
+     */
+    function setSelection(x1, y1, x2, y2, noScale) {
+        var sx = noScale || scaleX, sy = noScale || scaleY;
+        
+        selection = {
+            x1: round(x1 / sx || 0),
+            y1: round(y1 / sy || 0),
+            x2: round(x2 / sx || 0),
+            y2: round(y2 / sy || 0)
+        };
+        
+        selection.width = selection.x2 - selection.x1;
+        selection.height = selection.y2 - selection.y1;
+    }
+
+    /**
+     * Recalculate image and parent offsets
+     */
+    function adjust() {
+        /*
+         * Do not adjust if image has not yet loaded or if width is not a
+         * positive number. The latter might happen when imgAreaSelect is put
+         * on a parent element which is then hidden.
+         */
+        if (!imgLoaded || !$img.width())
+            return;
+        
+        /*
+         * Get image offset. The .offset() method returns float values, so they
+         * need to be rounded.
+         */
+        imgOfs = { left: round($img.offset().left), top: round($img.offset().top) };
+        
+        /* Get image dimensions */
+        imgWidth = $img.innerWidth();
+        imgHeight = $img.innerHeight();
+        
+        imgOfs.top += ($img.outerHeight() - imgHeight) >> 1;
+        imgOfs.left += ($img.outerWidth() - imgWidth) >> 1;
+
+        /* Set minimum and maximum selection area dimensions */
+        minWidth = round(options.minWidth / scaleX) || 0;
+        minHeight = round(options.minHeight / scaleY) || 0;
+        maxWidth = round(min(options.maxWidth / scaleX || 1<<24, imgWidth));
+        maxHeight = round(min(options.maxHeight / scaleY || 1<<24, imgHeight));
+        
+        /*
+         * Workaround for jQuery 1.3.2 incorrect offset calculation, originally
+         * observed in Safari 3. Firefox 2 is also affected.
+         */
+        if ($().jquery == '1.3.2' && position == 'fixed' &&
+            !docElem['getBoundingClientRect'])
+        {
+            imgOfs.top += max(document.body.scrollTop, docElem.scrollTop);
+            imgOfs.left += max(document.body.scrollLeft, docElem.scrollLeft);
+        }
+
+        /* Determine parent element offset */ 
+        parOfs = /absolute|relative/.test($parent.css('position')) ?
+            { left: round($parent.offset().left) - $parent.scrollLeft(),
+                top: round($parent.offset().top) - $parent.scrollTop() } :
+            position == 'fixed' ?
+                { left: $(document).scrollLeft(), top: $(document).scrollTop() } :
+                { left: 0, top: 0 };
+                
+        left = viewX(0);
+        top = viewY(0);
+        
+        /*
+         * Check if selection area is within image boundaries, adjust if
+         * necessary
+         */
+        if (selection.x2 > imgWidth || selection.y2 > imgHeight)
+            doResize();
+    }
+
+    /**
+     * Update plugin elements
+     * 
+     * @param resetKeyPress
+     *            If set to <code>false</code>, this instance's keypress
+     *            event handler is not activated
+     */
+    function update(resetKeyPress) {
+        /* If plugin elements are hidden, do nothing */
+        if (!shown) return;
+
+        /*
+         * Set the position and size of the container box and the selection area
+         * inside it
+         */
+        $box.css({ left: viewX(selection.x1), top: viewY(selection.y1) })
+            .add($area).width(w = selection.width).height(h = selection.height);
+
+        /*
+         * Reset the position of selection area, borders, and handles (IE6/IE7
+         * position them incorrectly if we don't do this)
+         */ 
+        $area.add($border).add($handles).css({ left: 0, top: 0 });
+
+        /* Set border dimensions */
+        $border
+            .width(max(w - $border.outerWidth() + $border.innerWidth(), 0))
+            .height(max(h - $border.outerHeight() + $border.innerHeight(), 0));
+
+        /* Arrange the outer area elements */
+        $($outer[0]).css({ left: left, top: top,
+            width: selection.x1, height: imgHeight });
+        $($outer[1]).css({ left: left + selection.x1, top: top,
+            width: w, height: selection.y1 });
+        $($outer[2]).css({ left: left + selection.x2, top: top,
+            width: imgWidth - selection.x2, height: imgHeight });
+        $($outer[3]).css({ left: left + selection.x1, top: top + selection.y2,
+            width: w, height: imgHeight - selection.y2 });
+        
+        w -= $handles.outerWidth();
+        h -= $handles.outerHeight();
+        
+        /* Arrange handles */
+        switch ($handles.length) {
+        case 8:
+            $($handles[4]).css({ left: w >> 1 });
+            $($handles[5]).css({ left: w, top: h >> 1 });
+            $($handles[6]).css({ left: w >> 1, top: h });
+            $($handles[7]).css({ top: h >> 1 });
+        case 4:
+            $handles.slice(1,3).css({ left: w });
+            $handles.slice(2,4).css({ top: h });
+        }
+
+        if (resetKeyPress !== false) {
+            /*
+             * Need to reset the document keypress event handler -- unbind the
+             * current handler
+             */
+            if ($.imgAreaSelect.onKeyPress != docKeyPress)
+                $(document).unbind($.imgAreaSelect.keyPress,
+                    $.imgAreaSelect.onKeyPress);
+
+            if (options.keys)
+                /*
+                 * Set the document keypress event handler to this instance's
+                 * docKeyPress() function
+                 */
+                $(document)[$.imgAreaSelect.keyPress](
+                    $.imgAreaSelect.onKeyPress = docKeyPress);
+        }
+
+        /*
+         * Internet Explorer displays 1px-wide dashed borders incorrectly by
+         * filling the spaces between dashes with white. Toggling the margin
+         * property between 0 and "auto" fixes this in IE6 and IE7 (IE8 is still
+         * broken). This workaround is not perfect, as it requires setTimeout()
+         * and thus causes the border to flicker a bit, but I haven't found a
+         * better solution.
+         * 
+         * Note: This only happens with CSS borders, set with the borderWidth,
+         * borderOpacity, borderColor1, and borderColor2 options (which are now
+         * deprecated). Borders created with GIF background images are fine.
+         */ 
+        if (msie && $border.outerWidth() - $border.innerWidth() == 2) {
+            $border.css('margin', 0);
+            setTimeout(function () { $border.css('margin', 'auto'); }, 0);
+        }
+    }
+    
+    /**
+     * Do the complete update sequence: recalculate offsets, update the
+     * elements, and set the correct values of x1, y1, x2, and y2.
+     * 
+     * @param resetKeyPress
+     *            If set to <code>false</code>, this instance's keypress
+     *            event handler is not activated
+     */
+    function doUpdate(resetKeyPress) {
+        adjust();
+        update(resetKeyPress);
+        x1 = viewX(selection.x1); y1 = viewY(selection.y1);
+        x2 = viewX(selection.x2); y2 = viewY(selection.y2);
+    }
+    
+    /**
+     * Hide or fade out an element (or multiple elements)
+     * 
+     * @param $elem
+     *            A jQuery object containing the element(s) to hide/fade out
+     * @param fn
+     *            Callback function to be called when fadeOut() completes
+     */
+    function hide($elem, fn) {
+        options.fadeSpeed ? $elem.fadeOut(options.fadeSpeed, fn) : $elem.hide(); 
+    }
+
+    /**
+     * Selection area mousemove event handler
+     * 
+     * @param event
+     *            The event object
+     */
+    function areaMouseMove(event) {
+        var x = selX(evX(event)) - selection.x1,
+            y = selY(evY(event)) - selection.y1;
+        
+        if (!adjusted) {
+            adjust();
+            adjusted = true;
+
+            $box.one('mouseout', function () { adjusted = false; });
+        }
+
+        /* Clear the resize mode */
+        resize = '';
+
+        if (options.resizable) {
+            /*
+             * Check if the mouse pointer is over the resize margin area and set
+             * the resize mode accordingly
+             */
+            if (y <= options.resizeMargin)
+                resize = 'n';
+            else if (y >= selection.height - options.resizeMargin)
+                resize = 's';
+            if (x <= options.resizeMargin)
+                resize += 'w';
+            else if (x >= selection.width - options.resizeMargin)
+                resize += 'e';
+        }
+
+        $box.css('cursor', resize ? resize + '-resize' :
+            options.movable ? 'move' : '');
+        if ($areaOpera)
+            $areaOpera.toggle();
+    }
+
+    /**
+     * Document mouseup event handler
+     * 
+     * @param event
+     *            The event object
+     */
+    function docMouseUp(event) {
+        /* Set back the default cursor */
+        $('body').css('cursor', '');
+        /*
+         * If autoHide is enabled, or if the selection has zero width/height,
+         * hide the selection and the outer area
+         */
+        if (options.autoHide || selection.width * selection.height == 0)
+            hide($box.add($outer), function () { $(this).hide(); });
+
+        $(document).unbind('mousemove', selectingMouseMove);
+        $box.mousemove(areaMouseMove);
+        
+        options.onSelectEnd(img, getSelection());
+    }
+
+    /**
+     * Selection area mousedown event handler
+     * 
+     * @param event
+     *            The event object
+     * @return false
+     */
+    function areaMouseDown(event) {
+        if (event.which != 1) return false;
+
+        adjust();
+
+        if (resize) {
+            /* Resize mode is in effect */
+            $('body').css('cursor', resize + '-resize');
+
+            x1 = viewX(selection[/w/.test(resize) ? 'x2' : 'x1']);
+            y1 = viewY(selection[/n/.test(resize) ? 'y2' : 'y1']);
+            
+            $(document).mousemove(selectingMouseMove)
+                .one('mouseup', docMouseUp);
+            $box.unbind('mousemove', areaMouseMove);
+        }
+        else if (options.movable) {
+            startX = left + selection.x1 - evX(event);
+            startY = top + selection.y1 - evY(event);
+
+            $box.unbind('mousemove', areaMouseMove);
+
+            $(document).mousemove(movingMouseMove)
+                .one('mouseup', function () {
+                    options.onSelectEnd(img, getSelection());
+
+                    $(document).unbind('mousemove', movingMouseMove);
+                    $box.mousemove(areaMouseMove);
+                });
+        }
+        else
+            $img.mousedown(event);
+
+        return false;
+    }
+
+    /**
+     * Adjust the x2/y2 coordinates to maintain aspect ratio (if defined)
+     * 
+     * @param xFirst
+     *            If set to <code>true</code>, calculate x2 first. Otherwise,
+     *            calculate y2 first.
+     */
+    function fixAspectRatio(xFirst) {
+        if (aspectRatio)
+            if (xFirst) {
+                x2 = max(left, min(left + imgWidth,
+                    x1 + abs(y2 - y1) * aspectRatio * (x2 > x1 || -1)));    
+                y2 = round(max(top, min(top + imgHeight,
+                    y1 + abs(x2 - x1) / aspectRatio * (y2 > y1 || -1))));
+                x2 = round(x2);
+            }
+            else {
+                y2 = max(top, min(top + imgHeight,
+                    y1 + abs(x2 - x1) / aspectRatio * (y2 > y1 || -1)));
+                x2 = round(max(left, min(left + imgWidth,
+                    x1 + abs(y2 - y1) * aspectRatio * (x2 > x1 || -1))));
+                y2 = round(y2);
+            }
+    }
+
+    /**
+     * Resize the selection area respecting the minimum/maximum dimensions and
+     * aspect ratio
+     */
+    function doResize() {
+        /*
+         * Make sure the top left corner of the selection area stays within
+         * image boundaries (it might not if the image source was dynamically
+         * changed).
+         */
+        x1 = min(x1, left + imgWidth);
+        y1 = min(y1, top + imgHeight);
+        
+        if (abs(x2 - x1) < minWidth) {
+            /* Selection width is smaller than minWidth */
+            x2 = x1 - minWidth * (x2 < x1 || -1);
+
+            if (x2 < left)
+                x1 = left + minWidth;
+            else if (x2 > left + imgWidth)
+                x1 = left + imgWidth - minWidth;
+        }
+
+        if (abs(y2 - y1) < minHeight) {
+            /* Selection height is smaller than minHeight */
+            y2 = y1 - minHeight * (y2 < y1 || -1);
+
+            if (y2 < top)
+                y1 = top + minHeight;
+            else if (y2 > top + imgHeight)
+                y1 = top + imgHeight - minHeight;
+        }
+
+        x2 = max(left, min(x2, left + imgWidth));
+        y2 = max(top, min(y2, top + imgHeight));
+        
+        fixAspectRatio(abs(x2 - x1) < abs(y2 - y1) * aspectRatio);
+
+        if (abs(x2 - x1) > maxWidth) {
+            /* Selection width is greater than maxWidth */
+            x2 = x1 - maxWidth * (x2 < x1 || -1);
+            fixAspectRatio();
+        }
+
+        if (abs(y2 - y1) > maxHeight) {
+            /* Selection height is greater than maxHeight */
+            y2 = y1 - maxHeight * (y2 < y1 || -1);
+            fixAspectRatio(true);
+        }
+
+        selection = { x1: selX(min(x1, x2)), x2: selX(max(x1, x2)),
+            y1: selY(min(y1, y2)), y2: selY(max(y1, y2)),
+            width: abs(x2 - x1), height: abs(y2 - y1) };
+
+        update();
+
+        options.onSelectChange(img, getSelection());
+    }
+
+    /**
+     * Mousemove event handler triggered when the user is selecting an area
+     * 
+     * @param event
+     *            The event object
+     * @return false
+     */
+    function selectingMouseMove(event) {
+        x2 = /w|e|^$/.test(resize) || aspectRatio ? evX(event) : viewX(selection.x2);
+        y2 = /n|s|^$/.test(resize) || aspectRatio ? evY(event) : viewY(selection.y2);
+
+        doResize();
+
+        return false;        
+    }
+
+    /**
+     * Move the selection area
+     * 
+     * @param newX1
+     *            New viewport X1
+     * @param newY1
+     *            New viewport Y1
+     */
+    function doMove(newX1, newY1) {
+        x2 = (x1 = newX1) + selection.width;
+        y2 = (y1 = newY1) + selection.height;
+
+        $.extend(selection, { x1: selX(x1), y1: selY(y1), x2: selX(x2),
+            y2: selY(y2) });
+
+        update();
+
+        options.onSelectChange(img, getSelection());
+    }
+
+    /**
+     * Mousemove event handler triggered when the selection area is being moved
+     * 
+     * @param event
+     *            The event object
+     * @return false
+     */
+    function movingMouseMove(event) {
+        x1 = max(left, min(startX + evX(event), left + imgWidth - selection.width));
+        y1 = max(top, min(startY + evY(event), top + imgHeight - selection.height));
+
+        doMove(x1, y1);
+
+        event.preventDefault();     
+        return false;
+    }
+
+    /**
+     * Start selection
+     */
+    function startSelection() {
+        $(document).unbind('mousemove', startSelection);
+        adjust();
+
+        x2 = x1;
+        y2 = y1;       
+        doResize();
+
+        resize = '';
+
+        if (!$outer.is(':visible'))
+            /* Show the plugin elements */
+            $box.add($outer).hide().fadeIn(options.fadeSpeed||0);
+
+        shown = true;
+
+        $(document).unbind('mouseup', cancelSelection)
+            .mousemove(selectingMouseMove).one('mouseup', docMouseUp);
+        $box.unbind('mousemove', areaMouseMove);
+
+        options.onSelectStart(img, getSelection());
+    }
+
+    /**
+     * Cancel selection
+     */
+    function cancelSelection() {
+        $(document).unbind('mousemove', startSelection)
+            .unbind('mouseup', cancelSelection);
+        hide($box.add($outer));
+        
+        setSelection(selX(x1), selY(y1), selX(x1), selY(y1));
+        
+        /* If this is an API call, callback functions should not be triggered */
+        if (!(this instanceof $.imgAreaSelect)) {
+            options.onSelectChange(img, getSelection());
+            options.onSelectEnd(img, getSelection());
+        }
+    }
+
+    /**
+     * Image mousedown event handler
+     * 
+     * @param event
+     *            The event object
+     * @return false
+     */
+    function imgMouseDown(event) {
+        /* Ignore the event if animation is in progress */
+        if (event.which != 1 || $outer.is(':animated')) return false;
+
+        adjust();
+        startX = x1 = evX(event);
+        startY = y1 = evY(event);
+
+        /* Selection will start when the mouse is moved */
+        $(document).mousemove(startSelection).mouseup(cancelSelection);
+
+        return false;
+    }
+    
+    /**
+     * Window resize event handler
+     */
+    function windowResize() {
+        doUpdate(false);
+    }
+
+    /**
+     * Image load event handler. This is the final part of the initialization
+     * process.
+     */
+    function imgLoad() {
+        imgLoaded = true;
+
+        /* Set options */
+        setOptions(options = $.extend({
+            classPrefix: 'imgareaselect',
+            movable: true,
+            parent: 'body',
+            resizable: true,
+            resizeMargin: 10,
+            onInit: function () {},
+            onSelectStart: function () {},
+            onSelectChange: function () {},
+            onSelectEnd: function () {}
+        }, options));
+
+        $box.add($outer).css({ visibility: '' });
+        
+        if (options.show) {
+            shown = true;
+            adjust();
+            update();
+            $box.add($outer).hide().fadeIn(options.fadeSpeed||0);
+        }
+
+        /*
+         * Call the onInit callback. The setTimeout() call is used to ensure
+         * that the plugin has been fully initialized and the object instance is
+         * available (so that it can be obtained in the callback).
+         */
+        setTimeout(function () { options.onInit(img, getSelection()); }, 0);
+    }
+
+    /**
+     * Document keypress event handler
+     * 
+     * @param event
+     *            The event object
+     * @return false
+     */
+    var docKeyPress = function(event) {
+        var k = options.keys, d, t, key = event.keyCode;
+        
+        d = !isNaN(k.alt) && (event.altKey || event.originalEvent.altKey) ? k.alt :
+            !isNaN(k.ctrl) && event.ctrlKey ? k.ctrl :
+            !isNaN(k.shift) && event.shiftKey ? k.shift :
+            !isNaN(k.arrows) ? k.arrows : 10;
+
+        if (k.arrows == 'resize' || (k.shift == 'resize' && event.shiftKey) ||
+            (k.ctrl == 'resize' && event.ctrlKey) ||
+            (k.alt == 'resize' && (event.altKey || event.originalEvent.altKey)))
+        {
+            /* Resize selection */
+            
+            switch (key) {
+            case 37:
+                /* Left */
+                d = -d;
+            case 39:
+                /* Right */
+                t = max(x1, x2);
+                x1 = min(x1, x2);
+                x2 = max(t + d, x1);
+                fixAspectRatio();
+                break;
+            case 38:
+                /* Up */
+                d = -d;
+            case 40:
+                /* Down */
+                t = max(y1, y2);
+                y1 = min(y1, y2);
+                y2 = max(t + d, y1);
+                fixAspectRatio(true);
+                break;
+            default:
+                return;
+            }
+
+            doResize();
+        }
+        else {
+            /* Move selection */
+            
+            x1 = min(x1, x2);
+            y1 = min(y1, y2);
+
+            switch (key) {
+            case 37:
+                /* Left */
+                doMove(max(x1 - d, left), y1);
+                break;
+            case 38:
+                /* Up */
+                doMove(x1, max(y1 - d, top));
+                break;
+            case 39:
+                /* Right */
+                doMove(x1 + min(d, imgWidth - selX(x2)), y1);
+                break;
+            case 40:
+                /* Down */
+                doMove(x1, y1 + min(d, imgHeight - selY(y2)));
+                break;
+            default:
+                return;
+            }
+        }
+
+        return false;
+    };
+
+    /**
+     * Apply style options to plugin element (or multiple elements)
+     * 
+     * @param $elem
+     *            A jQuery object representing the element(s) to style
+     * @param props
+     *            An object that maps option names to corresponding CSS
+     *            properties
+     */
+    function styleOptions($elem, props) {
+        for (var option in props)
+            if (options[option] !== undefined)
+                $elem.css(props[option], options[option]);
+    }
+
+    /**
+     * Set plugin options
+     * 
+     * @param newOptions
+     *            The new options object
+     */
+    function setOptions(newOptions) {
+        if (newOptions.parent)
+            ($parent = $(newOptions.parent)).append($box.add($outer));
+        
+        /* Merge the new options with the existing ones */
+        $.extend(options, newOptions);
+
+        adjust();
+
+        if (newOptions.handles != null) {
+            /* Recreate selection area handles */
+            $handles.remove();
+            $handles = $([]);
+
+            i = newOptions.handles ? newOptions.handles == 'corners' ? 4 : 8 : 0;
+
+            while (i--)
+                $handles = $handles.add(div());
+            
+            /* Add a class to handles and set the CSS properties */
+            $handles.addClass(options.classPrefix + '-handle').css({
+                position: 'absolute',
+                /*
+                 * The font-size property needs to be set to zero, otherwise
+                 * Internet Explorer makes the handles too large
+                 */
+                fontSize: 0,
+                zIndex: zIndex + 1 || 1
+            });
+            
+            /*
+             * If handle width/height has not been set with CSS rules, set the
+             * default 5px
+             */
+            if (!parseInt($handles.css('width')) >= 0)
+                $handles.width(5).height(5);
+            
+            /*
+             * If the borderWidth option is in use, add a solid border to
+             * handles
+             */
+            if (o = options.borderWidth)
+                $handles.css({ borderWidth: o, borderStyle: 'solid' });
+
+            /* Apply other style options */
+            styleOptions($handles, { borderColor1: 'border-color',
+                borderColor2: 'background-color',
+                borderOpacity: 'opacity' });
+        }
+
+        /* Calculate scale factors */
+        scaleX = options.imageWidth / imgWidth || 1;
+        scaleY = options.imageHeight / imgHeight || 1;
+
+        /* Set selection */
+        if (newOptions.x1 != null) {
+            setSelection(newOptions.x1, newOptions.y1, newOptions.x2,
+                newOptions.y2);
+            newOptions.show = !newOptions.hide;
+        }
+
+        if (newOptions.keys)
+            /* Enable keyboard support */
+            options.keys = $.extend({ shift: 1, ctrl: 'resize' },
+                newOptions.keys);
+
+        /* Add classes to plugin elements */
+        $outer.addClass(options.classPrefix + '-outer');
+        $area.addClass(options.classPrefix + '-selection');
+        for (i = 0; i++ < 4;)
+            $($border[i-1]).addClass(options.classPrefix + '-border' + i);
+
+        /* Apply style options */
+        styleOptions($area, { selectionColor: 'background-color',
+            selectionOpacity: 'opacity' });
+        styleOptions($border, { borderOpacity: 'opacity',
+            borderWidth: 'border-width' });
+        styleOptions($outer, { outerColor: 'background-color',
+            outerOpacity: 'opacity' });
+        if (o = options.borderColor1)
+            $($border[0]).css({ borderStyle: 'solid', borderColor: o });
+        if (o = options.borderColor2)
+            $($border[1]).css({ borderStyle: 'dashed', borderColor: o });
+
+        /* Append all the selection area elements to the container box */
+        $box.append($area.add($border).add($areaOpera)).append($handles);
+
+        if (msie) {
+            if (o = ($outer.css('filter')||'').match(/opacity=(\d+)/))
+                $outer.css('opacity', o[1]/100);
+            if (o = ($border.css('filter')||'').match(/opacity=(\d+)/))
+                $border.css('opacity', o[1]/100);
+        }
+        
+        if (newOptions.hide)
+            hide($box.add($outer));
+        else if (newOptions.show && imgLoaded) {
+            shown = true;
+            $box.add($outer).fadeIn(options.fadeSpeed||0);
+            doUpdate();
+        }
+
+        /* Calculate the aspect ratio factor */
+        aspectRatio = (d = (options.aspectRatio || '').split(/:/))[0] / d[1];
+
+        $img.add($outer).unbind('mousedown', imgMouseDown);
+        
+        if (options.disable || options.enable === false) {
+            /* Disable the plugin */
+            $box.unbind('mousemove', areaMouseMove).unbind('mousedown', areaMouseDown);
+            $(window).unbind('resize', windowResize);
+        }
+        else {
+            if (options.enable || options.disable === false) {
+                /* Enable the plugin */
+                if (options.resizable || options.movable)
+                    $box.mousemove(areaMouseMove).mousedown(areaMouseDown);
+    
+                $(window).resize(windowResize);
+            }
+
+            if (!options.persistent)
+                $img.add($outer).mousedown(imgMouseDown);
+        }
+        
+        options.enable = options.disable = undefined;
+    }
+    
+    /**
+     * Remove plugin completely
+     */
+    this.remove = function () {
+        /*
+         * Call setOptions with { disable: true } to unbind the event handlers
+         */
+        setOptions({ disable: true });
+        $box.add($outer).remove();
+    };
+    
+    /*
+     * Public API
+     */
+    
+    /**
+     * Get current options
+     * 
+     * @return An object containing the set of options currently in use
+     */
+    this.getOptions = function () { return options; };
+    
+    /**
+     * Set plugin options
+     * 
+     * @param newOptions
+     *            The new options object
+     */
+    this.setOptions = setOptions;
+    
+    /**
+     * Get the current selection
+     * 
+     * @param noScale
+     *            If set to <code>true</code>, scaling is not applied to the
+     *            returned selection
+     * @return Selection object
+     */
+    this.getSelection = getSelection;
+    
+    /**
+     * Set the current selection
+     * 
+     * @param x1
+     *            X coordinate of the upper left corner of the selection area
+     * @param y1
+     *            Y coordinate of the upper left corner of the selection area
+     * @param x2
+     *            X coordinate of the lower right corner of the selection area
+     * @param y2
+     *            Y coordinate of the lower right corner of the selection area
+     * @param noScale
+     *            If set to <code>true</code>, scaling is not applied to the
+     *            new selection
+     */
+    this.setSelection = setSelection;
+    
+    /**
+     * Cancel selection
+     */
+    this.cancelSelection = cancelSelection;
+    
+    /**
+     * Update plugin elements
+     * 
+     * @param resetKeyPress
+     *            If set to <code>false</code>, this instance's keypress
+     *            event handler is not activated
+     */
+    this.update = doUpdate;
+
+    /* Do the dreaded browser detection */
+    var msie = (/msie ([\w.]+)/i.exec(ua)||[])[1],
+        opera = /opera/i.test(ua),
+        safari = /webkit/i.test(ua) && !/chrome/i.test(ua);
+
+    /* 
+     * Traverse the image's parent elements (up to <body>) and find the
+     * highest z-index
+     */
+    $p = $img;
+
+    while ($p.length) {
+        zIndex = max(zIndex,
+            !isNaN($p.css('z-index')) ? $p.css('z-index') : zIndex);
+        /* Also check if any of the ancestor elements has fixed position */ 
+        if ($p.css('position') == 'fixed')
+            position = 'fixed';
+
+        $p = $p.parent(':not(body)');
+    }
+    
+    /*
+     * If z-index is given as an option, it overrides the one found by the
+     * above loop
+     */
+    zIndex = options.zIndex || zIndex;
+
+    if (msie)
+        $img.attr('unselectable', 'on');
+
+    /*
+     * In MSIE and WebKit, we need to use the keydown event instead of keypress
+     */
+    $.imgAreaSelect.keyPress = msie || safari ? 'keydown' : 'keypress';
+
+    /*
+     * There is a bug affecting the CSS cursor property in Opera (observed in
+     * versions up to 10.00) that prevents the cursor from being updated unless
+     * the mouse leaves and enters the element again. To trigger the mouseover
+     * event, we're adding an additional div to $box and we're going to toggle
+     * it when mouse moves inside the selection area.
+     */
+    if (opera)    
+        $areaOpera = div().css({ width: '100%', height: '100%',
+            position: 'absolute', zIndex: zIndex + 2 || 2 });
+
+    /*
+     * We initially set visibility to "hidden" as a workaround for a weird
+     * behaviour observed in Google Chrome 1.0.154.53 (on Windows XP). Normally
+     * we would just set display to "none", but, for some reason, if we do so
+     * then Chrome refuses to later display the element with .show() or
+     * .fadeIn().
+     */
+    $box.add($outer).css({ visibility: 'hidden', position: position,
+        overflow: 'hidden', zIndex: zIndex || '0' });
+    $box.css({ zIndex: zIndex + 2 || 2 });
+    $area.add($border).css({ position: 'absolute', fontSize: 0 });
+    
+    /*
+     * If the image has been fully loaded, or if it is not really an image (eg.
+     * a div), call imgLoad() immediately; otherwise, bind it to be called once
+     * on image load event.
+     */
+    img.complete || img.readyState == 'complete' || !$img.is('img') ?
+        imgLoad() : $img.one('load', imgLoad);
+
+    /* 
+     * MSIE 9.0 doesn't always fire the image load event -- resetting the src
+     * attribute seems to trigger it. The check is for version 7 and above to
+     * accommodate for MSIE 9 running in compatibility mode.
+     */
+    if (!imgLoaded && msie && msie >= 7)
+        img.src = img.src;
+};
+
+/**
+ * Invoke imgAreaSelect on a jQuery object containing the image(s)
+ * 
+ * @param options
+ *            Options object
+ * @return The jQuery object or a reference to imgAreaSelect instance (if the
+ *         <code>instance</code> option was specified)
+ */
+$.fn.imgAreaSelect = function (options) {
+    options = options || {};
+
+    this.each(function () {
+        /* Is there already an imgAreaSelect instance bound to this element? */
+        if ($(this).data('imgAreaSelect')) {
+            /* Yes there is -- is it supposed to be removed? */
+            if (options.remove) {
+                /* Remove the plugin */
+                $(this).data('imgAreaSelect').remove();
+                $(this).removeData('imgAreaSelect');
+            }
+            else
+                /* Reset options */
+                $(this).data('imgAreaSelect').setOptions(options);
+        }
+        else if (!options.remove) {
+            /* No exising instance -- create a new one */
+            
+            /*
+             * If neither the "enable" nor the "disable" option is present, add
+             * "enable" as the default
+             */ 
+            if (options.enable === undefined && options.disable === undefined)
+                options.enable = true;
+
+            $(this).data('imgAreaSelect', new $.imgAreaSelect(this, options));
+        }
+    });
+    
+    if (options.instance)
+        /*
+         * Return the imgAreaSelect instance bound to the first element in the
+         * set
+         */
+        return $(this).data('imgAreaSelect');
+
+    return this;
+};
+
+})(jQuery);
+
+define("jquery.imgareaselect", ["jquery"], function(){});
+
+define('utils/countDown',[], function() {
+	
+	$.fn.countDown = function(options) {
+		var defaults = {
+			seconds:60,
+			callback:'',
+			defaultText:'重新获取'
+		}
+		var options = $.extend(defaults, options);
+		var chain = this.each(function() {
+			var $this = $(this);
+			$this.html(options.defaultText);
+			countDownFun($this,options.seconds,options.defaultText,options.callback);
+
+		});
+		function countDownFun ($elm,second,defaultText,callback) {
+			if(second > 0){
+				$elm.attr('disabled','disabled');
+				var newText = second+'秒后'+defaultText;
+				$elm.html(newText);
+				second--;
+				setTimeout(function(){countDownFun($elm,second,defaultText);},1000);
+			}else{
+				$elm.removeAttr('disabled');
+				$elm.html(defaultText);
+				if(typeof callback === 'function'){
+					callback.call(this);
+				}
+			}	
+		}		
+	};
+
+});
+
+
+
+
+/**
+ * bootstrap-multiselect.js
+ * https://github.com/davidstutz/bootstrap-multiselect
+ *
+ * Copyright 2012, 2013 David Stutz
+ *
+ * Dual licensed under the BSD-3-Clause and the Apache License, Version 2.0.
+ */
+!function($) {
+
+    // jshint ;_;
+
+    if (typeof ko !== 'undefined' && ko.bindingHandlers && !ko.bindingHandlers.multiselect) {
+        ko.bindingHandlers.multiselect = {
+            init: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {},
+            update: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+
+               var config = ko.utils.unwrapObservable(valueAccessor());
+               var selectOptions = allBindingsAccessor().options;
+               var ms = $(element).data('multiselect');
+
+               if (!ms) {
+                  $(element).multiselect(config);
+               }
+               else {
+                  ms.updateOriginalOptions();
+                  if (selectOptions && selectOptions().length !== ms.originalOptions.length) {
+                     $(element).multiselect('rebuild');
+                  }
+               }
+            }
+        };
+    }
+
+    function Multiselect(select, options) {
+
+        this.options = this.mergeOptions(options);
+        this.$select = $(select);
+
+        // Initialization.
+        // We have to clone to create a new reference.
+        this.originalOptions = this.$select.clone()[0].options;
+        this.query = '';
+        this.searchTimeout = null;
+
+        this.options.multiple = this.$select.attr('multiple') === "multiple";
+        this.options.onChange = $.proxy(this.options.onChange, this);
+        this.options.onDropdownShow = $.proxy(this.options.onDropdownShow, this);
+        this.options.onDropdownHide = $.proxy(this.options.onDropdownHide, this);
+
+        // Build select all if enabled.
+        this.buildContainer();
+        this.buildButton();
+        this.buildSelectAll();
+        this.buildDropdown();
+        this.buildDropdownOptions();
+        this.buildFilter();
+        this.updateButtonText();
+
+        this.$select.hide().after(this.$container);
+    };
+
+    Multiselect.prototype = {
+
+        // Default options.
+        defaults: {
+            // Default text function will either print 'None selected' in case no
+            // option is selected, or a list of the selected options up to a length of 3 selected options by default.
+            // If more than 3 options are selected, the number of selected options is printed.
+            buttonText: function(options, select) {
+                if (options.length === 0) {
+                    return this.nonSelectedText + ' <b class="caret"></b>';
+                }
+                else {
+                    if (options.length > this.numberDisplayed) {
+                        return options.length + ' ' + this.nSelectedText + ' <b class="caret"></b>';
+                    }
+                    else {
+                        var selected = '';
+                        options.each(function() {
+                            var label = ($(this).attr('label') !== undefined) ? $(this).attr('label') : $(this).html();
+
+                            selected += label + ', ';
+                        });
+                        return selected.substr(0, selected.length - 2) + ' <b class="caret"></b>';
+                    }
+                }
+            },
+            // Like the buttonText option to update the title of the button.
+            buttonTitle: function(options, select) {
+                if (options.length === 0) {
+                    return this.nonSelectedText;
+                }
+                else {
+                    var selected = '';
+                    options.each(function () {
+                        selected += $(this).text() + ', ';
+                    });
+                    return selected.substr(0, selected.length - 2);
+                }
+            },
+            // Create label
+            label: function( element ){
+                return $(element).attr('label') || $(element).html();
+            },
+            // Is triggered on change of the selected options.
+            onChange : function(option, checked) {
+
+            },
+            // Triggered immediately when dropdown shown
+            onDropdownShow: function(event) {
+
+            },
+            // Triggered immediately when dropdown hidden
+            onDropdownHide: function(event) {
+
+            },
+            buttonClass: 'btn btn-default',
+            dropRight: false,
+            selectedClass: 'active',
+            buttonWidth: 'auto',
+            buttonContainer: '<div class="btn-group" />',
+            // Maximum height of the dropdown menu.
+            // If maximum height is exceeded a scrollbar will be displayed.
+            maxHeight: false,
+            includeSelectAllOption: false,
+            selectAllText: ' Select all',
+            selectAllValue: 'multiselect-all',
+            enableFiltering: false,
+            enableCaseInsensitiveFiltering: false,
+            filterPlaceholder: 'Search',
+            // possible options: 'text', 'value', 'both'
+            filterBehavior: 'text',
+            preventInputChangeEvent: false,
+            nonSelectedText: 'None selected',
+            nSelectedText: 'selected',
+            numberDisplayed: 3
+        },
+
+        // Templates.
+        templates: {
+            button: '<button type="button" class="multiselect dropdown-toggle" data-toggle="dropdown"></button>',
+            ul: '<ul class="multiselect-container dropdown-menu"></ul>',
+            filter: '<div class="input-group"><span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span><input class="form-control multiselect-search" type="text"></div>',
+            li: '<li><a href="javascript:void(0);"><label></label></a></li>',
+            liGroup: '<li><label class="multiselect-group"></label></li>'
+        },
+
+        constructor: Multiselect,
+
+        buildContainer: function() {
+            this.$container = $(this.options.buttonContainer);
+            this.$container.on('show.bs.dropdown', this.options.onDropdownShow);
+            this.$container.on('hide.bs.dropdown', this.options.onDropdownHide);
+        },
+
+        buildButton: function() {
+            // Build button.
+            this.$button = $(this.templates.button).addClass(this.options.buttonClass);
+
+            // Adopt active state.
+            if (this.$select.prop('disabled')) {
+                this.disable();
+            }
+            else {
+                this.enable();
+            }
+
+            // Manually add button width if set.
+            if (this.options.buttonWidth) {
+                this.$button.css({
+                    'width' : this.options.buttonWidth
+                });
+            }
+
+            // Keep the tab index from the select.
+            var tabindex = this.$select.attr('tabindex');
+            if (tabindex) {
+                this.$button.attr('tabindex', tabindex);
+            }
+
+            this.$container.prepend(this.$button);
+        },
+
+        // Build dropdown container ul.
+        buildDropdown: function() {
+
+            // Build ul.
+            this.$ul = $(this.templates.ul);
+
+            if (this.options.dropRight) {
+                this.$ul.addClass('pull-right');
+            }
+
+            // Set max height of dropdown menu to activate auto scrollbar.
+            if (this.options.maxHeight) {
+                // TODO: Add a class for this option to move the css declarations.
+                this.$ul.css({
+                    'max-height': this.options.maxHeight + 'px',
+                    'overflow-y': 'auto',
+                    'overflow-x': 'hidden'
+                });
+            }
+
+            this.$container.append(this.$ul);
+        },
+
+        // Build the dropdown and bind event handling.
+        buildDropdownOptions: function() {
+
+            this.$select.children().each($.proxy(function(index, element) {
+                // Support optgroups and options without a group simultaneously.
+                var tag = $(element).prop('tagName')
+                    .toLowerCase();
+                
+                if (tag === 'optgroup') {
+                    this.createOptgroup(element);
+                }
+                else if (tag === 'option') {
+                    this.createOptionValue(element);
+                }
+                // Other illegal tags will be ignored.
+            }, this));
+
+            // Bind the change event on the dropdown elements.
+            $('li input', this.$ul).on('change', $.proxy(function(event) {
+                var checked = $(event.target).prop('checked') || false;
+                var isSelectAllOption = $(event.target).val() === this.options.selectAllValue;
+
+                // Apply or unapply the configured selected class.
+                if (this.options.selectedClass) {
+                    if (checked) {
+                        $(event.target).parents('li')
+                            .addClass(this.options.selectedClass);
+                    }
+                    else {
+                        $(event.target).parents('li')
+                            .removeClass(this.options.selectedClass);
+                    }
+                }
+
+                // Get the corresponding option.
+                var value = $(event.target).val();
+                var $option = this.getOptionByValue(value);
+
+                var $optionsNotThis = $('option', this.$select).not($option);
+                var $checkboxesNotThis = $('input', this.$container).not($(event.target));
+
+                if (isSelectAllOption) {
+                    if (this.$select[0][0].value === this.options.selectAllValue) {
+                        var values = [];
+                        var options = $('option[value!="' + this.options.selectAllValue + '"]', this.$select);
+                        for (var i = 0; i < options.length; i++) {
+                            // Additionally check whether the option is visible within the dropcown.
+                            if (options[i].value !== this.options.selectAllValue && this.getInputByValue(options[i].value).is(':visible')) {
+                                values.push(options[i].value);
+                            }
+                        }
+                        
+                        if (checked) {
+                            this.select(values);
+                        }
+                        else {
+                            this.deselect(values);
+                        }
+                    }
+                }
+
+                if (checked) {
+                    $option.prop('selected', true);
+
+                    if (this.options.multiple) {
+                        // Simply select additional option.
+                        $option.prop('selected', true);
+                    }
+                    else {
+                        // Unselect all other options and corresponding checkboxes.
+                        if (this.options.selectedClass) {
+                            $($checkboxesNotThis).parents('li').removeClass(this.options.selectedClass);
+                        }
+
+                        $($checkboxesNotThis).prop('checked', false);
+                        $optionsNotThis.prop('selected', false);
+
+                        // It's a single selection, so close.
+                        this.$button.click();
+                    }
+
+                    if (this.options.selectedClass === "active") {
+                        $optionsNotThis.parents("a").css("outline", "");
+                    }
+                }
+                else {
+                    // Unselect option.
+                    $option.prop('selected', false);
+                }
+
+                this.$select.change();
+                this.options.onChange($option, checked);
+                this.updateButtonText();
+
+                if(this.options.preventInputChangeEvent) {
+                    return false;
+                }
+            }, this));
+
+            $('li a', this.$ul).on('touchstart click', function(event) {
+                event.stopPropagation();
+
+                if (event.shiftKey) {
+                    var checked = $(event.target).prop('checked') || false;
+                    
+                    if (checked) {
+                        var prev = $(event.target).parents('li:last')
+                            .siblings('li[class="active"]:first');
+
+                        var currentIdx = $(event.target).parents('li')
+                            .index();
+                        var prevIdx = prev.index();
+
+                        if (currentIdx > prevIdx) {
+                            $(event.target).parents("li:last").prevUntil(prev).each(
+                                function() {
+                                    $(this).find("input:first").prop("checked", true)
+                                        .trigger("change");
+                                }
+                            );
+                        }
+                        else {
+                            $(event.target).parents("li:last").nextUntil(prev).each(
+                                function() {
+                                    $(this).find("input:first").prop("checked", true)
+                                        .trigger("change");
+                                }
+                            );
+                        }
+                    }
+                }
+                
+                $(event.target).blur();
+            });
+
+            // Keyboard support.
+            this.$container.on('keydown', $.proxy(function(event) {
+                if ($('input[type="text"]', this.$container).is(':focus')) {
+                    return;
+                }
+                if ((event.keyCode === 9 || event.keyCode === 27) && this.$container.hasClass('open')) {
+                    // Close on tab or escape.
+                    this.$button.click();
+                }
+                else {
+                    var $items = $(this.$container).find("li:not(.divider):visible a");
+
+                    if (!$items.length) {
+                        return;
+                    }
+
+                    var index = $items.index($items.filter(':focus'));
+
+                    // Navigation up.
+                    if (event.keyCode === 38 && index > 0) {
+                        index--;
+                    }
+                    // Navigate down.
+                    else if (event.keyCode === 40 && index < $items.length - 1) {
+                        index++;
+                    }
+                    else if (!~index) {
+                        index = 0;
+                    }
+
+                    var $current = $items.eq(index);
+                    $current.focus();
+
+                    if (event.keyCode === 32 || event.keyCode === 13) {
+                        var $checkbox = $current.find('input');
+
+                        $checkbox.prop("checked", !$checkbox.prop("checked"));
+                        $checkbox.change();
+                    }
+
+                    event.stopPropagation();
+                    event.preventDefault();
+                }
+            }, this));
+        },
+
+        // Will build an dropdown element for the given option.
+        createOptionValue: function(element) {
+            if ($(element).is(':selected')) {
+                $(element).prop('selected', true);
+            }
+
+            // Support the label attribute on options.
+            var label = this.options.label(element);
+            var value = $(element).val();
+            var inputType = this.options.multiple ? "checkbox" : "radio";
+
+            var $li = $(this.templates.li);
+            $('label', $li).addClass(inputType);
+            $('label', $li).append('<input type="' + inputType + '" />');
+
+            var selected = $(element).prop('selected') || false;
+            var $checkbox = $('input', $li);
+            $checkbox.val(value);
+
+            if (value === this.options.selectAllValue) {
+                $checkbox.parent().parent()
+                    .addClass('multiselect-all');
+            }
+
+            $('label', $li).append(" " + label);
+
+            this.$ul.append($li);
+
+            if ($(element).is(':disabled')) {
+                $checkbox.attr('disabled', 'disabled')
+                    .prop('disabled', true)
+                    .parents('li')
+                    .addClass('disabled');
+            }
+
+            $checkbox.prop('checked', selected);
+
+            if (selected && this.options.selectedClass) {
+                $checkbox.parents('li')
+                    .addClass(this.options.selectedClass);
+            }
+        },
+
+        // Create optgroup.
+        createOptgroup: function(group) {
+            var groupName = $(group).prop('label');
+
+            // Add a header for the group.
+            var $li = $(this.templates.liGroup);
+            $('label', $li).text(groupName);
+
+            this.$ul.append($li);
+
+            // Add the options of the group.
+            $('option', group).each($.proxy(function(index, element) {
+                this.createOptionValue(element);
+            }, this));
+        },
+
+        // Add the select all option to the select.
+        buildSelectAll: function() {
+            var alreadyHasSelectAll = this.$select[0][0] ? this.$select[0][0].value === this.options.selectAllValue : false;
+            
+            // If options.includeSelectAllOption === true, add the include all checkbox.
+            if (this.options.includeSelectAllOption && this.options.multiple && !alreadyHasSelectAll) {
+                this.$select.prepend('<option value="' + this.options.selectAllValue + '">' + this.options.selectAllText + '</option>');
+            }
+        },
+
+        // Build and bind filter.
+        buildFilter: function() {
+
+            // Build filter if filtering OR case insensitive filtering is enabled and the number of options exceeds (or equals) enableFilterLength.
+            if (this.options.enableFiltering || this.options.enableCaseInsensitiveFiltering) {
+                var enableFilterLength = Math.max(this.options.enableFiltering, this.options.enableCaseInsensitiveFiltering);
+                
+                if (this.$select.find('option').length >= enableFilterLength) {
+
+                    this.$filter = $(this.templates.filter);
+                    $('input', this.$filter).attr('placeholder', this.options.filterPlaceholder);
+                    this.$ul.prepend(this.$filter);
+
+                    this.$filter.val(this.query).on('click', function(event) {
+                        event.stopPropagation();
+                    }).on('keydown', $.proxy(function(event) {
+                        // This is useful to catch "keydown" events after the browser has updated the control.
+                        clearTimeout(this.searchTimeout);
+
+                        this.searchTimeout = this.asyncFunction($.proxy(function() {
+
+                            if (this.query !== event.target.value) {
+                                this.query = event.target.value;
+
+                                $.each($('li', this.$ul), $.proxy(function(index, element) {
+                                    var value = $('input', element).val();
+                                    var text = $('label', element).text();
+                                    
+                                    if (value !== this.options.selectAllValue && text) {
+                                        // by default lets assume that element is not
+                                        // interesting for this search
+                                        var showElement = false;
+
+                                        var filterCandidate = '';
+                                        if ((this.options.filterBehavior === 'text' || this.options.filterBehavior === 'both')) {
+                                            filterCandidate = text;
+                                        }
+                                        if ((this.options.filterBehavior === 'value' || this.options.filterBehavior === 'both')) {
+                                            filterCandidate = value;
+                                        }
+
+                                        if (this.options.enableCaseInsensitiveFiltering && filterCandidate.toLowerCase().indexOf(this.query.toLowerCase()) > -1) {
+                                            showElement = true;
+                                        }
+                                        else if (filterCandidate.indexOf(this.query) > -1) {
+                                            showElement = true;
+                                        }
+
+                                        if (showElement) {
+                                            $(element).show();
+                                        }
+                                        else {
+                                            $(element).hide();
+                                        }
+                                    }
+                                }, this));
+                            }
+                            
+                            // TODO: check whether select all option needs to be updated.
+                        }, this), 300, this);
+                    }, this));
+                }
+            }
+        },
+
+        // Destroy - unbind - the plugin.
+        destroy: function() {
+            this.$container.remove();
+            this.$select.show();
+        },
+
+        // Refreshs the checked options based on the current state of the select.
+        refresh: function() {
+            $('option', this.$select).each($.proxy(function(index, element) {
+                var $input = $('li input', this.$ul).filter(function() {
+                    return $(this).val() === $(element).val();
+                });
+
+                if ($(element).is(':selected')) {
+                    $input.prop('checked', true);
+
+                    if (this.options.selectedClass) {
+                        $input.parents('li')
+                            .addClass(this.options.selectedClass);
+                    }
+                }
+                else {
+                    $input.prop('checked', false);
+
+                    if (this.options.selectedClass) {
+                        $input.parents('li')
+                            .removeClass(this.options.selectedClass);
+                    }
+                }
+
+                if ($(element).is(":disabled")) {
+                    $input.attr('disabled', 'disabled')
+                        .prop('disabled', true)
+                        .parents('li')
+                        .addClass('disabled');
+                }
+                else {
+                    $input.prop('disabled', false)
+                        .parents('li')
+                        .removeClass('disabled');
+                }
+            }, this));
+
+            this.updateButtonText();
+        },
+
+        // Select an option by its value or multiple options using an array of values.
+        select: function(selectValues) {
+            if(selectValues && !$.isArray(selectValues)) {
+                selectValues = [selectValues];
+            }
+
+            for (var i = 0; i < selectValues.length; i++) {
+                var value = selectValues[i];
+
+                var $option = this.getOptionByValue(value);
+                var $checkbox = this.getInputByValue(value);
+
+                if (this.options.selectedClass) {
+                    $checkbox.parents('li')
+                        .addClass(this.options.selectedClass);
+                }
+
+                $checkbox.prop('checked', true);
+                $option.prop('selected', true);
+                this.options.onChange($option, true);
+            }
+
+            this.updateButtonText();
+        },
+
+        // Deselect an option by its value or using an array of values.
+        deselect: function(deselectValues) {
+            if(deselectValues && !$.isArray(deselectValues)) {
+                deselectValues = [deselectValues];
+            }
+
+            for (var i = 0; i < deselectValues.length; i++) {
+
+                var value = deselectValues[i];
+
+                var $option = this.getOptionByValue(value);
+                var $checkbox = this.getInputByValue(value);
+
+                if (this.options.selectedClass) {
+                    $checkbox.parents('li')
+                        .removeClass(this.options.selectedClass);
+                }
+
+                $checkbox.prop('checked', false);
+                $option.prop('selected', false);
+                this.options.onChange($option, false);
+            }
+
+            this.updateButtonText();
+        },
+
+        // Rebuild the whole dropdown menu.
+        rebuild: function() {
+            this.$ul.html('');
+
+            // Remove select all option in select.
+            $('option[value="' + this.options.selectAllValue + '"]', this.$select).remove();
+
+            // Important to distinguish between radios and checkboxes.
+            this.options.multiple = this.$select.attr('multiple') === "multiple";
+
+            this.buildSelectAll();
+            this.buildDropdownOptions();
+            this.updateButtonText();
+            this.buildFilter();
+        },
+
+        // Build select using the given data as options.
+        dataprovider: function(dataprovider) {
+            var optionDOM = "";
+            dataprovider.forEach(function (option) {
+                optionDOM += '<option value="' + option.value + '">' + option.label + '</option>';
+            });
+
+            this.$select.html(optionDOM);
+            this.rebuild();
+        },
+
+        // Enable button.
+        enable: function() {
+            this.$select.prop('disabled', false);
+            this.$button.prop('disabled', false)
+                .removeClass('disabled');
+        },
+
+        // Disable button.
+        disable: function() {
+            this.$select.prop('disabled', true);
+            this.$button.prop('disabled', true)
+                .addClass('disabled');
+        },
+
+        // Set options.
+        setOptions: function(options) {
+            this.options = this.mergeOptions(options);
+        },
+
+        // Get options by merging defaults and given options.
+        mergeOptions: function(options) {
+            return $.extend({}, this.defaults, options);
+        },
+
+        // Update button text and button title.
+        updateButtonText: function() {
+            var options = this.getSelected();
+
+            // First update the displayed button text.
+            $('button', this.$container).html(this.options.buttonText(options, this.$select));
+
+            // Now update the title attribute of the button.
+            $('button', this.$container).attr('title', this.options.buttonTitle(options, this.$select));
+
+        },
+
+        // Get all selected options.
+        getSelected: function() {
+            // console.log($('option[value!="' + this.options.selectAllValue + '"]:selected'));
+            // console.log($('option[value!="' + this.options.selectAllValue + '"]:selected').filter(
+            //    function() {
+            //     return $(this).prop('selected');
+            // } ));
+            return $('option[value!="' + this.options.selectAllValue + '"]:selected', this.$select).filter(function() {
+                return $(this).prop('selected');
+            });
+        },
+
+        // Get the corresponding option by ts value.
+        getOptionByValue: function(value) {
+            return $('option', this.$select).filter(function() {
+                return $(this).val() === value;
+            });
+        },
+
+        // Get an input in the dropdown by its value.
+        getInputByValue: function(value) {
+            return $('li input', this.$ul).filter(function() {
+                return $(this).val() === value;
+            });
+        },
+
+        updateOriginalOptions: function() {
+            this.originalOptions = this.$select.clone()[0].options;
+        },
+
+        asyncFunction: function(callback, timeout, self) {
+            var args = Array.prototype.slice.call(arguments, 3);
+            return setTimeout(function() {
+                callback.apply(self || window, args);
+            }, timeout);
+        }
+    };
+
+    $.fn.multiselect = function(option, parameter) {
+        return this.each(function() {
+            var data = $(this).data('multiselect');
+            var options = typeof option === 'object' && option;
+
+            // Initialize the multiselect.
+            if (!data) {
+                $(this).data('multiselect', ( data = new Multiselect(this, options)));
+            }
+
+            // Call multiselect method.
+            if (typeof option === 'string') {
+                data[option](parameter);
+            }
+        });
+    };
+
+    $.fn.multiselect.Constructor = Multiselect;
+
+    // Automatically init selects by their data-role.
+    $(function() {
+        $("select[data-role=multiselect]").multiselect();
+    });
+
+}(window.jQuery);
+
+define("bootstrap.multiselect", ["bootstrap"], function(){});
+
+define('modal/modal_view',['config/base/constant', 'utils/reqcmd', 'lodash', 'marionette', 'templates', 'ladda-bootstrap', 'jquery.uploader.main',
+	'config/validator/config', 'spin', 'bootstrap', 'dust', 'dustMarionette', 'jquery.psteps',
+	'jquery.uploadify', 'jquery.imgareaselect', 'utils/countDown', 'bootstrap.multiselect'
+], function(Constant, ReqCmd, Lodash, Marionette, Templates, ladda, FileUploaderMain) {
+	
+	var MobileBindModalView = Marionette.ItemView.extend({
+		template: "mobileBindModal",
+		initialize: function(options) {
+			console.log("MobileBindModalView init");
+
+		},
+		ui: {
+			"mobileNumberInput": "#mobileNumber",
+			"getVerifyCodeBtn": "#getVerifyCodeBtn"
+		},
+		events: {
+			"blur @ui.mobileNumberInput": "mobileNumberChange",
+			"click @ui.getVerifyCodeBtn": "getVerifyCode"
+		},
+		mobileNumberChange: function(e) {
+			var mobileNum = this.ui.mobileNumberInput.val();
+			this.mobileNumber = mobileNum;
+			console.log(mobileNum);
+
+		},
+		onRender: function() {
+			console.log("MobileBindModalView render");
+			// get rid of that pesky wrapping-div
+			// assumes 1 child element			
+			this.$el = this.$el.children();
+			this.setElement(this.$el);
+
+		},
+		onShow: function() {
+			console.log("MobileBindModalView on show");
+			this.mobileNumber = this.model.get('mobile');
+			var that = this;
+
+			$('#mobileSteps').psteps({
+				traverse_titles: 'visited',
+				steps_width_percentage: false,
+				content_headings: true,
+				step_names: false,
+				check_marks: false,
+				validate_errors: false,
+				validate_next_step: true,
+				ignore_errors_on_next: true,
+				ignore_errors_on_submit: true,
+				content_headings_after: '.before-heading',
+				validation_rule: function() {
+					// var cur_step = $(this);
+					// if(cur_step.hasClass('pstep1')){
+					// 	if(that.getVerifyCode()){
+					// 		return true
+					// 	}else{
+					// 		return false
+					// 	}
+					// }
+					return true
+				},
+				steps_onload: function() {
+					var cur_step = $(this);
+					console.log(cur_step);
+					if (cur_step.hasClass('pstep2')) {
+						that.getVerifyCode();
+					}
+				},
+				ajaxDefer: function() {
+
+					var cur_step = $(this);
+					if (cur_step.hasClass('pstep2')) {
+						var l = ladda.create(document.querySelector('#nextBtn'));
+						l.start();
+						var verifyCode = $('#verifyCode').val();
+						var params = {
+							mobile: that.mobileNumber,
+							verifyCode: verifyCode
+						}
+						return $.ajax({
+							url: "/user/mobile/update",
+							dataType: 'json',
+							type: 'POST',
+							data: params,
+							success: function(data) {
+								if (data.status != 0) {
+									this.onError(data);
+
+								} else {
+									Messenger().post({
+										message: 'Success verify',
+										type: 'success',
+										showCloseButton: true
+									});
+								}
+							},
+							onError: function(res) {
+								// this.resetForm();
+								//var error = jQuery.parseJSON(data);
+								if (res.status == 2) {
+									window.location.replace('/loginPage')
+
+								} else if (res.status == 4) {
+									window.location.replace('/error')
+
+								}
+								if (typeof res.msg !== 'undefined') {
+									Messenger().post({
+										message: "错误信息:" + res.msg,
+										type: 'error',
+										showCloseButton: true
+									});
+								}
+
+							},
+							complete: function() {
+								l.stop();
+							}
+						});
+
+					} else if (cur_step.hasClass('pstep3')) {
+						ReqCmd.reqres.request('MobileBindModalView:submit:success');
+
+						// var l = ladda.create(document.querySelector('#submitBtn'));
+						// l.start();
+						// var params = {
+						// 	mobile: that.mobileNumber,
+						// 	status: 0
+						// }
+						// return $.ajax({
+						// 	url: "/user/mobile/update",
+						// 	dataType: 'json',
+						// 	type: 'POST',
+						// 	data: params,
+						// 	success: function(data) {
+						// 		if (data.status != 0) {
+						// 			this.onError(data);
+
+						// 		} else {
+						// 			Messenger().post({
+						// 				message: 'Success Modify',
+						// 				type: 'success',
+						// 				showCloseButton: true
+						// 			});
+						// 			ReqCmd.reqres.request('MobileBindModalView:submit:success');
+
+						// 		}
+						// 	},
+						// 	onError: function(res) {
+						// 		// this.resetForm();
+						// 		//var error = jQuery.parseJSON(data);
+						// 		if (res.status == 2) {
+						// 			window.location.replace('/loginPage')
+
+						// 		} else if (res.status == 4) {
+						// 			window.location.replace('/error')
+
+						// 		}
+						// 		if (typeof res.msg !== 'undefined') {
+						// 			Messenger().post({
+						// 				message: "错误信息:" + res.msg,
+						// 				type: 'error',
+						// 				showCloseButton: true
+						// 			});
+						// 		}
+
+						// 	},
+						// 	complete: function() {
+						// 		l.stop();
+						// 	}
+						// });
+
+					} else {
+						var dtd = $.Deferred();
+						dtd.resolve();
+						return dtd.promise();
+
+					}
+
+
+				}
+			});
+		},
+		getVerifyCode: function() {
+			var url = "/user/mobile/sendVerifyCode";
+			var that = this;
+			$('#getVerifyCodeBtn').countDown({});
+			// var params = {
+			// 	mobile: this.mobileNumber
+			// }
+			$.ajax({
+				type: 'POST',
+				dataType: 'JSON',
+				contentType: 'application/json',
+				url: url,
+				success: function(data, status, request) {
+					console.log('success');
+
+					if (!(data.errorDescription && data.errorCode)) {
+						Messenger().post({
+							message: "获取验证码成功",
+							type: 'success',
+							showCloseButton: true
+						});
+						// that.ui.regSteps.eq(1).children("i").add(that.ui.lines.eq(0)).addClass("pass");
+						// that.ui.formStep02.removeClass("hide").siblings("form").addClass("hide");
+
+					} else {
+						this.onError(data);
+					}
+				},
+				onError: function(data) {
+					if (typeof data.errorDescription !== 'undefined') {
+						Messenger().post({
+							message: "%ERROR_MESSAGE:" + data.errorDescription,
+							type: 'error',
+							showCloseButton: true
+						});
+					}
+				}
+			});
+			return true;
+		}
+	});
+
+
+
+	var ImageAreaSelectModalView = Marionette.ItemView.extend({
+		template: "imgareaselectModal",
+		initialize: function(options) {
+			console.log("ImageAreaSelectModalView init");
+			this.uploadUrl = options.uploadUrl;
+			console.log(this.uploadUrl);
+
+		},
+		onRender: function() {
+			console.log("ImageAreaSelectModalView render");
+			// get rid of that pesky wrapping-div
+			// assumes 1 child element			
+			this.$el = this.$el.children();
+			this.setElement(this.$el);
+
+		},
+		onShow: function() {
+			this.initUpload();
+		},
+		ui: {
+			'submitBtn': 'button[name="submit"]'
+		},
+		events: {
+			'click @ui.submitBtn': 'submitHandler'
+		},
+		submitHandler: function() {
+			if (this.successCutCallBack) {
+				this.successCutCallBack.call(this);
+			}
+		},
+		initUpload: function() {
+			/* 头像上传 */
+			var $txt = $("#upFace").prev(".txt"),
+				$progress = $txt.prev(".progress").children(".bar"),
+				$pct = $txt.children(".pct"),
+				$countdown = $txt.children(".countdown"),
+				flag = true,
+				pct, interval, countdown = 0,
+				byteUped = 0;
+
+			//set token
+			var url = Constant.AJAX_PREFIX + '/file/uploadUserPortrait';
+			var MyApp = require('app');
+			if (MyApp && MyApp.authSession) {
+				console.log(MyApp.authSession.get('access_token'));
+				// settings.data = $.extend(settings.data, {
+				//     access_token: 'test'
+				// });
+				// var rex = new RegExp("[\\?&][\w.]+=([^&#]*)").test(settings.url);
+				var rex = url.match(/[\\?&][\w.]+=([^&#]*)/);
+				// console.log(settings.data);
+				// console.log(settings.url);
+				// console.log(rex);
+				var token = MyApp.authSession.get('access_token');
+
+				if (typeof token === 'undefined' || token == '') {
+					if (MyApp.authSession.get('0') && MyApp.authSession.get('0').hasOwnProperty('access_token')) {
+						token = MyApp.authSession.get('0').access_token;
+					} else {
+						token = '';
+					}
+
+				}
+				if (rex) {
+					url = url + '&access_token=' + token;
+
+				} else {
+					url = url + '?access_token=' + token;
+				}
+
+				// settings.url = settings.url+ '&access_token=test';
+				//return true;
+			}
+
+
+			var that = this;
+
+			$("#upFace").uploadify({
+				'height': 40,
+				'width': 68,
+				'multi': false,
+				'simUploadLimit': 1,
+				'swf': '/static/app/lib/uploadify/uploadify.swf',
+				"buttonClass": "btn btn-primary btn-large",
+				'buttonText': '上 传',
+				'uploader': url,
+				'auto': true, // 选中后自动上传文件
+				'fileTypeExts': '*.jpg;*.png;',
+				'fileSizeLimit': 2048, // 限制文件大小为2m
+				'fileObjName': 'file',
+				'onInit': function() {
+					$("#upFace").next(".uploadify-queue").remove();
+				},
+				'onUploadStart': function(file) {},
+				'onUploadSuccess': function(file, data, Response) {
+					if (Response) {
+						$countdown.text("00:00:00");
+						$progress.width("0");
+						$pct.text("0%");
+						if (data) {
+							var objvalue = eval("(" + data + ")");
+							if (objvalue.item) {
+								// $("#attIdID").val(objvalue.item.filename);
+								// $("#facePreview2").hide();
+								// $("#cutimg-box").removeClass("hide");
+								$("#submit").removeAttr("disabled");
+								$('#uploadedFileGroup').show();
+								// $('#uploadFileGroup').hide();
+								$("#ferret").attr("src", objvalue.item.filename);
+
+								// uncomment this to enable cut image feature
+								// $("#minImg").attr("src", objvalue.item.filename);
+
+
+								$("#ferret").one('load', function() { //Set something to run when it finishes loading
+									//remove this line to enable cut image feature
+									that.successCutCallBack = function() {
+											ReqCmd.commands.execute('ImageAreaSelectModalView:submitCut:success', objvalue.item.filename);
+										}
+										//uncomment this to enable cut image feature
+										//that.successCutCallBack = that.initCutImage(objvalue.item.filename, 100, 100, 123); //Fade it in when loaded
+								});
+
+							}
+
+						}
+
+
+
+					}
+				},
+				'onUploadProgress': function(file, bytesUploaded, bytesTotal, totalBytesUploaded, totalBytesTotal) {
+					pct = Math.round((bytesUploaded / bytesTotal) * 100) + '%';
+					byteUped = bytesUploaded;
+					if (flag) {
+						interval = setInterval(uploadSpeed, 100);
+						flag = false;
+					}
+					if (bytesUploaded == bytesTotal) {
+						clearInterval(interval);
+					}
+
+					$progress.width(pct);
+					$pct.text(pct);
+					countdown > 0 && $countdown.text(secTransform((bytesTotal - bytesUploaded) / countdown * 10));
+				}
+			});
+
+			function uploadSpeed() {
+				countdown = byteUped - countdown;
+			}
+
+			function secTransform(s) {
+				if (typeof s == "number") {
+					s = Math.ceil(s);
+					var t = "";
+					if (s > 3600) {
+						t = completeZero(Math.ceil(s / 3600)) + ":" + completeZero(Math.ceil(s % 3600 / 60)) + ":" + completeZero(s % 3600 % 60);
+					} else if (s > 60) {
+						t = "00:" + completeZero(Math.ceil(s / 60)) + ":" + completeZero(s % 60);
+					} else {
+						t = "00:00:" + completeZero(s);
+					}
+					return t;
+				} else {
+					return null;
+				}
+			}
+
+			function completeZero(n) {
+				return n < 10 ? "0" + n : n;
+			}
+
+
+		},
+		initCutImage: function(imgSrcPath, zoomWidth, zoomHeight, imgId) {
+
+			var imgDivW = Math.round($("#big-imgDiv").width());
+			var imageW = 100;
+			var imageH = 100;
+			var cutImageW = 0;
+			var cutImageH = 0;
+			var cutImageX = 0;
+			var cutImageY = 0;
+			var minWidth = zoomWidth;
+			var minHeight = zoomHeight;
+			var scale = 1;
+			var uploadImgStatus = 0;
+
+			function submitCut() {
+				$.ajax({
+					url: Constant.AJAX_PREFIX + '/file/uploadUserPortrait/cutImage',
+					dataType: 'JSON',
+					type: 'POST',
+					contentType: 'application/json',
+					data: JSON.stringify({
+						imgSrcPath: imgSrcPath,
+						imgWidth: cutImageW,
+						imgHeight: cutImageH,
+						imgTop: cutImageX,
+						imgLeft: cutImageY,
+						imgScale: scale,
+						reMinWidth: minWidth,
+						reMinHeight: minHeight,
+						imgId: imgId
+					}),
+					success: function(data, status, request) {
+						console.log('success');
+						Messenger().post({
+							message: "裁减图片成功",
+							type: 'success',
+							showCloseButton: true
+						});
+						ReqCmd.commands.execute('ImageAreaSelectModalView:submitCut:success', data.item.filename);
+					},
+					onError: function(data) {
+						if (typeof data.errorDescription !== 'undefined') {
+							Messenger().post({
+								message: "%ERROR_MESSAGE:" + data.errorDescription,
+								type: 'error',
+								showCloseButton: true
+							});
+						}
+					}
+				});
+
+			}
+
+			function preview(img, selection) {
+				showCut(selection.width, selection.height, selection.x1, selection.y1);
+			}
+
+			function showCut(w, h, x, y) {
+				var scaleX = minWidth / w;
+				var scaleY = minHeight / h;
+				$("#facePreview .imgshow img, #minImg").each(function() {
+					scaleX = $(this).parent().width() / w;
+					scaleY = $(this).parent().height() / h;
+					$(this).css({
+						width: Math.round(scaleX * imageW * scale) + 'px',
+						height: Math.round(scaleY * imageH * scale) + 'px',
+						marginLeft: '-' + Math.round(scaleX * x) + 'px',
+						marginTop: '-' + Math.round(scaleY * y) + 'px'
+					});
+				});
+				cutImageW = w;
+				cutImageH = h;
+				cutImageX = x;
+				cutImageY = y;
+			}
+
+			imageW = $('#ferret').width();
+			imageH = $('#ferret').height();
+			if (imageW > imgDivW) {
+				scale = imgDivW / imageW;
+				$('#ferret').css({
+					width: Math.round(imgDivW) + 'px',
+					height: 'auto'
+				});
+			}
+
+			//默认尺寸
+			if (imageW < minWidth || imageH < minHeight) {
+				alert("源图尺寸小于缩略图，请重新上传一个较大的图片。");
+				return;
+			}
+			/* if(imageW==minWidth&&imageH==minHeight) {
+			alert("源图和缩略图尺寸一致，请重设缩略图大小。");
+			return;
+		} */
+			$('#imgDiv').css({
+				'width': minWidth + 'px',
+				'height': minHeight + 'px'
+			});
+
+			var minSelW = Math.round(minWidth * scale);
+			var minSelH = Math.round(minHeight * scale);
+			$('#ferret').imgAreaSelect({
+				selectionOpacity: 0,
+				outerOpacity: '0.5',
+				selectionColor: '#ffffff',
+				borderColor1: "#6fa7c6",
+				borderColor2: "transparent",
+				onSelectChange: preview,
+				minWidth: minSelW,
+				minHeight: minSelH,
+				aspectRatio: minWidth + ":" + minHeight,
+				x1: 0,
+				y1: 0,
+				x2: parseInt(minWidth),
+				y2: parseInt(minHeight)
+			});
+			showCut(minWidth, minHeight, 0, 0);
+			return submitCut;
+
+		}
+
+	});
+
+
+
+	var DeleteModalView = Marionette.ItemView.extend({
+		template: "deleteModal",
+		initialize: function() {
+			console.log("DeleteModalView init");
+		},
+		onRender: function() {
+			console.log("DeleteModalView render");
+			// get rid of that pesky wrapping-div
+			// assumes 1 child element			
+			this.$el = this.$el.children();
+			this.setElement(this.$el);
+
+		},
+		onShow: function() {},
+		ui: {
+			'submitBtn': 'button[name="submit"]'
+		},
+		events: {
+			'click @ui.submitBtn': 'submitHandler'
+		},
+		submitHandler: function() {
+			ReqCmd.commands.execute('DeleteModalView:submitHandler', this.model);
+		}
+
+	});
+
+	//used for all confirm modal
+	var ConfirmModalView = Marionette.ItemView.extend({
+		template: "confirmModal",
+		initialize: function(options) {
+			console.log("ConfirmModalView init");
+			this.submitCallback = options.callback;
+			this.callbackContext = options.callbackContext;
+		},
+		onRender: function() {
+			console.log("ConfirmModalView render");
+			// get rid of that pesky wrapping-div
+			// assumes 1 child element			
+			this.$el = this.$el.children();
+			this.setElement(this.$el);
+
+		},
+		onShow: function() {},
+		ui: {
+			'submitBtn': 'button[name="submit"]'
+		},
+		events: {
+			'click @ui.submitBtn': 'submitHandler'
+		},
+		submitHandler: function(e) {
+			if (this.submitCallback && this.callbackContext) {
+				this.submitCallback.call(this.callbackContext);
+			}
+		}
+
+	});
+
+
+	//used for show user the file is uploading modal
+	var FileUploadingModalView = Marionette.ItemView.extend({
+		template: "fileUploadingModal",
+		initialize: function(options) {
+			console.log("FileUploadingModalView init");
+
+		},
+		onRender: function() {
+			console.log("FileUploadingModalView render");
+			// get rid of that pesky wrapping-div
+			// assumes 1 child element			
+			this.$el = this.$el.children();
+			this.setElement(this.$el);
+		},
+		onShow: function() {},
+		ui: {},
+		events: {}
+
+	});
+
+	//update doctor info
+	var UpdateDoctorInfo = Marionette.ItemView.extend({
+		template: "updateDoctorInfoModal",
+		initialize: function(options) {
+			console.log("UpdateDoctorInfo init");
+		},
+		onRender: function() {
+			console.log("UpdateDoctorInfo render");
+			// get rid of that pesky wrapping-div
+			// assumes 1 child element			
+			this.$el = this.$el.children();
+			this.setElement(this.$el);
+
+		},
+		onShow: function() {
+			var that = this;
+			$('#avatarUpload').fileupload({
+				disableImageResize: false,
+				maxFileSize: 200000000,
+				acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+				maxNumberOfFiles: 5,
+
+				// Uncomment the following to send cross-domain cookies:
+				//xhrFields: {withCredentials: true},
+				url: '/account/uploadAvatar',
+				uploadTemplateId: FileUploaderMain.uploadTemplateStr,
+				downloadTemplateId: FileUploaderMain.downloadTemplateStr
+
+			}).bind('fileuploadsubmit', function(e, data) {
+				// The example input, doesn't have to be part of the upload form:
+				data.formData = {
+					userId: that.model.get('userId')
+				};
+				// if (!data.formData.diagnoseId) {
+				//   data.context.find('button').prop('disabled', false);
+				//   input.focus();
+				//   return false;
+				// }
+			});
+
+			//multi select
+			// $("select.multiselect").multiselect({
+			// 	enableFiltering: true,
+			// 	filterPlaceholder: "搜索",
+			// 	nonSelectedText: "没有选中"
+			// 	// buttonWidth: '300px'
+			// });
+			ReqCmd.reqres.request('UpdateDoctorInfo:onShow');
+		},
+		ui: {
+			'submitBtn': 'button[name="submit"]',
+			'doctorInfoForm': '#doctorInfoForm'
+		},
+		events: {
+			'click @ui.submitBtn': 'submitHandler'
+		},
+		submitHandler: function(e) {
+			var params = this.ui.doctorInfoForm.serialize();
+			params += '&userId=' + this.model.get('userId') + '&status=0'
+			ReqCmd.commands.execute('UpdateDoctorInfo:submitHandler', params);
+		}
+
+	});
+
+	var CreateConsultView = Marionette.ItemView.extend({
+		template: "createConsultViewModal",
+		initialize: function(options) {
+			console.log("CreateConsultView init");
+		},
+		onRender: function() {
+			console.log("CreateConsultView render");
+			// get rid of that pesky wrapping-div
+			// assumes 1 child element			
+			this.$el = this.$el.children();
+			this.setElement(this.$el);
+
+		},
+		onShow: function() {
+			var that = this;
+			var $select = $('#diagnoseSelect');
+			// if ($select) {
+			// 	var params = {
+			// 		type:6
+			// 	}
+			// 	if(this.model.get("isDoctor")){
+			// 		this.selectData = DiagnoseEntity.API.getDiagnoseList(params);
+			// 	}else{
+			// 		this.selectData = DiagnoseEntity.API.getPatientDiagnoseList(params);
+			// 	}				
+			// }
+			ReqCmd.commands.execute('CreateConsultView:onShow', $select);
+		},
+		ui: {
+			'submitBtn': 'button[name="submit"]',
+			'consultForm': '#consultForm'
+		},
+		events: {
+			'click @ui.submitBtn': 'submitHandler'
+		},
+		submitHandler: function(e) {
+			var params = this.ui.consultForm.serialize();
+			ReqCmd.commands.execute('CreateConsultView:submitHandler', params);
+		}
+	});
+
+
+	var DiagnoseLogsView = Marionette.ItemView.extend({
+		template: "diagnoseLogsModal",
+		initialize: function(options) {
+			console.log("DiagnoseLogsView init");
+			this.model.on('change', this.render);
+
+		},
+		onRender: function() {
+			console.log("DiagnoseLogsView render");
+			// get rid of that pesky wrapping-div
+			// assumes 1 child element			
+			this.$el = this.$el.children();
+			this.setElement(this.$el);
+		},
+		onShow: function() {
+
+		}
+	});
+
+
+
+	return {
+		ImageAreaSelectModalView: ImageAreaSelectModalView,
+		DeleteModalView: DeleteModalView,
+		MobileBindModalView: MobileBindModalView,
+		ConfirmModalView: ConfirmModalView,
+		UpdateDoctorInfo: UpdateDoctorInfo,
+		CreateConsultView: CreateConsultView,
+		FileUploadingModalView: FileUploadingModalView,
+		DiagnoseLogsView: DiagnoseLogsView
+	}
 });
 /*!
  * typeahead.js 0.9.3
@@ -23667,2057 +28765,1705 @@ dust.helpers['pager'] = function(chunk, context, bodies, params) {
 };
 define("dust_cus_helpers", ["dust","dustHelper"], function(){});
 
-/*!
- * jQuery Validation Plugin 1.11.1
+/* =========================================================
+ * bootstrap-datepicker.js
+ * Repo: https://github.com/eternicode/bootstrap-datepicker/
+ * Demo: http://eternicode.github.io/bootstrap-datepicker/
+ * Docs: http://bootstrap-datepicker.readthedocs.org/
+ * Forked from http://www.eyecon.ro/bootstrap-datepicker
+ * =========================================================
+ * Started by Stefan Petre; improvements by Andrew Rowls + contributors
  *
- * http://bassistance.de/jquery-plugins/jquery-plugin-validation/
- * http://docs.jquery.com/Plugins/Validation
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * Copyright 2013 JÃ¶rn Zaefferer
- * Released under the MIT license:
- *   http://www.opensource.org/licenses/mit-license.php
- */
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ========================================================= */
 
-(function($) {
+(function($, undefined){
 
-$.extend($.fn, {
-	// http://docs.jquery.com/Plugins/Validation/validate
-	validate: function( options ) {
+	var $window = $(window);
 
-		// if nothing is selected, return nothing; can't chain anyway
-		if ( !this.length ) {
-			if ( options && options.debug && window.console ) {
-				console.warn( "Nothing selected, can't validate, returning nothing." );
-			}
-			return;
-		}
-
-		// check if a validator for this form was already created
-		var validator = $.data( this[0], "validator" );
-		if ( validator ) {
-			return validator;
-		}
-
-		// Add novalidate tag if HTML5.
-		this.attr( "novalidate", "novalidate" );
-
-		validator = new $.validator( options, this[0] );
-		$.data( this[0], "validator", validator );
-
-		if ( validator.settings.onsubmit ) {
-
-			this.validateDelegate( ":submit", "click", function( event ) {
-				if ( validator.settings.submitHandler ) {
-					validator.submitButton = event.target;
-				}
-				// allow suppressing validation by adding a cancel class to the submit button
-				if ( $(event.target).hasClass("cancel") ) {
-					validator.cancelSubmit = true;
-				}
-
-				// allow suppressing validation by adding the html5 formnovalidate attribute to the submit button
-				if ( $(event.target).attr("formnovalidate") !== undefined ) {
-					validator.cancelSubmit = true;
-				}
-			});
-
-			// validate the form on submit
-			this.submit( function( event ) {
-				if ( validator.settings.debug ) {
-					// prevent form submit to be able to see console output
-					event.preventDefault();
-				}
-				function handle() {
-					var hidden;
-					if ( validator.settings.submitHandler ) {
-						if ( validator.submitButton ) {
-							// insert a hidden input as a replacement for the missing submit button
-							hidden = $("<input type='hidden'/>").attr("name", validator.submitButton.name).val( $(validator.submitButton).val() ).appendTo(validator.currentForm);
-						}
-						validator.settings.submitHandler.call( validator, validator.currentForm, event );
-						if ( validator.submitButton ) {
-							// and clean up afterwards; thanks to no-block-scope, hidden can be referenced
-							hidden.remove();
-						}
-						return false;
-					}
-					return true;
-				}
-
-				// prevent submit for invalid forms or custom submit handlers
-				if ( validator.cancelSubmit ) {
-					validator.cancelSubmit = false;
-					return handle();
-				}
-				if ( validator.form() ) {
-					if ( validator.pendingRequest ) {
-						validator.formSubmitted = true;
-						return false;
-					}
-					return handle();
-				} else {
-					validator.focusInvalid();
-					return false;
-				}
-			});
-		}
-
-		return validator;
-	},
-	// http://docs.jquery.com/Plugins/Validation/valid
-	valid: function() {
-		if ( $(this[0]).is("form")) {
-			return this.validate().form();
-		} else {
-			var valid = true;
-			var validator = $(this[0].form).validate();
-			this.each(function() {
-				valid = valid && validator.element(this);
-			});
-			return valid;
-		}
-	},
-	// attributes: space seperated list of attributes to retrieve and remove
-	removeAttrs: function( attributes ) {
-		var result = {},
-			$element = this;
-		$.each(attributes.split(/\s/), function( index, value ) {
-			result[value] = $element.attr(value);
-			$element.removeAttr(value);
-		});
-		return result;
-	},
-	// http://docs.jquery.com/Plugins/Validation/rules
-	rules: function( command, argument ) {
-		var element = this[0];
-
-		if ( command ) {
-			var settings = $.data(element.form, "validator").settings;
-			var staticRules = settings.rules;
-			var existingRules = $.validator.staticRules(element);
-			switch(command) {
-			case "add":
-				$.extend(existingRules, $.validator.normalizeRule(argument));
-				// remove messages from rules, but allow them to be set separetely
-				delete existingRules.messages;
-				staticRules[element.name] = existingRules;
-				if ( argument.messages ) {
-					settings.messages[element.name] = $.extend( settings.messages[element.name], argument.messages );
-				}
-				break;
-			case "remove":
-				if ( !argument ) {
-					delete staticRules[element.name];
-					return existingRules;
-				}
-				var filtered = {};
-				$.each(argument.split(/\s/), function( index, method ) {
-					filtered[method] = existingRules[method];
-					delete existingRules[method];
-				});
-				return filtered;
-			}
-		}
-
-		var data = $.validator.normalizeRules(
-		$.extend(
-			{},
-			$.validator.classRules(element),
-			$.validator.attributeRules(element),
-			$.validator.dataRules(element),
-			$.validator.staticRules(element)
-		), element);
-
-		// make sure required is at front
-		if ( data.required ) {
-			var param = data.required;
-			delete data.required;
-			data = $.extend({required: param}, data);
-		}
-
-		return data;
+	function UTCDate(){
+		return new Date(Date.UTC.apply(Date, arguments));
 	}
-});
-
-// Custom selectors
-$.extend($.expr[":"], {
-	// http://docs.jquery.com/Plugins/Validation/blank
-	blank: function( a ) { return !$.trim("" + $(a).val()); },
-	// http://docs.jquery.com/Plugins/Validation/filled
-	filled: function( a ) { return !!$.trim("" + $(a).val()); },
-	// http://docs.jquery.com/Plugins/Validation/unchecked
-	unchecked: function( a ) { return !$(a).prop("checked"); }
-});
-
-// constructor for validator
-$.validator = function( options, form ) {
-	this.settings = $.extend( true, {}, $.validator.defaults, options );
-	this.currentForm = form;
-	this.init();
-};
-
-$.validator.format = function( source, params ) {
-	if ( arguments.length === 1 ) {
-		return function() {
-			var args = $.makeArray(arguments);
-			args.unshift(source);
-			return $.validator.format.apply( this, args );
+	function UTCToday(){
+		var today = new Date();
+		return UTCDate(today.getFullYear(), today.getMonth(), today.getDate());
+	}
+	function alias(method){
+		return function(){
+			return this[method].apply(this, arguments);
 		};
 	}
-	if ( arguments.length > 2 && params.constructor !== Array  ) {
-		params = $.makeArray(arguments).slice(1);
-	}
-	if ( params.constructor !== Array ) {
-		params = [ params ];
-	}
-	$.each(params, function( i, n ) {
-		source = source.replace( new RegExp("\\{" + i + "\\}", "g"), function() {
-			return n;
-		});
-	});
-	return source;
-};
 
-$.extend($.validator, {
+	var DateArray = (function(){
+		var extras = {
+			get: function(i){
+				return this.slice(i)[0];
+			},
+			contains: function(d){
+				// Array.indexOf is not cross-browser;
+				// $.inArray doesn't work with Dates
+				var val = d && d.valueOf();
+				for (var i=0, l=this.length; i < l; i++)
+					if (this[i].valueOf() === val)
+						return i;
+				return -1;
+			},
+			remove: function(i){
+				this.splice(i,1);
+			},
+			replace: function(new_array){
+				if (!new_array)
+					return;
+				if (!$.isArray(new_array))
+					new_array = [new_array];
+				this.clear();
+				this.push.apply(this, new_array);
+			},
+			clear: function(){
+				this.splice(0);
+			},
+			copy: function(){
+				var a = new DateArray();
+				a.replace(this);
+				return a;
+			}
+		};
 
-	defaults: {
-		messages: {},
-		groups: {},
-		rules: {},
-		errorClass: "error",
-		validClass: "valid",
-		errorElement: "label",
-		focusInvalid: true,
-		errorContainer: $([]),
-		errorLabelContainer: $([]),
-		onsubmit: true,
-		ignore: ":hidden",
-		ignoreTitle: false,
-		onfocusin: function( element, event ) {
-			this.lastActive = element;
+		return function(){
+			var a = [];
+			a.push.apply(a, arguments);
+			$.extend(a, extras);
+			return a;
+		};
+	})();
 
-			// hide error label and remove error class on focus if enabled
-			if ( this.settings.focusCleanup && !this.blockFocusCleanup ) {
-				if ( this.settings.unhighlight ) {
-					this.settings.unhighlight.call( this, element, this.settings.errorClass, this.settings.validClass );
-				}
-				this.addWrapper(this.errorsFor(element)).hide();
-			}
-		},
-		onfocusout: function( element, event ) {
-			if ( !this.checkable(element) && (element.name in this.submitted || !this.optional(element)) ) {
-				this.element(element);
-			}
-		},
-		onkeyup: function( element, event ) {
-			if ( event.which === 9 && this.elementValue(element) === "" ) {
-				return;
-			} else if ( element.name in this.submitted || element === this.lastElement ) {
-				this.element(element);
-			}
-		},
-		onclick: function( element, event ) {
-			// click on selects, radiobuttons and checkboxes
-			if ( element.name in this.submitted ) {
-				this.element(element);
-			}
-			// or option elements, check parent select in that case
-			else if ( element.parentNode.name in this.submitted ) {
-				this.element(element.parentNode);
-			}
-		},
-		highlight: function( element, errorClass, validClass ) {
-			if ( element.type === "radio" ) {
-				this.findByName(element.name).addClass(errorClass).removeClass(validClass);
-			} else {
-				$(element).addClass(errorClass).removeClass(validClass);
-			}
-		},
-		unhighlight: function( element, errorClass, validClass ) {
-			if ( element.type === "radio" ) {
-				this.findByName(element.name).removeClass(errorClass).addClass(validClass);
-			} else {
-				$(element).removeClass(errorClass).addClass(validClass);
-			}
+
+	// Picker object
+
+	var Datepicker = function(element, options){
+		this.dates = new DateArray();
+		this.viewDate = UTCToday();
+		this.focusDate = null;
+
+		this._process_options(options);
+
+		this.element = $(element);
+		this.isInline = false;
+		this.isInput = this.element.is('input');
+		this.component = this.element.is('.date') ? this.element.find('.add-on, .input-group-addon, .btn') : false;
+		this.hasInput = this.component && this.element.find('input').length;
+		if (this.component && this.component.length === 0)
+			this.component = false;
+
+		this.picker = $(DPGlobal.template);
+		this._buildEvents();
+		this._attachEvents();
+
+		if (this.isInline){
+			this.picker.addClass('datepicker-inline').appendTo(this.element);
 		}
-	},
+		else {
+			this.picker.addClass('datepicker-dropdown dropdown-menu');
+		}
 
-	// http://docs.jquery.com/Plugins/Validation/Validator/setDefaults
-	setDefaults: function( settings ) {
-		$.extend( $.validator.defaults, settings );
-	},
+		if (this.o.rtl){
+			this.picker.addClass('datepicker-rtl');
+		}
 
-	messages: {
-		required: "This field is required.",
-		remote: "Please fix this field.",
-		email: "Please enter a valid email address.",
-		url: "Please enter a valid URL.",
-		date: "Please enter a valid date.",
-		dateISO: "Please enter a valid date (ISO).",
-		number: "Please enter a valid number.",
-		digits: "Please enter only digits.",
-		creditcard: "Please enter a valid credit card number.",
-		equalTo: "Please enter the same value again.",
-		maxlength: $.validator.format("Please enter no more than {0} characters."),
-		minlength: $.validator.format("Please enter at least {0} characters."),
-		rangelength: $.validator.format("Please enter a value between {0} and {1} characters long."),
-		range: $.validator.format("Please enter a value between {0} and {1}."),
-		max: $.validator.format("Please enter a value less than or equal to {0}."),
-		min: $.validator.format("Please enter a value greater than or equal to {0}.")
-	},
+		this.viewMode = this.o.startView;
 
-	autoCreateRanges: false,
+		if (this.o.calendarWeeks)
+			this.picker.find('tfoot th.today')
+						.attr('colspan', function(i, val){
+							return parseInt(val) + 1;
+						});
 
-	prototype: {
+		this._allow_update = false;
 
-		init: function() {
-			this.labelContainer = $(this.settings.errorLabelContainer);
-			this.errorContext = this.labelContainer.length && this.labelContainer || $(this.currentForm);
-			this.containers = $(this.settings.errorContainer).add( this.settings.errorLabelContainer );
-			this.submitted = {};
-			this.valueCache = {};
-			this.pendingRequest = 0;
-			this.pending = {};
-			this.invalid = {};
-			this.reset();
+		this.setStartDate(this._o.startDate);
+		this.setEndDate(this._o.endDate);
+		this.setDaysOfWeekDisabled(this.o.daysOfWeekDisabled);
 
-			var groups = (this.groups = {});
-			$.each(this.settings.groups, function( key, value ) {
-				if ( typeof value === "string" ) {
-					value = value.split(/\s/);
+		this.fillDow();
+		this.fillMonths();
+
+		this._allow_update = true;
+
+		this.update();
+		this.showMode();
+
+		if (this.isInline){
+			this.show();
+		}
+	};
+
+	Datepicker.prototype = {
+		constructor: Datepicker,
+
+		_process_options: function(opts){
+			// Store raw options for reference
+			this._o = $.extend({}, this._o, opts);
+			// Processed options
+			var o = this.o = $.extend({}, this._o);
+
+			// Check if "de-DE" style date is available, if not language should
+			// fallback to 2 letter code eg "de"
+			var lang = o.language;
+			if (!dates[lang]){
+				lang = lang.split('-')[0];
+				if (!dates[lang])
+					lang = defaults.language;
+			}
+			o.language = lang;
+
+			switch (o.startView){
+				case 2:
+				case 'decade':
+					o.startView = 2;
+					break;
+				case 1:
+				case 'year':
+					o.startView = 1;
+					break;
+				default:
+					o.startView = 0;
+			}
+
+			switch (o.minViewMode){
+				case 1:
+				case 'months':
+					o.minViewMode = 1;
+					break;
+				case 2:
+				case 'years':
+					o.minViewMode = 2;
+					break;
+				default:
+					o.minViewMode = 0;
+			}
+
+			o.startView = Math.max(o.startView, o.minViewMode);
+
+			// true, false, or Number > 0
+			if (o.multidate !== true){
+				o.multidate = Number(o.multidate) || false;
+				if (o.multidate !== false)
+					o.multidate = Math.max(0, o.multidate);
+				else
+					o.multidate = 1;
+			}
+			o.multidateSeparator = String(o.multidateSeparator);
+
+			o.weekStart %= 7;
+			o.weekEnd = ((o.weekStart + 6) % 7);
+
+			var format = DPGlobal.parseFormat(o.format);
+			if (o.startDate !== -Infinity){
+				if (!!o.startDate){
+					if (o.startDate instanceof Date)
+						o.startDate = this._local_to_utc(this._zero_time(o.startDate));
+					else
+						o.startDate = DPGlobal.parseDate(o.startDate, format, o.language);
 				}
-				$.each(value, function( index, name ) {
-					groups[name] = key;
+				else {
+					o.startDate = -Infinity;
+				}
+			}
+			if (o.endDate !== Infinity){
+				if (!!o.endDate){
+					if (o.endDate instanceof Date)
+						o.endDate = this._local_to_utc(this._zero_time(o.endDate));
+					else
+						o.endDate = DPGlobal.parseDate(o.endDate, format, o.language);
+				}
+				else {
+					o.endDate = Infinity;
+				}
+			}
+
+			o.daysOfWeekDisabled = o.daysOfWeekDisabled||[];
+			if (!$.isArray(o.daysOfWeekDisabled))
+				o.daysOfWeekDisabled = o.daysOfWeekDisabled.split(/[,\s]*/);
+			o.daysOfWeekDisabled = $.map(o.daysOfWeekDisabled, function(d){
+				return parseInt(d, 10);
+			});
+
+			var plc = String(o.orientation).toLowerCase().split(/\s+/g),
+				_plc = o.orientation.toLowerCase();
+			plc = $.grep(plc, function(word){
+				return (/^auto|left|right|top|bottom$/).test(word);
+			});
+			o.orientation = {x: 'auto', y: 'auto'};
+			if (!_plc || _plc === 'auto')
+				; // no action
+			else if (plc.length === 1){
+				switch (plc[0]){
+					case 'top':
+					case 'bottom':
+						o.orientation.y = plc[0];
+						break;
+					case 'left':
+					case 'right':
+						o.orientation.x = plc[0];
+						break;
+				}
+			}
+			else {
+				_plc = $.grep(plc, function(word){
+					return (/^left|right$/).test(word);
 				});
-			});
-			var rules = this.settings.rules;
-			$.each(rules, function( key, value ) {
-				rules[key] = $.validator.normalizeRule(value);
-			});
+				o.orientation.x = _plc[0] || 'auto';
 
-			function delegate(event) {
-				var validator = $.data(this[0].form, "validator"),
-					eventType = "on" + event.type.replace(/^validate/, "");
-				if ( validator.settings[eventType] ) {
-					validator.settings[eventType].call(validator, this[0], event);
-				}
-			}
-			$(this.currentForm)
-				.validateDelegate(":text, [type='password'], [type='file'], select, textarea, " +
-					"[type='number'], [type='search'] ,[type='tel'], [type='url'], " +
-					"[type='email'], [type='datetime'], [type='date'], [type='month'], " +
-					"[type='week'], [type='time'], [type='datetime-local'], " +
-					"[type='range'], [type='color'] ",
-					"focusin focusout keyup", delegate)
-				.validateDelegate("[type='radio'], [type='checkbox'], select, option", "click", delegate);
-
-			if ( this.settings.invalidHandler ) {
-				$(this.currentForm).bind("invalid-form.validate", this.settings.invalidHandler);
-			}
-		},
-
-		// http://docs.jquery.com/Plugins/Validation/Validator/form
-		form: function() {
-			this.checkForm();
-			$.extend(this.submitted, this.errorMap);
-			this.invalid = $.extend({}, this.errorMap);
-			if ( !this.valid() ) {
-				$(this.currentForm).triggerHandler("invalid-form", [this]);
-			}
-			this.showErrors();
-			return this.valid();
-		},
-
-		checkForm: function() {
-			this.prepareForm();
-			for ( var i = 0, elements = (this.currentElements = this.elements()); elements[i]; i++ ) {
-				this.check( elements[i] );
-			}
-			return this.valid();
-		},
-
-		// http://docs.jquery.com/Plugins/Validation/Validator/element
-		element: function( element ) {
-			element = this.validationTargetFor( this.clean( element ) );
-			this.lastElement = element;
-			this.prepareElement( element );
-			this.currentElements = $(element);
-			var result = this.check( element ) !== false;
-			if ( result ) {
-				delete this.invalid[element.name];
-			} else {
-				this.invalid[element.name] = true;
-			}
-			if ( !this.numberOfInvalids() ) {
-				// Hide error containers on last error
-				this.toHide = this.toHide.add( this.containers );
-			}
-			this.showErrors();
-			return result;
-		},
-
-		// http://docs.jquery.com/Plugins/Validation/Validator/showErrors
-		showErrors: function( errors ) {
-			if ( errors ) {
-				// add items to error list and map
-				$.extend( this.errorMap, errors );
-				this.errorList = [];
-				for ( var name in errors ) {
-					this.errorList.push({
-						message: errors[name],
-						element: this.findByName(name)[0]
-					});
-				}
-				// remove items from success list
-				this.successList = $.grep( this.successList, function( element ) {
-					return !(element.name in errors);
+				_plc = $.grep(plc, function(word){
+					return (/^top|bottom$/).test(word);
 				});
-			}
-			if ( this.settings.showErrors ) {
-				this.settings.showErrors.call( this, this.errorMap, this.errorList );
-			} else {
-				this.defaultShowErrors();
+				o.orientation.y = _plc[0] || 'auto';
 			}
 		},
-
-		// http://docs.jquery.com/Plugins/Validation/Validator/resetForm
-		resetForm: function() {
-			if ( $.fn.resetForm ) {
-				$(this.currentForm).resetForm();
-			}
-			this.submitted = {};
-			this.lastElement = null;
-			this.prepareForm();
-			this.hideErrors();
-			this.elements().removeClass( this.settings.errorClass ).removeData( "previousValue" );
-		},
-
-		numberOfInvalids: function() {
-			return this.objectLength(this.invalid);
-		},
-
-		objectLength: function( obj ) {
-			var count = 0;
-			for ( var i in obj ) {
-				count++;
-			}
-			return count;
-		},
-
-		hideErrors: function() {
-			this.addWrapper( this.toHide ).hide();
-		},
-
-		valid: function() {
-			return this.size() === 0;
-		},
-
-		size: function() {
-			return this.errorList.length;
-		},
-
-		focusInvalid: function() {
-			if ( this.settings.focusInvalid ) {
-				try {
-					$(this.findLastActive() || this.errorList.length && this.errorList[0].element || [])
-					.filter(":visible")
-					.focus()
-					// manually trigger focusin event; without it, focusin handler isn't called, findLastActive won't have anything to find
-					.trigger("focusin");
-				} catch(e) {
-					// ignore IE throwing errors when focusing hidden elements
+		_events: [],
+		_secondaryEvents: [],
+		_applyEvents: function(evs){
+			for (var i=0, el, ch, ev; i < evs.length; i++){
+				el = evs[i][0];
+				if (evs[i].length === 2){
+					ch = undefined;
+					ev = evs[i][1];
 				}
-			}
-		},
-
-		findLastActive: function() {
-			var lastActive = this.lastActive;
-			return lastActive && $.grep(this.errorList, function( n ) {
-				return n.element.name === lastActive.name;
-			}).length === 1 && lastActive;
-		},
-
-		elements: function() {
-			var validator = this,
-				rulesCache = {};
-
-			// select all valid inputs inside the form (no submit or reset buttons)
-			return $(this.currentForm)
-			.find("input, select, textarea")
-			.not(":submit, :reset, :image, [disabled]")
-			.not( this.settings.ignore )
-			.filter(function() {
-				if ( !this.name && validator.settings.debug && window.console ) {
-					console.error( "%o has no name assigned", this);
+				else if (evs[i].length === 3){
+					ch = evs[i][1];
+					ev = evs[i][2];
 				}
-
-				// select only the first element for each name, and only those with rules specified
-				if ( this.name in rulesCache || !validator.objectLength($(this).rules()) ) {
-					return false;
+				el.on(ev, ch);
+			}
+		},
+		_unapplyEvents: function(evs){
+			for (var i=0, el, ev, ch; i < evs.length; i++){
+				el = evs[i][0];
+				if (evs[i].length === 2){
+					ch = undefined;
+					ev = evs[i][1];
 				}
-
-				rulesCache[this.name] = true;
-				return true;
-			});
-		},
-
-		clean: function( selector ) {
-			return $(selector)[0];
-		},
-
-		errors: function() {
-			var errorClass = this.settings.errorClass.replace(" ", ".");
-			return $(this.settings.errorElement + "." + errorClass, this.errorContext);
-		},
-
-		reset: function() {
-			this.successList = [];
-			this.errorList = [];
-			this.errorMap = {};
-			this.toShow = $([]);
-			this.toHide = $([]);
-			this.currentElements = $([]);
-		},
-
-		prepareForm: function() {
-			this.reset();
-			this.toHide = this.errors().add( this.containers );
-		},
-
-		prepareElement: function( element ) {
-			this.reset();
-			this.toHide = this.errorsFor(element);
-		},
-
-		elementValue: function( element ) {
-			var type = $(element).attr("type"),
-				val = $(element).val();
-
-			if ( type === "radio" || type === "checkbox" ) {
-				return $("input[name='" + $(element).attr("name") + "']:checked").val();
-			}
-
-			if ( typeof val === "string" ) {
-				return val.replace(/\r/g, "");
-			}
-			return val;
-		},
-
-		check: function( element ) {
-			element = this.validationTargetFor( this.clean( element ) );
-
-			var rules = $(element).rules();
-			var dependencyMismatch = false;
-			var val = this.elementValue(element);
-			var result;
-
-			for (var method in rules ) {
-				var rule = { method: method, parameters: rules[method] };
-				try {
-
-					result = $.validator.methods[method].call( this, val, element, rule.parameters );
-
-					// if a method indicates that the field is optional and therefore valid,
-					// don't mark it as valid when there are no other rules
-					if ( result === "dependency-mismatch" ) {
-						dependencyMismatch = true;
-						continue;
-					}
-					dependencyMismatch = false;
-
-					if ( result === "pending" ) {
-						this.toHide = this.toHide.not( this.errorsFor(element) );
-						return;
-					}
-
-					if ( !result ) {
-						this.formatAndAdd( element, rule );
-						return false;
-					}
-				} catch(e) {
-					if ( this.settings.debug && window.console ) {
-						console.log( "Exception occurred when checking element " + element.id + ", check the '" + rule.method + "' method.", e );
-					}
-					throw e;
+				else if (evs[i].length === 3){
+					ch = evs[i][1];
+					ev = evs[i][2];
 				}
+				el.off(ev, ch);
 			}
-			if ( dependencyMismatch ) {
-				return;
+		},
+		_buildEvents: function(){
+			if (this.isInput){ // single input
+				this._events = [
+					[this.element, {
+						focus: $.proxy(this.show, this),
+						keyup: $.proxy(function(e){
+							if ($.inArray(e.keyCode, [27,37,39,38,40,32,13,9]) === -1)
+								this.update();
+						}, this),
+						keydown: $.proxy(this.keydown, this)
+					}]
+				];
 			}
-			if ( this.objectLength(rules) ) {
-				this.successList.push(element);
+			else if (this.component && this.hasInput){ // component: input + button
+				this._events = [
+					// For components that are not readonly, allow keyboard nav
+					[this.element.find('input'), {
+						focus: $.proxy(this.show, this),
+						keyup: $.proxy(function(e){
+							if ($.inArray(e.keyCode, [27,37,39,38,40,32,13,9]) === -1)
+								this.update();
+						}, this),
+						keydown: $.proxy(this.keydown, this)
+					}],
+					[this.component, {
+						click: $.proxy(this.show, this)
+					}]
+				];
 			}
-			return true;
-		},
-
-		// return the custom message for the given element and validation method
-		// specified in the element's HTML5 data attribute
-		customDataMessage: function( element, method ) {
-			return $(element).data("msg-" + method.toLowerCase()) || (element.attributes && $(element).attr("data-msg-" + method.toLowerCase()));
-		},
-
-		// return the custom message for the given element name and validation method
-		customMessage: function( name, method ) {
-			var m = this.settings.messages[name];
-			return m && (m.constructor === String ? m : m[method]);
-		},
-
-		// return the first defined argument, allowing empty strings
-		findDefined: function() {
-			for(var i = 0; i < arguments.length; i++) {
-				if ( arguments[i] !== undefined ) {
-					return arguments[i];
-				}
+			else if (this.element.is('div')){  // inline datepicker
+				this.isInline = true;
 			}
-			return undefined;
-		},
-
-		defaultMessage: function( element, method ) {
-			return this.findDefined(
-				this.customMessage( element.name, method ),
-				this.customDataMessage( element, method ),
-				// title is never undefined, so handle empty string as undefined
-				!this.settings.ignoreTitle && element.title || undefined,
-				$.validator.messages[method],
-				"<strong>Warning: No message defined for " + element.name + "</strong>"
+			else {
+				this._events = [
+					[this.element, {
+						click: $.proxy(this.show, this)
+					}]
+				];
+			}
+			this._events.push(
+				// Component: listen for blur on element descendants
+				[this.element, '*', {
+					blur: $.proxy(function(e){
+						this._focused_from = e.target;
+					}, this)
+				}],
+				// Input: listen for blur on element
+				[this.element, {
+					blur: $.proxy(function(e){
+						this._focused_from = e.target;
+					}, this)
+				}]
 			);
+
+			this._secondaryEvents = [
+				[this.picker, {
+					click: $.proxy(this.click, this)
+				}],
+				[$(window), {
+					resize: $.proxy(this.place, this)
+				}],
+				[$(document), {
+					'mousedown touchstart': $.proxy(function(e){
+						// Clicked outside the datepicker, hide it
+						if (!(
+							this.element.is(e.target) ||
+							this.element.find(e.target).length ||
+							this.picker.is(e.target) ||
+							this.picker.find(e.target).length
+						)){
+							this.hide();
+						}
+					}, this)
+				}]
+			];
 		},
-
-		formatAndAdd: function( element, rule ) {
-			var message = this.defaultMessage( element, rule.method ),
-				theregex = /\$?\{(\d+)\}/g;
-			if ( typeof message === "function" ) {
-				message = message.call(this, rule.parameters, element);
-			} else if (theregex.test(message)) {
-				message = $.validator.format(message.replace(theregex, "{$1}"), rule.parameters);
-			}
-			this.errorList.push({
-				message: message,
-				element: element
-			});
-
-			this.errorMap[element.name] = message;
-			this.submitted[element.name] = message;
+		_attachEvents: function(){
+			this._detachEvents();
+			this._applyEvents(this._events);
 		},
-
-		addWrapper: function( toToggle ) {
-			if ( this.settings.wrapper ) {
-				toToggle = toToggle.add( toToggle.parent( this.settings.wrapper ) );
-			}
-			return toToggle;
+		_detachEvents: function(){
+			this._unapplyEvents(this._events);
 		},
-
-		defaultShowErrors: function() {
-			var i, elements;
-			for ( i = 0; this.errorList[i]; i++ ) {
-				var error = this.errorList[i];
-				if ( this.settings.highlight ) {
-					this.settings.highlight.call( this, error.element, this.settings.errorClass, this.settings.validClass );
-				}
-				this.showLabel( error.element, error.message );
-			}
-			if ( this.errorList.length ) {
-				this.toShow = this.toShow.add( this.containers );
-			}
-			if ( this.settings.success ) {
-				for ( i = 0; this.successList[i]; i++ ) {
-					this.showLabel( this.successList[i] );
-				}
-			}
-			if ( this.settings.unhighlight ) {
-				for ( i = 0, elements = this.validElements(); elements[i]; i++ ) {
-					this.settings.unhighlight.call( this, elements[i], this.settings.errorClass, this.settings.validClass );
-				}
-			}
-			this.toHide = this.toHide.not( this.toShow );
-			this.hideErrors();
-			this.addWrapper( this.toShow ).show();
+		_attachSecondaryEvents: function(){
+			this._detachSecondaryEvents();
+			this._applyEvents(this._secondaryEvents);
 		},
-
-		validElements: function() {
-			return this.currentElements.not(this.invalidElements());
+		_detachSecondaryEvents: function(){
+			this._unapplyEvents(this._secondaryEvents);
 		},
+		_trigger: function(event, altdate){
+			var date = altdate || this.dates.get(-1),
+				local_date = this._utc_to_local(date);
 
-		invalidElements: function() {
-			return $(this.errorList).map(function() {
-				return this.element;
+			this.element.trigger({
+				type: event,
+				date: local_date,
+				dates: $.map(this.dates, this._utc_to_local),
+				format: $.proxy(function(ix, format){
+					if (arguments.length === 0){
+						ix = this.dates.length - 1;
+						format = this.o.format;
+					}
+					else if (typeof ix === 'string'){
+						format = ix;
+						ix = this.dates.length - 1;
+					}
+					format = format || this.o.format;
+					var date = this.dates.get(ix);
+					return DPGlobal.formatDate(date, format, this.o.language);
+				}, this)
 			});
 		},
 
-		showLabel: function( element, message ) {
-			var label = this.errorsFor( element );
-			if ( label.length ) {
-				// refresh error/success class
-				label.removeClass( this.settings.validClass ).addClass( this.settings.errorClass );
-				// replace message on existing label
-				label.html(message);
-			} else {
-				// create label
-				label = $("<" + this.settings.errorElement + ">")
-					.attr("for", this.idOrName(element))
-					.addClass(this.settings.errorClass)
-					.html(message || "");
-				if ( this.settings.wrapper ) {
-					// make sure the element is visible, even in IE
-					// actually showing the wrapped element is handled elsewhere
-					label = label.hide().show().wrap("<" + this.settings.wrapper + "/>").parent();
+		show: function(){
+			if (!this.isInline)
+				this.picker.appendTo('body');
+			this.picker.show();
+			this.place();
+			this._attachSecondaryEvents();
+			this._trigger('show');
+		},
+
+		hide: function(){
+			if (this.isInline)
+				return;
+			if (!this.picker.is(':visible'))
+				return;
+			this.focusDate = null;
+			this.picker.hide().detach();
+			this._detachSecondaryEvents();
+			this.viewMode = this.o.startView;
+			this.showMode();
+
+			if (
+				this.o.forceParse &&
+				(
+					this.isInput && this.element.val() ||
+					this.hasInput && this.element.find('input').val()
+				)
+			)
+				this.setValue();
+			this._trigger('hide');
+		},
+
+		remove: function(){
+			this.hide();
+			this._detachEvents();
+			this._detachSecondaryEvents();
+			this.picker.remove();
+			delete this.element.data().datepicker;
+			if (!this.isInput){
+				delete this.element.data().date;
+			}
+		},
+
+		_utc_to_local: function(utc){
+			return utc && new Date(utc.getTime() + (utc.getTimezoneOffset()*60000));
+		},
+		_local_to_utc: function(local){
+			return local && new Date(local.getTime() - (local.getTimezoneOffset()*60000));
+		},
+		_zero_time: function(local){
+			return local && new Date(local.getFullYear(), local.getMonth(), local.getDate());
+		},
+		_zero_utc_time: function(utc){
+			return utc && new Date(Date.UTC(utc.getUTCFullYear(), utc.getUTCMonth(), utc.getUTCDate()));
+		},
+
+		getDates: function(){
+			return $.map(this.dates, this._utc_to_local);
+		},
+
+		getUTCDates: function(){
+			return $.map(this.dates, function(d){
+				return new Date(d);
+			});
+		},
+
+		getDate: function(){
+			return this._utc_to_local(this.getUTCDate());
+		},
+
+		getUTCDate: function(){
+			return new Date(this.dates.get(-1));
+		},
+
+		setDates: function(){
+			var args = $.isArray(arguments[0]) ? arguments[0] : arguments;
+			this.update.apply(this, args);
+			this._trigger('changeDate');
+			this.setValue();
+		},
+
+		setUTCDates: function(){
+			var args = $.isArray(arguments[0]) ? arguments[0] : arguments;
+			this.update.apply(this, $.map(args, this._utc_to_local));
+			this._trigger('changeDate');
+			this.setValue();
+		},
+
+		setDate: alias('setDates'),
+		setUTCDate: alias('setUTCDates'),
+
+		setValue: function(){
+			var formatted = this.getFormattedDate();
+			if (!this.isInput){
+				if (this.component){
+					this.element.find('input').val(formatted).change();
 				}
-				if ( !this.labelContainer.append(label).length ) {
-					if ( this.settings.errorPlacement ) {
-						this.settings.errorPlacement(label, $(element) );
-					} else {
-						label.insertAfter(element);
+			}
+			else {
+				this.element.val(formatted).change();
+			}
+		},
+
+		getFormattedDate: function(format){
+			if (format === undefined)
+				format = this.o.format;
+
+			var lang = this.o.language;
+			return $.map(this.dates, function(d){
+				return DPGlobal.formatDate(d, format, lang);
+			}).join(this.o.multidateSeparator);
+		},
+
+		setStartDate: function(startDate){
+			this._process_options({startDate: startDate});
+			this.update();
+			this.updateNavArrows();
+		},
+
+		setEndDate: function(endDate){
+			this._process_options({endDate: endDate});
+			this.update();
+			this.updateNavArrows();
+		},
+
+		setDaysOfWeekDisabled: function(daysOfWeekDisabled){
+			this._process_options({daysOfWeekDisabled: daysOfWeekDisabled});
+			this.update();
+			this.updateNavArrows();
+		},
+
+		place: function(){
+			if (this.isInline)
+				return;
+			var calendarWidth = this.picker.outerWidth(),
+				calendarHeight = this.picker.outerHeight(),
+				visualPadding = 10,
+				windowWidth = $window.width(),
+				windowHeight = $window.height(),
+				scrollTop = $window.scrollTop();
+
+			var zIndex = parseInt(this.element.parents().filter(function(){
+					return $(this).css('z-index') !== 'auto';
+				}).first().css('z-index'))+10;
+			var offset = this.component ? this.component.parent().offset() : this.element.offset();
+			var height = this.component ? this.component.outerHeight(true) : this.element.outerHeight(false);
+			var width = this.component ? this.component.outerWidth(true) : this.element.outerWidth(false);
+			var left = offset.left,
+				top = offset.top;
+
+			this.picker.removeClass(
+				'datepicker-orient-top datepicker-orient-bottom '+
+				'datepicker-orient-right datepicker-orient-left'
+			);
+
+			if (this.o.orientation.x !== 'auto'){
+				this.picker.addClass('datepicker-orient-' + this.o.orientation.x);
+				if (this.o.orientation.x === 'right')
+					left -= calendarWidth - width;
+			}
+			// auto x orientation is best-placement: if it crosses a window
+			// edge, fudge it sideways
+			else {
+				// Default to left
+				this.picker.addClass('datepicker-orient-left');
+				if (offset.left < 0)
+					left -= offset.left - visualPadding;
+				else if (offset.left + calendarWidth > windowWidth)
+					left = windowWidth - calendarWidth - visualPadding;
+			}
+
+			// auto y orientation is best-situation: top or bottom, no fudging,
+			// decision based on which shows more of the calendar
+			var yorient = this.o.orientation.y,
+				top_overflow, bottom_overflow;
+			if (yorient === 'auto'){
+				top_overflow = -scrollTop + offset.top - calendarHeight;
+				bottom_overflow = scrollTop + windowHeight - (offset.top + height + calendarHeight);
+				if (Math.max(top_overflow, bottom_overflow) === bottom_overflow)
+					yorient = 'top';
+				else
+					yorient = 'bottom';
+			}
+			this.picker.addClass('datepicker-orient-' + yorient);
+			if (yorient === 'top')
+				top += height;
+			else
+				top -= calendarHeight + parseInt(this.picker.css('padding-top'));
+
+			this.picker.css({
+				top: top,
+				left: left,
+				zIndex: zIndex
+			});
+		},
+
+		_allow_update: true,
+		update: function(){
+			if (!this._allow_update)
+				return;
+
+			var oldDates = this.dates.copy(),
+				dates = [],
+				fromArgs = false;
+			if (arguments.length){
+				$.each(arguments, $.proxy(function(i, date){
+					if (date instanceof Date)
+						date = this._local_to_utc(date);
+					dates.push(date);
+				}, this));
+				fromArgs = true;
+			}
+			else {
+				dates = this.isInput
+						? this.element.val()
+						: this.element.data('date') || this.element.find('input').val();
+				if (dates && this.o.multidate)
+					dates = dates.split(this.o.multidateSeparator);
+				else
+					dates = [dates];
+				delete this.element.data().date;
+			}
+
+			dates = $.map(dates, $.proxy(function(date){
+				return DPGlobal.parseDate(date, this.o.format, this.o.language);
+			}, this));
+			dates = $.grep(dates, $.proxy(function(date){
+				return (
+					date < this.o.startDate ||
+					date > this.o.endDate ||
+					!date
+				);
+			}, this), true);
+			this.dates.replace(dates);
+
+			if (this.dates.length)
+				this.viewDate = new Date(this.dates.get(-1));
+			else if (this.viewDate < this.o.startDate)
+				this.viewDate = new Date(this.o.startDate);
+			else if (this.viewDate > this.o.endDate)
+				this.viewDate = new Date(this.o.endDate);
+
+			if (fromArgs){
+				// setting date by clicking
+				this.setValue();
+			}
+			else if (dates.length){
+				// setting date by typing
+				if (String(oldDates) !== String(this.dates))
+					this._trigger('changeDate');
+			}
+			if (!this.dates.length && oldDates.length)
+				this._trigger('clearDate');
+
+			this.fill();
+		},
+
+		fillDow: function(){
+			var dowCnt = this.o.weekStart,
+				html = '<tr>';
+			if (this.o.calendarWeeks){
+				var cell = '<th class="cw">&nbsp;</th>';
+				html += cell;
+				this.picker.find('.datepicker-days thead tr:first-child').prepend(cell);
+			}
+			while (dowCnt < this.o.weekStart + 7){
+				html += '<th class="dow">'+dates[this.o.language].daysMin[(dowCnt++)%7]+'</th>';
+			}
+			html += '</tr>';
+			this.picker.find('.datepicker-days thead').append(html);
+		},
+
+		fillMonths: function(){
+			var html = '',
+			i = 0;
+			while (i < 12){
+				html += '<span class="month">'+dates[this.o.language].monthsShort[i++]+'</span>';
+			}
+			this.picker.find('.datepicker-months td').html(html);
+		},
+
+		setRange: function(range){
+			if (!range || !range.length)
+				delete this.range;
+			else
+				this.range = $.map(range, function(d){
+					return d.valueOf();
+				});
+			this.fill();
+		},
+
+		getClassNames: function(date){
+			var cls = [],
+				year = this.viewDate.getUTCFullYear(),
+				month = this.viewDate.getUTCMonth(),
+				today = new Date();
+			if (date.getUTCFullYear() < year || (date.getUTCFullYear() === year && date.getUTCMonth() < month)){
+				cls.push('old');
+			}
+			else if (date.getUTCFullYear() > year || (date.getUTCFullYear() === year && date.getUTCMonth() > month)){
+				cls.push('new');
+			}
+			if (this.focusDate && date.valueOf() === this.focusDate.valueOf())
+				cls.push('focused');
+			// Compare internal UTC date with local today, not UTC today
+			if (this.o.todayHighlight &&
+				date.getUTCFullYear() === today.getFullYear() &&
+				date.getUTCMonth() === today.getMonth() &&
+				date.getUTCDate() === today.getDate()){
+				cls.push('today');
+			}
+			if (this.dates.contains(date) !== -1)
+				cls.push('active');
+			if (date.valueOf() < this.o.startDate || date.valueOf() > this.o.endDate ||
+				$.inArray(date.getUTCDay(), this.o.daysOfWeekDisabled) !== -1){
+				cls.push('disabled');
+			}
+			if (this.range){
+				if (date > this.range[0] && date < this.range[this.range.length-1]){
+					cls.push('range');
+				}
+				if ($.inArray(date.valueOf(), this.range) !== -1){
+					cls.push('selected');
+				}
+			}
+			return cls;
+		},
+
+		fill: function(){
+			var d = new Date(this.viewDate),
+				year = d.getUTCFullYear(),
+				month = d.getUTCMonth(),
+				startYear = this.o.startDate !== -Infinity ? this.o.startDate.getUTCFullYear() : -Infinity,
+				startMonth = this.o.startDate !== -Infinity ? this.o.startDate.getUTCMonth() : -Infinity,
+				endYear = this.o.endDate !== Infinity ? this.o.endDate.getUTCFullYear() : Infinity,
+				endMonth = this.o.endDate !== Infinity ? this.o.endDate.getUTCMonth() : Infinity,
+				todaytxt = dates[this.o.language].today || dates['en'].today || '',
+				cleartxt = dates[this.o.language].clear || dates['en'].clear || '',
+				tooltip;
+			this.picker.find('.datepicker-days thead th.datepicker-switch')
+						.text(dates[this.o.language].months[month]+' '+year);
+			this.picker.find('tfoot th.today')
+						.text(todaytxt)
+						.toggle(this.o.todayBtn !== false);
+			this.picker.find('tfoot th.clear')
+						.text(cleartxt)
+						.toggle(this.o.clearBtn !== false);
+			this.updateNavArrows();
+			this.fillMonths();
+			var prevMonth = UTCDate(year, month-1, 28),
+				day = DPGlobal.getDaysInMonth(prevMonth.getUTCFullYear(), prevMonth.getUTCMonth());
+			prevMonth.setUTCDate(day);
+			prevMonth.setUTCDate(day - (prevMonth.getUTCDay() - this.o.weekStart + 7)%7);
+			var nextMonth = new Date(prevMonth);
+			nextMonth.setUTCDate(nextMonth.getUTCDate() + 42);
+			nextMonth = nextMonth.valueOf();
+			var html = [];
+			var clsName;
+			while (prevMonth.valueOf() < nextMonth){
+				if (prevMonth.getUTCDay() === this.o.weekStart){
+					html.push('<tr>');
+					if (this.o.calendarWeeks){
+						// ISO 8601: First week contains first thursday.
+						// ISO also states week starts on Monday, but we can be more abstract here.
+						var
+							// Start of current week: based on weekstart/current date
+							ws = new Date(+prevMonth + (this.o.weekStart - prevMonth.getUTCDay() - 7) % 7 * 864e5),
+							// Thursday of this week
+							th = new Date(Number(ws) + (7 + 4 - ws.getUTCDay()) % 7 * 864e5),
+							// First Thursday of year, year from thursday
+							yth = new Date(Number(yth = UTCDate(th.getUTCFullYear(), 0, 1)) + (7 + 4 - yth.getUTCDay())%7*864e5),
+							// Calendar week: ms between thursdays, div ms per day, div 7 days
+							calWeek =  (th - yth) / 864e5 / 7 + 1;
+						html.push('<td class="cw">'+ calWeek +'</td>');
+
 					}
 				}
-			}
-			if ( !message && this.settings.success ) {
-				label.text("");
-				if ( typeof this.settings.success === "string" ) {
-					label.addClass( this.settings.success );
-				} else {
-					this.settings.success( label, element );
-				}
-			}
-			this.toShow = this.toShow.add(label);
-		},
+				clsName = this.getClassNames(prevMonth);
+				clsName.push('day');
 
-		errorsFor: function( element ) {
-			var name = this.idOrName(element);
-			return this.errors().filter(function() {
-				return $(this).attr("for") === name;
+				if (this.o.beforeShowDay !== $.noop){
+					var before = this.o.beforeShowDay(this._utc_to_local(prevMonth));
+					if (before === undefined)
+						before = {};
+					else if (typeof(before) === 'boolean')
+						before = {enabled: before};
+					else if (typeof(before) === 'string')
+						before = {classes: before};
+					if (before.enabled === false)
+						clsName.push('disabled');
+					if (before.classes)
+						clsName = clsName.concat(before.classes.split(/\s+/));
+					if (before.tooltip)
+						tooltip = before.tooltip;
+				}
+
+				clsName = $.unique(clsName);
+				html.push('<td class="'+clsName.join(' ')+'"' + (tooltip ? ' title="'+tooltip+'"' : '') + '>'+prevMonth.getUTCDate() + '</td>');
+				if (prevMonth.getUTCDay() === this.o.weekEnd){
+					html.push('</tr>');
+				}
+				prevMonth.setUTCDate(prevMonth.getUTCDate()+1);
+			}
+			this.picker.find('.datepicker-days tbody').empty().append(html.join(''));
+
+			var months = this.picker.find('.datepicker-months')
+						.find('th:eq(1)')
+							.text(year)
+							.end()
+						.find('span').removeClass('active');
+
+			$.each(this.dates, function(i, d){
+				if (d.getUTCFullYear() === year)
+					months.eq(d.getUTCMonth()).addClass('active');
 			});
-		},
 
-		idOrName: function( element ) {
-			return this.groups[element.name] || (this.checkable(element) ? element.name : element.id || element.name);
-		},
-
-		validationTargetFor: function( element ) {
-			// if radio/checkbox, validate first element in group instead
-			if ( this.checkable(element) ) {
-				element = this.findByName( element.name ).not(this.settings.ignore)[0];
+			if (year < startYear || year > endYear){
+				months.addClass('disabled');
 			}
-			return element;
+			if (year === startYear){
+				months.slice(0, startMonth).addClass('disabled');
+			}
+			if (year === endYear){
+				months.slice(endMonth+1).addClass('disabled');
+			}
+
+			html = '';
+			year = parseInt(year/10, 10) * 10;
+			var yearCont = this.picker.find('.datepicker-years')
+								.find('th:eq(1)')
+									.text(year + '-' + (year + 9))
+									.end()
+								.find('td');
+			year -= 1;
+			var years = $.map(this.dates, function(d){
+					return d.getUTCFullYear();
+				}),
+				classes;
+			for (var i = -1; i < 11; i++){
+				classes = ['year'];
+				if (i === -1)
+					classes.push('old');
+				else if (i === 10)
+					classes.push('new');
+				if ($.inArray(year, years) !== -1)
+					classes.push('active');
+				if (year < startYear || year > endYear)
+					classes.push('disabled');
+				html += '<span class="' + classes.join(' ') + '">'+year+'</span>';
+				year += 1;
+			}
+			yearCont.html(html);
 		},
 
-		checkable: function( element ) {
-			return (/radio|checkbox/i).test(element.type);
+		updateNavArrows: function(){
+			if (!this._allow_update)
+				return;
+
+			var d = new Date(this.viewDate),
+				year = d.getUTCFullYear(),
+				month = d.getUTCMonth();
+			switch (this.viewMode){
+				case 0:
+					if (this.o.startDate !== -Infinity && year <= this.o.startDate.getUTCFullYear() && month <= this.o.startDate.getUTCMonth()){
+						this.picker.find('.prev').css({visibility: 'hidden'});
+					}
+					else {
+						this.picker.find('.prev').css({visibility: 'visible'});
+					}
+					if (this.o.endDate !== Infinity && year >= this.o.endDate.getUTCFullYear() && month >= this.o.endDate.getUTCMonth()){
+						this.picker.find('.next').css({visibility: 'hidden'});
+					}
+					else {
+						this.picker.find('.next').css({visibility: 'visible'});
+					}
+					break;
+				case 1:
+				case 2:
+					if (this.o.startDate !== -Infinity && year <= this.o.startDate.getUTCFullYear()){
+						this.picker.find('.prev').css({visibility: 'hidden'});
+					}
+					else {
+						this.picker.find('.prev').css({visibility: 'visible'});
+					}
+					if (this.o.endDate !== Infinity && year >= this.o.endDate.getUTCFullYear()){
+						this.picker.find('.next').css({visibility: 'hidden'});
+					}
+					else {
+						this.picker.find('.next').css({visibility: 'visible'});
+					}
+					break;
+			}
 		},
 
-		findByName: function( name ) {
-			return $(this.currentForm).find("[name='" + name + "']");
-		},
+		click: function(e){
+			e.preventDefault();
+			var target = $(e.target).closest('span, td, th'),
+				year, month, day;
+			if (target.length === 1){
+				switch (target[0].nodeName.toLowerCase()){
+					case 'th':
+						switch (target[0].className){
+							case 'datepicker-switch':
+								this.showMode(1);
+								break;
+							case 'prev':
+							case 'next':
+								var dir = DPGlobal.modes[this.viewMode].navStep * (target[0].className === 'prev' ? -1 : 1);
+								switch (this.viewMode){
+									case 0:
+										this.viewDate = this.moveMonth(this.viewDate, dir);
+										this._trigger('changeMonth', this.viewDate);
+										break;
+									case 1:
+									case 2:
+										this.viewDate = this.moveYear(this.viewDate, dir);
+										if (this.viewMode === 1)
+											this._trigger('changeYear', this.viewDate);
+										break;
+								}
+								this.fill();
+								break;
+							case 'today':
+								var date = new Date();
+								date = UTCDate(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
 
-		getLength: function( value, element ) {
-			switch( element.nodeName.toLowerCase() ) {
-			case "select":
-				return $("option:selected", element).length;
-			case "input":
-				if ( this.checkable( element) ) {
-					return this.findByName(element.name).filter(":checked").length;
+								this.showMode(-2);
+								var which = this.o.todayBtn === 'linked' ? null : 'view';
+								this._setDate(date, which);
+								break;
+							case 'clear':
+								var element;
+								if (this.isInput)
+									element = this.element;
+								else if (this.component)
+									element = this.element.find('input');
+								if (element)
+									element.val("").change();
+								this.update();
+								this._trigger('changeDate');
+								if (this.o.autoclose)
+									this.hide();
+								break;
+						}
+						break;
+					case 'span':
+						if (!target.is('.disabled')){
+							this.viewDate.setUTCDate(1);
+							if (target.is('.month')){
+								day = 1;
+								month = target.parent().find('span').index(target);
+								year = this.viewDate.getUTCFullYear();
+								this.viewDate.setUTCMonth(month);
+								this._trigger('changeMonth', this.viewDate);
+								if (this.o.minViewMode === 1){
+									this._setDate(UTCDate(year, month, day));
+								}
+							}
+							else {
+								day = 1;
+								month = 0;
+								year = parseInt(target.text(), 10)||0;
+								this.viewDate.setUTCFullYear(year);
+								this._trigger('changeYear', this.viewDate);
+								if (this.o.minViewMode === 2){
+									this._setDate(UTCDate(year, month, day));
+								}
+							}
+							this.showMode(-1);
+							this.fill();
+						}
+						break;
+					case 'td':
+						if (target.is('.day') && !target.is('.disabled')){
+							day = parseInt(target.text(), 10)||1;
+							year = this.viewDate.getUTCFullYear();
+							month = this.viewDate.getUTCMonth();
+							if (target.is('.old')){
+								if (month === 0){
+									month = 11;
+									year -= 1;
+								}
+								else {
+									month -= 1;
+								}
+							}
+							else if (target.is('.new')){
+								if (month === 11){
+									month = 0;
+									year += 1;
+								}
+								else {
+									month += 1;
+								}
+							}
+							this._setDate(UTCDate(year, month, day));
+						}
+						break;
 				}
 			}
-			return value.length;
+			if (this.picker.is(':visible') && this._focused_from){
+				$(this._focused_from).focus();
+			}
+			delete this._focused_from;
 		},
 
-		depend: function( param, element ) {
-			return this.dependTypes[typeof param] ? this.dependTypes[typeof param](param, element) : true;
-		},
-
-		dependTypes: {
-			"boolean": function( param, element ) {
-				return param;
-			},
-			"string": function( param, element ) {
-				return !!$(param, element.form).length;
-			},
-			"function": function( param, element ) {
-				return param(element);
+		_toggle_multidate: function(date){
+			var ix = this.dates.contains(date);
+			if (!date){
+				this.dates.clear();
 			}
-		},
-
-		optional: function( element ) {
-			var val = this.elementValue(element);
-			return !$.validator.methods.required.call(this, val, element) && "dependency-mismatch";
-		},
-
-		startRequest: function( element ) {
-			if ( !this.pending[element.name] ) {
-				this.pendingRequest++;
-				this.pending[element.name] = true;
+			else if (ix !== -1){
+				this.dates.remove(ix);
 			}
+			else {
+				this.dates.push(date);
+			}
+			if (typeof this.o.multidate === 'number')
+				while (this.dates.length > this.o.multidate)
+					this.dates.remove(0);
 		},
 
-		stopRequest: function( element, valid ) {
-			this.pendingRequest--;
-			// sometimes synchronization fails, make sure pendingRequest is never < 0
-			if ( this.pendingRequest < 0 ) {
-				this.pendingRequest = 0;
+		_setDate: function(date, which){
+			if (!which || which === 'date')
+				this._toggle_multidate(date && new Date(date));
+			if (!which || which  === 'view')
+				this.viewDate = date && new Date(date);
+
+			this.fill();
+			this.setValue();
+			this._trigger('changeDate');
+			var element;
+			if (this.isInput){
+				element = this.element;
 			}
-			delete this.pending[element.name];
-			if ( valid && this.pendingRequest === 0 && this.formSubmitted && this.form() ) {
-				$(this.currentForm).submit();
-				this.formSubmitted = false;
-			} else if (!valid && this.pendingRequest === 0 && this.formSubmitted) {
-				$(this.currentForm).triggerHandler("invalid-form", [this]);
-				this.formSubmitted = false;
+			else if (this.component){
+				element = this.element.find('input');
+			}
+			if (element){
+				element.change();
+			}
+			if (this.o.autoclose && (!which || which === 'date')){
+				this.hide();
 			}
 		},
 
-		previousValue: function( element ) {
-			return $.data(element, "previousValue") || $.data(element, "previousValue", {
-				old: null,
-				valid: true,
-				message: this.defaultMessage( element, "remote" )
-			});
-		}
-
-	},
-
-	classRuleSettings: {
-		required: {required: true},
-		email: {email: true},
-		url: {url: true},
-		date: {date: true},
-		dateISO: {dateISO: true},
-		number: {number: true},
-		digits: {digits: true},
-		creditcard: {creditcard: true}
-	},
-
-	addClassRules: function( className, rules ) {
-		if ( className.constructor === String ) {
-			this.classRuleSettings[className] = rules;
-		} else {
-			$.extend(this.classRuleSettings, className);
-		}
-	},
-
-	classRules: function( element ) {
-		var rules = {};
-		var classes = $(element).attr("class");
-		if ( classes ) {
-			$.each(classes.split(" "), function() {
-				if ( this in $.validator.classRuleSettings ) {
-					$.extend(rules, $.validator.classRuleSettings[this]);
-				}
-			});
-		}
-		return rules;
-	},
-
-	attributeRules: function( element ) {
-		var rules = {};
-		var $element = $(element);
-		var type = $element[0].getAttribute("type");
-
-		for (var method in $.validator.methods) {
-			var value;
-
-			// support for <input required> in both html5 and older browsers
-			if ( method === "required" ) {
-				value = $element.get(0).getAttribute(method);
-				// Some browsers return an empty string for the required attribute
-				// and non-HTML5 browsers might have required="" markup
-				if ( value === "" ) {
-					value = true;
-				}
-				// force non-HTML5 browsers to return bool
-				value = !!value;
-			} else {
-				value = $element.attr(method);
+		moveMonth: function(date, dir){
+			if (!date)
+				return undefined;
+			if (!dir)
+				return date;
+			var new_date = new Date(date.valueOf()),
+				day = new_date.getUTCDate(),
+				month = new_date.getUTCMonth(),
+				mag = Math.abs(dir),
+				new_month, test;
+			dir = dir > 0 ? 1 : -1;
+			if (mag === 1){
+				test = dir === -1
+					// If going back one month, make sure month is not current month
+					// (eg, Mar 31 -> Feb 31 == Feb 28, not Mar 02)
+					? function(){
+						return new_date.getUTCMonth() === month;
+					}
+					// If going forward one month, make sure month is as expected
+					// (eg, Jan 31 -> Feb 31 == Feb 28, not Mar 02)
+					: function(){
+						return new_date.getUTCMonth() !== new_month;
+					};
+				new_month = month + dir;
+				new_date.setUTCMonth(new_month);
+				// Dec -> Jan (12) or Jan -> Dec (-1) -- limit expected date to 0-11
+				if (new_month < 0 || new_month > 11)
+					new_month = (new_month + 12) % 12;
 			}
-
-			// convert the value to a number for number inputs, and for text for backwards compability
-			// allows type="date" and others to be compared as strings
-			if ( /min|max/.test( method ) && ( type === null || /number|range|text/.test( type ) ) ) {
-				value = Number(value);
+			else {
+				// For magnitudes >1, move one month at a time...
+				for (var i=0; i < mag; i++)
+					// ...which might decrease the day (eg, Jan 31 to Feb 28, etc)...
+					new_date = this.moveMonth(new_date, dir);
+				// ...then reset the day, keeping it in the new month
+				new_month = new_date.getUTCMonth();
+				new_date.setUTCDate(day);
+				test = function(){
+					return new_month !== new_date.getUTCMonth();
+				};
 			}
-
-			if ( value ) {
-				rules[method] = value;
-			} else if ( type === method && type !== 'range' ) {
-				// exception: the jquery validate 'range' method
-				// does not test for the html5 'range' type
-				rules[method] = true;
+			// Common date-resetting loop -- if date is beyond end of month, make it
+			// end of month
+			while (test()){
+				new_date.setUTCDate(--day);
+				new_date.setUTCMonth(new_month);
 			}
-		}
+			return new_date;
+		},
 
-		// maxlength may be returned as -1, 2147483647 (IE) and 524288 (safari) for text inputs
-		if ( rules.maxlength && /-1|2147483647|524288/.test(rules.maxlength) ) {
-			delete rules.maxlength;
-		}
+		moveYear: function(date, dir){
+			return this.moveMonth(date, dir*12);
+		},
 
-		return rules;
-	},
+		dateWithinRange: function(date){
+			return date >= this.o.startDate && date <= this.o.endDate;
+		},
 
-	dataRules: function( element ) {
-		var method, value,
-			rules = {}, $element = $(element);
-		for (method in $.validator.methods) {
-			value = $element.data("rule-" + method.toLowerCase());
-			if ( value !== undefined ) {
-				rules[method] = value;
-			}
-		}
-		return rules;
-	},
-
-	staticRules: function( element ) {
-		var rules = {};
-		var validator = $.data(element.form, "validator");
-		if ( validator.settings.rules ) {
-			rules = $.validator.normalizeRule(validator.settings.rules[element.name]) || {};
-		}
-		return rules;
-	},
-
-	normalizeRules: function( rules, element ) {
-		// handle dependency check
-		$.each(rules, function( prop, val ) {
-			// ignore rule when param is explicitly false, eg. required:false
-			if ( val === false ) {
-				delete rules[prop];
+		keydown: function(e){
+			if (this.picker.is(':not(:visible)')){
+				if (e.keyCode === 27) // allow escape to hide and re-show picker
+					this.show();
 				return;
 			}
-			if ( val.param || val.depends ) {
-				var keepRule = true;
-				switch (typeof val.depends) {
-				case "string":
-					keepRule = !!$(val.depends, element.form).length;
+			var dateChanged = false,
+				dir, newDate, newViewDate,
+				focusDate = this.focusDate || this.viewDate;
+			switch (e.keyCode){
+				case 27: // escape
+					if (this.focusDate){
+						this.focusDate = null;
+						this.viewDate = this.dates.get(-1) || this.viewDate;
+						this.fill();
+					}
+					else
+						this.hide();
+					e.preventDefault();
 					break;
-				case "function":
-					keepRule = val.depends.call(element, element);
+				case 37: // left
+				case 39: // right
+					if (!this.o.keyboardNavigation)
+						break;
+					dir = e.keyCode === 37 ? -1 : 1;
+					if (e.ctrlKey){
+						newDate = this.moveYear(this.dates.get(-1) || UTCToday(), dir);
+						newViewDate = this.moveYear(focusDate, dir);
+						this._trigger('changeYear', this.viewDate);
+					}
+					else if (e.shiftKey){
+						newDate = this.moveMonth(this.dates.get(-1) || UTCToday(), dir);
+						newViewDate = this.moveMonth(focusDate, dir);
+						this._trigger('changeMonth', this.viewDate);
+					}
+					else {
+						newDate = new Date(this.dates.get(-1) || UTCToday());
+						newDate.setUTCDate(newDate.getUTCDate() + dir);
+						newViewDate = new Date(focusDate);
+						newViewDate.setUTCDate(focusDate.getUTCDate() + dir);
+					}
+					if (this.dateWithinRange(newDate)){
+						this.focusDate = this.viewDate = newViewDate;
+						this.setValue();
+						this.fill();
+						e.preventDefault();
+					}
 					break;
+				case 38: // up
+				case 40: // down
+					if (!this.o.keyboardNavigation)
+						break;
+					dir = e.keyCode === 38 ? -1 : 1;
+					if (e.ctrlKey){
+						newDate = this.moveYear(this.dates.get(-1) || UTCToday(), dir);
+						newViewDate = this.moveYear(focusDate, dir);
+						this._trigger('changeYear', this.viewDate);
+					}
+					else if (e.shiftKey){
+						newDate = this.moveMonth(this.dates.get(-1) || UTCToday(), dir);
+						newViewDate = this.moveMonth(focusDate, dir);
+						this._trigger('changeMonth', this.viewDate);
+					}
+					else {
+						newDate = new Date(this.dates.get(-1) || UTCToday());
+						newDate.setUTCDate(newDate.getUTCDate() + dir * 7);
+						newViewDate = new Date(focusDate);
+						newViewDate.setUTCDate(focusDate.getUTCDate() + dir * 7);
+					}
+					if (this.dateWithinRange(newDate)){
+						this.focusDate = this.viewDate = newViewDate;
+						this.setValue();
+						this.fill();
+						e.preventDefault();
+					}
+					break;
+				case 32: // spacebar
+					// Spacebar is used in manually typing dates in some formats.
+					// As such, its behavior should not be hijacked.
+					break;
+				case 13: // enter
+					focusDate = this.focusDate || this.dates.get(-1) || this.viewDate;
+					this._toggle_multidate(focusDate);
+					dateChanged = true;
+					this.focusDate = null;
+					this.viewDate = this.dates.get(-1) || this.viewDate;
+					this.setValue();
+					this.fill();
+					if (this.picker.is(':visible')){
+						e.preventDefault();
+						if (this.o.autoclose)
+							this.hide();
+					}
+					break;
+				case 9: // tab
+					this.focusDate = null;
+					this.viewDate = this.dates.get(-1) || this.viewDate;
+					this.fill();
+					this.hide();
+					break;
+			}
+			if (dateChanged){
+				if (this.dates.length)
+					this._trigger('changeDate');
+				else
+					this._trigger('clearDate');
+				var element;
+				if (this.isInput){
+					element = this.element;
 				}
-				if ( keepRule ) {
-					rules[prop] = val.param !== undefined ? val.param : true;
-				} else {
-					delete rules[prop];
+				else if (this.component){
+					element = this.element.find('input');
+				}
+				if (element){
+					element.change();
 				}
 			}
-		});
+		},
 
-		// evaluate parameters
-		$.each(rules, function( rule, parameter ) {
-			rules[rule] = $.isFunction(parameter) ? parameter(element) : parameter;
-		});
-
-		// clean number parameters
-		$.each(['minlength', 'maxlength'], function() {
-			if ( rules[this] ) {
-				rules[this] = Number(rules[this]);
+		showMode: function(dir){
+			if (dir){
+				this.viewMode = Math.max(this.o.minViewMode, Math.min(2, this.viewMode + dir));
 			}
-		});
-		$.each(['rangelength', 'range'], function() {
-			var parts;
-			if ( rules[this] ) {
-				if ( $.isArray(rules[this]) ) {
-					rules[this] = [Number(rules[this][0]), Number(rules[this][1])];
-				} else if ( typeof rules[this] === "string" ) {
-					parts = rules[this].split(/[\s,]+/);
-					rules[this] = [Number(parts[0]), Number(parts[1])];
-				}
-			}
-		});
-
-		if ( $.validator.autoCreateRanges ) {
-			// auto-create ranges
-			if ( rules.min && rules.max ) {
-				rules.range = [rules.min, rules.max];
-				delete rules.min;
-				delete rules.max;
-			}
-			if ( rules.minlength && rules.maxlength ) {
-				rules.rangelength = [rules.minlength, rules.maxlength];
-				delete rules.minlength;
-				delete rules.maxlength;
-			}
+			this.picker
+				.find('>div')
+				.hide()
+				.filter('.datepicker-'+DPGlobal.modes[this.viewMode].clsName)
+					.css('display', 'block');
+			this.updateNavArrows();
 		}
+	};
 
-		return rules;
-	},
+	var DateRangePicker = function(element, options){
+		this.element = $(element);
+		this.inputs = $.map(options.inputs, function(i){
+			return i.jquery ? i[0] : i;
+		});
+		delete options.inputs;
 
-	// Converts a simple string to a {string: true} rule, e.g., "required" to {required:true}
-	normalizeRule: function( data ) {
-		if ( typeof data === "string" ) {
-			var transformed = {};
-			$.each(data.split(/\s/), function() {
-				transformed[this] = true;
+		$(this.inputs)
+			.datepickerBootstrap(options)
+			.bind('changeDate', $.proxy(this.dateUpdated, this));
+
+		this.pickers = $.map(this.inputs, function(i){
+			return $(i).data('datepicker');
+		});
+		this.updateDates();
+	};
+	DateRangePicker.prototype = {
+		updateDates: function(){
+			this.dates = $.map(this.pickers, function(i){
+				return i.getUTCDate();
 			});
-			data = transformed;
-		}
-		return data;
-	},
-
-	// http://docs.jquery.com/Plugins/Validation/Validator/addMethod
-	addMethod: function( name, method, message ) {
-		$.validator.methods[name] = method;
-		$.validator.messages[name] = message !== undefined ? message : $.validator.messages[name];
-		if ( method.length < 3 ) {
-			$.validator.addClassRules(name, $.validator.normalizeRule(name));
-		}
-	},
-
-	methods: {
-
-		// http://docs.jquery.com/Plugins/Validation/Methods/required
-		required: function( value, element, param ) {
-			// check if dependency is met
-			if ( !this.depend(param, element) ) {
-				return "dependency-mismatch";
-			}
-			if ( element.nodeName.toLowerCase() === "select" ) {
-				// could be an array for select-multiple or a string, both are fine this way
-				var val = $(element).val();
-				return val && val.length > 0;
-			}
-			if ( this.checkable(element) ) {
-				return this.getLength(value, element) > 0;
-			}
-			return $.trim(value).length > 0;
+			this.updateRanges();
 		},
-
-		// http://docs.jquery.com/Plugins/Validation/Methods/email
-		email: function( value, element ) {
-			// contributed by Scott Gonzalez: http://projects.scottsplayground.com/email_address_validation/
-			return this.optional(element) || /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))$/i.test(value);
+		updateRanges: function(){
+			var range = $.map(this.dates, function(d){
+				return d.valueOf();
+			});
+			$.each(this.pickers, function(i, p){
+				p.setRange(range);
+			});
 		},
+		dateUpdated: function(e){
+			// `this.updating` is a workaround for preventing infinite recursion
+			// between `changeDate` triggering and `setUTCDate` calling.  Until
+			// there is a better mechanism.
+			if (this.updating)
+				return;
+			this.updating = true;
 
-		// http://docs.jquery.com/Plugins/Validation/Methods/url
-		url: function( value, element ) {
-			// contributed by Scott Gonzalez: http://projects.scottsplayground.com/iri/
-			return this.optional(element) || /^(https?|s?ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(value);
-		},
+			var dp = $(e.target).data('datepicker'),
+				new_date = dp.getUTCDate(),
+				i = $.inArray(e.target, this.inputs),
+				l = this.inputs.length;
+			if (i === -1)
+				return;
 
-		// http://docs.jquery.com/Plugins/Validation/Methods/date
-		date: function( value, element ) {
-			return this.optional(element) || !/Invalid|NaN/.test(new Date(value).toString());
-		},
+			$.each(this.pickers, function(i, p){
+				if (!p.getUTCDate())
+					p.setUTCDate(new_date);
+			});
 
-		// http://docs.jquery.com/Plugins/Validation/Methods/dateISO
-		dateISO: function( value, element ) {
-			return this.optional(element) || /^\d{4}[\/\-]\d{1,2}[\/\-]\d{1,2}$/.test(value);
-		},
-
-		// http://docs.jquery.com/Plugins/Validation/Methods/number
-		number: function( value, element ) {
-			return this.optional(element) || /^-?(?:\d+|\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$/.test(value);
-		},
-
-		// http://docs.jquery.com/Plugins/Validation/Methods/digits
-		digits: function( value, element ) {
-			return this.optional(element) || /^\d+$/.test(value);
-		},
-
-		// http://docs.jquery.com/Plugins/Validation/Methods/creditcard
-		// based on http://en.wikipedia.org/wiki/Luhn
-		creditcard: function( value, element ) {
-			if ( this.optional(element) ) {
-				return "dependency-mismatch";
-			}
-			// accept only spaces, digits and dashes
-			if ( /[^0-9 \-]+/.test(value) ) {
-				return false;
-			}
-			var nCheck = 0,
-				nDigit = 0,
-				bEven = false;
-
-			value = value.replace(/\D/g, "");
-
-			for (var n = value.length - 1; n >= 0; n--) {
-				var cDigit = value.charAt(n);
-				nDigit = parseInt(cDigit, 10);
-				if ( bEven ) {
-					if ( (nDigit *= 2) > 9 ) {
-						nDigit -= 9;
-					}
+			if (new_date < this.dates[i]){
+				// Date being moved earlier/left
+				while (i >= 0 && new_date < this.dates[i]){
+					this.pickers[i--].setUTCDate(new_date);
 				}
-				nCheck += nDigit;
-				bEven = !bEven;
 			}
-
-			return (nCheck % 10) === 0;
-		},
-
-		// http://docs.jquery.com/Plugins/Validation/Methods/minlength
-		minlength: function( value, element, param ) {
-			var length = $.isArray( value ) ? value.length : this.getLength($.trim(value), element);
-			return this.optional(element) || length >= param;
-		},
-
-		// http://docs.jquery.com/Plugins/Validation/Methods/maxlength
-		maxlength: function( value, element, param ) {
-			var length = $.isArray( value ) ? value.length : this.getLength($.trim(value), element);
-			return this.optional(element) || length <= param;
-		},
-
-		// http://docs.jquery.com/Plugins/Validation/Methods/rangelength
-		rangelength: function( value, element, param ) {
-			var length = $.isArray( value ) ? value.length : this.getLength($.trim(value), element);
-			return this.optional(element) || ( length >= param[0] && length <= param[1] );
-		},
-
-		// http://docs.jquery.com/Plugins/Validation/Methods/min
-		min: function( value, element, param ) {
-			return this.optional(element) || value >= param;
-		},
-
-		// http://docs.jquery.com/Plugins/Validation/Methods/max
-		max: function( value, element, param ) {
-			return this.optional(element) || value <= param;
-		},
-
-		// http://docs.jquery.com/Plugins/Validation/Methods/range
-		range: function( value, element, param ) {
-			return this.optional(element) || ( value >= param[0] && value <= param[1] );
-		},
-
-		// http://docs.jquery.com/Plugins/Validation/Methods/equalTo
-		equalTo: function( value, element, param ) {
-			// bind to the blur event of the target in order to revalidate whenever the target field is updated
-			// TODO find a way to bind the event just once, avoiding the unbind-rebind overhead
-			var target = $(param);
-			if ( this.settings.onfocusout ) {
-				target.unbind(".validate-equalTo").bind("blur.validate-equalTo", function() {
-					$(element).valid();
-				});
-			}
-			return value === target.val();
-		},
-
-		// http://docs.jquery.com/Plugins/Validation/Methods/remote
-		remote: function( value, element, param ) {
-			if ( this.optional(element) ) {
-				return "dependency-mismatch";
-			}
-
-			var previous = this.previousValue(element);
-			if (!this.settings.messages[element.name] ) {
-				this.settings.messages[element.name] = {};
-			}
-			previous.originalMessage = this.settings.messages[element.name].remote;
-			this.settings.messages[element.name].remote = previous.message;
-
-			param = typeof param === "string" && {url:param} || param;
-
-			if ( previous.old === value ) {
-				return previous.valid;
-			}
-
-			previous.old = value;
-			var validator = this;
-			this.startRequest(element);
-			var data = {};
-			data[element.name] = value;
-			$.ajax($.extend(true, {
-				url: param,
-				mode: "abort",
-				port: "validate" + element.name,
-				dataType: "json",
-				data: data,
-				success: function( response ) {
-					validator.settings.messages[element.name].remote = previous.originalMessage;
-					var valid = response === true || response === "true";
-					if ( valid ) {
-						var submitted = validator.formSubmitted;
-						validator.prepareElement(element);
-						validator.formSubmitted = submitted;
-						validator.successList.push(element);
-						delete validator.invalid[element.name];
-						validator.showErrors();
-					} else {
-						var errors = {};
-						var message = response || validator.defaultMessage( element, "remote" );
-						errors[element.name] = previous.message = $.isFunction(message) ? message(value) : message;
-						validator.invalid[element.name] = true;
-						validator.showErrors(errors);
-					}
-					previous.valid = valid;
-					validator.stopRequest(element, valid);
+			else if (new_date > this.dates[i]){
+				// Date being moved later/right
+				while (i < l && new_date > this.dates[i]){
+					this.pickers[i++].setUTCDate(new_date);
 				}
-			}, param));
-			return "pending";
-		}
+			}
+			this.updateDates();
 
+			delete this.updating;
+		},
+		remove: function(){
+			$.map(this.pickers, function(p){ p.remove(); });
+			delete this.element.data().datepicker;
+		}
+	};
+
+	function opts_from_el(el, prefix){
+		// Derive options from element data-attrs
+		var data = $(el).data(),
+			out = {}, inkey,
+			replace = new RegExp('^' + prefix.toLowerCase() + '([A-Z])');
+		prefix = new RegExp('^' + prefix.toLowerCase());
+		function re_lower(_,a){
+			return a.toLowerCase();
+		}
+		for (var key in data)
+			if (prefix.test(key)){
+				inkey = key.replace(replace, re_lower);
+				out[inkey] = data[key];
+			}
+		return out;
 	}
 
-});
+	function opts_from_locale(lang){
+		// Derive options from locale plugins
+		var out = {};
+		// Check if "de-DE" style date is available, if not language should
+		// fallback to 2 letter code eg "de"
+		if (!dates[lang]){
+			lang = lang.split('-')[0];
+			if (!dates[lang])
+				return;
+		}
+		var d = dates[lang];
+		$.each(locale_opts, function(i,k){
+			if (k in d)
+				out[k] = d[k];
+		});
+		return out;
+	}
 
-// deprecated, use $.validator.format instead
-$.format = $.validator.format;
-
-}(jQuery));
-
-// ajax mode: abort
-// usage: $.ajax({ mode: "abort"[, port: "uniqueport"]});
-// if mode:"abort" is used, the previous request on that port (port can be undefined) is aborted via XMLHttpRequest.abort()
-(function($) {
-	var pendingRequests = {};
-	// Use a prefilter if available (1.5+)
-	if ( $.ajaxPrefilter ) {
-		$.ajaxPrefilter(function( settings, _, xhr ) {
-			var port = settings.port;
-			if ( settings.mode === "abort" ) {
-				if ( pendingRequests[port] ) {
-					pendingRequests[port].abort();
+	var old = $.fn.datepickerBootstrap;
+	$.fn.datepickerBootstrap = function(option){
+		var args = Array.apply(null, arguments);
+		args.shift();
+		var internal_return;
+		this.each(function(){
+			var $this = $(this),
+				data = $this.data('datepicker'),
+				options = typeof option === 'object' && option;
+			if (!data){
+				var elopts = opts_from_el(this, 'date'),
+					// Preliminary otions
+					xopts = $.extend({}, defaults, elopts, options),
+					locopts = opts_from_locale(xopts.language),
+					// Options priority: js args, data-attrs, locales, defaults
+					opts = $.extend({}, defaults, locopts, elopts, options);
+				if ($this.is('.input-daterange') || opts.inputs){
+					var ropts = {
+						inputs: opts.inputs || $this.find('input').toArray()
+					};
+					$this.data('datepicker', (data = new DateRangePicker(this, $.extend(opts, ropts))));
 				}
-				pendingRequests[port] = xhr;
+				else {
+					$this.data('datepicker', (data = new Datepicker(this, opts)));
+				}
+			}
+			if (typeof option === 'string' && typeof data[option] === 'function'){
+				internal_return = data[option].apply(data, args);
+				if (internal_return !== undefined)
+					return false;
 			}
 		});
-	} else {
-		// Proxy ajax
-		var ajax = $.ajax;
-		$.ajax = function( settings ) {
-			var mode = ( "mode" in settings ? settings : $.ajaxSettings ).mode,
-				port = ( "port" in settings ? settings : $.ajaxSettings ).port;
-			if ( mode === "abort" ) {
-				if ( pendingRequests[port] ) {
-					pendingRequests[port].abort();
-				}
-				pendingRequests[port] = ajax.apply(this, arguments);
-				return pendingRequests[port];
-			}
-			return ajax.apply(this, arguments);
-		};
-	}
-}(jQuery));
+		if (internal_return !== undefined)
+			return internal_return;
+		else
+			return this;
+	};
 
-// provides delegate(type: String, delegate: Selector, handler: Callback) plugin for easier event delegation
-// handler is only called when $(event.target).is(delegate), in the scope of the jquery-object for event.target
-(function($) {
-	$.extend($.fn, {
-		validateDelegate: function( delegate, type, handler ) {
-			return this.bind(type, function( event ) {
-				var target = $(event.target);
-				if ( target.is(delegate) ) {
-					return handler.apply(target, arguments);
-				}
-			});
+	var defaults = $.fn.datepickerBootstrap.defaults = {
+		autoclose: false,
+		beforeShowDay: $.noop,
+		calendarWeeks: false,
+		clearBtn: false,
+		daysOfWeekDisabled: [],
+		endDate: Infinity,
+		forceParse: true,
+		format: 'mm/dd/yyyy',
+		keyboardNavigation: true,
+		language: 'en',
+		minViewMode: 0,
+		multidate: false,
+		multidateSeparator: ',',
+		orientation: "auto",
+		rtl: false,
+		startDate: -Infinity,
+		startView: 0,
+		todayBtn: false,
+		todayHighlight: false,
+		weekStart: 0
+	};
+	var locale_opts = $.fn.datepickerBootstrap.locale_opts = [
+		'format',
+		'rtl',
+		'weekStart'
+	];
+	$.fn.datepickerBootstrap.Constructor = Datepicker;
+	var dates = $.fn.datepickerBootstrap.dates = {
+		en: {
+			days: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+			daysShort: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+			daysMin: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
+			months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+			monthsShort: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+			today: "Today",
+			clear: "Clear"
 		}
+	};
+
+	var DPGlobal = {
+		modes: [
+			{
+				clsName: 'days',
+				navFnc: 'Month',
+				navStep: 1
+			},
+			{
+				clsName: 'months',
+				navFnc: 'FullYear',
+				navStep: 1
+			},
+			{
+				clsName: 'years',
+				navFnc: 'FullYear',
+				navStep: 10
+		}],
+		isLeapYear: function(year){
+			return (((year % 4 === 0) && (year % 100 !== 0)) || (year % 400 === 0));
+		},
+		getDaysInMonth: function(year, month){
+			return [31, (DPGlobal.isLeapYear(year) ? 29 : 28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month];
+		},
+		validParts: /dd?|DD?|mm?|MM?|yy(?:yy)?/g,
+		nonpunctuation: /[^ -\/:-@\[\u3400-\u9fff-`{-~\t\n\r]+/g,
+		parseFormat: function(format){
+			// IE treats \0 as a string end in inputs (truncating the value),
+			// so it's a bad format delimiter, anyway
+			var separators = format.replace(this.validParts, '\0').split('\0'),
+				parts = format.match(this.validParts);
+			if (!separators || !separators.length || !parts || parts.length === 0){
+				throw new Error("Invalid date format.");
+			}
+			return {separators: separators, parts: parts};
+		},
+		parseDate: function(date, format, language){
+			if (!date)
+				return undefined;
+			if (date instanceof Date)
+				return date;
+			if (typeof format === 'string')
+				format = DPGlobal.parseFormat(format);
+			var part_re = /([\-+]\d+)([dmwy])/,
+				parts = date.match(/([\-+]\d+)([dmwy])/g),
+				part, dir, i;
+			if (/^[\-+]\d+[dmwy]([\s,]+[\-+]\d+[dmwy])*$/.test(date)){
+				date = new Date();
+				for (i=0; i < parts.length; i++){
+					part = part_re.exec(parts[i]);
+					dir = parseInt(part[1]);
+					switch (part[2]){
+						case 'd':
+							date.setUTCDate(date.getUTCDate() + dir);
+							break;
+						case 'm':
+							date = Datepicker.prototype.moveMonth.call(Datepicker.prototype, date, dir);
+							break;
+						case 'w':
+							date.setUTCDate(date.getUTCDate() + dir * 7);
+							break;
+						case 'y':
+							date = Datepicker.prototype.moveYear.call(Datepicker.prototype, date, dir);
+							break;
+					}
+				}
+				return UTCDate(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), 0, 0, 0);
+			}
+			parts = date && date.match(this.nonpunctuation) || [];
+			date = new Date();
+			var parsed = {},
+				setters_order = ['yyyy', 'yy', 'M', 'MM', 'm', 'mm', 'd', 'dd'],
+				setters_map = {
+					yyyy: function(d,v){
+						return d.setUTCFullYear(v);
+					},
+					yy: function(d,v){
+						return d.setUTCFullYear(2000+v);
+					},
+					m: function(d,v){
+						if (isNaN(d))
+							return d;
+						v -= 1;
+						while (v < 0) v += 12;
+						v %= 12;
+						d.setUTCMonth(v);
+						while (d.getUTCMonth() !== v)
+							d.setUTCDate(d.getUTCDate()-1);
+						return d;
+					},
+					d: function(d,v){
+						return d.setUTCDate(v);
+					}
+				},
+				val, filtered;
+			setters_map['M'] = setters_map['MM'] = setters_map['mm'] = setters_map['m'];
+			setters_map['dd'] = setters_map['d'];
+			date = UTCDate(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
+			var fparts = format.parts.slice();
+			// Remove noop parts
+			if (parts.length !== fparts.length){
+				fparts = $(fparts).filter(function(i,p){
+					return $.inArray(p, setters_order) !== -1;
+				}).toArray();
+			}
+			// Process remainder
+			function match_part(){
+				var m = this.slice(0, parts[i].length),
+					p = parts[i].slice(0, m.length);
+				return m === p;
+			}
+			if (parts.length === fparts.length){
+				var cnt;
+				for (i=0, cnt = fparts.length; i < cnt; i++){
+					val = parseInt(parts[i], 10);
+					part = fparts[i];
+					if (isNaN(val)){
+						switch (part){
+							case 'MM':
+								filtered = $(dates[language].months).filter(match_part);
+								val = $.inArray(filtered[0], dates[language].months) + 1;
+								break;
+							case 'M':
+								filtered = $(dates[language].monthsShort).filter(match_part);
+								val = $.inArray(filtered[0], dates[language].monthsShort) + 1;
+								break;
+						}
+					}
+					parsed[part] = val;
+				}
+				var _date, s;
+				for (i=0; i < setters_order.length; i++){
+					s = setters_order[i];
+					if (s in parsed && !isNaN(parsed[s])){
+						_date = new Date(date);
+						setters_map[s](_date, parsed[s]);
+						if (!isNaN(_date))
+							date = _date;
+					}
+				}
+			}
+			return date;
+		},
+		formatDate: function(date, format, language){
+			if (!date)
+				return '';
+			if (typeof format === 'string')
+				format = DPGlobal.parseFormat(format);
+			var val = {
+				d: date.getUTCDate(),
+				D: dates[language].daysShort[date.getUTCDay()],
+				DD: dates[language].days[date.getUTCDay()],
+				m: date.getUTCMonth() + 1,
+				M: dates[language].monthsShort[date.getUTCMonth()],
+				MM: dates[language].months[date.getUTCMonth()],
+				yy: date.getUTCFullYear().toString().substring(2),
+				yyyy: date.getUTCFullYear()
+			};
+			val.dd = (val.d < 10 ? '0' : '') + val.d;
+			val.mm = (val.m < 10 ? '0' : '') + val.m;
+			date = [];
+			var seps = $.extend([], format.separators);
+			for (var i=0, cnt = format.parts.length; i <= cnt; i++){
+				if (seps.length)
+					date.push(seps.shift());
+				date.push(val[format.parts[i]]);
+			}
+			return date.join('');
+		},
+		headTemplate: '<thead>'+
+							'<tr>'+
+								'<th class="prev">&laquo;</th>'+
+								'<th colspan="5" class="datepicker-switch"></th>'+
+								'<th class="next">&raquo;</th>'+
+							'</tr>'+
+						'</thead>',
+		contTemplate: '<tbody><tr><td colspan="7"></td></tr></tbody>',
+		footTemplate: '<tfoot>'+
+							'<tr>'+
+								'<th colspan="7" class="today"></th>'+
+							'</tr>'+
+							'<tr>'+
+								'<th colspan="7" class="clear"></th>'+
+							'</tr>'+
+						'</tfoot>'
+	};
+	DPGlobal.template = '<div class="datepicker">'+
+							'<div class="datepicker-days">'+
+								'<table class=" table-condensed">'+
+									DPGlobal.headTemplate+
+									'<tbody></tbody>'+
+									DPGlobal.footTemplate+
+								'</table>'+
+							'</div>'+
+							'<div class="datepicker-months">'+
+								'<table class="table-condensed">'+
+									DPGlobal.headTemplate+
+									DPGlobal.contTemplate+
+									DPGlobal.footTemplate+
+								'</table>'+
+							'</div>'+
+							'<div class="datepicker-years">'+
+								'<table class="table-condensed">'+
+									DPGlobal.headTemplate+
+									DPGlobal.contTemplate+
+									DPGlobal.footTemplate+
+								'</table>'+
+							'</div>'+
+						'</div>';
+
+	$.fn.datepickerBootstrap.DPGlobal = DPGlobal;
+
+
+	/* DATEPICKER NO CONFLICT
+	* =================== */
+
+	$.fn.datepickerBootstrap.noConflict = function(){
+		$.fn.datepickerBootstrap = old;
+		return this;
+	};
+
+
+	/* DATEPICKER DATA-API
+	* ================== */
+
+	$(document).on(
+		'focus.datepicker.data-api click.datepicker.data-api',
+		'[data-provide="datepicker"]',
+		function(e){
+			var $this = $(this);
+			if ($this.data('datepicker'))
+				return;
+			e.preventDefault();
+			// component click requires us to explicitly show it
+			$this.datepickerBootstrap('show');
+		}
+	);
+	$(function(){
+		$('[data-provide="datepicker-inline"]').datepickerBootstrap();
 	});
-}(jQuery));
-define("jquery.validate", function(){});
 
-require(['lodash','jquery.validate'], function(Lodash) {
-	$.validator.addMethod(
-		"multipleSelectOptionsSelected",
-		function(value, element, param) {
-			//console.log("test");
-			if (this.optional(element)) {
-				return true;
-			}
+}(window.jQuery));
 
-			var selectedOptions = 0;
-			$('option:selected', element).each(function() {
-				if (this.value != '') {
-					selectedOptions++;
-				}
-			});
-			return selectedOptions >= param;
-		},
-		'Should select at least {0} locale.');
-
-	$.validator.addMethod(
-		"userEmail",
-		function(value, element, param) {
-			//console.log("test");
-			if (this.optional(element)) {
-				return true
-			}
-			if (value == "") {
-				return true
-			} else {
-				var regex = /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))$/i;
-				var emails = value.split(',');
-				var valid = true;
-				Lodash(emails).forEach(function(email) {
-					// body...
-					var temp = email;
-					//var temp = UnderscoreStr.trim(email);
-					if (temp != "") {
-						valid = regex.test(temp);
-					}
-
-				})
-				return valid
-
-			}
-		},
-		'Please input valid email address.');
-
-		jQuery.extend(jQuery.validator.messages, {
-		  required: "必选字段",
-		  remote: "请修正该字段",
-		  email: "请输入正确格式的电子邮件",
-		  url: "请输入合法的网址",
-		  date: "请输入合法的日期",
-		  dateISO: "请输入合法的日期 (ISO).",
-		  number: "请输入合法的数字",
-		  digits: "只能输入整数",
-		  creditcard: "请输入合法的信用卡号",
-		  equalTo: "请再次输入相同的值",
-		  accept: "请输入拥有合法后缀名的字符串",
-		  maxlength: jQuery.validator.format("请输入一个 长度最多是 {0} 的字符串"),
-		  minlength: jQuery.validator.format("请输入一个 长度最少是 {0} 的字符串"),
-		  rangelength: jQuery.validator.format("请输入 一个长度介于 {0} 和 {1} 之间的字符串"),
-		  range: jQuery.validator.format("请输入一个介于 {0} 和 {1} 之间的值"),
-		  max: jQuery.validator.format("请输入一个最大为{0} 的值"),
-		  min: jQuery.validator.format("请输入一个最小为{0} 的值")
-		});
-});
-define("config/validator/config", function(){});
+define("bootstrap-datepicker", ["jquery","bootstrap"], function(){});
 
 /**
- * bootstrap-multiselect.js
- * https://github.com/davidstutz/bootstrap-multiselect
- *
- * Copyright 2012, 2013 David Stutz
- *
- * Dual licensed under the BSD-3-Clause and the Apache License, Version 2.0.
+ * Simplified Chinese translation for bootstrap-datepicker
+ * Yuan Cheung <advanimal@gmail.com>
  */
-!function($) {
-
-    // jshint ;_;
-
-    if (typeof ko !== 'undefined' && ko.bindingHandlers && !ko.bindingHandlers.multiselect) {
-        ko.bindingHandlers.multiselect = {
-            init: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {},
-            update: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
-
-               var config = ko.utils.unwrapObservable(valueAccessor());
-               var selectOptions = allBindingsAccessor().options;
-               var ms = $(element).data('multiselect');
-
-               if (!ms) {
-                  $(element).multiselect(config);
-               }
-               else {
-                  ms.updateOriginalOptions();
-                  if (selectOptions && selectOptions().length !== ms.originalOptions.length) {
-                     $(element).multiselect('rebuild');
-                  }
-               }
-            }
-        };
-    }
-
-    function Multiselect(select, options) {
-
-        this.options = this.mergeOptions(options);
-        this.$select = $(select);
-
-        // Initialization.
-        // We have to clone to create a new reference.
-        this.originalOptions = this.$select.clone()[0].options;
-        this.query = '';
-        this.searchTimeout = null;
-
-        this.options.multiple = this.$select.attr('multiple') === "multiple";
-        this.options.onChange = $.proxy(this.options.onChange, this);
-        this.options.onDropdownShow = $.proxy(this.options.onDropdownShow, this);
-        this.options.onDropdownHide = $.proxy(this.options.onDropdownHide, this);
-
-        // Build select all if enabled.
-        this.buildContainer();
-        this.buildButton();
-        this.buildSelectAll();
-        this.buildDropdown();
-        this.buildDropdownOptions();
-        this.buildFilter();
-        this.updateButtonText();
-
-        this.$select.hide().after(this.$container);
-    };
-
-    Multiselect.prototype = {
-
-        // Default options.
-        defaults: {
-            // Default text function will either print 'None selected' in case no
-            // option is selected, or a list of the selected options up to a length of 3 selected options by default.
-            // If more than 3 options are selected, the number of selected options is printed.
-            buttonText: function(options, select) {
-                if (options.length === 0) {
-                    return this.nonSelectedText + ' <b class="caret"></b>';
-                }
-                else {
-                    if (options.length > this.numberDisplayed) {
-                        return options.length + ' ' + this.nSelectedText + ' <b class="caret"></b>';
-                    }
-                    else {
-                        var selected = '';
-                        options.each(function() {
-                            var label = ($(this).attr('label') !== undefined) ? $(this).attr('label') : $(this).html();
-
-                            selected += label + ', ';
-                        });
-                        return selected.substr(0, selected.length - 2) + ' <b class="caret"></b>';
-                    }
-                }
-            },
-            // Like the buttonText option to update the title of the button.
-            buttonTitle: function(options, select) {
-                if (options.length === 0) {
-                    return this.nonSelectedText;
-                }
-                else {
-                    var selected = '';
-                    options.each(function () {
-                        selected += $(this).text() + ', ';
-                    });
-                    return selected.substr(0, selected.length - 2);
-                }
-            },
-            // Create label
-            label: function( element ){
-                return $(element).attr('label') || $(element).html();
-            },
-            // Is triggered on change of the selected options.
-            onChange : function(option, checked) {
-
-            },
-            // Triggered immediately when dropdown shown
-            onDropdownShow: function(event) {
-
-            },
-            // Triggered immediately when dropdown hidden
-            onDropdownHide: function(event) {
-
-            },
-            buttonClass: 'btn btn-default',
-            dropRight: false,
-            selectedClass: 'active',
-            buttonWidth: 'auto',
-            buttonContainer: '<div class="btn-group" />',
-            // Maximum height of the dropdown menu.
-            // If maximum height is exceeded a scrollbar will be displayed.
-            maxHeight: false,
-            includeSelectAllOption: false,
-            selectAllText: ' Select all',
-            selectAllValue: 'multiselect-all',
-            enableFiltering: false,
-            enableCaseInsensitiveFiltering: false,
-            filterPlaceholder: 'Search',
-            // possible options: 'text', 'value', 'both'
-            filterBehavior: 'text',
-            preventInputChangeEvent: false,
-            nonSelectedText: 'None selected',
-            nSelectedText: 'selected',
-            numberDisplayed: 3
-        },
-
-        // Templates.
-        templates: {
-            button: '<button type="button" class="multiselect dropdown-toggle" data-toggle="dropdown"></button>',
-            ul: '<ul class="multiselect-container dropdown-menu"></ul>',
-            filter: '<div class="input-group"><span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span><input class="form-control multiselect-search" type="text"></div>',
-            li: '<li><a href="javascript:void(0);"><label></label></a></li>',
-            liGroup: '<li><label class="multiselect-group"></label></li>'
-        },
-
-        constructor: Multiselect,
-
-        buildContainer: function() {
-            this.$container = $(this.options.buttonContainer);
-            this.$container.on('show.bs.dropdown', this.options.onDropdownShow);
-            this.$container.on('hide.bs.dropdown', this.options.onDropdownHide);
-        },
-
-        buildButton: function() {
-            // Build button.
-            this.$button = $(this.templates.button).addClass(this.options.buttonClass);
-
-            // Adopt active state.
-            if (this.$select.prop('disabled')) {
-                this.disable();
-            }
-            else {
-                this.enable();
-            }
-
-            // Manually add button width if set.
-            if (this.options.buttonWidth) {
-                this.$button.css({
-                    'width' : this.options.buttonWidth
-                });
-            }
-
-            // Keep the tab index from the select.
-            var tabindex = this.$select.attr('tabindex');
-            if (tabindex) {
-                this.$button.attr('tabindex', tabindex);
-            }
-
-            this.$container.prepend(this.$button);
-        },
-
-        // Build dropdown container ul.
-        buildDropdown: function() {
-
-            // Build ul.
-            this.$ul = $(this.templates.ul);
-
-            if (this.options.dropRight) {
-                this.$ul.addClass('pull-right');
-            }
-
-            // Set max height of dropdown menu to activate auto scrollbar.
-            if (this.options.maxHeight) {
-                // TODO: Add a class for this option to move the css declarations.
-                this.$ul.css({
-                    'max-height': this.options.maxHeight + 'px',
-                    'overflow-y': 'auto',
-                    'overflow-x': 'hidden'
-                });
-            }
-
-            this.$container.append(this.$ul);
-        },
-
-        // Build the dropdown and bind event handling.
-        buildDropdownOptions: function() {
-
-            this.$select.children().each($.proxy(function(index, element) {
-                // Support optgroups and options without a group simultaneously.
-                var tag = $(element).prop('tagName')
-                    .toLowerCase();
-                
-                if (tag === 'optgroup') {
-                    this.createOptgroup(element);
-                }
-                else if (tag === 'option') {
-                    this.createOptionValue(element);
-                }
-                // Other illegal tags will be ignored.
-            }, this));
-
-            // Bind the change event on the dropdown elements.
-            $('li input', this.$ul).on('change', $.proxy(function(event) {
-                var checked = $(event.target).prop('checked') || false;
-                var isSelectAllOption = $(event.target).val() === this.options.selectAllValue;
-
-                // Apply or unapply the configured selected class.
-                if (this.options.selectedClass) {
-                    if (checked) {
-                        $(event.target).parents('li')
-                            .addClass(this.options.selectedClass);
-                    }
-                    else {
-                        $(event.target).parents('li')
-                            .removeClass(this.options.selectedClass);
-                    }
-                }
-
-                // Get the corresponding option.
-                var value = $(event.target).val();
-                var $option = this.getOptionByValue(value);
-
-                var $optionsNotThis = $('option', this.$select).not($option);
-                var $checkboxesNotThis = $('input', this.$container).not($(event.target));
-
-                if (isSelectAllOption) {
-                    if (this.$select[0][0].value === this.options.selectAllValue) {
-                        var values = [];
-                        var options = $('option[value!="' + this.options.selectAllValue + '"]', this.$select);
-                        for (var i = 0; i < options.length; i++) {
-                            // Additionally check whether the option is visible within the dropcown.
-                            if (options[i].value !== this.options.selectAllValue && this.getInputByValue(options[i].value).is(':visible')) {
-                                values.push(options[i].value);
-                            }
-                        }
-                        
-                        if (checked) {
-                            this.select(values);
-                        }
-                        else {
-                            this.deselect(values);
-                        }
-                    }
-                }
-
-                if (checked) {
-                    $option.prop('selected', true);
-
-                    if (this.options.multiple) {
-                        // Simply select additional option.
-                        $option.prop('selected', true);
-                    }
-                    else {
-                        // Unselect all other options and corresponding checkboxes.
-                        if (this.options.selectedClass) {
-                            $($checkboxesNotThis).parents('li').removeClass(this.options.selectedClass);
-                        }
-
-                        $($checkboxesNotThis).prop('checked', false);
-                        $optionsNotThis.prop('selected', false);
-
-                        // It's a single selection, so close.
-                        this.$button.click();
-                    }
-
-                    if (this.options.selectedClass === "active") {
-                        $optionsNotThis.parents("a").css("outline", "");
-                    }
-                }
-                else {
-                    // Unselect option.
-                    $option.prop('selected', false);
-                }
-
-                this.$select.change();
-                this.options.onChange($option, checked);
-                this.updateButtonText();
-
-                if(this.options.preventInputChangeEvent) {
-                    return false;
-                }
-            }, this));
-
-            $('li a', this.$ul).on('touchstart click', function(event) {
-                event.stopPropagation();
-
-                if (event.shiftKey) {
-                    var checked = $(event.target).prop('checked') || false;
-                    
-                    if (checked) {
-                        var prev = $(event.target).parents('li:last')
-                            .siblings('li[class="active"]:first');
-
-                        var currentIdx = $(event.target).parents('li')
-                            .index();
-                        var prevIdx = prev.index();
-
-                        if (currentIdx > prevIdx) {
-                            $(event.target).parents("li:last").prevUntil(prev).each(
-                                function() {
-                                    $(this).find("input:first").prop("checked", true)
-                                        .trigger("change");
-                                }
-                            );
-                        }
-                        else {
-                            $(event.target).parents("li:last").nextUntil(prev).each(
-                                function() {
-                                    $(this).find("input:first").prop("checked", true)
-                                        .trigger("change");
-                                }
-                            );
-                        }
-                    }
-                }
-                
-                $(event.target).blur();
-            });
-
-            // Keyboard support.
-            this.$container.on('keydown', $.proxy(function(event) {
-                if ($('input[type="text"]', this.$container).is(':focus')) {
-                    return;
-                }
-                if ((event.keyCode === 9 || event.keyCode === 27) && this.$container.hasClass('open')) {
-                    // Close on tab or escape.
-                    this.$button.click();
-                }
-                else {
-                    var $items = $(this.$container).find("li:not(.divider):visible a");
-
-                    if (!$items.length) {
-                        return;
-                    }
-
-                    var index = $items.index($items.filter(':focus'));
-
-                    // Navigation up.
-                    if (event.keyCode === 38 && index > 0) {
-                        index--;
-                    }
-                    // Navigate down.
-                    else if (event.keyCode === 40 && index < $items.length - 1) {
-                        index++;
-                    }
-                    else if (!~index) {
-                        index = 0;
-                    }
-
-                    var $current = $items.eq(index);
-                    $current.focus();
-
-                    if (event.keyCode === 32 || event.keyCode === 13) {
-                        var $checkbox = $current.find('input');
-
-                        $checkbox.prop("checked", !$checkbox.prop("checked"));
-                        $checkbox.change();
-                    }
-
-                    event.stopPropagation();
-                    event.preventDefault();
-                }
-            }, this));
-        },
-
-        // Will build an dropdown element for the given option.
-        createOptionValue: function(element) {
-            if ($(element).is(':selected')) {
-                $(element).prop('selected', true);
-            }
-
-            // Support the label attribute on options.
-            var label = this.options.label(element);
-            var value = $(element).val();
-            var inputType = this.options.multiple ? "checkbox" : "radio";
-
-            var $li = $(this.templates.li);
-            $('label', $li).addClass(inputType);
-            $('label', $li).append('<input type="' + inputType + '" />');
-
-            var selected = $(element).prop('selected') || false;
-            var $checkbox = $('input', $li);
-            $checkbox.val(value);
-
-            if (value === this.options.selectAllValue) {
-                $checkbox.parent().parent()
-                    .addClass('multiselect-all');
-            }
-
-            $('label', $li).append(" " + label);
-
-            this.$ul.append($li);
-
-            if ($(element).is(':disabled')) {
-                $checkbox.attr('disabled', 'disabled')
-                    .prop('disabled', true)
-                    .parents('li')
-                    .addClass('disabled');
-            }
-
-            $checkbox.prop('checked', selected);
-
-            if (selected && this.options.selectedClass) {
-                $checkbox.parents('li')
-                    .addClass(this.options.selectedClass);
-            }
-        },
-
-        // Create optgroup.
-        createOptgroup: function(group) {
-            var groupName = $(group).prop('label');
-
-            // Add a header for the group.
-            var $li = $(this.templates.liGroup);
-            $('label', $li).text(groupName);
-
-            this.$ul.append($li);
-
-            // Add the options of the group.
-            $('option', group).each($.proxy(function(index, element) {
-                this.createOptionValue(element);
-            }, this));
-        },
-
-        // Add the select all option to the select.
-        buildSelectAll: function() {
-            var alreadyHasSelectAll = this.$select[0][0] ? this.$select[0][0].value === this.options.selectAllValue : false;
-            
-            // If options.includeSelectAllOption === true, add the include all checkbox.
-            if (this.options.includeSelectAllOption && this.options.multiple && !alreadyHasSelectAll) {
-                this.$select.prepend('<option value="' + this.options.selectAllValue + '">' + this.options.selectAllText + '</option>');
-            }
-        },
-
-        // Build and bind filter.
-        buildFilter: function() {
-
-            // Build filter if filtering OR case insensitive filtering is enabled and the number of options exceeds (or equals) enableFilterLength.
-            if (this.options.enableFiltering || this.options.enableCaseInsensitiveFiltering) {
-                var enableFilterLength = Math.max(this.options.enableFiltering, this.options.enableCaseInsensitiveFiltering);
-                
-                if (this.$select.find('option').length >= enableFilterLength) {
-
-                    this.$filter = $(this.templates.filter);
-                    $('input', this.$filter).attr('placeholder', this.options.filterPlaceholder);
-                    this.$ul.prepend(this.$filter);
-
-                    this.$filter.val(this.query).on('click', function(event) {
-                        event.stopPropagation();
-                    }).on('keydown', $.proxy(function(event) {
-                        // This is useful to catch "keydown" events after the browser has updated the control.
-                        clearTimeout(this.searchTimeout);
-
-                        this.searchTimeout = this.asyncFunction($.proxy(function() {
-
-                            if (this.query !== event.target.value) {
-                                this.query = event.target.value;
-
-                                $.each($('li', this.$ul), $.proxy(function(index, element) {
-                                    var value = $('input', element).val();
-                                    var text = $('label', element).text();
-                                    
-                                    if (value !== this.options.selectAllValue && text) {
-                                        // by default lets assume that element is not
-                                        // interesting for this search
-                                        var showElement = false;
-
-                                        var filterCandidate = '';
-                                        if ((this.options.filterBehavior === 'text' || this.options.filterBehavior === 'both')) {
-                                            filterCandidate = text;
-                                        }
-                                        if ((this.options.filterBehavior === 'value' || this.options.filterBehavior === 'both')) {
-                                            filterCandidate = value;
-                                        }
-
-                                        if (this.options.enableCaseInsensitiveFiltering && filterCandidate.toLowerCase().indexOf(this.query.toLowerCase()) > -1) {
-                                            showElement = true;
-                                        }
-                                        else if (filterCandidate.indexOf(this.query) > -1) {
-                                            showElement = true;
-                                        }
-
-                                        if (showElement) {
-                                            $(element).show();
-                                        }
-                                        else {
-                                            $(element).hide();
-                                        }
-                                    }
-                                }, this));
-                            }
-                            
-                            // TODO: check whether select all option needs to be updated.
-                        }, this), 300, this);
-                    }, this));
-                }
-            }
-        },
-
-        // Destroy - unbind - the plugin.
-        destroy: function() {
-            this.$container.remove();
-            this.$select.show();
-        },
-
-        // Refreshs the checked options based on the current state of the select.
-        refresh: function() {
-            $('option', this.$select).each($.proxy(function(index, element) {
-                var $input = $('li input', this.$ul).filter(function() {
-                    return $(this).val() === $(element).val();
-                });
-
-                if ($(element).is(':selected')) {
-                    $input.prop('checked', true);
-
-                    if (this.options.selectedClass) {
-                        $input.parents('li')
-                            .addClass(this.options.selectedClass);
-                    }
-                }
-                else {
-                    $input.prop('checked', false);
-
-                    if (this.options.selectedClass) {
-                        $input.parents('li')
-                            .removeClass(this.options.selectedClass);
-                    }
-                }
-
-                if ($(element).is(":disabled")) {
-                    $input.attr('disabled', 'disabled')
-                        .prop('disabled', true)
-                        .parents('li')
-                        .addClass('disabled');
-                }
-                else {
-                    $input.prop('disabled', false)
-                        .parents('li')
-                        .removeClass('disabled');
-                }
-            }, this));
-
-            this.updateButtonText();
-        },
-
-        // Select an option by its value or multiple options using an array of values.
-        select: function(selectValues) {
-            if(selectValues && !$.isArray(selectValues)) {
-                selectValues = [selectValues];
-            }
-
-            for (var i = 0; i < selectValues.length; i++) {
-                var value = selectValues[i];
-
-                var $option = this.getOptionByValue(value);
-                var $checkbox = this.getInputByValue(value);
-
-                if (this.options.selectedClass) {
-                    $checkbox.parents('li')
-                        .addClass(this.options.selectedClass);
-                }
-
-                $checkbox.prop('checked', true);
-                $option.prop('selected', true);
-                this.options.onChange($option, true);
-            }
-
-            this.updateButtonText();
-        },
-
-        // Deselect an option by its value or using an array of values.
-        deselect: function(deselectValues) {
-            if(deselectValues && !$.isArray(deselectValues)) {
-                deselectValues = [deselectValues];
-            }
-
-            for (var i = 0; i < deselectValues.length; i++) {
-
-                var value = deselectValues[i];
-
-                var $option = this.getOptionByValue(value);
-                var $checkbox = this.getInputByValue(value);
-
-                if (this.options.selectedClass) {
-                    $checkbox.parents('li')
-                        .removeClass(this.options.selectedClass);
-                }
-
-                $checkbox.prop('checked', false);
-                $option.prop('selected', false);
-                this.options.onChange($option, false);
-            }
-
-            this.updateButtonText();
-        },
-
-        // Rebuild the whole dropdown menu.
-        rebuild: function() {
-            this.$ul.html('');
-
-            // Remove select all option in select.
-            $('option[value="' + this.options.selectAllValue + '"]', this.$select).remove();
-
-            // Important to distinguish between radios and checkboxes.
-            this.options.multiple = this.$select.attr('multiple') === "multiple";
-
-            this.buildSelectAll();
-            this.buildDropdownOptions();
-            this.updateButtonText();
-            this.buildFilter();
-        },
-
-        // Build select using the given data as options.
-        dataprovider: function(dataprovider) {
-            var optionDOM = "";
-            dataprovider.forEach(function (option) {
-                optionDOM += '<option value="' + option.value + '">' + option.label + '</option>';
-            });
-
-            this.$select.html(optionDOM);
-            this.rebuild();
-        },
-
-        // Enable button.
-        enable: function() {
-            this.$select.prop('disabled', false);
-            this.$button.prop('disabled', false)
-                .removeClass('disabled');
-        },
-
-        // Disable button.
-        disable: function() {
-            this.$select.prop('disabled', true);
-            this.$button.prop('disabled', true)
-                .addClass('disabled');
-        },
-
-        // Set options.
-        setOptions: function(options) {
-            this.options = this.mergeOptions(options);
-        },
-
-        // Get options by merging defaults and given options.
-        mergeOptions: function(options) {
-            return $.extend({}, this.defaults, options);
-        },
-
-        // Update button text and button title.
-        updateButtonText: function() {
-            var options = this.getSelected();
-
-            // First update the displayed button text.
-            $('button', this.$container).html(this.options.buttonText(options, this.$select));
-
-            // Now update the title attribute of the button.
-            $('button', this.$container).attr('title', this.options.buttonTitle(options, this.$select));
-
-        },
-
-        // Get all selected options.
-        getSelected: function() {
-            // console.log($('option[value!="' + this.options.selectAllValue + '"]:selected'));
-            // console.log($('option[value!="' + this.options.selectAllValue + '"]:selected').filter(
-            //    function() {
-            //     return $(this).prop('selected');
-            // } ));
-            return $('option[value!="' + this.options.selectAllValue + '"]:selected', this.$select).filter(function() {
-                return $(this).prop('selected');
-            });
-        },
-
-        // Get the corresponding option by ts value.
-        getOptionByValue: function(value) {
-            return $('option', this.$select).filter(function() {
-                return $(this).val() === value;
-            });
-        },
-
-        // Get an input in the dropdown by its value.
-        getInputByValue: function(value) {
-            return $('li input', this.$ul).filter(function() {
-                return $(this).val() === value;
-            });
-        },
-
-        updateOriginalOptions: function() {
-            this.originalOptions = this.$select.clone()[0].options;
-        },
-
-        asyncFunction: function(callback, timeout, self) {
-            var args = Array.prototype.slice.call(arguments, 3);
-            return setTimeout(function() {
-                callback.apply(self || window, args);
-            }, timeout);
-        }
-    };
-
-    $.fn.multiselect = function(option, parameter) {
-        return this.each(function() {
-            var data = $(this).data('multiselect');
-            var options = typeof option === 'object' && option;
-
-            // Initialize the multiselect.
-            if (!data) {
-                $(this).data('multiselect', ( data = new Multiselect(this, options)));
-            }
-
-            // Call multiselect method.
-            if (typeof option === 'string') {
-                data[option](parameter);
-            }
-        });
-    };
-
-    $.fn.multiselect.Constructor = Multiselect;
-
-    // Automatically init selects by their data-role.
-    $(function() {
-        $("select[data-role=multiselect]").multiselect();
-    });
-
-}(window.jQuery);
-
-define("bootstrap.multiselect", ["bootstrap"], function(){});
-
-define('diagnose/apply/apply_view',['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.main', 'entities/doctorEntity', 'ladda-bootstrap','dust', 'dustMarionette', "bootstrap", 'typeahead', 'flatui.checkbox', 'flatui.radio', 'jquery-ui', 'bootstrap.select', 'flat_ui_custom', 'dust_cus_helpers', 'config/validator/config', 'bootstrap.multiselect'], function(ReqCmd, Lodash, Marionette, Templates, FileUploaderMain, DoctorEntity,ladda) {
+;(function($){
+	$.fn.datepickerBootstrap.dates['zh-CN'] = {
+		days: ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日"],
+		daysShort: ["周日", "周一", "周二", "周三", "周四", "周五", "周六", "周日"],
+		daysMin:  ["日", "一", "二", "三", "四", "五", "六", "日"],
+		months: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
+		monthsShort: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
+		today: "今日",
+		format: "yyyy年mm月dd日",
+		weekStart: 1
+	};
+}(jQuery));
+
+define("bootstrap-datepicker.zh-CN", ["bootstrap-datepicker"], function(){});
+
+define('diagnose/apply/apply_view',['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.main',
+	'entities/doctorEntity', 'ladda-bootstrap', 'modal/modal_view', 'dust', 'dustMarionette',
+	"bootstrap", 'typeahead', 'flatui.checkbox', 'flatui.radio', 'jquery-ui',
+	'bootstrap.select', 'flat_ui_custom', 'dust_cus_helpers', 'config/validator/config',
+	'bootstrap.multiselect', 'bootstrap-datepicker', 'bootstrap-datepicker.zh-CN'
+], function(ReqCmd, Lodash, Marionette, Templates, FileUploaderMain, DoctorEntity, ladda, ModalView) {
 	// body...
 	
 	//var $;
@@ -25759,6 +30505,10 @@ define('diagnose/apply/apply_view',['utils/reqcmd', 'lodash', 'marionette', 'tem
 			'click @ui.reuploadBtn': "reuploadFile"
 		},
 		attachEndHandler: function() {
+
+			//init userId
+			this.userId = $('.submit-patient-info-wrapper').data('userid');
+
 			//init flatui
 			$('.input-group').on('focus', '.form-control', function() {
 				$(this).closest('.input-group, .form-group').addClass('focus');
@@ -25786,30 +30536,40 @@ define('diagnose/apply/apply_view',['utils/reqcmd', 'lodash', 'marionette', 'tem
 
 			// jQuery UI Datepicker JS init
 			var datepickerSelector = '#birthdateinput';
-			$(datepickerSelector).datepicker({
-				showOtherMonths: true,
-				selectOtherMonths: true,
-			}).prev('.btn').on('click', function(e) {
-				e && e.preventDefault();
-				$(datepickerSelector).focus();
+			$('.input-group.date').datepickerBootstrap({
+				language: "zh-CN",
+				format: "yyyy-mm-dd",
+				startView: 2,
+				autoclose:true
 			});
-			$.extend($.datepicker, {
-				_checkOffset: function(inst, offset, isFixed) {
-					return offset
-				}
-			});
+			// $(datepickerSelector).datepicker({
+			// 	showOtherMonths: true,
+			// 	selectOtherMonths: true,
+			// 	changeMonth: true,
+			//    			changeYear: true
+			// }).prev('.btn').on('click', function(e) {
+			// 	e && e.preventDefault();
+			// 	$(datepickerSelector).focus();
+			// });
+			// $.extend($.datepicker, {
+			// 	_checkOffset: function(inst, offset, isFixed) {
+			// 		return offset
+			// 	}
+			// });
 
-			// Now let's align datepicker with the prepend button
-			$(datepickerSelector).datepicker('widget').css({
-				'margin-left': -$(datepickerSelector).prev('.input-group-btn').find('.btn').outerWidth()
-			});
-
+			// // Now let's align datepicker with the prepend button
+			// $(datepickerSelector).datepicker('widget').css({
+			// 	'margin-left': -$(datepickerSelector).prev('.input-group-btn').find('.btn').outerWidth()
+			// });
+			var that = this;
 			//init file uploader
 			var temp = $('#dicomfileupload').fileupload({
 				disableImageResize: false,
-				maxFileSize: 2000000,
-				// acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+				maxFileSize: 200000000,
+				acceptFileTypes: /(\.|\/)(zip|jpe?g|png|rar)$/i,
+				// locale:FileUploaderMain.zhCNLocale,
 				maxNumberOfFiles: 1,
+				messages:FileUploaderMain.message,
 
 				// Uncomment the following to send cross-domain cookies:
 				//xhrFields: {withCredentials: true},
@@ -25823,17 +30583,31 @@ define('diagnose/apply/apply_view',['utils/reqcmd', 'lodash', 'marionette', 'tem
 				data.formData = {
 					diagnoseId: input.val()
 				};
+				$('#submitBtn3').hide();
+				$('#submitPendingBtn3').show();
 				// if (!data.formData.diagnoseId) {
 				//   data.context.find('button').prop('disabled', false);
 				//   input.focus();
 				//   return false;
 				// }
+				var fileUploadingModalView = new ModalView.FileUploadingModalView({});
+
+				that.appInstance.modalRegion.show(fileUploadingModalView);
+
+			}).bind('fileuploadalways', function(e, data) {
+				$('#submitBtn3').show();
+				$('#submitPendingBtn3').hide();
+				that.appInstance.modalRegion.close();
+
 			});
 			$('#patient-medical-report-fileupload').fileupload({
 				disableImageResize: false,
-				maxFileSize: 2000000,
+				maxFileSize: 200000000,
 				// acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
 				maxNumberOfFiles: 5,
+				acceptFileTypes: /(\.|\/)(zip|jpe?g|png|rar)$/i,
+				// locale:FileUploaderMain.zhCNLocale,
+				messages:FileUploaderMain.message,
 
 				// Uncomment the following to send cross-domain cookies:
 				//xhrFields: {withCredentials: true},
@@ -25852,6 +30626,18 @@ define('diagnose/apply/apply_view',['utils/reqcmd', 'lodash', 'marionette', 'tem
 				//   input.focus();
 				//   return false;
 				// }
+				$('#submitBtn4').hide();
+				$('#submitPendingBtn4').show();
+				var fileUploadingModalView = new ModalView.FileUploadingModalView({});
+
+				that.appInstance.modalRegion.show(fileUploadingModalView);
+
+
+			}).bind('fileuploadalways', function(e, data) {
+				$('#submitBtn4').show();
+				$('#submitPendingBtn4').hide();
+				that.appInstance.modalRegion.close();
+
 			});
 
 			//init affix
@@ -25876,21 +30662,21 @@ define('diagnose/apply/apply_view',['utils/reqcmd', 'lodash', 'marionette', 'tem
 				enableFiltering: true,
 				filterPlaceholder: "搜索",
 				nonSelectedText: "没有选中"
-				// buttonWidth: '300px'
+					// buttonWidth: '300px'
 			});
 
 			$("#hospitalinput").multiselect({
 				enableFiltering: true,
 				filterPlaceholder: "搜索",
 				nonSelectedText: "没有选中"
-				// buttonWidth: '300px'
+					// buttonWidth: '300px'
 			});
 
 			$("#locationinput").multiselect({
 				enableFiltering: true,
 				filterPlaceholder: "搜索",
 				nonSelectedText: "没有选中"
-				// buttonWidth: '300px'
+					// buttonWidth: '300px'
 			});
 
 
@@ -26016,6 +30802,8 @@ define('diagnose/apply/apply_view',['utils/reqcmd', 'lodash', 'marionette', 'tem
 
 			this.initDiagnoseForms();
 
+			$('body').show();
+
 		},
 		// we need this to do init work for forms
 		initDiagnoseForms: function() {
@@ -26093,17 +30881,18 @@ define('diagnose/apply/apply_view',['utils/reqcmd', 'lodash', 'marionette', 'tem
 			var $form = $panel.find('form:visible');
 			var formId = $panel.data('form-id');
 			var data = this.validate($form, formId);
+			var submitBtnDom = $(e.target).closest('button').get(0);
 			//console.dir(e.target);
 			//console.dir(document.querySelector('.ladda-button'));
-			var l = ladda.create(e.target);
+			var l = ladda.create(submitBtnDom);
 			//console.dir(data);
 			if (data) {
 				//when edit , add diagnose id for the request
 				if (this.isEdit === 'true' && this.diagnoseId) {
 					data += "&diagnoseId=" + this.diagnoseId;
 				}
-				if(this.applyUserType){
-					data+= "&type="+this.applyUserType;
+				if (this.applyUserType) {
+					data += "&type=" + this.applyUserType;
 				}
 				var that = this;
 				//add ladda
@@ -26130,6 +30919,13 @@ define('diagnose/apply/apply_view',['utils/reqcmd', 'lodash', 'marionette', 'tem
 						}
 					},
 					onError: function(res) {
+						if (res.status == 2) {
+							window.location.replace('/loginPage')
+
+						} else if (res.status == 4) {
+							window.location.replace('/error')
+
+						}
 						this.resetForm(true);
 						//var error = jQuery.parseJSON(data);
 						if (typeof res.msg !== 'undefined') {
@@ -26144,7 +30940,7 @@ define('diagnose/apply/apply_view',['utils/reqcmd', 'lodash', 'marionette', 'tem
 					resetForm: function(leaveInputData) {
 
 					},
-					complete: function(status,request) {
+					complete: function(status, request) {
 						l.stop();
 					}
 				});
@@ -26157,7 +30953,7 @@ define('diagnose/apply/apply_view',['utils/reqcmd', 'lodash', 'marionette', 'tem
 			if ($form.valid()) {
 				if (formId == 1) {
 					console.dir(this.ui.recommandedDoctor);
-					data = "doctorid=" + $('#recommandedDoctor .doctor-preview').data('doctor-id');
+					data = "doctorId=" + $('#recommandedDoctor .doctor-preview').data('doctor-id');
 				} else if (formId == 3) {
 					var $newDicomForm = $('#new-dicom-form');
 					var $editFileWrapper = $newDicomForm.find('.edit-file-wrapper');
@@ -26171,6 +30967,10 @@ define('diagnose/apply/apply_view',['utils/reqcmd', 'lodash', 'marionette', 'tem
 					}
 
 					var data = $form.serialize();
+					//for add isHospitalUser
+					if (this.isHospitalUser) {
+						data += "&isHospitalUser=1"
+					}
 					if (typeof tempstr !== 'undefined' && tempstr != 'undefined') {
 						data = data + "&fileurl=" + encodeURIComponent(tempstr);
 					}
@@ -26189,18 +30989,25 @@ define('diagnose/apply/apply_view',['utils/reqcmd', 'lodash', 'marionette', 'tem
 					}
 
 					data = $form.serialize();
+					//for add isHospitalUser
+					if (this.isHospitalUser) {
+						data += "&isHospitalUser=1"
+					}
 					var fileurl = "";
 					var fileid = "";
-					filelinks.each(function(index, element) {
-						var tempstr = $(element).attr('href');
-						var tempIdStr = $(element).data('fileid');
-						if (typeof tempstr !== 'undefined' && tempstr != 'undefined') {
-							fileurl += "&fileurl=" + encodeURIComponent(tempstr);
-						}
-						if (typeof tempIdStr !== 'undefined' && tempIdStr != 'undefined') {
-							fileid += "&fileid=" + tempIdStr;
-						}
-					});
+					if (typeof filelinks !== 'undefined') {
+						filelinks.each(function(index, element) {
+							var tempstr = $(element).attr('href');
+							var tempIdStr = $(element).data('fileid');
+							if (typeof tempstr !== 'undefined' && tempstr != 'undefined') {
+								fileurl += "&fileurl=" + encodeURIComponent(tempstr);
+							}
+							if (typeof tempIdStr !== 'undefined' && tempIdStr != 'undefined') {
+								fileid += "&fileid=" + tempIdStr;
+							}
+						});
+					}
+
 					if (typeof fileurl !== 'undefined') {
 						data = data + fileurl;
 					}
@@ -26217,8 +31024,7 @@ define('diagnose/apply/apply_view',['utils/reqcmd', 'lodash', 'marionette', 'tem
 		refreshForm: function(data) {
 			if (typeof data.data.formId !== 'undefined') {
 				if (data.data.formId == 1) {
-					if (this.isEdit !== 'true') {
-					}
+					if (this.isEdit !== 'true') {}
 				} else if (data.data.formId == 2) {
 					if (this.isEdit !== 'true') {
 						this.initPatientProfile();
@@ -26230,7 +31036,7 @@ define('diagnose/apply/apply_view',['utils/reqcmd', 'lodash', 'marionette', 'tem
 					if (this.isEdit !== 'true') {
 						this.initDicomInfo();
 					}
-					
+
 				}
 				this.showForm(data.data.formId);
 			}
@@ -26241,6 +31047,7 @@ define('diagnose/apply/apply_view',['utils/reqcmd', 'lodash', 'marionette', 'tem
 				});
 				var model = new ModalModel();
 				model.set('isHospitalUser', this.isHospitalUser);
+				model.set('userId', this.userId);
 				var successSubmitDiagnoseModalView = new SuccessSubmitDiagnoseModalView({
 					model: model
 				});
@@ -26317,7 +31124,7 @@ define('diagnose/apply/apply_view',['utils/reqcmd', 'lodash', 'marionette', 'tem
 		},
 		ui: {
 			"pageLinks": ".pagination-plain a"
-			// "currentLi":"li.active"
+				// "currentLi":"li.active"
 		},
 		events: {
 			"click @ui.pageLinks": "changePage"
@@ -26446,7 +31253,7 @@ define('diagnose/apply/apply_view',['utils/reqcmd', 'lodash', 'marionette', 'tem
 		onRender: function() {
 			console.log("PathologyCollectionView render");
 			console.dir(this.$el);
-			
+
 
 		},
 		onAfterItemAdded: function(itemView) {
@@ -26507,8 +31314,18 @@ define('diagnose/apply/apply_view',['utils/reqcmd', 'lodash', 'marionette', 'tem
 		onShow: function() {
 
 		},
-		ui: {},
-		events: {}
+		ui: {
+			'closeBtn': 'button.close'
+		},
+		events: {
+			'click @ui.closeBtn': 'closeModal'
+		},
+		closeModal: function(e) {
+			e.preventDefault();
+			var userId = this.model.get('userId');
+			var url = '/userCenter/' + userId;
+			window.location.replace(url);
+		}
 
 	});
 
@@ -26876,7 +31693,7 @@ define('diagnose/diagnose_app',['diagnose/apply/apply_controller'], function(App
 	}
 
 });
-define('register/patient/show_view',['utils/reqcmd', 'lodash', 'marionette', 'templates', 'dust', 'dustMarionette', "bootstrap"], function(ReqCmd, Lodash, Marionette, Templates) {
+define('register/patient/show_view',['utils/reqcmd', 'lodash', 'marionette', 'templates','login/login_app','dust', 'dustMarionette', "bootstrap"], function(ReqCmd, Lodash, Marionette, Templates,LoginApp) {
 	// body...
 	
 	var PatientRegisterPageLayoutView = Marionette.Layout.extend({
@@ -26895,6 +31712,9 @@ define('register/patient/show_view',['utils/reqcmd', 'lodash', 'marionette', 'te
 		},
 		attachEndHandler: function() {
 			console.log("PatientRegisterPageLayoutView attach end ");
+			LoginApp.loginAction();
+			$('body').show();
+
 		},
 
 		submitForm: function(e) {
@@ -27024,7 +31844,7 @@ define('register/patient/show_controller',['lodash', 'config/base/constant', 'co
 	return ShowController;
 
 });
-define('register/doctor/show_view',['utils/reqcmd', 'lodash', 'marionette', 'templates', 'dust', 'dustMarionette', "bootstrap"], function(ReqCmd, Lodash, Marionette, Templates) {
+define('register/doctor/show_view',['utils/reqcmd', 'lodash', 'marionette', 'templates', 'login/login_app','dust', 'dustMarionette', "bootstrap"], function(ReqCmd, Lodash, Marionette, Templates,LoginApp) {
 	// body...
 	
 	var DoctorRegisterPageLayoutView = Marionette.Layout.extend({
@@ -27042,6 +31862,9 @@ define('register/doctor/show_view',['utils/reqcmd', 'lodash', 'marionette', 'tem
 			'click @ui.submitBtn': "submitForm"
 		},
 		attachEndHandler: function() {
+			LoginApp.loginAction();
+			$('body').show();
+
 		},
 		submitForm: function(e) {
 			e.preventDefault();
@@ -27216,7 +32039,7 @@ define('register/register_app',['register/patient/show_controller', 'register/do
 		borderColor: undefined, // '#dddddd',
 		onhoverColor: '#F5F5F5',
 		selectedColor: '#FFFFFF',
-		selectedBackColor: '#16a085',
+		selectedBackColor: '#428bca',
 
 		enableLinks: false,
 		highlightSelected: true,
@@ -27606,10 +32429,11 @@ define('register/register_app',['register/patient/show_controller', 'register/do
 })(jQuery, window, document);
 define("bootstrap-treeview", ["bootstrap"], function(){});
 
-define('doctorhome/show/show_view',['utils/reqcmd', 'lodash', 'marionette', 'templates', 'dust', 'dustMarionette', "bootstrap", 'bootstrap.select', 'bootstrap-treeview', 'flat_ui_custom'], function(ReqCmd, Lodash, Marionette, Templates) {
-	// body...
+define('doctorhome/show/show_view',['utils/reqcmd', 'lodash', 'marionette', 'templates', 'ladda-bootstrap', 'modal/modal_view', 'dust',
+	'dustMarionette', "bootstrap", 'bootstrap.select', 'bootstrap-treeview',
+	'flat_ui_custom', 'config/validator/config'
+], function(ReqCmd, Lodash, Marionette, Templates, ladda, ModalView) {
 	
-	//var $;
 	var DoctorHomePageLayoutView = Marionette.Layout.extend({
 		initialize: function() {
 			console.log("init DoctorHomePageLayoutView");
@@ -27631,6 +32455,7 @@ define('doctorhome/show/show_view',['utils/reqcmd', 'lodash', 'marionette', 'tem
 		attachEndHandler: function() {
 
 			this.ui.doctorActionLinks.filter("[name*='diagnoseLink']").click();
+			$('body').show();
 		},
 		doctorActionLinksHandler: function(e) {
 			e.preventDefault();
@@ -27741,60 +32566,238 @@ define('doctorhome/show/show_view',['utils/reqcmd', 'lodash', 'marionette', 'tem
 	var AccountManageLayoutView = Marionette.ItemView.extend({
 		initialize: function() {
 			console.log("AccountManageLayoutView init");
+			this.model.on('change', this.render);
+			this.AppInstance = require('app');
 
 		},
 		template: "doctorAccountManageLayout",
 		ui: {
+
 			"editBtns": ".edit-btn",
-			"editBlocks": "#doctor-user-account-form .edit-block"
+			"editBlocks": "#doctor-user-account-form .edit-block",
+			"cancelSubmit": ".btn-cancel",
+			"submitBtn": ".btn-submit",
+			"bindMobileBtn": "#bindMobileBtn",
+			"editMobileBtn": "#editMobileBtn",
+			"submitPwdBtn": "#submitPwdBtn"
 		},
 		events: {
-			"click @ui.editBtns": "editFormHandler"
+			"click @ui.editBtns": "editFormHandler",
+			"click @ui.cancelSubmit": "cancelSubmit",
+			"click @ui.submitBtn": "submitChange",
+			"click @ui.bindMobileBtn": "bindMobileHandler",
+			"click @ui.editMobileBtn": "editMobileHandler",
+			"click @ui.submitPwdBtn": "submitPassword"
+		},
+		resetPwdForm: function() {
+			$('#doctor-user-password-form').find('input').val('');
+		},
+		submitPassword: function(e) {
+			e.preventDefault();
+			if ($('#doctor-user-password-form').valid()) {
+				var that = this;
+				var l = ladda.create(e.target);
+				l.start();
+				var url = "/account/changePasswd";
+				var data = $('#doctor-user-password-form').serialize();
+				$.ajax({
+					type: 'POST',
+					dataType: 'JSON',
+					data: data,
+					url: url,
+					success: function(data, status, request) {
+						console.log('success');
+						if (data.status != 0) {
+							this.onError(data);
+
+						} else {
+							that.resetPwdForm();
+							Messenger().post({
+								message: "密码修改成功",
+								type: 'success',
+								showCloseButton: true
+							});
+						}
+
+					},
+					onError: function(res) {
+						if (res.status == 2) {
+							window.location.replace('/loginPage')
+
+						} else if (res.status == 4) {
+							window.location.replace('/error')
+
+						}
+						if (typeof res.msg !== 'undefined') {
+							Messenger().post({
+								message: "错误信息:" + res.msg,
+								type: 'error',
+								showCloseButton: true
+							});
+						}
+					},
+					complete: function(status, request) {
+						l.stop();
+					}
+				});
+
+			}
+
+		},
+		bindMobileHandler: function(e) {
+			//set mobileType 1 bind , 2 modify
+			this.model.set('mobileType', 1);
+			var modalView = new ModalView.MobileBindModalView({
+				model: this.model
+			});
+			this.AppInstance.modalRegion.show(modalView);
+		},
+		editMobileHandler: function(e) {
+			//set mobileType 1 bind , 2 modify
+			this.model.set('mobileType', 2);
+			var modalView = new ModalView.MobileBindModalView({
+				model: this.model
+			});
+			this.AppInstance.modalRegion.show(modalView);
 		},
 		editFormHandler: function(e) {
 			e.preventDefault();
 			var $target = $(e.target);
-			$target.hide();
-			$target.siblings('.edit-block').show();
+			$target.closest('.form-body').find('.show-block').hide();
+			$target.closest('.form-body').find('.edit-block').show();
+
+		},
+		cancelSubmit: function(e) {
+			e.preventDefault();
+			var $target = $(e.target);
+			$target.closest('.form-body').find('.show-block').show();
+			$target.closest('.form-body').find('.edit-block').hide();
+		},
+		resetModel: function(params) {
+			this.model.clear();
+			this.model.fetch({
+				data: params
+			});
+		},
+		submitChange: function(e) {
+			e.preventDefault();
+			//need to add validate
+			var $target = $(e.target);
+			var $parent = $target.closest('.form-body');
+			var $inputField = $parent.find('input, textarea, select');
+			this.model.set($inputField.attr('name'), $inputField.val());
+			//type = 2 means patient , type = 1 means doctor
+			this.model.set('type', 1);
+			var that = this;
+
+			// console.log(data);
+			var l = ladda.create(e.target);
+			l.start();
+
+			var url = '/account/admin';
+			$.ajax({
+				type: 'POST',
+				dataType: 'JSON',
+				data: that.model.toJSON(),
+				url: url,
+				success: function(data, status, request) {
+					console.log('success');
+					if (data.status != 0) {
+						this.onError(data);
+
+					} else {
+						var params = {
+							type: 1
+						}
+						that.resetModel(params);
+						Messenger().post({
+							message: "修改成功",
+							type: 'success',
+							showCloseButton: true
+						});
+					}
+
+				},
+				onError: function(res) {
+					if (res.status == 2) {
+						window.location.replace('/loginPage')
+
+					} else if (res.status == 4) {
+						window.location.replace('/error')
+
+					}
+					if (typeof res.msg !== 'undefined') {
+						Messenger().post({
+							message: "错误信息:" + res.msg,
+							type: 'error',
+							showCloseButton: true
+						});
+					}
+				},
+				complete: function(status, request) {
+					l.stop();
+				}
+			});
 
 		},
 		onRender: function() {
-			this.ui.editBlocks.hide();
+			console.log('AccountManageLayoutView on render');
 
 		},
-
-		onShow: function() {
+		onDomRefresh: function() {
+			this.ui.editBlocks.hide();
 			var $this = $(this);
 			console.dir($('#accountTab a'));
 			$('#accountTab a').click(function(e) {
 				e.preventDefault();
 				$(this).tab('show');
 			});
-		}
-	});
 
+			//init validation
 
-	//consult  view
-	var ConsultLayoutView = Marionette.ItemView.extend({
-		initialize: function() {
-			console.log("ConsultLayoutView init");
+			$('#doctor-user-password-form').validate({
+				rules: {
+					oldPasswd: {
+						required: true
+					},
+					newPasswd: {
+						required: true,
+						minlength: 8
+					},
+					newPasswd_confirm: {
+						required: true,
+						equalTo: "#newPasswordInput"
+					}
 
-		},
-		template: "doctorConsultLayout",
-		ui: {
-
-		},
-		events: {},
-		onRender: function() {},
-		onShow: function() {
-			var $this = $(this);
-			console.dir($('#accountTab a'));
-			$('#consultTab a').click(function(e) {
-				e.preventDefault();
-				$(this).tab('show');
+				},
+				ignore: [],
+				highlight: function(element) {
+					$(element).closest('.form-group').addClass('has-error');
+				},
+				unhighlight: function(element) {
+					$(element).closest('.form-group').removeClass('has-error');
+				},
+				errorElement: 'span',
+				errorClass: 'help-block',
+				errorPlacement: function(error, element) {
+					if (element.is(":hidden")) {
+						element.next().parent().append(error);
+					} else if (element.parent('.input-group').length) {
+						error.insertAfter(element.parent());
+					} else {
+						error.insertAfter(element);
+					}
+				}
 			});
+
+		},
+
+		onShow: function() {
+			console.log("AccountManageLayoutView onshow");
 		}
 	});
+
+
 
 	var NewDiagnoseLayoutView = Marionette.ItemView.extend({
 		initialize: function(options) {
@@ -27876,6 +32879,8 @@ define('doctorhome/show/show_view',['utils/reqcmd', 'lodash', 'marionette', 'tem
 						} else {
 							if (targetId === 'previewDiagnoseBtn') {
 								window.open('/diagnose/' + that.model.get('id') + '/pdf', '_blank');
+							} else {
+								that.closeRegionAction();
 							}
 							Messenger().post({
 								message: 'SUCCESS.Create diagnose',
@@ -27887,6 +32892,13 @@ define('doctorhome/show/show_view',['utils/reqcmd', 'lodash', 'marionette', 'tem
 					onError: function(res) {
 						// this.resetForm();
 						//var error = jQuery.parseJSON(data);
+						if (res.status == 2) {
+							window.location.replace('/loginPage')
+
+						} else if (res.status == 4) {
+							window.location.replace('/error')
+
+						}
 						if (typeof res.msg !== 'undefined') {
 							Messenger().post({
 								message: "错误信息:" + res.msg,
@@ -27907,6 +32919,9 @@ define('doctorhome/show/show_view',['utils/reqcmd', 'lodash', 'marionette', 'tem
 		},
 		closeRegion: function(e) {
 			e.preventDefault();
+			this.closeRegionAction();
+		},
+		closeRegionAction: function() {
 			ReqCmd.reqres.request("NewDiagnoseLayoutView:closeRegion");
 		},
 		loadTemplate: function(e) {
@@ -28068,6 +33083,13 @@ define('doctorhome/show/show_view',['utils/reqcmd', 'lodash', 'marionette', 'tem
 							},
 							onError: function(res) {
 								//var error = jQuery.parseJSON(data);
+								if (res.status == 2) {
+									window.location.replace('/loginPage')
+
+								} else if (res.status == 4) {
+									window.location.replace('/error')
+
+								}
 								if (typeof res.msg !== 'undefined') {
 									Messenger().post({
 										message: "错误信息:" + res.msg,
@@ -28132,6 +33154,13 @@ define('doctorhome/show/show_view',['utils/reqcmd', 'lodash', 'marionette', 'tem
 							},
 							onError: function(res) {
 								//var error = jQuery.parseJSON(data);
+								if (res.status == 2) {
+									window.location.replace('/loginPage')
+
+								} else if (res.status == 4) {
+									window.location.replace('/error')
+
+								}
 								if (typeof res.msg !== 'undefined') {
 									Messenger().post({
 										message: "错误信息:" + res.msg,
@@ -28230,6 +33259,13 @@ define('doctorhome/show/show_view',['utils/reqcmd', 'lodash', 'marionette', 'tem
 					onError: function(res) {
 						// this.resetForm();
 						//var error = jQuery.parseJSON(data);
+						if (res.status == 2) {
+							window.location.replace('/loginPage')
+
+						} else if (res.status == 4) {
+							window.location.replace('/error')
+
+						}
 						if (typeof res.msg !== 'undefined') {
 							Messenger().post({
 								message: "错误信息:" + res.msg,
@@ -28247,6 +33283,10 @@ define('doctorhome/show/show_view',['utils/reqcmd', 'lodash', 'marionette', 'tem
 		},
 		closeRegion: function(e) {
 			e.preventDefault();
+			this.closeRegionAction();
+			
+		},
+		closeRegionAction: function() {
 			ReqCmd.reqres.request("NewDiagnoseLayoutView:closeRegion");
 		}
 	});
@@ -28301,11 +33341,203 @@ define('doctorhome/show/show_view',['utils/reqcmd', 'lodash', 'marionette', 'tem
 			var diagnoseId = this.ui.rollbackForm.data('id');
 			// var comments = this.ui.rollbackForm.find('textarea').val().trim();
 			var data = this.ui.rollbackForm.serialize() + "&status=7";
-			ReqCmd.commands.execute("rollbackDiagnose:RollbackModalView", diagnoseId,data);
+			ReqCmd.commands.execute("rollbackDiagnose:RollbackModalView", diagnoseId, data);
 
 		}
 
 	});
+
+	//consult  view
+	var ConsultLayoutView = Marionette.Layout.extend({
+		initialize: function() {
+			console.log("ConsultLayoutView init");
+
+		},
+		template: "doctorConsultLayout",
+		ui: {
+
+		},
+		regions: {
+			"contentRegion": "#consultLayoutContent"
+		},
+		events: {},
+		onRender: function() {},
+		onShow: function() {
+			ReqCmd.reqres.request("ConsultLayoutView:onshow");
+		}
+	});
+
+	var ConsultListView = Marionette.CompositeView.extend({
+		initialize: function(options) {
+			console.log("ConsultListView init end");
+		},
+		onRender: function() {
+			console.log("ConsultListView render");
+		},
+		onDomRefresh: function() {
+			$("select").selectpicker({
+				style: 'btn-sm btn-primary'
+			});
+		},
+		ui: {
+			"searchConsultForm": "#searchConsultForm",
+			"submitBtn": ".submit-btn",
+			"newConsultBtn": "#new-consult-btn"
+
+
+		},
+		events: {
+			"click @ui.submitBtn": "searchConsult",
+			"click @ui.newConsultBtn": "addConsult"
+
+		},
+		addConsult: function(e) {
+			e.preventDefault();
+			ReqCmd.commands.execute("ConsultDetailListView:addConsult");
+		},
+		searchConsult: function(e) {
+			e.preventDefault();
+			var params = this.ui.searchConsultForm.serialize();
+			ReqCmd.commands.execute("ConsultListView:searchConsult", params, $("#searchConsultForm select").val());
+		},
+		template: 'consultListView',
+		itemViewContainer: '#consult-tbody'
+
+	});
+
+
+	var ConsultListItemView = Marionette.ItemView.extend({
+		template: "consultListItemView",
+		initialize: function(options) {},
+		ui: {
+			"checkLink": ".action-group .check-link"
+		},
+		events: {
+			"click @ui.checkLink": "checkDetail"
+		},
+		checkDetail: function(e) {
+			var model = this.model;
+			ReqCmd.commands.execute("ConsultListItemView:checkDetail", model);
+		},
+		onRender: function() {
+			// get rid of that pesky wrapping-div
+			// assumes 1 child element			
+			this.$el = this.$el.children();
+			this.setElement(this.$el);
+		}
+	});
+
+
+
+	var ConsultDetailLayoutView = Marionette.Layout.extend({
+		initialize: function() {
+			console.log("ConsultDetailLayoutView init");
+
+		},
+		template: "consultDetailLayout",
+		ui: {
+
+		},
+		regions: {
+			"diagnoseRegion": "#diagnoseContent",
+			"consultListRegion": "#consultListContent"
+		},
+		events: {},
+		onRender: function() {},
+		onShow: function() {
+			ReqCmd.reqres.request("consultDetailLayoutView:onshow");
+		}
+	});
+
+	//consult detail view
+	var ConsultDetailListView = Marionette.CompositeView.extend({
+		initialize: function() {
+			console.log("ConsultDetailListView init");
+		},
+		template: "consultDetailList",
+		ui: {
+			"backLink": ".back-link",
+			"addCommentsBtn": "#add-comments-btn",
+			"commentsTextArea": "#new-comments-content"
+		},
+		events: {
+			"click @ui.backLink": "backToList",
+			"click @ui.addCommentsBtn": "addComments",
+		},
+
+		addComments: function(e) {
+			e.preventDefault();
+			$('.help-block').hide();
+			var comments = this.ui.commentsTextArea.val().trim();
+			if (comments) {
+				var params = {
+					userId: this.model.get("userId"),
+					doctorId: this.model.get("doctorId"),
+					title: this.model.get("title"),
+					content: this.ui.commentsTextArea.val(),
+					source_id: this.model.get("id"),
+					// type is not follow parent model , but has own depends on patient and doctor send
+					// type: this.model.get("type"),
+					diagnoseId: this.model.get("diagnoseId")
+				}
+				ReqCmd.commands.execute("ConsultDetailListView:addComments", params);
+
+			} else {
+				$('.help-block').show();
+			}
+
+		},
+		backToList: function(e) {
+			e.preventDefault();
+			ReqCmd.reqres.request("ConsultDetailListView:backToList");
+		},
+		onRender: function() {
+			console.log("ConsultDetailListView render");
+		},
+		onShow: function() {
+			console.log("ConsultDetailListView on show");
+			// ReqCmd.reqres.request("ConsultLayoutView:onshow");
+		},
+		itemViewContainer: "#comments-wrapper"
+
+	});
+
+
+	var ConsultDetailItemView = Marionette.ItemView.extend({
+		template: "consultDetailItem",
+		initialize: function(options) {
+
+		},
+		ui: {},
+		events: {},
+		onRender: function() {
+			// get rid of that pesky wrapping-div
+			// assumes 1 child element			
+			this.$el = this.$el.children();
+			this.setElement(this.$el);
+		}
+	});
+
+	var ConsultDiagnoseView = Marionette.ItemView.extend({
+		template: "consultDiagnose",
+		initialize: function(options) {
+			console.log("ConsultDiagnoseView render");
+			this.model.on('change', this.render);
+
+		},
+		ui: {},
+		events: {},
+		onRender: function() {
+			console.log("ConsultDiagnoseView render");
+			// get rid of that pesky wrapping-div
+			// assumes 1 child element			
+			this.$el = this.$el.children();
+			this.setElement(this.$el);
+		}
+
+	});
+
+
 
 	return {
 		DoctorHomePageLayoutView: DoctorHomePageLayoutView,
@@ -28316,7 +33548,13 @@ define('doctorhome/show/show_view',['utils/reqcmd', 'lodash', 'marionette', 'tem
 		NewAuditLayoutView: NewAuditLayoutView,
 		MessageLayoutView: MessageLayoutView,
 		ConsultLayoutView: ConsultLayoutView,
-		RollbackModalView: RollbackModalView
+		ConsultListView: ConsultListView,
+		ConsultListItemView: ConsultListItemView,
+		ConsultDetailLayoutView: ConsultDetailLayoutView,
+		ConsultDetailListView: ConsultDetailListView,
+		RollbackModalView: RollbackModalView,
+		ConsultDetailItemView: ConsultDetailItemView,
+		ConsultDiagnoseView: ConsultDiagnoseView
 	}
 });
 define('entities/diagnoseEntity',["backbone", "marionette", "config/base/constant", "utils/reqcmd"], function(Backbone, Marionette, Constant, ReqCmd) {
@@ -28380,6 +33618,26 @@ define('entities/diagnoseEntity',["backbone", "marionette", "config/base/constan
 
 
 	var API = {
+		getDiagnoseListDefer: function(params, isDoctor, diagnoseCollection) {
+			if (!params) {
+				params = {
+					type: ""
+				};
+			}
+			if (typeof params === 'object') {
+				params = $.param(params);
+			}
+			if (isDoctor) {
+				var url = "/diagnose/list";
+			} else {
+				var url = "/patient/diagnose/list";
+			}
+			diagnoseCollection.url = url;
+			return diagnoseCollection.fetch({
+				data: params
+			});
+
+		},
 		getDiagnoseList: function(params, collection) {
 			if (!params) {
 				params = {
@@ -28402,6 +33660,40 @@ define('entities/diagnoseEntity',["backbone", "marionette", "config/base/constan
 			} else {
 				var diagnoseCollection = new DiagnoseCollection();
 				diagnoseCollection.url = "/diagnose/list";
+				diagnoseCollection.fetch({
+					success: function() {
+						console.log("fetch success");
+					},
+					data: params
+				});
+
+			}
+
+
+			return diagnoseCollection
+		},
+		getPatientDiagnoseList: function(params, collection) {
+			if (!params) {
+				params = {
+					type: ""
+				};
+			}
+			if (typeof params === 'object') {
+				params = $.param(params);
+			}
+			if (collection) {
+				collection.reset();
+				collection.fetch({
+					success: function() {
+						console.log("fetch success");
+					},
+					data: params
+				});
+				var diagnoseCollection = collection;
+
+			} else {
+				var diagnoseCollection = new DiagnoseCollection();
+				diagnoseCollection.url = "/patient/diagnose/list";
 				diagnoseCollection.fetch({
 					success: function() {
 						console.log("fetch success");
@@ -28519,7 +33811,7 @@ define('entities/diagnoseEntity',["backbone", "marionette", "config/base/constan
 			return diagnoseCollection
 		},
 		getHospitalUserUnfinishDiagnose: function(collection) {
-			
+
 			if (collection) {
 				collection.reset();
 				collection.fetch({
@@ -28579,7 +33871,8 @@ define('entities/diagnoseEntity',["backbone", "marionette", "config/base/constan
 	};
 
 	return {
-		API: API
+		API: API,
+		DiagnoseCollection:DiagnoseCollection
 	}
 
 });
@@ -28632,6 +33925,257 @@ define('entities/messageEntity',["backbone","marionette","config/base/constant",
 
 });
 		
+define('entities/consultEntity',["backbone", "marionette", "config/base/constant", "utils/reqcmd"], function(Backbone, Marionette, Constant, ReqCmd) {
+	// body...
+	
+	var ConsultModel = Backbone.Model.extend({
+		//urlRoot: Constant+'/locale',
+	});
+
+	var ConsultCollection = Backbone.Collection.extend({
+		model: ConsultModel,
+		success: function(data, textStatus, jqXHR) {
+			// body...
+			console.dir(data);
+		},
+		onError: function(data) {
+			// body...
+			console.dir(data);
+		},
+		parse: function(resp) {
+			// body...
+			console.dir(resp.data);
+			return resp.data
+		}
+	});
+
+
+	var API = {
+		//type -- doctor , user 
+		//id -- doctorId , userId
+		getConsultCollection: function(params, collection, type, id) {
+			if (!params) {
+				params = {};
+			}
+			if (typeof params === 'object') {
+				params = $.param(params);
+			}
+			var consultCollection;
+
+			if (collection) {
+				consultCollection = collection;
+				consultCollection.reset();
+
+			} else {
+				consultCollection = new ConsultCollection();
+				if (type === "doctor") {
+					consultCollection.url = "/doctor/" + id + "/consultList";
+				} else if (type === "user") {
+					consultCollection.url = "/user/" + id + "/consultList";
+
+				}
+			}
+
+			consultCollection.fetch({
+				success: function() {
+					console.log("fetch success");
+					ReqCmd.reqres.request('consultEntity:getConsultCollection:fetch');
+				},
+				data: params
+			});
+
+			return consultCollection
+		},
+
+		getConsultDetailCollection: function(params, collection, type, id) {
+			if (!params) {
+				params = {};
+			}
+			if (typeof params === 'object') {
+				params = $.param(params);
+			}
+			var consultCollection;
+
+			if (collection) {
+				consultCollection = collection;
+				consultCollection.reset();
+
+			} else {
+				consultCollection = new ConsultCollection();
+				if (type === "doctor") {
+					consultCollection.url = "/doctor/" + id + "/consultList";
+				} else if (type === "user") {
+					consultCollection.url = "/user/" + id + "/consultList";
+
+				}
+			}
+
+			consultCollection.fetch({
+				success: function() {
+					console.log("fetch success");
+					ReqCmd.reqres.request('consultEntity:getConsultDetailCollection:fetch');
+				},
+				data: params
+			});
+
+			return consultCollection
+
+		},
+		addConsult: function(params, callback,context) {
+			if (!params) {
+				params = {};
+			}
+			if (typeof params === 'object') {
+				params = $.param(params);
+			}
+			$.ajax({
+				url: '/consult/add',
+				data: params,
+				dataType: 'json',
+				type: 'POST',
+				success: function(data) {
+					if (data.status != 0) {
+						this.onError(data);
+
+					} else {
+						Messenger().post({
+							message: '成功新建留言',
+							type: 'success',
+							showCloseButton: true
+						});
+						callback.call(context);
+					}
+				},
+				onError: function(res) {
+					// this.resetForm();
+					//var error = jQuery.parseJSON(data);
+					if (res.status == 2) {
+						window.location.replace('/loginPage')
+
+					} else if (res.status == 4) {
+						window.location.replace('/error')
+
+					}
+					if (typeof res.msg !== 'undefined') {
+						Messenger().post({
+							message: "错误信息:" + res.msg,
+							type: 'error',
+							showCloseButton: true
+						});
+					}
+
+				}
+			});
+
+
+		}
+
+
+	};
+
+	return {
+		API: API
+	}
+
+});
+define('entities/userInfoEntity',["backbone", "marionette", "config/base/constant", "utils/reqcmd"], function(Backbone, Marionette, Constant, ReqCmd) {
+	// body...
+	
+	var UserInfoModel = Backbone.Model.extend({
+		//urlRoot: Constant+'/locale',
+		parse: function(resp) {
+			// body...
+			console.dir(resp.data);
+			return resp.data
+		}
+	});
+
+
+	var API = {
+		getUserInfo: function(params) {
+			if (!params) {
+				params = {};
+			}
+			var userInfoModel= new UserInfoModel();
+			userInfoModel.url = "/account/info";
+			userInfoModel.fetch({
+				success: function() {
+					console.log("userInfoModel fetch success");
+				},
+				data: params
+			});
+
+			return userInfoModel
+		}
+	};
+	return {
+		API: API
+	}
+
+});
+
+
+
+define('entities/incomeEntity',["backbone","marionette","config/base/constant","utils/reqcmd"],function (Backbone,Marionette,Constant,ReqCmd) {
+	// body...
+	
+	var SummaryModel = Backbone.Model.extend({
+		success: function(data, textStatus, jqXHR) {
+			console.dir(data);
+
+		},
+		onError: function(data) {
+			console.dir(data);
+		},
+		parse: function(resp) {
+			//this.pageNumber = resp.data.pageNumber;
+			//console.log(resp.data);
+			return resp.data
+		}
+	});
+
+	// var FavoriteCollection = Backbone.Collection.extend({
+	// 	model:FavoriteModel,
+	// 	success: function (data,textStatus,jqXHR) {
+	// 		// body...
+	// 		console.dir(data);
+	// 	},
+	// 	onError: function (data) {
+	// 		// body...
+	// 		console.dir(data);
+	// 	},
+	// 	parse: function (resp) {
+	// 		// body...
+	// 		console.dir(resp.data);
+	// 		return resp.data
+	// 	}
+	// });
+	
+	var API = {
+		getIncomeSummary: function (params) {
+			if(!params){
+				params = {};
+			}
+			var summaryModel = new SummaryModel();
+			summaryModel.url = "/stats/summary";
+			summaryModel.fetch({
+				success:function () {
+					// ReqCmd.reqres.request("localelistfetch:success");
+					console.log("summaryModel fetch success");
+				},
+				data:params
+			});
+
+			return summaryModel
+		}
+	};
+	
+	return {
+		API:API
+	}
+
+});
+		
 define('message/show/show_view',['utils/reqcmd', 'lodash', 'marionette', 'templates', 'dust', 'dustMarionette', "bootstrap"], function(ReqCmd, Lodash, Marionette, Templates) {
 	// body...
 	
@@ -28656,18 +34200,34 @@ define('message/show/show_view',['utils/reqcmd', 'lodash', 'marionette', 'templa
 		},
 		template: "messageItem",
 		ui: {
-			"messageLink": ".message-link"
+			"messageLink": ".message-link",
+			"openBtn": ".open-btn",
+			"closeBtn": ".close-btn",
+			"messageContent":".message-content-wrapper > p"
 		},
 		events: {
-			"click @ui.messageLink": "changeReadStatus"
+			"click @ui.openBtn": "changeReadStatus",
+			"click @ui.closeBtn": "closeMessage"
+		},
+		closeMessage: function(e) {
+			this.ui.closeBtn.hide();
+			this.ui.openBtn.show();
+			this.ui.messageContent.removeClass("open");
+
+
 		},
 		changeReadStatus: function(e) {
 			e.stopPropagation();
 			e.preventDefault();
+			this.ui.openBtn.hide();
+			this.ui.closeBtn.show();
+			this.ui.messageContent.addClass("open");
 			var messageId = $(e.target).closest('li').data('id');
-			if (messageId) {
+			var parentId = $(e.target).closest('ul').attr("id");
+			//console.log(parentId);
+			if (messageId && parentId == 'unread-message-region') {
 				$.ajax({
-					url: '/message/'+messageId+'/remark.json',
+					url: '/message/' + messageId + '/remark.json',
 					dataType: 'json',
 					type: 'POST',
 					success: function(data) {
@@ -28698,9 +34258,9 @@ define('message/show/show_view',['utils/reqcmd', 'lodash', 'marionette', 'templa
 			}
 			//$(this).trigger('click');
 			//if have url , then link to , if not , use type to send event
-			var href = $(e.target).closest('a').attr('href');
-			var $sidelink = $("li").find('a[name="'+href+'"]');
-			$sidelink.click();
+			// var href = $(e.target).closest('a').attr('href');
+			// var $sidelink = $("li").find('a[name="' + href + '"]');
+			// $sidelink.click();
 
 			// ReqCmd.commands.execute('doctorHomePageLayoutView:changeContentView','diagnoseLink');
 
@@ -28721,184 +34281,710 @@ define('message/show/show_view',['utils/reqcmd', 'lodash', 'marionette', 'templa
 		MessageItemView: MessageItemView
 	}
 });
-define('doctorhome/show/show_controller',['lodash', 'config/base/constant', 'config/controllers/_base_controller', 'doctorhome/show/show_view', 'utils/reqcmd', 'entities/diagnoseEntity', 'entities/messageEntity', 'message/show/show_view'], function(Lodash, CONSTANT, BaseController, View, ReqCmd, DiagnoseEntity, MessageEntity, MessageView) {
+define('common/common_view',['utils/reqcmd', 'lodash', 'marionette', 'templates', 'dust',
+ 'dustMarionette', "bootstrap",'jquery.imgareaselect'], function(ReqCmd, Lodash, Marionette, Templates) {
 	// body...
 	
-	var ShowController = BaseController.extend({
+	var SelectCollectionView = Marionette.CollectionView.extend({
 		initialize: function() {
 
-			this.layoutView = this.getDoctorHomePageLayoutView();
-
-			this.show(this.layoutView, {
-				name: "doctorHomePageLayoutView",
-				//as bindAll this,so don't need that
-				instance: this
-			});
-
-			//instance is this controller instance
-			ReqCmd.commands.setHandler("doctorHomePageLayoutView:attached", Lodash.bind(function(instance) {
-				console.log("attached end");
-				this.layoutView.attachEndHandler();
-			}, this));
-
-			
-
-			//click left menu , change view , send from view 
-			ReqCmd.commands.setHandler("doctorHomePageLayoutView:changeContentView", Lodash.bind(function(viewName) {
-				console.log("doctorHomePageLayoutView changeContentView");
-				this.changeContentView(viewName);
-			}, this));
-
-			//diagnose list , change type , click search, send from view
-			ReqCmd.commands.setHandler("DiagnoseListView:searchDiagnose", Lodash.bind(function(params) {
-				console.log("DiagnoseListView searchDiagnose");
-				// var params = {
-				// 	type: type
-				// };
-				console.dir(params);
-				if(this.diagnoseCollection){
-					DiagnoseEntity.API.getDiagnoseList(params,this.diagnoseCollection);
-
-				}else{
-					this.diagnoseCollection = DiagnoseEntity.API.getDiagnoseList(params);
-				}
-			}, this));
-
-			//doctor click the action link , e.g. add diagnose
-			ReqCmd.commands.setHandler("DiagnoseTableItemView:actionHandler", Lodash.bind(function(model) {
-				console.log("DiagnoseTableItemView actionHandler");
-				var statusId = model.get('statusId');
-				if (statusId == 5) {
-					this.detailModel = DiagnoseEntity.API.getDiagnoseDetail({
-						diagnoseId:model.get('id')
-					});
-					if (typeof this.diagnoseActionView !== 'undefined') {
-						this.diagnoseActionView.close();
-					}
-					this.diagnoseActionView = this.getNewDiagnoseLayoutView(this.detailModel);
-
-				} else if (statusId == '审核') {
-					if (typeof this.diagnoseActionView !== 'undefined') {
-						this.diagnoseActionView.close();
-					}
-					var auditModel = DiagnoseEntity.API.getExistsDiagnose({
-						diagnoseId: model.get('id')
-					});
-					this.diagnoseActionView = this.getNewAuditLayoutView(auditModel);
-				}
-
-				this.show(this.diagnoseActionView, {
-					region: this.layoutView.newDiagnoseRegion,
-					client: true
-				});
-
-
-			}, this));
-
-
-			//close diagnose region
-			ReqCmd.reqres.setHandler("NewDiagnoseLayoutView:closeRegion", Lodash.bind(function() {
-				this.layoutView.newDiagnoseRegion.close();
-				this.contentView.initDiagnoseListView();
-
-			}, this));
-
-
-
-			//show message list after layout show
-			ReqCmd.reqres.setHandler("showMessageList:MessageLayoutView", Lodash.bind(function() {
-
-				this.unreadMessageCollection = MessageEntity.API.getMessageList({
-					status:0
-				});
-				this.unreadMessageCollectionView = this.getMessageListView(this.unreadMessageCollection);
-				this.show(this.unreadMessageCollectionView, {
-					region: this.contentView.unReadMessageRegion,
-					client: true
-				});
-
-				this.readMessageCollection = MessageEntity.API.getMessageList({
-					status:2
-				});
-				this.readMessageCollectionView = this.getMessageListView(this.readMessageCollection);
-				this.show(this.readMessageCollectionView, {
-					region: this.contentView.readMessageRegion,
-					client: true
-				});
-
-
-			}, this));
-
-			console.log('follow controller init end');
-
 		},
-		changeContentView: function(viewName) {
-			if (typeof this.diagnoseActionView !== 'undefined') {
-				this.diagnoseActionView.close();
-			}
-			if (viewName === 'diagnoseLink') {
-				this.diagnoseCollection = DiagnoseEntity.API.getDiagnoseList({
-					type:5
-				});
-				this.contentView = this.getDiagnoseListView(this.diagnoseCollection);
-
-			} else if (viewName === 'accountLink') {
-				this.contentView = this.getAccountManageLayoutView();
-			} else if (viewName === 'messageLink') {
-				this.contentView = this.getMessageLayoutView();
-			} else if (viewName === 'consultLink') {
-				this.contentView = this.getConsultLayoutView();
-			}
-
-			// var that = this;
-			this.show(this.contentView, {
-				region: this.layoutView.contentRegion,
-				client: true
+		onRender: function() {
+			console.log("SelectCollectionView render");
+			//multi select
+			this.$el.multiselect({
+				enableFiltering: true,
+				filterPlaceholder: "搜索",
+				nonSelectedText: "没有选中"
+				// buttonWidth: '300px'
 			});
 		},
-		getDoctorHomePageLayoutView: function() {
-			return new View.DoctorHomePageLayoutView();
-		},
-		getDiagnoseListView: function(collection) {
-			var view = new View.DiagnoseListView({
-				collection: collection,
-				itemView: View.DiagnoseTableItemView
-			});
-			return view;
-		},
-		getAccountManageLayoutView: function() {
-			return new View.AccountManageLayoutView();
-		},
-		getNewDiagnoseLayoutView: function(model) {
-			return new View.NewDiagnoseLayoutView({
-				model: model,
-				typeID:1
-			});
-		},
-		getNewAuditLayoutView: function(model) {
-			return new View.NewAuditLayoutView({
-				model: model
-			});
-		},
-		getMessageLayoutView: function() {
-			return new View.MessageLayoutView();
-		},
-		getMessageListView: function(collection) {
-			return new MessageView.MessageListView({
-				collection: collection,
-				itemView: MessageView.MessageItemView
-			});
-		},
-		getConsultLayoutView: function() {
-			return new View.ConsultLayoutView();
+		onAfterItemAdded: function(itemView) {
 
-		}
-
+		},
+		onDomRefresh: function() {
+		},
+		onShow: function() {
+			console.log("SelectCollectionView onShow");
+			//init the modal onshow
+		},
+		itemViewOptions: function() {}
 	});
 
-	return ShowController;
+	var SelectItemView = Marionette.ItemView.extend({
+		initialize: function() {
+			console.log("init SelectItemView");
+			this.listenTo(this.model, 'change', this.render, this);
+		},
+		template: "selectItemView",
+		onRender: function() {
+			console.log("item render");
+			// get rid of that pesky wrapping-div
+			// assumes 1 child element			
+			this.$el = this.$el.children();
+			this.setElement(this.$el);
+		},
+		ui: {},
+		events: {},
+		onShow: function() {
+			console.log("SelectItemView onShow");
+		}
+	});
 
+
+	var DiagnoseSelectItemView = Marionette.ItemView.extend({
+		initialize: function() {
+			console.log("init SelectItemView");
+			this.listenTo(this.model, 'change', this.render, this);
+		},
+		template: "diagnoseSelectItemView",
+		onRender: function() {
+			console.log("item render");
+			// get rid of that pesky wrapping-div
+			// assumes 1 child element			
+			this.$el = this.$el.children();
+			this.setElement(this.$el);
+		},
+		ui: {},
+		events: {},
+		onShow: function() {
+			console.log("SelectItemView onShow");
+		}
+	});
+
+	return {
+		
+		SelectCollectionView:SelectCollectionView,
+		SelectItemView:SelectItemView,
+		DiagnoseSelectItemView:DiagnoseSelectItemView
+	}
 });
+
+define('stats/income/income_view',['utils/reqcmd', 'lodash', 'marionette', 'templates', 'ladda-bootstrap', 'modal/modal_view', 'dust',
+	'dustMarionette', "bootstrap", 'bootstrap.select', 'bootstrap-treeview',
+	'flat_ui_custom', 'config/validator/config'
+], function(ReqCmd, Lodash, Marionette, Templates, ladda, ModalView) {
+	var IncomeLayoutView = Marionette.Layout.extend({
+		initialize: function() {
+			console.log("IncomeLayoutView init");
+
+		},
+		template: "incomeLayout",
+		ui: {
+		},
+		regions: {
+			"summaryRegion": "#summaryRegionContent",
+			"detailRegion": "#detailRegionContent",
+		},
+		events: {},
+		onRender: function() {},
+		onShow: function() {
+			console.log('IncomeLayoutView on show');
+			ReqCmd.reqres.request("IncomeLayoutView:onshow");
+		}
+	});
+
+	var SummaryView = Marionette.ItemView.extend({
+		template: "incomeSummary",
+		initialize: function(options) {
+			console.log("SummaryView init");
+			this.listenTo(this.model, 'change', this.render, this);
+
+		},
+		ui: {
+			"applyPayBtn": "#applyPayBtn"
+		},
+		events: {
+			"click @ui.applyPayBtn": "applyPayAction"
+		},
+		applyPayAction: function(e) {
+
+		},
+		onRender: function() {
+			// get rid of that pesky wrapping-div
+			// assumes 1 child element			
+			this.$el = this.$el.children();
+			this.setElement(this.$el);
+		}
+	});
+
+
+	return {
+		IncomeLayoutView:IncomeLayoutView,
+		SummaryView:SummaryView
+	}
+});
+define('doctorhome/show/show_controller',['lodash', 'config/base/constant', 'config/controllers/_base_controller',
+		'doctorhome/show/show_view', 'utils/reqcmd', 'entities/diagnoseEntity',
+		'entities/messageEntity', 'entities/consultEntity', 'entities/userInfoEntity','entities/incomeEntity',
+		'message/show/show_view', 'common/common_view', 'modal/modal_view', 'stats/income/income_view'
+	],
+	function(Lodash, CONSTANT, BaseController, View, ReqCmd, DiagnoseEntity, MessageEntity, ConsultEntity,
+		UserInfoEntity,IncomeEntity , MessageView, CommonView, ModalView, IncomeView) {
+		// body...
+		
+		var ShowController = BaseController.extend({
+			initialize: function() {
+
+				this.layoutView = this.getDoctorHomePageLayoutView();
+				this.appInstance = require('app');
+
+				this.show(this.layoutView, {
+					name: "doctorHomePageLayoutView",
+					//as bindAll this,so don't need that
+					instance: this
+				});
+
+				//instance is this controller instance
+				ReqCmd.commands.setHandler("doctorHomePageLayoutView:attached", Lodash.bind(function(instance) {
+					console.log("attached end");
+					this.doctorId = $('#doctorhome-content').data('doctorid');
+					this.layoutView.attachEndHandler();
+				}, this));
+
+
+
+				//click left menu , change view , send from view 
+				ReqCmd.commands.setHandler("doctorHomePageLayoutView:changeContentView", Lodash.bind(function(viewName) {
+					console.log("doctorHomePageLayoutView changeContentView");
+					this.changeContentView(viewName);
+				}, this));
+
+				//diagnose list , change type , click search, send from view
+				ReqCmd.commands.setHandler("DiagnoseListView:searchDiagnose", Lodash.bind(function(params) {
+					console.log("DiagnoseListView searchDiagnose");
+					// var params = {
+					// 	type: type
+					// };
+					console.dir(params);
+					if (this.diagnoseCollection) {
+						DiagnoseEntity.API.getDiagnoseList(params, this.diagnoseCollection);
+
+					} else {
+						this.diagnoseCollection = DiagnoseEntity.API.getDiagnoseList(params);
+					}
+				}, this));
+
+				//doctor click the action link , e.g. add diagnose
+				ReqCmd.commands.setHandler("DiagnoseTableItemView:actionHandler", Lodash.bind(function(model) {
+					console.log("DiagnoseTableItemView actionHandler");
+					var statusId = model.get('statusId');
+					if (statusId == 5) {
+						this.detailModel = DiagnoseEntity.API.getDiagnoseDetail({
+							diagnoseId: model.get('id')
+						});
+						if (typeof this.diagnoseActionView !== 'undefined') {
+							this.diagnoseActionView.close();
+						}
+						this.diagnoseActionView = this.getNewDiagnoseLayoutView(this.detailModel);
+
+					} else if (statusId == '审核') {
+						if (typeof this.diagnoseActionView !== 'undefined') {
+							this.diagnoseActionView.close();
+						}
+						var auditModel = DiagnoseEntity.API.getExistsDiagnose({
+							diagnoseId: model.get('id')
+						});
+						this.diagnoseActionView = this.getNewAuditLayoutView(auditModel);
+					}
+
+					this.show(this.diagnoseActionView, {
+						region: this.layoutView.newDiagnoseRegion,
+						client: true
+					});
+
+
+				}, this));
+
+
+				//close diagnose region
+				ReqCmd.reqres.setHandler("NewDiagnoseLayoutView:closeRegion", Lodash.bind(function() {
+					this.layoutView.newDiagnoseRegion.close();
+					this.contentView.initDiagnoseListView();
+
+				}, this));
+
+
+
+				//show message list after layout show
+				ReqCmd.reqres.setHandler("showMessageList:MessageLayoutView", Lodash.bind(function() {
+
+					this.unreadMessageCollection = MessageEntity.API.getMessageList({
+						status: 0
+					});
+					this.unreadMessageCollectionView = this.getMessageListView(this.unreadMessageCollection);
+					this.show(this.unreadMessageCollectionView, {
+						region: this.contentView.unReadMessageRegion,
+						client: true
+					});
+
+					this.readMessageCollection = MessageEntity.API.getMessageList({
+						status: 2
+					});
+					this.readMessageCollectionView = this.getMessageListView(this.readMessageCollection);
+					this.show(this.readMessageCollectionView, {
+						region: this.contentView.readMessageRegion,
+						client: true
+					});
+
+
+				}, this));
+
+
+				//close the bind mobile modal
+				ReqCmd.reqres.setHandler("MobileBindModalView:submit:success", Lodash.bind(function() {
+					this.appInstance.modalRegion.close();
+
+				}, this));
+
+
+				//Consult layout on show
+				ReqCmd.reqres.setHandler("ConsultLayoutView:onshow", Lodash.bind(function() {
+					var Model = Backbone.Model.extend({});
+					this.consultFilterModel = new Model();
+
+					var params = {
+						status: 0
+					};
+					this.consultFilterModel.set("filter", 0);
+					this.getConsultCollection(params);
+				}, this));
+
+				//consult collection fetch
+				ReqCmd.reqres.setHandler("consultEntity:getConsultCollection:fetch", Lodash.bind(function() {
+					console.log("consultEntity:getConsultCollection:fetch");
+					this.showConsultListView();
+				}, this));
+				//search consult
+				ReqCmd.commands.setHandler("ConsultListView:searchConsult", Lodash.bind(function(params, filterValue) {
+					this.consultFilterModel.set("filter", filterValue);
+					this.getConsultCollection(params);
+				}, this));
+
+				//click 查看 from consult list item
+				ReqCmd.commands.setHandler("ConsultListItemView:checkDetail", Lodash.bind(function(model) {
+					var consultId = model.get("id");
+					var changeReadStatusUrl = "/consut/" + consultId + "/read"
+					$.ajax({
+						url: changeReadStatusUrl,
+						dataType: 'json',
+						type: 'POST',
+						success: function(data) {
+							if (data.status != 0) {
+								this.onError(data);
+
+							} else {
+								Messenger().post({
+									message: '咨询已阅读',
+									type: 'success',
+									showCloseButton: true
+								});
+							}
+						},
+						onError: function(res) {
+							//var error = jQuery.parseJSON(data);
+							if (res.status == 2) {
+								window.location.replace('/loginPage')
+
+							} else if (res.status == 4) {
+								window.location.replace('/error')
+
+							}
+							if (typeof res.msg !== 'undefined') {
+								Messenger().post({
+									message: "错误信息:" + res.msg,
+									type: 'error',
+									showCloseButton: true
+								});
+							}
+
+						}
+					});
+
+
+					this.consultDetailModel = model;
+
+					this.consultDetailLayoutView = this.getConsultDetailLayoutView(this.consultDetailModel);
+					if (this.contentView.contentRegion) {
+						this.show(this.consultDetailLayoutView, {
+							region: this.contentView.contentRegion,
+							client: true
+						});
+					}
+
+
+
+				}, this));
+
+				//consult detail collection fetch
+				ReqCmd.reqres.setHandler("consultEntity:getConsultDetailCollection:fetch", Lodash.bind(function() {
+					console.log("consultEntity:getConsultDetailCollection:fetch");
+					//this.consultDetailView.render();
+					this.consultDetailListView = this.getConsultDetailListView(this.consultDetailModel, this.consultDetailCollection);
+					if (this.consultDetailLayoutView.consultListRegion) {
+						this.show(this.consultDetailListView, {
+							region: this.consultDetailLayoutView.consultListRegion,
+							client: true
+						});
+					}
+
+				}, this));
+
+				//consult detail layout onshow
+				ReqCmd.reqres.setHandler("consultDetailLayoutView:onshow", Lodash.bind(function() {
+					console.log("consultDetailLayoutView:onshow");
+					//this.consultDetailView.render();
+					var params = {
+						source_id: this.consultDetailModel.get("id")
+					};
+					if (this.consultDetailCollection) {
+						ConsultEntity.API.getConsultDetailCollection(params, this.consultDetailCollection, "doctor", this.doctorId);
+
+					} else {
+						this.consultDetailCollection = ConsultEntity.API.getConsultDetailCollection(params, "", "doctor", this.doctorId);
+					}
+
+
+					//show diagnose detail if related to diagnose
+					var diagnoseId = this.consultDetailModel.get("diagnoseId");
+					if (diagnoseId) {
+						this.diagnoseDetailModel = DiagnoseEntity.API.getDiagnoseDetail({
+							diagnoseId: diagnoseId
+						});
+						this.consultDiagnoseView = this.getConsultDiagnoseView(this.diagnoseDetailModel);
+						this.show(this.consultDiagnoseView, {
+							region: this.consultDetailLayoutView.diagnoseRegion,
+							client: true
+						});
+					}
+
+				}, this));
+
+				console.log('follow controller init end');
+
+				//consult detail back to consult list
+				ReqCmd.reqres.setHandler("ConsultDetailListView:backToList", Lodash.bind(function() {
+					console.log("ConsultDetailListView:backToList");
+					var params = {
+						status: 0
+					};
+					this.consultFilterModel.set("filter", 0);
+					this.getConsultCollection(params);
+				}, this));
+
+				//add level two consult comments
+				ReqCmd.commands.setHandler("ConsultDetailListView:addComments", Lodash.bind(function(params) {
+					console.log("ConsultDetailListView:addComments");
+					//type 1 means doctor , 0 means patient
+					params.type = 1;
+					ConsultEntity.API.addConsult(params, function() {
+						//refetch the detail collection
+						var params = {
+							source_id: this.consultDetailModel.get("id")
+						}
+						ConsultEntity.API.getConsultDetailCollection(params, this.consultDetailCollection, "doctor", this.doctorId);
+					}, this);
+
+				}, this));
+
+
+				//create consult view on show
+				ReqCmd.commands.setHandler("CreateConsultView:onShow", Lodash.bind(function($el) {
+					console.log("ConsultDetailListView:addComments");
+					var that = this;
+					if ($el) {
+						var params = {
+							type: 6
+						}
+						var isDoctor = true;
+						this.selectData = new DiagnoseEntity.DiagnoseCollection();
+						$.when(DiagnoseEntity.API.getDiagnoseListDefer(params, isDoctor, this.selectData)).done(function() {
+							that.getSelectView(that.selectData, $el).render();
+						});
+					}
+
+				}, this));
+
+				//create consult view submit
+				ReqCmd.commands.setHandler("CreateConsultView:submitHandler", Lodash.bind(function(params) {
+					console.log("CreateConsultView:submitHandler");
+					var that = this;
+					console.log(params);
+					//1 means doctor start, 0 means patient start
+					params += "&type=1";
+					var url = "/consult/add";
+					$.ajax({
+						url: url,
+						dataType: 'json',
+						type: 'POST',
+						data: params,
+						success: function(data) {
+							if (data.status != 0) {
+								this.onError(data);
+
+							} else {
+								Messenger().post({
+									message: '添加咨询成功',
+									type: 'success',
+									showCloseButton: true
+								});
+								//refresh the consult list
+								var params = {
+									status: 0
+								};
+								that.consultFilterModel.set("filter", 0);
+								that.getConsultCollection(params);
+								that.appInstance.modalRegion.close();
+							}
+						},
+						onError: function(res) {
+							//var error = jQuery.parseJSON(data);
+							if (res.status == 2) {
+								window.location.replace('/loginPage')
+
+							} else if (res.status == 4) {
+								window.location.replace('/error')
+
+							}
+							if (typeof res.msg !== 'undefined') {
+								Messenger().post({
+									message: "错误信息:" + res.msg,
+									type: 'error',
+									showCloseButton: true
+								});
+							}
+
+						}
+					});
+
+				}, this));
+
+				//click add consult
+				ReqCmd.commands.setHandler("ConsultDetailListView:addConsult", Lodash.bind(function() {
+					console.log("ConsultDetailListView:addConsult");
+					var ModalModel = Backbone.Model.extend({});
+					var modalModel = new ModalModel();
+					modalModel.set("hasDiagnose", true);
+					var modalView = new ModalView.CreateConsultView({
+						model: modalModel
+					});
+					this.appInstance.modalRegion.show(modalView);
+				}, this));
+
+
+				//for doctor roll back
+				ReqCmd.commands.setHandler("rollbackDiagnose:NewDiagnoseLayoutView", Lodash.bind(function(model) {
+					console.log("rollbackDiagnose");
+
+					var rollbackModalView = this.getRollbackModalView(model);
+					this.appInstance.modalRegion.show(rollbackModalView);
+
+				}, this));
+
+				//click submit on roll back diagnose modal
+				ReqCmd.commands.setHandler("rollbackDiagnose:RollbackModalView", Lodash.bind(function(diagnoseId, params) {
+					console.log("rollbackDiagnose RollbackModalView");
+					var that = this;
+					if (diagnoseId) {
+						$.ajax({
+							url: '/diagnose/rollback/' + diagnoseId,
+							data: params,
+							dataType: 'json',
+							type: 'POST',
+							success: function(data) {
+								if (data.status != 0) {
+									this.onError(data);
+
+								} else {
+									that.appInstance.modalRegion.close();
+									Messenger().post({
+										message: '诊断已经成功打回',
+										type: 'success',
+										showCloseButton: true
+									});
+								}
+							},
+							onError: function(res) {
+								//var error = jQuery.parseJSON(data);
+								if (res.status == 2) {
+									window.location.replace('/loginPage')
+
+								} else if (res.status == 4) {
+									window.location.replace('/error')
+
+								}
+								if (typeof res.msg !== 'undefined') {
+									Messenger().post({
+										message: "错误信息:" + res.msg,
+										type: 'error',
+										showCloseButton: true
+									});
+								}
+
+							}
+						});
+					}
+
+
+				}, this));
+
+
+				//FOR STATS INCOME FEATURE
+				ReqCmd.reqres.setHandler("IncomeLayoutView:onshow", Lodash.bind(function(diagnoseId, params) {
+					if(this.contentView.summaryRegion){
+						this.incomeSummaryModel = IncomeEntity.API.getIncomeSummary();
+						var view = new IncomeView.SummaryView({
+							model:this.incomeSummaryModel
+						})
+						this.show(view,{
+							region:this.contentView.summaryRegion,
+							client:true
+						});
+					}
+				}, this));
+
+
+
+			},
+
+			getRollbackModalView: function(model) {
+				var view = new View.RollbackModalView({
+					model: model
+				});
+				return view;
+			},
+			showConsultListView: function() {
+				if (this.contentView.contentRegion) {
+
+					var view = this.getConsultListView(this.consultFilterModel, this.consultCollection);
+					this.show(view, {
+						region: this.contentView.contentRegion,
+						client: true
+					});
+				}
+
+			},
+			getConsultCollection: function(params) {
+				if (this.consultCollection) {
+					ConsultEntity.API.getConsultCollection(params, this.consultCollection, "doctor", this.doctorId);
+
+				} else {
+					this.consultCollection = ConsultEntity.API.getConsultCollection(params, "", "doctor", this.doctorId);
+				}
+			},
+
+			changeContentView: function(viewName) {
+				if (typeof this.diagnoseActionView !== 'undefined') {
+					this.diagnoseActionView.close();
+				}
+				if (viewName === 'diagnoseLink') {
+					this.diagnoseCollection = DiagnoseEntity.API.getDiagnoseList({
+						type: 5
+					});
+					this.contentView = this.getDiagnoseListView(this.diagnoseCollection);
+
+				} else if (viewName === 'accountLink') {
+					//type = 2 means patient , type =1 means doctor
+					var params = {
+						type: 1
+					}
+					this.userInfoModel = UserInfoEntity.API.getUserInfo(params);
+					this.contentView = this.getAccountManageLayoutView(this.userInfoModel);
+				} else if (viewName === 'messageLink') {
+					this.contentView = this.getMessageLayoutView();
+				} else if (viewName === 'consultLink') {
+					this.contentView = this.getConsultLayoutView();
+				} else if (viewName === 'statisticLink') {
+					this.contentView = this.getIncomeLayoutView();
+				}
+
+				// var that = this;
+				this.show(this.contentView, {
+					region: this.layoutView.contentRegion,
+					client: true
+				});
+			},
+			getDoctorHomePageLayoutView: function() {
+				return new View.DoctorHomePageLayoutView();
+			},
+			getDiagnoseListView: function(collection) {
+				var view = new View.DiagnoseListView({
+					collection: collection,
+					itemView: View.DiagnoseTableItemView
+				});
+				return view;
+			},
+			getAccountManageLayoutView: function(model) {
+				return new View.AccountManageLayoutView({
+					model: model
+				});
+			},
+			getNewDiagnoseLayoutView: function(model) {
+				return new View.NewDiagnoseLayoutView({
+					model: model,
+					typeID: 1
+				});
+			},
+			getNewAuditLayoutView: function(model) {
+				return new View.NewAuditLayoutView({
+					model: model
+				});
+			},
+			getMessageLayoutView: function() {
+				return new View.MessageLayoutView();
+			},
+			getMessageListView: function(collection) {
+				return new MessageView.MessageListView({
+					collection: collection,
+					itemView: MessageView.MessageItemView
+				});
+			},
+			getConsultLayoutView: function() {
+				return new View.ConsultLayoutView();
+
+			},
+			getConsultListView: function(model, collection) {
+				return new View.ConsultListView({
+					model: model,
+					collection: collection,
+					itemView: View.ConsultListItemView
+				})
+			},
+			getConsultDetailListView: function(model, collection) {
+				return new View.ConsultDetailListView({
+					model: model,
+					collection: collection,
+					itemView: View.ConsultDetailItemView
+				})
+			},
+			getConsultDetailLayoutView: function(model) {
+				return new View.ConsultDetailLayoutView({
+					model: model
+				})
+			},
+			getConsultDiagnoseView: function(model) {
+				return new View.ConsultDiagnoseView({
+					model: model
+				})
+			},
+			getSelectView: function(collection, el) {
+				return new CommonView.SelectCollectionView({
+					collection: collection,
+					itemView: CommonView.DiagnoseSelectItemView,
+					el: el
+				})
+			},
+			getIncomeLayoutView: function() {
+				return new IncomeView.IncomeLayoutView({
+
+				});
+			}
+
+		});
+
+		return ShowController;
+
+	});
 define('doctorhome/doctor_home_app',['doctorhome/show/show_controller'], function(ShowController) {
 	// body...
 	
@@ -28912,212 +34998,446 @@ define('doctorhome/doctor_home_app',['doctorhome/show/show_controller'], functio
 	}
 
 });
-define('patienthome/show/show_view',['utils/reqcmd', 'lodash', 'marionette', 'templates', 'dust', 'dustMarionette', "bootstrap", 'bootstrap.select'], function(ReqCmd, Lodash, Marionette, Templates) {
-	// body...
-	
-	var PatientHomePageLayoutView = Marionette.Layout.extend({
-		initialize: function() {
-			console.log("init PatientHomePageLayoutView");
-			this.bindUIElements();
-		},
-		regions: {
-			"contentRegion": "#contentRegion",
-			"diagnoseDetailTrackRegion": "#diagnose-detail-track-wrapper"
-		},
-		el: "#patienthome-content",
-		ui: {
-			"patientActionLinks": "#patient-actions ul a",
-			"headerTitle": "#patient-action-header h6"
+define('patienthome/show/show_view',['utils/reqcmd', 'lodash', 'marionette', 'templates',
+		'ladda-bootstrap', 'modal/modal_view',
+		'dust', 'dustMarionette', "bootstrap", 'bootstrap.select', 'config/validator/config'
+	],
+	function(ReqCmd, Lodash, Marionette, Templates, ladda, ModalView) {
+		// body...
+		
+		var PatientHomePageLayoutView = Marionette.Layout.extend({
+			initialize: function() {
+				console.log("init PatientHomePageLayoutView");
+				this.bindUIElements();
+			},
+			regions: {
+				"contentRegion": "#contentRegion",
+				"diagnoseDetailTrackRegion": "#diagnose-detail-track-wrapper"
+			},
+			el: "#patienthome-content",
+			ui: {
+				"patientActionLinks": "#patient-actions ul a",
+				"headerTitle": "#patient-action-header h6",
+				'headerAction': '#patient-action-header .right-action'
 
-		},
-		events: {
-			"click @ui.patientActionLinks": "patientActionLinksHandler"
-		},
-		attachEndHandler: function() {
+			},
+			events: {
+				"click @ui.patientActionLinks": "patientActionLinksHandler"
+			},
+			attachEndHandler: function() {
 
-			this.ui.patientActionLinks.filter("[name*='diagnoseLink']").click();
-		},
-		patientActionLinksHandler: function(e) {
-			e.preventDefault();
-			//e.stopPropagation();
-			//console.dir($(e.target));
-			var $target = $(e.target);
-			if ($target.is('span')) {
-				$target = $target.closest('a');
-			}
-			console.log($target.attr("name"));
-			this.ui.patientActionLinks.removeClass('active');
-			$target.addClass('active');
-			ReqCmd.commands.execute("patientHomePageLayoutView:changeContentView", $target.attr("name"));
-
-			//change title
-			var iconClass = $target.attr('class');
-			var titleText = $target.find('.nav-text').html();
-			//console.log(iconClass+','+text);
-			//console.dir(this.ui);
-			this.ui.headerTitle.html("<i class='" + iconClass + "'></i><span>" + titleText + "</span>");
-
-
-
-		}
-
-
-
-	});
-
-
-	var DiagnoseListView = Marionette.CompositeView.extend({
-		initialize: function() {
-			console.log("init DiagnoseTableCollectionView");
-			this.appInstance = require('app');
-
-		},
-		onShow: function() {
-			$("select").selectpicker({
-				style: 'btn-sm btn-primary'
-			});
-
-		},
-		ui: {
-			"submitBtn": "#patient-action-content .submit-btn",
-			"typeSelect": "#patient-action-content select",
-			"diagnoseAllWrapper": "#diagnose-all-wrapper"
-		},
-		events: {
-			"click @ui.submitBtn": "searchDiagnose"
-		},
-		template: "diagnoseLayout",
-		itemViewContainer: "#diagnose-tbody",
-		searchDiagnose: function(e) {
-			e.preventDefault();
-			ReqCmd.commands.execute("DiagnoseListView:searchDiagnose", this.ui.typeSelect.val());
-		},
-		itemViewOptions: function() {
-			return {
-				parentsInstance: this
-			};
-		},
-		hideView: function() {
-			this.$el.hide();
-		},
-		showAndRefreshView: function() {
-			this.$el.show();
-			ReqCmd.commands.execute("DiagnoseListView:searchDiagnose", this.ui.typeSelect.val());
-
-
-		}
-
-	});
-
-	var DiagnoseTableItemView = Marionette.ItemView.extend({
-		initialize: function(options) {
-			this.parentsInstance = options.parentsInstance;
-
-		},
-		template: "diagnoseItem",
-		ui: {
-			"actionLinks": ".action-group a",
-			"detailLinks": ".detail-link",
-			"deleteLinks": ".rm-diagnose-link"
-		},
-		events: {
-			"click @ui.actionLinks": "actionLinkHandler",
-			"click @ui.detailLinks": "detailLinksHandler",
-			"click @ui.deleteLinks": "deleteDiagnose"
-		},
-		actionLinkHandler: function(e) {
-			var $link = $(e.target);
-			if ($link.is('.action-link')) {
+				this.ui.patientActionLinks.filter("[name*='diagnoseLink']").click();
+				$('body').show();
+			},
+			patientActionLinksHandler: function(e) {
 				e.preventDefault();
-				console.log("sharing-link click");
-				var model = this.model;
-				var sharingModalView = new SharingModalView({
-					model: model
-				});
+				//e.stopPropagation();
+				//console.dir($(e.target));
+				var $target = $(e.target);
+				if ($target.is('span')) {
+					$target = $target.closest('a');
+				}
+				console.log($target.attr("name"));
+				this.ui.patientActionLinks.removeClass('active');
+				$target.addClass('active');
+				var viewName = $target.attr("name");
+				ReqCmd.commands.execute("patientHomePageLayoutView:changeContentView", viewName);
 
-				this.parentsInstance.appInstance.modalRegion.show(sharingModalView);
-
-			}
-		},
-		detailLinksHandler: function(e) {
-			e.preventDefault();
-			ReqCmd.commands.execute("detailLinksHandler:DiagnoseTableItemView", this.model);
-
-		},
-		onRender: function() {
-			//console.log("item render");
-			// get rid of that pesky wrapping-div
-			// assumes 1 child element			
-			this.$el = this.$el.children();
-			this.setElement(this.$el);
-		},
-		deleteDiagnose: function(e) {
-			e.preventDefault();
-			var $link = $(e.target);
-			if ($link.is('.rm-diagnose-link')) {
-				console.log("rm-diagnose-link click");
-				var model = this.model;
-				var deleteDiagnoseModalView = new DeleteDiagnoseModalView({
-					model: model
-				});
-
-				this.parentsInstance.appInstance.modalRegion.show(deleteDiagnoseModalView);
-
+				//change title
+				var iconClass = $target.attr('class');
+				var titleText = $target.find('.nav-text').html();
+				//console.log(iconClass+','+text);
+				//console.dir(this.ui);
+				this.ui.headerTitle.html("<i class='" + iconClass + "'></i><span>" + titleText + "</span>");
+				if (viewName == 'diagnoseLink') {
+					this.ui.headerAction.show();
+				} else {
+					this.ui.headerAction.hide();
+				}
 			}
 
-		}
 
 
-	});
+		});
 
-	var DeleteDiagnoseModalView = Marionette.ItemView.extend({
-		template: "deleteDiagnoseModal",
-		initialize: function() {
-			console.log("DeleteDiagnoseModalView init");
 
-		},
-		onRender: function() {
-			console.log("DeleteDiagnoseModalView render");
-			// get rid of that pesky wrapping-div
-			// assumes 1 child element			
-			this.$el = this.$el.children();
-			this.setElement(this.$el);
+		var DiagnoseListView = Marionette.CompositeView.extend({
+			initialize: function() {
+				console.log("init DiagnoseTableCollectionView");
+				this.appInstance = require('app');
 
-		},
-		onShow: function() {
+			},
+			onShow: function() {
+				$("select").selectpicker({
+					style: 'btn-sm btn-primary'
+				});
 
-		},
-		ui: {
-			"saveBtn": "button[name=save]",
-			"confirmForm": "#confirm-form"
-		},
-		events: {
-			"click @ui.saveBtn": "confirmDelete"
-		},
-		confirmDelete: function(e) {
-			var diagnoseId = this.ui.confirmForm.data('id');
-			if (diagnoseId) {
+			},
+			ui: {
+				"submitBtn": "#patient-action-content .submit-btn",
+				"typeSelect": "#patient-action-content select",
+				"diagnoseAllWrapper": "#diagnose-all-wrapper"
+			},
+			events: {
+				"click @ui.submitBtn": "searchDiagnose"
+			},
+			template: "diagnoseLayout",
+			itemViewContainer: "#diagnose-tbody",
+			searchDiagnose: function(e) {
+				e.preventDefault();
+				ReqCmd.commands.execute("DiagnoseListView:searchDiagnose", this.ui.typeSelect.val());
+			},
+			itemViewOptions: function() {
+				return {
+					parentsInstance: this
+				};
+			},
+			hideView: function() {
+				this.$el.hide();
+			},
+			showAndRefreshView: function() {
+				this.$el.show();
+				ReqCmd.commands.execute("DiagnoseListView:searchDiagnose", this.ui.typeSelect.val());
+
+
+			}
+
+		});
+
+		var DiagnoseTableItemView = Marionette.ItemView.extend({
+			initialize: function(options) {
+				this.parentsInstance = options.parentsInstance;
+
+			},
+			template: "diagnoseItem",
+			ui: {
+				"actionLinks": ".action-group a",
+				"detailLinks": ".detail-link",
+				"deleteLinks": ".rm-diagnose-link"
+			},
+			events: {
+				"click @ui.actionLinks": "actionLinkHandler",
+				"click @ui.detailLinks": "detailLinksHandler",
+				"click @ui.deleteLinks": "deleteDiagnose"
+			},
+			actionLinkHandler: function(e) {
+				var $link = $(e.target);
+				if ($link.is('.action-link')) {
+					e.preventDefault();
+					console.log("sharing-link click");
+					var model = this.model;
+					var sharingModalView = new SharingModalView({
+						model: model
+					});
+
+					this.parentsInstance.appInstance.modalRegion.show(sharingModalView);
+
+				}
+			},
+			detailLinksHandler: function(e) {
+				e.preventDefault();
+				ReqCmd.commands.execute("detailLinksHandler:DiagnoseTableItemView", this.model);
+
+			},
+			onRender: function() {
+				//console.log("item render");
+				// get rid of that pesky wrapping-div
+				// assumes 1 child element			
+				this.$el = this.$el.children();
+				this.setElement(this.$el);
+			},
+			deleteDiagnose: function(e) {
+				e.preventDefault();
+				var $link = $(e.target);
+				if ($link.is('.rm-diagnose-link')) {
+					console.log("rm-diagnose-link click");
+					var model = this.model;
+					var deleteDiagnoseModalView = new DeleteDiagnoseModalView({
+						model: model
+					});
+
+					this.parentsInstance.appInstance.modalRegion.show(deleteDiagnoseModalView);
+
+				}
+
+			}
+
+
+		});
+
+		var DeleteDiagnoseModalView = Marionette.ItemView.extend({
+			template: "deleteDiagnoseModal",
+			initialize: function() {
+				console.log("DeleteDiagnoseModalView init");
+
+			},
+			onRender: function() {
+				console.log("DeleteDiagnoseModalView render");
+				// get rid of that pesky wrapping-div
+				// assumes 1 child element			
+				this.$el = this.$el.children();
+				this.setElement(this.$el);
+
+			},
+			onShow: function() {
+
+			},
+			ui: {
+				"saveBtn": "button[name=save]",
+				"confirmForm": "#confirm-form"
+			},
+			events: {
+				"click @ui.saveBtn": "confirmDelete"
+			},
+			confirmDelete: function(e) {
+				var diagnoseId = this.ui.confirmForm.data('id');
+				if (diagnoseId) {
+					var that = this;
+					$.ajax({
+						url: "/diagnose/delete/" + diagnoseId,
+						dataType: 'json',
+						type: 'POST',
+						success: function(data) {
+							if (data.status != 0) {
+								this.onError(data);
+
+							} else {
+								that.close();
+								Messenger().post({
+									message: 'SUCCESS.delete diagnose',
+									type: 'success',
+									showCloseButton: true
+								});
+							}
+						},
+						onError: function(res) {
+							// this.resetForm();
+							//var error = jQuery.parseJSON(data);
+							if (res.status == 2) {
+								window.location.replace('/loginPage')
+
+							} else if (res.status == 4) {
+								window.location.replace('/error')
+
+							}
+							if (typeof res.msg !== 'undefined') {
+								Messenger().post({
+									message: "错误信息:" + res.msg,
+									type: 'error',
+									showCloseButton: true
+								});
+							}
+
+						}
+					});
+
+				}
+
+
+
+			}
+
+		});
+
+		var SharingModalView = Marionette.ItemView.extend({
+			template: "sharingModal",
+			initialize: function() {
+				console.log("SharingModalView init");
+
+			},
+			onRender: function() {
+				console.log("SharingModalView render");
+				// get rid of that pesky wrapping-div
+				// assumes 1 child element			
+				this.$el = this.$el.children();
+				this.setElement(this.$el);
+
+			},
+			onShow: function() {
+				$('#score-select').selectpicker({
+					style: 'btn-primary'
+				});
+			},
+			ui: {
+				"saveBtn": "button[name=save]",
+				"sharingForm": "#sharing-form"
+			},
+			events: {
+				"click @ui.saveBtn": "submitSharing"
+			},
+			submitSharing: function(e) {
+				var diagnoseId = this.ui.sharingForm.data('id');
+				var data = this.ui.sharingForm.serialize() + "&diagnoseId=" + diagnoseId;
+				ReqCmd.commands.execute("submitSharing:SharingModalView", data);
+
+			}
+
+		});
+
+
+		var AccountManageLayoutView = Marionette.ItemView.extend({
+			initialize: function() {
+				console.log("AccountManageLayoutView init");
+				this.model.on('change', this.render);
+				this.AppInstance = require('app');
+
+			},
+			template: "patientAccountManageLayout",
+			ui: {
+				"editBtns": ".edit-btn",
+				"editBlocks": "#patient-user-account-form .edit-block",
+				"cancelSubmit": ".btn-cancel",
+				"submitBtn": ".btn-submit",
+				"bindMobileBtn": "#bindMobileBtn",
+				"editMobileBtn": "#editMobileBtn",
+				"submitPwdBtn": "#submitPwdBtn"
+			},
+			events: {
+				"click @ui.editBtns": "editFormHandler",
+				"click @ui.cancelSubmit": "cancelSubmit",
+				"click @ui.submitBtn": "submitChange",
+				"click @ui.bindMobileBtn": "bindMobileHandler",
+				"click @ui.editMobileBtn": "editMobileHandler",
+				"click @ui.submitPwdBtn": "submitPassword"
+
+			},
+			resetPwdForm: function() {
+				$('#patient-user-password-form').find('input').val('');
+			},
+			submitPassword: function(e) {
+				e.preventDefault();
+				if ($('#patient-user-password-form').valid()) {
+					var that = this;
+					var l = ladda.create(e.target);
+					l.start();
+					var url = "/account/changePasswd";
+					var data = $('#patient-user-password-form').serialize();
+					$.ajax({
+						type: 'POST',
+						dataType: 'JSON',
+						data: data,
+						url: url,
+						success: function(data, status, request) {
+							console.log('success');
+							if (data.status != 0) {
+								this.onError(data);
+
+							} else {
+								that.resetPwdForm();
+								Messenger().post({
+									message: "密码修改成功",
+									type: 'success',
+									showCloseButton: true
+								});
+							}
+
+						},
+						onError: function(res) {
+							if (res.status == 2) {
+								window.location.replace('/loginPage')
+
+							} else if (res.status == 4) {
+								window.location.replace('/error')
+
+							}
+							if (typeof res.msg !== 'undefined') {
+								Messenger().post({
+									message: "错误信息:" + res.msg,
+									type: 'error',
+									showCloseButton: true
+								});
+							}
+						},
+						complete: function(status, request) {
+							l.stop();
+						}
+					});
+
+				}
+
+			},
+			bindMobileHandler: function(e) {
+				//set mobileType 1 bind , 2 modify
+				this.model.set('mobileType', 1);
+				var modalView = new ModalView.MobileBindModalView({
+					model: this.model
+				});
+				this.AppInstance.modalRegion.show(modalView);
+			},
+			editMobileHandler: function(e) {
+				//set mobileType 1 bind , 2 modify
+				this.model.set('mobileType', 2);
+				var modalView = new ModalView.MobileBindModalView({
+					model: this.model
+				});
+				this.AppInstance.modalRegion.show(modalView);
+			},
+			editFormHandler: function(e) {
+				e.preventDefault();
+				var $target = $(e.target);
+				$target.closest('.form-body').find('.show-block').hide();
+				$target.closest('.form-body').find('.edit-block').show();
+
+			},
+			cancelSubmit: function(e) {
+				e.preventDefault();
+				var $target = $(e.target);
+				$target.closest('.form-body').find('.show-block').show();
+				$target.closest('.form-body').find('.edit-block').hide();
+			},
+			resetModel: function(params) {
+				this.model.clear();
+				this.model.fetch({
+					data: params
+				});
+			},
+			submitChange: function(e) {
+				e.preventDefault();
+				//need to add validate
+				var $target = $(e.target);
+				var $parent = $target.closest('.form-body');
+				var $inputField = $parent.find('input, textarea, select');
+				this.model.set($inputField.attr('name'), $inputField.val());
+				this.model.set('type', 2);
+				var that = this;
+
+				// console.log(data);
+				var l = ladda.create(e.target);
+				l.start();
+
+				var url = '/account/admin';
 				var that = this;
 				$.ajax({
-					url: "/diagnose/delete/"+diagnoseId,
-					dataType: 'json',
 					type: 'POST',
-					success: function(data) {
+					dataType: 'JSON',
+					data: that.model.toJSON(),
+					url: url,
+					success: function(data, status, request) {
+						console.log('success');
 						if (data.status != 0) {
 							this.onError(data);
 
 						} else {
-							that.close();
+							var params = {
+								type: 2
+							}
+							that.resetModel(params);
 							Messenger().post({
-								message: 'SUCCESS.delete diagnose',
+								message: "修改成功",
 								type: 'success',
 								showCloseButton: true
 							});
 						}
+
 					},
-					onError: function(res) {
-						// this.resetForm();
-						//var error = jQuery.parseJSON(data);
+					onError: function(data) {
+						if (res.status == 2) {
+							window.location.replace('/loginPage')
+
+						} else if (res.status == 4) {
+							window.location.replace('/error')
+
+						}
 						if (typeof res.msg !== 'undefined') {
 							Messenger().post({
 								message: "错误信息:" + res.msg,
@@ -29125,263 +35445,329 @@ define('patienthome/show/show_view',['utils/reqcmd', 'lodash', 'marionette', 'te
 								showCloseButton: true
 							});
 						}
-
+					},
+					complete: function(status, request) {
+						l.stop();
 					}
 				});
 
+			},
+			onRender: function() {
+				console.log('AccountManageLayoutView on render');
+			},
+			onDomRefresh: function() {
+				this.ui.editBlocks.hide();
+				var $this = $(this);
+				console.dir($('#accountTab a'));
+				$('#accountTab a').click(function(e) {
+					e.preventDefault();
+					$(this).tab('show');
+				});
+
+				//init validation
+
+				$('#patient-user-password-form').validate({
+					rules: {
+						oldPasswd: {
+							required: true
+						},
+						newPasswd: {
+							required: true,
+							minlength: 8
+						},
+						newPasswd_confirm: {
+							required: true,
+							equalTo: "#newPasswordInput"
+						}
+
+					},
+					ignore: [],
+					highlight: function(element) {
+						$(element).closest('.form-group').addClass('has-error');
+					},
+					unhighlight: function(element) {
+						$(element).closest('.form-group').removeClass('has-error');
+					},
+					errorElement: 'span',
+					errorClass: 'help-block',
+					errorPlacement: function(error, element) {
+						if (element.is(":hidden")) {
+							element.next().parent().append(error);
+						} else if (element.parent('.input-group').length) {
+							error.insertAfter(element.parent());
+						} else {
+							error.insertAfter(element);
+						}
+					}
+				});
+
+			},
+			onShow: function() {
+				console.log('AccountManageLayoutView onshow');
+			}
+		});
+
+		var MessageLayoutView = Marionette.Layout.extend({
+			initialize: function() {
+				console.log("MessageLayoutView init");
+
+			},
+			template: "patientMessageLayout",
+			ui: {},
+			regions: {
+				"unReadMessageRegion": "#unread-message-region",
+				"readMessageRegion": "#read-message-region"
+			},
+			events: {},
+			onRender: function() {},
+			onShow: function() {
+				var $this = $(this);
+				console.dir($('#messageTab a'));
+				$('#messageTab a').click(function(e) {
+					e.preventDefault();
+					$(this).tab('show');
+				});
+				ReqCmd.reqres.request('showMessageList:MessageLayoutView');
+			}
+		});
+
+
+		var FavoriteLayoutView = Marionette.Layout.extend({
+			initialize: function() {
+				console.log("FavoriteLayoutView init");
+
+			},
+			regions: {
+				"doctorListRegion": "#doctor-wrapper"
+			},
+			template: "favoriteLayout",
+			ui: {},
+			events: {},
+			onRender: function() {},
+			onShow: function() {
+				var $this = $(this);
+				console.dir($('#favoriteTab a'));
+				$('#favoriteTab a').click(function(e) {
+					e.preventDefault();
+					$(this).tab('show');
+				});
+				ReqCmd.reqres.request('onShow:FavoriteLayoutView');
+			}
+		});
+
+
+
+		var FavoriteCollectionView = Marionette.CollectionView.extend({
+			initialize: function() {
+				console.log("FavoriteCollectionView init");
+				this.appInstance = require('app');
+
+			},
+			tagName: "ul",
+			className: "favorite-list",
+			ui: {},
+			events: {},
+			onRender: function() {},
+			onShow: function() {},
+			itemViewOptions: function() {
+				return {
+					parentsInstance: this
+				};
+			}
+		});
+
+		var FavoriteItemView = Marionette.ItemView.extend({
+			initialize: function(options) {
+				console.log("FavoriteItemView init");
+				this.parentsInstance = options.parentsInstance;
+			},
+			template: "favoriteItem",
+			ui: {
+				"cancelFavoriteLinks": "a.del"
+			},
+			events: {
+				"click @ui.cancelFavoriteLinks": "cancelFavoriteHandler"
+			},
+			onRender: function() {},
+			cancelFavoriteHandler: function(e) {
+				console.log($(e.target));
+				var id = $(e.target).data('id');
+				console.log(id);
+				var model = this.model;
+				var cancelFavoriteModalView = new CancelFavoriteModalView({
+					model: model
+				});
+
+				this.parentsInstance.appInstance.modalRegion.show(cancelFavoriteModalView);
+			},
+			onShow: function() {}
+		});
+
+
+
+		var CancelFavoriteModalView = Marionette.ItemView.extend({
+			template: "cancelFavoriteModalView",
+			initialize: function() {
+				console.log("CancelFavoriteModalView init");
+
+			},
+			onRender: function() {
+				console.log("CancelFavoriteModalView render");
+				// get rid of that pesky wrapping-div
+				// assumes 1 child element			
+				this.$el = this.$el.children();
+				this.setElement(this.$el);
+
+			},
+			onShow: function() {},
+			ui: {
+				"saveBtn": "button[name=save]"
+			},
+			events: {
+				"click @ui.saveBtn": "removeFavorite"
+			},
+			removeFavorite: function(e) {
+				//var favoriteId = this.model.get('id');
+				ReqCmd.commands.execute("removeFavorite:CancelFavoriteModalView", this.model);
 			}
 
+		});
+
+		var DetailTrackLayoutView = Marionette.Layout.extend({
+			initialize: function() {
+				console.log("DetailTrackLayoutView init");
+				this.listenTo(this.model, 'change', this.render, this);
 
 
-		}
+			},
+			regions: {},
+			template: "detailTrackLayout",
+			ui: {
+				"backLink": ".back-link-wrapper > a"
+			},
+			events: {
+				"click @ui.backLink": "backLinkHandler"
+			},
+			onRender: function() {
+				console.log("DetailTrackLayoutView on render");
+				var $activeDiv = $('.bs-wizard .bs-wizard-step.active');
+				if ($activeDiv) {
+					$activeDiv.prevAll().removeClass("disabled").addClass("complete");
+				}
 
-	});
-
-	var SharingModalView = Marionette.ItemView.extend({
-		template: "sharingModal",
-		initialize: function() {
-			console.log("SharingModalView init");
-
-		},
-		onRender: function() {
-			console.log("SharingModalView render");
-			// get rid of that pesky wrapping-div
-			// assumes 1 child element			
-			this.$el = this.$el.children();
-			this.setElement(this.$el);
-
-		},
-		onShow: function() {
-			$('#score-select').selectpicker({
-				style: 'btn-primary'
-			});
-		},
-		ui: {
-			"saveBtn": "button[name=save]",
-			"sharingForm": "#sharing-form"
-		},
-		events: {
-			"click @ui.saveBtn": "submitSharing"
-		},
-		submitSharing: function(e) {
-			var diagnoseId = this.ui.sharingForm.data('id');
-			var data = this.ui.sharingForm.serialize() + "&diagnoseId=" + diagnoseId;
-			ReqCmd.commands.execute("submitSharing:SharingModalView", data);
-
-		}
-
-	});
+			},
+			onShow: function() {
+				console.log("DetailTrackLayoutView on show");
 
 
-	var AccountManageLayoutView = Marionette.ItemView.extend({
-		initialize: function() {
-			console.log("AccountManageLayoutView init");
-
-		},
-		template: "patientAccountManageLayout",
-		ui: {
-			"editBtns": ".edit-btn",
-			"editBlocks": "#patient-user-account-form .edit-block"
-		},
-		events: {
-			"click @ui.editBtns": "editFormHandler"
-		},
-		editFormHandler: function(e) {
-			e.preventDefault();
-			var $target = $(e.target);
-			$target.hide();
-			$target.siblings('.edit-block').show();
-
-		},
-		onRender: function() {
-			this.ui.editBlocks.hide();
-
-		},
-
-		onShow: function() {
-			var $this = $(this);
-			console.dir($('#accountTab a'));
-			$('#accountTab a').click(function(e) {
-				e.preventDefault();
-				$(this).tab('show');
-			});
-		}
-	});
-
-	var MessageLayoutView = Marionette.Layout.extend({
-		initialize: function() {
-			console.log("MessageLayoutView init");
-
-		},
-		template: "patientMessageLayout",
-		ui: {},
-		regions: {
-			"unReadMessageRegion": "#unread-message-region",
-			"readMessageRegion": "#read-message-region"
-		},
-		events: {},
-		onRender: function() {},
-		onShow: function() {
-			var $this = $(this);
-			console.dir($('#messageTab a'));
-			$('#messageTab a').click(function(e) {
-				e.preventDefault();
-				$(this).tab('show');
-			});
-			ReqCmd.reqres.request('showMessageList:MessageLayoutView');
-		}
-	});
-
-
-	var FavoriteLayoutView = Marionette.Layout.extend({
-		initialize: function() {
-			console.log("FavoriteLayoutView init");
-
-		},
-		regions: {
-			"doctorListRegion": "#doctor-wrapper"
-		},
-		template: "favoriteLayout",
-		ui: {},
-		events: {},
-		onRender: function() {},
-		onShow: function() {
-			var $this = $(this);
-			console.dir($('#favoriteTab a'));
-			$('#favoriteTab a').click(function(e) {
-				e.preventDefault();
-				$(this).tab('show');
-			});
-			ReqCmd.reqres.request('onShow:FavoriteLayoutView');
-		}
-	});
-
-
-
-	var FavoriteCollectionView = Marionette.CollectionView.extend({
-		initialize: function() {
-			console.log("FavoriteCollectionView init");
-			this.appInstance = require('app');
-
-		},
-		tagName: "ul",
-		className: "favorite-list",
-		ui: {},
-		events: {},
-		onRender: function() {},
-		onShow: function() {},
-		itemViewOptions: function() {
-			return {
-				parentsInstance: this
-			};
-		}
-	});
-
-	var FavoriteItemView = Marionette.ItemView.extend({
-		initialize: function(options) {
-			console.log("FavoriteItemView init");
-			this.parentsInstance = options.parentsInstance;
-		},
-		template: "favoriteItem",
-		ui: {
-			"cancelFavoriteLinks": "a.del"
-		},
-		events: {
-			"click @ui.cancelFavoriteLinks": "cancelFavoriteHandler"
-		},
-		onRender: function() {},
-		cancelFavoriteHandler: function(e) {
-			console.log($(e.target));
-			var id = $(e.target).data('id');
-			console.log(id);
-			var model = this.model;
-			var cancelFavoriteModalView = new CancelFavoriteModalView({
-				model: model
-			});
-
-			this.parentsInstance.appInstance.modalRegion.show(cancelFavoriteModalView);
-		},
-		onShow: function() {}
-	});
-
-
-
-	var CancelFavoriteModalView = Marionette.ItemView.extend({
-		template: "cancelFavoriteModalView",
-		initialize: function() {
-			console.log("CancelFavoriteModalView init");
-
-		},
-		onRender: function() {
-			console.log("CancelFavoriteModalView render");
-			// get rid of that pesky wrapping-div
-			// assumes 1 child element			
-			this.$el = this.$el.children();
-			this.setElement(this.$el);
-
-		},
-		onShow: function() {},
-		ui: {
-			"saveBtn": "button[name=save]"
-		},
-		events: {
-			"click @ui.saveBtn": "removeFavorite"
-		},
-		removeFavorite: function(e) {
-			//var favoriteId = this.model.get('id');
-			ReqCmd.commands.execute("removeFavorite:CancelFavoriteModalView", this.model);
-		}
-
-	});
-
-	var DetailTrackLayoutView = Marionette.Layout.extend({
-		initialize: function() {
-			console.log("DetailTrackLayoutView init");
-			this.listenTo(this.model, 'change', this.render, this);
-
-
-		},
-		regions: {},
-		template: "detailTrackLayout",
-		ui: {
-			"backLink": ".back-link-wrapper > a"
-		},
-		events: {
-			"click @ui.backLink": "backLinkHandler"
-		},
-		onRender: function() {
-			console.log("DetailTrackLayoutView on render");
-			var $activeDiv = $('.bs-wizard .bs-wizard-step.active');
-			if ($activeDiv) {
-				$activeDiv.prevAll().removeClass("disabled").addClass("complete");
+			},
+			backLinkHandler: function(e) {
+				ReqCmd.reqres.request("backLinkHandler:DetailTrackLayoutView");
 			}
-
-		},
-		onShow: function() {
-			console.log("DetailTrackLayoutView on show");
+		});
 
 
-		},
-		backLinkHandler: function(e) {
-			ReqCmd.reqres.request("backLinkHandler:DetailTrackLayoutView");
+		//consult  view
+		var ConsultLayoutView = Marionette.Layout.extend({
+			initialize: function() {
+				console.log("ConsultLayoutView init");
+
+			},
+			template: "patientConsultLayout",
+			ui: {
+
+			},
+			regions: {
+				"contentRegion": "#consultLayoutContent",
+				"phoneContentRegion":"#phoneConsultLayoutContent"
+			},
+			events: {},
+			onRender: function() {},
+			onShow: function() {
+				ReqCmd.reqres.request("ConsultLayoutView:onshow");
+			},
+			onDomRefresh: function() {
+				var $this = $(this);
+				console.dir($('#accountTab a'));
+				$('#accountTab a').click(function(e) {
+					e.preventDefault();
+					$(this).tab('show');
+				});
+			},
+		});
+
+
+		var PhoneConsultListView = Marionette.CompositeView.extend({
+			initialize: function(options) {
+				console.log("PhoneConsultListView init end");
+			},
+			onRender: function() {
+				console.log("PhoneConsultListView render");
+			},
+			onDomRefresh: function() {
+				$("select").selectpicker({
+					style: 'btn-sm btn-primary'
+				});
+			},
+			ui: {
+				"phoneSearchConsultForm": "#phoneSearchConsultForm",
+				"submitBtn": ".submit-btn",
+				"newConsultBtn": "#new-phone-consult-btn"
+
+			},
+			events: {
+				"click @ui.submitBtn": "searchConsult",
+				"click @ui.newConsultBtn": "addConsult"
+
+			},
+			addConsult: function(e) {
+				e.preventDefault();
+				ReqCmd.commands.execute("PhoneConsultListView:addConsult");
+			},
+			searchConsult: function(e) {
+				e.preventDefault();
+				var params = this.ui.phoneSearchConsultForm.serialize();
+				ReqCmd.commands.execute("PhoneConsultListView:searchConsult", params, $("#phoneSearchConsultForm select").val());
+			},
+			template: 'phoneConsultList',
+			itemViewContainer: '#phone-consult-tbody'
+
+		});
+
+
+		var PhoneConsultListItemView = Marionette.ItemView.extend({
+			template: "phoneConsultListItem",
+			initialize: function(options) {},
+			ui: {
+			},
+			events: {
+			},
+			onRender: function() {
+				// get rid of that pesky wrapping-div
+				// assumes 1 child element			
+				this.$el = this.$el.children();
+				this.setElement(this.$el);
+			}
+		});
+
+
+
+		return {
+			PatientHomePageLayoutView: PatientHomePageLayoutView,
+			DiagnoseListView: DiagnoseListView,
+			DiagnoseTableItemView: DiagnoseTableItemView,
+			AccountManageLayoutView: AccountManageLayoutView,
+			MessageLayoutView: MessageLayoutView,
+			FavoriteLayoutView: FavoriteLayoutView,
+			FavoriteCollectionView: FavoriteCollectionView,
+			FavoriteItemView: FavoriteItemView,
+			DetailTrackLayoutView: DetailTrackLayoutView,
+			DeleteDiagnoseModalView: DeleteDiagnoseModalView,
+			ConsultLayoutView: ConsultLayoutView,
+			PhoneConsultListItemView:PhoneConsultListItemView,
+			PhoneConsultListView:PhoneConsultListView
 		}
 	});
-
-
-
-	return {
-		PatientHomePageLayoutView: PatientHomePageLayoutView,
-		DiagnoseListView: DiagnoseListView,
-		DiagnoseTableItemView: DiagnoseTableItemView,
-		AccountManageLayoutView: AccountManageLayoutView,
-		MessageLayoutView: MessageLayoutView,
-		FavoriteLayoutView: FavoriteLayoutView,
-		FavoriteCollectionView: FavoriteCollectionView,
-		FavoriteItemView: FavoriteItemView,
-		DetailTrackLayoutView: DetailTrackLayoutView,
-		DeleteDiagnoseModalView:DeleteDiagnoseModalView
-	}
-});
 define('entities/favoriteEntity',["backbone","marionette","config/base/constant","utils/reqcmd"],function (Backbone,Marionette,Constant,ReqCmd) {
 	// body...
 	
@@ -29431,137 +35817,89 @@ define('entities/favoriteEntity',["backbone","marionette","config/base/constant"
 
 });
 		
-define('patienthome/show/show_controller',['lodash', 'config/base/constant', 'config/controllers/_base_controller', 'patienthome/show/show_view', 'utils/reqcmd', 'entities/diagnoseEntity', 'entities/messageEntity', 'message/show/show_view', 'entities/favoriteEntity'], function(Lodash, CONSTANT, BaseController, View, ReqCmd, DiagnoseEntity, MessageEntity, MessageView, FavoriteEntity) {
-	// body...
-	
-	var ShowController = BaseController.extend({
-		initialize: function() {
+define('patienthome/show/show_controller',['lodash', 'config/base/constant', 'config/controllers/_base_controller',
+		'patienthome/show/show_view', 'utils/reqcmd', 'entities/diagnoseEntity',
+		'entities/messageEntity', 'message/show/show_view',
+		 'entities/favoriteEntity', 'entities/userInfoEntity','entities/consultEntity',
+		 'common/common_view','modal/modal_view','doctorhome/show/show_view'
+	],
+	function(Lodash, CONSTANT, BaseController, View, ReqCmd,
+		DiagnoseEntity, MessageEntity, MessageView, FavoriteEntity, UserInfoEntity,ConsultEntity,
+		CommonView,ModalView,DoctorView) {
+		
+		var ShowController = BaseController.extend({
+			initialize: function() {
 
-			this.layoutView = this.getPatientHomePageLayoutView();
-			this.appInstance = require('app');
+				this.layoutView = this.getPatientHomePageLayoutView();
+				this.appInstance = require('app');
 
-			this.show(this.layoutView, {
-				name: "patientHomePageLayoutView",
-				//as bindAll this,so don't need that
-				instance: this
-			});
-
-			//instance is this controller instance
-			ReqCmd.commands.setHandler("patientHomePageLayoutView:attached", Lodash.bind(function(instance) {
-				console.log("attached end");
-				this.layoutView.attachEndHandler();
-
-			}, this));
-
-
-			//click left menu , change view , send from view 
-			ReqCmd.commands.setHandler("patientHomePageLayoutView:changeContentView", Lodash.bind(function(viewName) {
-				console.log("patientHomePageLayoutView changeContentView");
-				this.changeContentView(viewName);
-			}, this));
-
-			//diagnose list , change type , click search, send from view
-			ReqCmd.commands.setHandler("DiagnoseListView:searchDiagnose", Lodash.bind(function(type) {
-				console.log("DiagnoseListView searchDiagnose");
-				var params = {
-					type: type
-				};
-				console.dir(params);
-				if (this.diagnoseCollection) {
-					DiagnoseEntity.API.getDiagnoseList(params, this.diagnoseCollection);
-
-				} else {
-					this.diagnoseCollection = DiagnoseEntity.API.getDiagnoseList(params);
-				}
-			}, this));
-
-			//show message list after layout show
-			ReqCmd.reqres.setHandler("showMessageList:MessageLayoutView", Lodash.bind(function() {
-
-				this.unreadMessageCollection = MessageEntity.API.getMessageList({
-					status: 0
-				});
-				this.unreadMessageCollectionView = this.getMessageListView(this.unreadMessageCollection);
-				this.show(this.unreadMessageCollectionView, {
-					region: this.contentView.unReadMessageRegion,
-					client: true
+				this.show(this.layoutView, {
+					name: "patientHomePageLayoutView",
+					//as bindAll this,so don't need that
+					instance: this
 				});
 
-				this.readMessageCollection = MessageEntity.API.getMessageList({
-					status: 2
-				});
-				this.readMessageCollectionView = this.getMessageListView(this.readMessageCollection);
-				this.show(this.readMessageCollectionView, {
-					region: this.contentView.readMessageRegion,
-					client: true
-				});
+				//instance is this controller instance
+				ReqCmd.commands.setHandler("patientHomePageLayoutView:attached", Lodash.bind(function(instance) {
+					console.log("attached end");
+					this.userId = $('#patienthome-content').data('userid');
+					this.layoutView.attachEndHandler();
+
+				}, this));
 
 
-			}, this));
+				//click left menu , change view , send from view 
+				ReqCmd.commands.setHandler("patientHomePageLayoutView:changeContentView", Lodash.bind(function(viewName) {
+					console.log("patientHomePageLayoutView changeContentView");
+					this.changeContentView(viewName);
+				}, this));
 
+				//diagnose list , change type , click search, send from view
+				ReqCmd.commands.setHandler("DiagnoseListView:searchDiagnose", Lodash.bind(function(type) {
+					console.log("DiagnoseListView searchDiagnose");
+					var params = {
+						type: type
+					};
+					console.dir(params);
+					if (this.diagnoseCollection) {
+						DiagnoseEntity.API.getPatientDiagnoseList(params, this.diagnoseCollection);
 
-			//提交sharing
-			ReqCmd.commands.setHandler("submitSharing:SharingModalView", Lodash.bind(function(data) {
-				var that = this;
-				$.ajax({
-					url: '/addDiagnoseComment.json',
-					data: data,
-					dataType: 'json',
-					type: 'POST',
-					success: function(data) {
-						if (data.status != 0) {
-							this.onError(data);
-
-						} else {
-							that.appInstance.modalRegion.close();
-							Messenger().post({
-								message: 'SUCCESS.Submit sharing.',
-								type: 'success',
-								showCloseButton: true
-							});
-						}
-					},
-					onError: function(res) {
-						//var error = jQuery.parseJSON(data);
-						if (typeof res.msg !== 'undefined') {
-							Messenger().post({
-								message: "错误信息:" + res.msg,
-								type: 'error',
-								showCloseButton: true
-							});
-						}
-
+					} else {
+						this.diagnoseCollection = DiagnoseEntity.API.getPatientDiagnoseList(params);
 					}
-				});
+				}, this));
 
-			}, this));
+				//show message list after layout show
+				ReqCmd.reqres.setHandler("showMessageList:MessageLayoutView", Lodash.bind(function() {
 
-			//after favorite layout show, init favorite list
-			ReqCmd.reqres.setHandler("onShow:FavoriteLayoutView", Lodash.bind(function() {
-				var userId = $('#patienthome-content').data('userid');
-				if (userId) {
-					this.favoriteDoctorCollection = FavoriteEntity.API.getFavoriteList({
-						type: 0
-					}, userId);
-
-					this.favoriteDoctorCollectionView = this.getFavoriteListView(this.favoriteDoctorCollection);
-					this.show(this.favoriteDoctorCollectionView, {
-						region: this.contentView.doctorListRegion,
+					this.unreadMessageCollection = MessageEntity.API.getMessageList({
+						status: 0
+					});
+					this.unreadMessageCollectionView = this.getMessageListView(this.unreadMessageCollection);
+					this.show(this.unreadMessageCollectionView, {
+						region: this.contentView.unReadMessageRegion,
 						client: true
 					});
 
-				}
+					this.readMessageCollection = MessageEntity.API.getMessageList({
+						status: 2
+					});
+					this.readMessageCollectionView = this.getMessageListView(this.readMessageCollection);
+					this.show(this.readMessageCollectionView, {
+						region: this.contentView.readMessageRegion,
+						client: true
+					});
 
-			}, this));
+
+				}, this));
 
 
-			//confirm remove favorite
-			ReqCmd.commands.setHandler("removeFavorite:CancelFavoriteModalView", Lodash.bind(function(model) {
-				var that = this;
-				var favoriteId = model.get('id');
-				if (favoriteId) {
+				//提交sharing
+				ReqCmd.commands.setHandler("submitSharing:SharingModalView", Lodash.bind(function(data) {
+					var that = this;
 					$.ajax({
-						url: '/userFavorties/' + favoriteId + '/cancel',
+						url: '/addDiagnoseComment.json',
+						data: data,
 						dataType: 'json',
 						type: 'POST',
 						success: function(data) {
@@ -29570,10 +35908,8 @@ define('patienthome/show/show_controller',['lodash', 'config/base/constant', 'co
 
 							} else {
 								that.appInstance.modalRegion.close();
-								//delete the view from collection
-								that.favoriteDoctorCollection.remove(model);
 								Messenger().post({
-									message: 'SUCCESS.remove favorite.',
+									message: 'SUCCESS.Submit sharing.',
 									type: 'success',
 									showCloseButton: true
 								});
@@ -29581,6 +35917,13 @@ define('patienthome/show/show_controller',['lodash', 'config/base/constant', 'co
 						},
 						onError: function(res) {
 							//var error = jQuery.parseJSON(data);
+							if (res.status == 2) {
+								window.location.replace('/loginPage')
+
+							} else if (res.status == 4) {
+								window.location.replace('/error')
+
+							}
 							if (typeof res.msg !== 'undefined') {
 								Messenger().post({
 									message: "错误信息:" + res.msg,
@@ -29592,104 +35935,507 @@ define('patienthome/show/show_controller',['lodash', 'config/base/constant', 'co
 						}
 					});
 
+				}, this));
+
+				//after favorite layout show, init favorite list
+				ReqCmd.reqres.setHandler("onShow:FavoriteLayoutView", Lodash.bind(function() {
+					var userId = $('#patienthome-content').data('userid');
+					if (userId) {
+						this.favoriteDoctorCollection = FavoriteEntity.API.getFavoriteList({
+							type: 0
+						}, userId);
+
+						this.favoriteDoctorCollectionView = this.getFavoriteListView(this.favoriteDoctorCollection);
+						this.show(this.favoriteDoctorCollectionView, {
+							region: this.contentView.doctorListRegion,
+							client: true
+						});
+
+					}
+
+				}, this));
+
+
+				//confirm remove favorite
+				ReqCmd.commands.setHandler("removeFavorite:CancelFavoriteModalView", Lodash.bind(function(model) {
+					var that = this;
+					var favoriteId = model.get('id');
+					if (favoriteId) {
+						$.ajax({
+							url: '/userFavorties/' + favoriteId + '/cancel',
+							dataType: 'json',
+							type: 'POST',
+							success: function(data) {
+								if (data.status != 0) {
+									this.onError(data);
+
+								} else {
+									that.appInstance.modalRegion.close();
+									//delete the view from collection
+									that.favoriteDoctorCollection.remove(model);
+									Messenger().post({
+										message: 'SUCCESS.remove favorite.',
+										type: 'success',
+										showCloseButton: true
+									});
+								}
+							},
+							onError: function(res) {
+								//var error = jQuery.parseJSON(data);
+								if (res.status == 2) {
+									window.location.replace('/loginPage')
+
+								} else if (res.status == 4) {
+									window.location.replace('/error')
+
+								}
+								if (typeof res.msg !== 'undefined') {
+									Messenger().post({
+										message: "错误信息:" + res.msg,
+										type: 'error',
+										showCloseButton: true
+									});
+								}
+
+							}
+						});
+
+					}
+
+
+				}, this));
+
+				//click detail at diagnose list item
+				ReqCmd.commands.setHandler("detailLinksHandler:DiagnoseTableItemView", Lodash.bind(function(model) {
+					this.contentView.hideView();
+					// $('#diagnose-detail-track-wrapper').show();
+					var params = "diagnoseId=" + model.get('id');
+					var diagnosePatientDetailModel = DiagnoseEntity.API.getDiagnosePatientDetail(params);
+
+					this.diagnoseDetailTrackLayoutView = this.getDetailTrackLayoutView(diagnosePatientDetailModel);
+					this.show(this.diagnoseDetailTrackLayoutView, {
+						region: this.layoutView.diagnoseDetailTrackRegion,
+						client: true
+					});
+
+
+				}, this));
+
+				//click back link ,back to diagnose list from detail page
+				ReqCmd.reqres.setHandler("backLinkHandler:DetailTrackLayoutView", Lodash.bind(function() {
+					this.layoutView.diagnoseDetailTrackRegion.close();
+					this.contentView.showAndRefreshView();
+
+				}, this));
+
+
+				//close the bind mobile modal
+				ReqCmd.reqres.setHandler("MobileBindModalView:submit:success", Lodash.bind(function() {
+					this.appInstance.modalRegion.close();
+
+				}, this));
+
+				//Consult layout on show
+				ReqCmd.reqres.setHandler("ConsultLayoutView:onshow", Lodash.bind(function() {
+					var Model = Backbone.Model.extend({});
+					this.consultFilterModel = new Model();
+
+					var params = {
+						status: 0
+					};
+					this.consultFilterModel.set("filter", 0);
+					this.getConsultCollection(params);
+
+					//for test , 应该先读取数据
+					if (this.contentView.phoneContentRegion) {
+
+						var phoneview = this.getPhoneConsultListView();
+						this.show(phoneview, {
+							region: this.contentView.phoneContentRegion,
+							client: true
+						});
+					}
+
+
+				}, this));
+
+
+				//consult collection fetch
+				ReqCmd.reqres.setHandler("consultEntity:getConsultCollection:fetch", Lodash.bind(function() {
+					console.log("consultEntity:getConsultCollection:fetch");
+					this.showConsultListView();
+				}, this));
+				//search consult
+				ReqCmd.commands.setHandler("ConsultListView:searchConsult", Lodash.bind(function(params, filterValue) {
+					this.consultFilterModel.set("filter", filterValue);
+					this.getConsultCollection(params);
+				}, this));
+
+
+				//search consult
+				ReqCmd.commands.setHandler("PhoneConsultListView:searchConsult", Lodash.bind(function(params, filterValue) {
+					console.log("PhoneConsultListView:searchConsult handler start");
+				}, this));
+
+				//click 查看 from consult list item
+				ReqCmd.commands.setHandler("ConsultListItemView:checkDetail", Lodash.bind(function(model) {
+					var consultId = model.get("id");
+					var changeReadStatusUrl = "/consut/" + consultId + "/read"
+					$.ajax({
+						url: changeReadStatusUrl,
+						dataType: 'json',
+						type: 'POST',
+						success: function(data) {
+							if (data.status != 0) {
+								this.onError(data);
+
+							} else {
+								Messenger().post({
+									message: '咨询已阅读',
+									type: 'success',
+									showCloseButton: true
+								});
+							}
+						},
+						onError: function(res) {
+							//var error = jQuery.parseJSON(data);
+							if (res.status == 2) {
+								window.location.replace('/loginPage')
+
+							} else if (res.status == 4) {
+								window.location.replace('/error')
+
+							}
+							if (typeof res.msg !== 'undefined') {
+								Messenger().post({
+									message: "错误信息:" + res.msg,
+									type: 'error',
+									showCloseButton: true
+								});
+							}
+
+						}
+					});
+
+
+					this.consultDetailModel = model;
+
+					this.consultDetailLayoutView = this.getConsultDetailLayoutView(this.consultDetailModel);
+					if (this.contentView.contentRegion) {
+						this.show(this.consultDetailLayoutView, {
+							region: this.contentView.contentRegion,
+							client: true
+						});
+					}
+
+
+
+				}, this));
+
+				//consult detail collection fetch
+				ReqCmd.reqres.setHandler("consultEntity:getConsultDetailCollection:fetch", Lodash.bind(function() {
+					console.log("consultEntity:getConsultDetailCollection:fetch");
+					//this.consultDetailView.render();
+					this.consultDetailListView = this.getConsultDetailListView(this.consultDetailModel, this.consultDetailCollection);
+					if (this.consultDetailLayoutView.consultListRegion) {
+						this.show(this.consultDetailListView, {
+							region: this.consultDetailLayoutView.consultListRegion,
+							client: true
+						});
+					}
+
+				}, this));
+
+				//consult detail layout onshow
+				ReqCmd.reqres.setHandler("consultDetailLayoutView:onshow", Lodash.bind(function() {
+					console.log("consultDetailLayoutView:onshow");
+					//this.consultDetailView.render();
+					var params = {
+						source_id: this.consultDetailModel.get("id")
+					};
+					if (this.consultDetailCollection) {
+						ConsultEntity.API.getConsultDetailCollection(params, this.consultDetailCollection, "user", this.userId);
+
+					} else {
+						this.consultDetailCollection = ConsultEntity.API.getConsultDetailCollection(params, "", "user", this.userId);
+					}
+
+
+					//show diagnose detail if related to diagnose
+					var diagnoseId = this.consultDetailModel.get("diagnoseId");
+					if (diagnoseId) {
+						this.diagnoseDetailModel = DiagnoseEntity.API.getDiagnoseDetail({
+							diagnoseId: diagnoseId
+						});
+						this.consultDiagnoseView = this.getConsultDiagnoseView(this.diagnoseDetailModel);
+						this.show(this.consultDiagnoseView, {
+							region: this.consultDetailLayoutView.diagnoseRegion,
+							client: true
+						});
+					}
+
+				}, this));
+
+				console.log('follow controller init end');
+
+				//consult detail back to consult list
+				ReqCmd.reqres.setHandler("ConsultDetailListView:backToList", Lodash.bind(function() {
+					console.log("ConsultDetailListView:backToList");
+					var params = {
+						status: 0
+					};
+					this.consultFilterModel.set("filter", 0);
+					this.getConsultCollection(params);
+				}, this));
+
+				//add level two consult comments
+				ReqCmd.commands.setHandler("ConsultDetailListView:addComments", Lodash.bind(function(params) {
+					console.log("ConsultDetailListView:addComments");
+					//type 1 means doctor , 0 means patient
+					params.type = 0;
+					ConsultEntity.API.addConsult(params, function() {
+						//refetch the detail collection
+						var params = {
+							source_id: this.consultDetailModel.get("id")
+						}
+						ConsultEntity.API.getConsultDetailCollection(params, this.consultDetailCollection, "user", this.userId);
+					}, this);
+
+				}, this));
+
+
+				//create consult view on show
+				ReqCmd.commands.setHandler("CreateConsultView:onShow", Lodash.bind(function($el) {
+					console.log("ConsultDetailListView:addComments");
+					var that = this;
+					if ($el) {
+						var params = {
+							type: 6
+						}
+						var isDoctor = false;
+						this.selectData = new DiagnoseEntity.DiagnoseCollection();
+						$.when(DiagnoseEntity.API.getDiagnoseListDefer(params, isDoctor, this.selectData)).done(function() {
+							that.getSelectView(that.selectData, $el).render();
+						});
+					}
+
+				}, this));
+
+				//create consult view submit
+				ReqCmd.commands.setHandler("CreateConsultView:submitHandler", Lodash.bind(function(params) {
+					console.log("CreateConsultView:submitHandler");
+					var that = this;
+					console.log(params);
+					//1 means doctor start, 0 means patient start
+					params+="&type=0";
+					var url = "/consult/add";
+					$.ajax({
+						url: url,
+						dataType: 'json',
+						type: 'POST',
+						data:params,
+						success: function(data) {
+							if (data.status != 0) {
+								this.onError(data);
+
+							} else {
+								Messenger().post({
+									message: '添加咨询成功',
+									type: 'success',
+									showCloseButton: true
+								});
+								that.appInstance.modalRegion.close();
+							}
+						},
+						onError: function(res) {
+							//var error = jQuery.parseJSON(data);
+							if (res.status == 2) {
+								window.location.replace('/loginPage')
+
+							} else if (res.status == 4) {
+								window.location.replace('/error')
+
+							}
+							if (typeof res.msg !== 'undefined') {
+								Messenger().post({
+									message: "错误信息:" + res.msg,
+									type: 'error',
+									showCloseButton: true
+								});
+							}
+
+						}
+					});
+
+				}, this));
+
+				//click add consult
+				ReqCmd.commands.setHandler("ConsultDetailListView:addConsult", Lodash.bind(function() {
+					console.log("ConsultDetailListView:addConsult");
+					var ModalModel = Backbone.Model.extend({});
+					var modalModel = new ModalModel();
+					modalModel.set("hasDiagnose", true);
+					var modalView = new ModalView.CreateConsultView({
+						model: modalModel
+					});
+					this.appInstance.modalRegion.show(modalView);
+				}, this));
+
+				//click add phone consult
+				ReqCmd.commands.setHandler("PhoneConsultDetailListView:addConsult", Lodash.bind(function() {
+					console.log("PhoneConsultDetailListView:addConsult handler start");
+					// var ModalModel = Backbone.Model.extend({});
+					// var modalModel = new ModalModel();
+					// modalModel.set("hasDiagnose", true);
+					// var modalView = new ModalView.CreateConsultView({
+					// 	model: modalModel
+					// });
+					// this.appInstance.modalRegion.show(modalView);
+				}, this));
+
+
+
+				console.log('show controller init end');
+
+			},
+
+			showConsultListView: function() {
+				if (this.contentView.contentRegion) {
+
+					var view = this.getConsultListView(this.consultFilterModel, this.consultCollection);
+					this.show(view, {
+						region: this.contentView.contentRegion,
+						client: true
+					});
 				}
 
+			},
+			getConsultCollection: function(params) {
+				if (this.consultCollection) {
+					ConsultEntity.API.getConsultCollection(params, this.consultCollection, "user", this.userId);
 
-			}, this));
+				} else {
+					this.consultCollection = ConsultEntity.API.getConsultCollection(params, "", "user", this.userId);
+				}
+			},
+			changeContentView: function(viewName) {
+				this.layoutView.diagnoseDetailTrackRegion.close();
 
-			//click detail at diagnose list item
-			ReqCmd.commands.setHandler("detailLinksHandler:DiagnoseTableItemView", Lodash.bind(function(model) {
-				this.contentView.hideView();
-				// $('#diagnose-detail-track-wrapper').show();
-				var params = "diagnoseId="+model.get('id');
-				var diagnosePatientDetailModel = DiagnoseEntity.API.getDiagnosePatientDetail(params);
+				if (viewName === 'diagnoseLink') {
+					this.diagnoseCollection = DiagnoseEntity.API.getPatientDiagnoseList();
+					this.contentView = this.getDiagnoseListView(this.diagnoseCollection);
 
-				this.diagnoseDetailTrackLayoutView = this.getDetailTrackLayoutView(diagnosePatientDetailModel);
-				this.show(this.diagnoseDetailTrackLayoutView, {
-					region: this.layoutView.diagnoseDetailTrackRegion,
+				} else if (viewName === 'accountLink') {
+					//type = 2 means patient , type =1 means doctor
+					var params = {
+						type: 2
+					}
+					this.userInfoModel = UserInfoEntity.API.getUserInfo(params);
+					this.contentView = this.getAccountManageLayoutView(this.userInfoModel);
+
+
+				} else if (viewName === 'messageLink') {
+					this.contentView = this.getMessageLayoutView();
+				} else if (viewName === 'favoritesLink') {
+					this.contentView = this.getFavoriteLayoutView();
+				}else if (viewName === 'consultLink') {
+					this.contentView = this.getConsultLayoutView();
+				}
+				// var that = this;
+				this.show(this.contentView, {
+					region: this.layoutView.contentRegion,
 					client: true
 				});
+			},
+			getPatientHomePageLayoutView: function() {
+				return new View.PatientHomePageLayoutView();
+			},
+			getDiagnoseListView: function(collection) {
+				var view = new View.DiagnoseListView({
+					collection: collection,
+					itemView: View.DiagnoseTableItemView
+				});
+				return view;
+			},
+			getAccountManageLayoutView: function(model) {
+				return new View.AccountManageLayoutView({
+					model: model
+				});
+			},
+			getMessageLayoutView: function() {
+				return new View.MessageLayoutView();
+			},
+			getMessageListView: function(collection) {
+				return new MessageView.MessageListView({
+					collection: collection,
+					itemView: MessageView.MessageItemView
+				});
+			},
+			getFavoriteLayoutView: function() {
+				return new View.FavoriteLayoutView();
+			},
+			getFavoriteListView: function(collection) {
+				var view = new View.FavoriteCollectionView({
+					collection: collection,
+					itemView: View.FavoriteItemView
+				});
+				return view;
+			},
+			getDetailTrackLayoutView: function(model) {
+				return new View.DetailTrackLayoutView({
+					model: model
+				});
 
+			},
+			getConsultLayoutView: function() {
+				return new View.ConsultLayoutView();
 
-			}, this));
+			},
+			getConsultListView: function(model, collection) {
+				return new DoctorView.ConsultListView({
+					model: model,
+					collection: collection,
+					itemView: DoctorView.ConsultListItemView
+				})
+			},
+			getConsultDetailListView: function(model, collection) {
+				return new DoctorView.ConsultDetailListView({
+					model: model,
+					collection: collection,
+					itemView: DoctorView.ConsultDetailItemView
+				})
+			},
+			getConsultDetailLayoutView: function(model) {
+				return new DoctorView.ConsultDetailLayoutView({
+					model: model
+				})
+			},
+			getConsultDiagnoseView: function(model) {
+				return new DoctorView.ConsultDiagnoseView({
+					model: model
+				})
+			},
+			getPhoneConsultListView: function(model, collection) {
+				return new View.PhoneConsultListView({
+					// model: model,
+					// collection: collection,
+					itemView: View.PhoneConsultListItemView
+				})
+			},
 
-			//click back link ,back to diagnose list from detail page
-			ReqCmd.reqres.setHandler("backLinkHandler:DetailTrackLayoutView", Lodash.bind(function() {
-				this.layoutView.diagnoseDetailTrackRegion.close();
-				this.contentView.showAndRefreshView();
-
-			}, this));
-
-
-
-
-			console.log('show controller init end');
-
-		},
-		changeContentView: function(viewName) {
-			this.layoutView.diagnoseDetailTrackRegion.close();
-
-			if (viewName === 'diagnoseLink') {
-				this.diagnoseCollection = DiagnoseEntity.API.getDiagnoseList();
-				this.contentView = this.getDiagnoseListView(this.diagnoseCollection);
-
-			} else if (viewName === 'accountLink') {
-				this.contentView = this.getAccountManageLayoutView();
-			} else if (viewName === 'messageLink') {
-				this.contentView = this.getMessageLayoutView();
-			} else if (viewName === 'favoritesLink') {
-				this.contentView = this.getFavoriteLayoutView();
+			getSelectView: function(collection, el) {
+				return new CommonView.SelectCollectionView({
+					collection: collection,
+					itemView: CommonView.DiagnoseSelectItemView,
+					el: el
+				})
 			}
-			// var that = this;
-			this.show(this.contentView, {
-				region: this.layoutView.contentRegion,
-				client: true
-			});
-		},
-		getPatientHomePageLayoutView: function() {
-			return new View.PatientHomePageLayoutView();
-		},
-		getDiagnoseListView: function(collection) {
-			var view = new View.DiagnoseListView({
-				collection: collection,
-				itemView: View.DiagnoseTableItemView
-			});
-			return view;
-		},
-		getAccountManageLayoutView: function() {
-			return new View.AccountManageLayoutView();
-		},
-		getMessageLayoutView: function() {
-			return new View.MessageLayoutView();
-		},
-		getMessageListView: function(collection) {
-			return new MessageView.MessageListView({
-				collection: collection,
-				itemView: MessageView.MessageItemView
-			});
-		},
-		getFavoriteLayoutView: function() {
-			return new View.FavoriteLayoutView();
-		},
-		getFavoriteListView: function(collection) {
-			var view = new View.FavoriteCollectionView({
-				collection: collection,
-				itemView: View.FavoriteItemView
-			});
-			return view;
-		},
-		getDetailTrackLayoutView: function(model) {
-			return new View.DetailTrackLayoutView({
-				model: model
-			});
 
-		}
+		});
+
+		return ShowController;
 
 	});
-
-	return ShowController;
-
-});
 define('patienthome/patient_home_app',['patienthome/show/show_controller'], function(ShowController) {
 	// body...
 	
@@ -29717,6 +36463,7 @@ define('report/show/show_view',['utils/reqcmd', 'lodash', 'marionette', 'templat
 		},
 		events: {},
 		attachEndHandler: function() {
+			$('body').show();
 		}
 	});
 
@@ -29769,7 +36516,7 @@ define('report/report_app',['report/show/show_controller'], function(ShowControl
 	}
 
 });
-define('doctorList/show/show_view',['utils/reqcmd', 'lodash', 'marionette', 'templates', 'dust', 'dustMarionette', "bootstrap"], function(ReqCmd, Lodash, Marionette, Templates) {
+define('doctorList/show/show_view',['utils/reqcmd', 'lodash', 'marionette', 'templates','login/login_app', 'dust', 'dustMarionette', "bootstrap"], function(ReqCmd, Lodash, Marionette, Templates,LoginApp) {
 	// body...
 	
 	var DoctorListLayoutView = Marionette.Layout.extend({
@@ -29788,6 +36535,9 @@ define('doctorList/show/show_view',['utils/reqcmd', 'lodash', 'marionette', 'tem
 			"click @ui.queryLinks": "queryHandler"
 		},
 		attachEndHandler: function() {
+			LoginApp.loginAction();
+			$('body').show();
+
 
 		},
 		queryHandler: function(e) {
@@ -30105,7 +36855,7 @@ define('utils/followbtn',[], function() {
 	}
 
 });
-define('doctorSite/show/show_view',['utils/reqcmd', 'lodash', 'marionette', 'templates', 'dust', 'dustMarionette', "bootstrap", 'utils/followbtn'], function(ReqCmd, Lodash, Marionette, Templates) {
+define('doctorSite/show/show_view',['utils/reqcmd', 'lodash', 'marionette', 'templates','login/login_app','dust', 'dustMarionette', "bootstrap", 'utils/followbtn'], function(ReqCmd, Lodash, Marionette, Templates,LoginApp) {
 	// body...
 	
 	var DoctorSiteLayoutView = Marionette.Layout.extend({
@@ -30153,6 +36903,13 @@ define('doctorSite/show/show_view',['utils/reqcmd', 'lodash', 'marionette', 'tem
 					},
 					onError: function(res) {
 						//var error = jQuery.parseJSON(data);
+						if (res.status == 2) {
+							window.location.replace('/loginPage')
+
+						} else if (res.status == 4) {
+							window.location.replace('/error')
+
+						}
 						if (typeof res.msg !== 'undefined') {
 							Messenger().post({
 								message: "错误信息:" + res.msg,
@@ -30178,6 +36935,8 @@ define('doctorSite/show/show_view',['utils/reqcmd', 'lodash', 'marionette', 'tem
 				$(this).siblings().removeClass('active');
 				$(this).tab('show');
 			});
+			//init login modal
+			LoginApp.loginAction();
 		}
 
 	});
@@ -30232,7 +36991,8 @@ define('doctorSite/doctorSite_app',['doctorSite/show/show_controller'], function
 	}
 
 });
-define('admin/fenzhen/fz_view',['utils/reqcmd', 'lodash', 'marionette', 'templates', 'dust', 'dustMarionette', "bootstrap", 'bootstrap.select', 'bootstrap-treeview', 'flat_ui_custom', 'bootstrap.multiselect'], function(ReqCmd, Lodash, Marionette, Templates) {
+define('admin/fenzhen/fz_view',['utils/reqcmd', 'lodash', 'marionette', 'templates', 'dust', 'dustMarionette', 
+	"bootstrap", 'bootstrap.select', 'bootstrap-treeview', 'flat_ui_custom', 'bootstrap.multiselect'], function(ReqCmd, Lodash, Marionette, Templates) {
 	// body...
 	
 	var FzPageLayoutView = Marionette.Layout.extend({
@@ -30321,6 +37081,7 @@ define('admin/fenzhen/fz_view',['utils/reqcmd', 'lodash', 'marionette', 'templat
 			this.initAllDiagnoseView();
 			this.initMyDiagnoseView();
 
+			$('body').show();
 
 
 		},
@@ -30396,6 +37157,13 @@ define('admin/fenzhen/fz_view',['utils/reqcmd', 'lodash', 'marionette', 'templat
 						}
 					},
 					onError: function(res) {
+						if (res.status == 2) {
+							window.location.replace('/loginPage')
+
+						} else if (res.status == 4) {
+							window.location.replace('/error')
+
+						}
 						this.resetForm();
 						//var error = jQuery.parseJSON(data);
 						if (typeof res.msg !== 'undefined') {
@@ -30474,7 +37242,9 @@ define('admin/fenzhen/fz_view',['utils/reqcmd', 'lodash', 'marionette', 'templat
 
 	}
 });
-define('admin/fenzhen/fz_controller',['lodash', 'config/base/constant', 'config/controllers/_base_controller', 'admin/fenzhen/fz_view', 'utils/reqcmd', 'entities/diagnoseEntity', 'doctorhome/show/show_view'], function(Lodash, CONSTANT, BaseController, View, ReqCmd, DiagnoseEntity, DoctorHomeShowView) {
+define('admin/fenzhen/fz_controller',['lodash', 'config/base/constant', 'config/controllers/_base_controller', 
+	'admin/fenzhen/fz_view', 'utils/reqcmd', 'entities/diagnoseEntity', 'doctorhome/show/show_view'], 
+	function(Lodash, CONSTANT, BaseController, View, ReqCmd, DiagnoseEntity, DoctorHomeShowView) {
 	// body...
 	
 	var FzController = BaseController.extend({
@@ -30619,6 +37389,13 @@ define('admin/fenzhen/fz_controller',['lodash', 'config/base/constant', 'config/
 						},
 						onError: function(res) {
 							//var error = jQuery.parseJSON(data);
+							if(res.status == 2){
+				                window.location.replace('/loginPage')
+
+				            }else if(res.status == 4){
+				                window.location.replace('/error')
+
+				            }
 							if (typeof res.msg !== 'undefined') {
 								Messenger().post({
 									message: "错误信息:" + res.msg,
@@ -30677,7 +37454,9 @@ define('admin/fenzhen/fz_controller',['lodash', 'config/base/constant', 'config/
 	return FzController;
 
 });
-define('admin/kefu/kf_view',['utils/reqcmd', 'lodash', 'marionette', 'templates', 'dust', 'dustMarionette', "bootstrap"], function(ReqCmd, Lodash, Marionette, Templates) {
+define('admin/kefu/kf_view',['utils/reqcmd', 'lodash', 'marionette', 'templates', 'dust',
+	'dustMarionette', "bootstrap"
+], function(ReqCmd, Lodash, Marionette, Templates) {
 	// body...
 	
 	var KfPageLayoutView = Marionette.Layout.extend({
@@ -30686,93 +37465,117 @@ define('admin/kefu/kf_view',['utils/reqcmd', 'lodash', 'marionette', 'templates'
 			this.bindUIElements();
 		},
 		regions: {
+			"diagnoseRegion": "#diagnose-manage-wrapper",
+			"doctorAuditRegion": "#user-manage-wrapper",
+			"sharingAuditRegion": "#sharing-manage-wrapper",
+			"gratitudeAuditRegion": "#gratitude-manage-wrapper"
+
 
 		},
 		el: "#admin-kefu-content",
 		ui: {
-			"payLink": ".pay-link",
-			"confirmRegisterLink": ".confirm-register"
+			// "payLink": ".pay-link",
+			// "confirmRegisterLink": ".confirm-register"
 
 		},
 		events: {
-			'click @ui.payLink': "payLinkHandler",
-			'click @ui.confirmRegisterLink': "confirmRegister"
+			// 'click @ui.payLink': "payLinkHandler",
+			// 'click @ui.confirmRegisterLink': "confirmRegister"
 		},
-		confirmRegister: function(e) {
-			e.preventDefault();
-			var userid = $(e.target).closest('tr').data('userid');
-			if (userid) {
-				var that = this;
-				$.ajax({
-					url: '/doctor/register/confirm',
-					data: "userid=" + userid,
-					dataType: 'json',
-					type: 'POST',
-					success: function(data) {
-						if (data.status != 0) {
-							this.onError(data);
+		// confirmRegister: function(e) {
+		// 	e.preventDefault();
+		// 	var userid = $(e.target).closest('tr').data('userid');
 
-						} else {
-							Messenger().post({
-								message: 'SUCCESS.register confirm.',
-								type: 'success',
-								showCloseButton: true
-							});
-						}
-					},
-					onError: function(res) {
-						//var error = jQuery.parseJSON(data);
-						if (typeof res.msg !== 'undefined') {
-							Messenger().post({
-								message: "错误信息:" + res.msg,
-								type: 'error',
-								showCloseButton: true
-							});
-						}
+		// 	if (userid) {
+		// 		var params = {
+		// 			userId: userid,
+		// 			status: 0
+		// 		}
+		// 		var that = this;
+		// 		$.ajax({
+		// 			url: '/doctor/statuschange',
+		// 			data: params,
+		// 			dataType: 'json',
+		// 			type: 'POST',
+		// 			success: function(data) {
+		// 				if (data.status != 0) {
+		// 					this.onError(data);
 
-					}
-				});
-			}
+		// 				} else {
+		// 					Messenger().post({
+		// 						message: '成功更改医生状态',
+		// 						type: 'success',
+		// 						showCloseButton: true
+		// 					});
+		// 				}
+		// 			},
+		// 			onError: function(res) {
+		// 				//var error = jQuery.parseJSON(data);
+		// 				if (res.status == 2) {
+		// 					window.location.replace('/loginPage')
+
+		// 				} else if (res.status == 4) {
+		// 					window.location.replace('/error')
+
+		// 				}
+		// 				if (typeof res.msg !== 'undefined') {
+		// 					Messenger().post({
+		// 						message: "错误信息:" + res.msg,
+		// 						type: 'error',
+		// 						showCloseButton: true
+		// 					});
+		// 				}
+
+		// 			}
+		// 		});
+		// 	}
 
 
-		},
-		payLinkHandler: function(e) {
-			e.preventDefault();
-			var diagnoseId = $(e.target).closest('tr').data('id');
-			if (diagnoseId) {
-				var that = this;
-				$.ajax({
-					url: '/diagnose/paylink',
-					data: "diagnoseId=" + diagnoseId,
-					dataType: 'json',
-					type: 'GET',
-					success: function(data) {
-						if (data.status != 0) {
-							this.onError(data);
+		// },
+		// payLinkHandler: function(e) {
+		// 	e.preventDefault();
+		// 	var diagnoseId = $(e.target).closest('tr').data('id');
+		// 	if (diagnoseId) {
+		// 		var that = this;
+		// 		var url = "/diagnose/alipayurl/" + diagnoseId;
+		// 		$.ajax({
+		// 			url: url,
+		// 			dataType: 'json',
+		// 			type: 'POST',
+		// 			success: function(data) {
+		// 				if (data.status != 0) {
+		// 					this.onError(data);
 
-						} else {
-							ReqCmd.commands.execute('payLinkHandler:KfPageLayoutView', data.data);
-							Messenger().post({
-								message: 'SUCCESS.Get diagnose.',
-								type: 'success',
-								showCloseButton: true
-							});
-						}
-					},
-					onError: function(res) {
-						//var error = jQuery.parseJSON(data);
-						if (typeof res.msg !== 'undefined') {
-							Messenger().post({
-								message: "错误信息:" + res.msg,
-								type: 'error',
-								showCloseButton: true
-							});
-						}
+		// 				} else {
+		// 					// ReqCmd.commands.execute('payLinkHandler:KfPageLayoutView', data.data);
+		// 					Messenger().post({
+		// 						message: '成功确认支付请求',
+		// 						type: 'success',
+		// 						showCloseButton: true
+		// 					});
+		// 				}
+		// 			},
+		// 			onError: function(res) {
+		// 				//var error = jQuery.parseJSON(data);
+		// 				if (res.status == 2) {
+		// 					window.location.replace('/loginPage')
 
-					}
-				});
-			}
-		},
+		// 				} else if (res.status == 4) {
+		// 					window.location.replace('/error')
+
+		// 				}
+		// 				if (typeof res.msg !== 'undefined') {
+		// 					Messenger().post({
+		// 						message: "错误信息:" + res.msg,
+		// 						type: 'error',
+		// 						showCloseButton: true
+		// 					});
+		// 				}
+
+		// 			}
+		// 		});
+		// 	}
+		// },
 		attachEndHandler: function() {
 			var $this = $(this);
 			console.dir($('#kefuTab a'));
@@ -30780,6 +37583,7 @@ define('admin/kefu/kf_view',['utils/reqcmd', 'lodash', 'marionette', 'templates'
 				e.preventDefault();
 				$(this).tab('show');
 			});
+			$('body').show();
 
 
 		}
@@ -30804,65 +37608,1168 @@ define('admin/kefu/kf_view',['utils/reqcmd', 'lodash', 'marionette', 'templates'
 		events: {}
 	});
 
-	return {
-		KfPageLayoutView: KfPageLayoutView,
-		DisplayPayLinkModalView: DisplayPayLinkModalView
 
-
-
-	}
-});
-define('admin/kefu/kf_controller',['lodash', 'config/base/constant', 'config/controllers/_base_controller', 'admin/kefu/kf_view', 'utils/reqcmd'], function(Lodash, CONSTANT, BaseController, View, ReqCmd) {
-	// body...
-	
-	var KfController = BaseController.extend({
-		initialize: function() {
-
-			this.layoutView = this.getKfPageLayoutView();
-			this.appInstance = require('app');
-
-
-			this.show(this.layoutView, {
-				name: "kefuPageLayoutView",
-				//as bindAll this,so don't need that
-				instance: this
-			});
-
-			//instance is this controller instance
-			ReqCmd.commands.setHandler("kefuPageLayoutView:attached", Lodash.bind(function(instance) {
-				console.log("kefuPageLayoutView attached end");
-				this.layoutView.attachEndHandler();
-			}, this));
-
-
-			ReqCmd.commands.setHandler("payLinkHandler:KfPageLayoutView", Lodash.bind(function(data) {
-				if(data.paylink){
-					var TempModel = Backbone.Model.extend({});
-					var tempModel = new TempModel();
-					tempModel.set('paylink',data.paylink);
-					var modalview = this.getDisplayPayLinkModalView(tempModel);
-					this.appInstance.modalRegion.show(modalview);
-
-				}
-				
-			}, this));
-
+	//diagnose list view
+	var DiagnoseListView = Marionette.CompositeView.extend({
+		initialize: function(options) {
+			console.log("DiagnoseListView init end");
 
 		},
-		getKfPageLayoutView: function() {
-			return new View.KfPageLayoutView();
+		onRender: function() {
+			console.log("DiagnoseListView render");
 		},
-		getDisplayPayLinkModalView: function(model) {
-			return new View.DisplayPayLinkModalView({
-				model: model
-			});
+		template: 'diagnoseListView',
+		itemViewContainer: '#diagnose-manage-tbody'
+	});
+
+
+	var DiagnoseListItemView = Marionette.ItemView.extend({
+		template: "diagnoseListItemView",
+		initialize: function(options) {},
+		ui: {
+			"payLink": ".pay-link",
+			// "deleteLink": ".delete-link"
+		},
+		events: {
+			"click @ui.payLink": "payLinkHandler",
+			// "click @ui.deleteLink": "deleteHandler"
+		},
+		payLinkHandler: function(e) {
+			var diagnoseId = this.model.get('id');
+			ReqCmd.commands.execute("DiagnoseListItemView:payLinkHandler", diagnoseId);
+
+		},
+		// deleteHandler: function(e) {
+		// 	var diagnoseId = this.model.get('id');
+		// 	ReqCmd.commands.execute("DiagnoseListItemView:deleteHandler", diagnoseId);
+
+		// },
+		onRender: function() {
+			// get rid of that pesky wrapping-div
+			// assumes 1 child element			
+			this.$el = this.$el.children();
+			this.setElement(this.$el);
+		}
+	});
+
+
+
+	var DoctorAuditListView = Marionette.CompositeView.extend({
+		initialize: function(options) {
+			console.log("DoctorAuditListView init end");
+
+		},
+		onRender: function() {
+			console.log("DoctorAuditListView render");
+		},
+		template: 'doctorAuditListView',
+		itemViewContainer: '#user-manage-tbody'
+
+	});
+
+	var DoctorAuditListItemView = Marionette.ItemView.extend({
+		template: "doctorAuditListItemView",
+		initialize: function(options) {},
+		ui: {
+			"confirmRegister": ".confirm-register",
+			"deleteRegister": ".delete-register"
+		},
+		events: {
+			"click @ui.confirmRegister": "confirmHandler",
+			"click @ui.deleteRegister": "deleteHandler"
+		},
+		confirmHandler: function(e) {
+			var userId = this.model.get('userId');
+			ReqCmd.commands.execute("DoctorAuditListItemView:confirmHandler", userId);
+
+		},
+		deleteHandler: function(e) {
+			var userId = this.model.get('userId');
+			ReqCmd.commands.execute("DoctorAuditListItemView:deleteHandler", userId);
+		},
+		onRender: function() {
+			// get rid of that pesky wrapping-div
+			// assumes 1 child element			
+			this.$el = this.$el.children();
+			this.setElement(this.$el);
 		}
 
 	});
 
-	return KfController;
+	//sharing view
+	var SharingListView = Marionette.CompositeView.extend({
+		initialize: function(options) {
+			console.log("SharingListView init end");
+
+		},
+		onRender: function() {
+			console.log("SharingListView render");
+		},
+		template: 'sharingListView',
+		itemViewContainer: '#sharing-manage-tbody'
+	});
+
+
+	var SharingListItemView = Marionette.ItemView.extend({
+		template: "sharingListItemView",
+		initialize: function(options) {},
+		ui: {
+			"acceptLink": ".accept-link",
+			"deleteLink": ".delete-link"
+		},
+		events: {
+			"click @ui.acceptLink": "acceptLinkHandler",
+			"click @ui.deleteLink": "deleteHandler"
+		},
+		acceptLinkHandler: function(e) {
+			var sharingId = this.model.get('id');
+			ReqCmd.commands.execute("SharingListItemView:acceptLinkHandler", sharingId);
+
+		},
+		deleteHandler: function(e) {
+			var sharingId = this.model.get('id');
+			ReqCmd.commands.execute("SharingListItemView:deleteHandler", sharingId);
+
+		},
+		onRender: function() {
+			// get rid of that pesky wrapping-div
+			// assumes 1 child element			
+			this.$el = this.$el.children();
+			this.setElement(this.$el);
+		}
+	});
+
+
+	//gratitude view
+	var GratitudeListView = Marionette.CompositeView.extend({
+		initialize: function(options) {
+			console.log("GratitudeListView init end");
+
+		},
+		onRender: function() {
+			console.log("GratitudeListView render");
+		},
+		template: 'gratitudeListView',
+		itemViewContainer: '#gratitude-manage-tbody'
+	});
+
+
+	var GratitudeListItemView = Marionette.ItemView.extend({
+		template: "gratitudeListItemView",
+		initialize: function(options) {},
+		ui: {
+			"acceptLink": ".accept-link",
+			"deleteLink": ".delete-link"
+		},
+		events: {
+			"click @ui.acceptLink": "acceptLinkHandler",
+			"click @ui.deleteLink": "deleteHandler"
+		},
+		acceptLinkHandler: function(e) {
+			var gratitudeId = this.model.get('id');
+			ReqCmd.commands.execute("GratitudeListItemView:acceptLinkHandler", gratitudeId);
+
+		},
+		deleteHandler: function(e) {
+			var gratitudeId = this.model.get('id');
+			ReqCmd.commands.execute("GratitudeListItemView:deleteHandler", gratitudeId);
+
+		},
+		onRender: function() {
+			// get rid of that pesky wrapping-div
+			// assumes 1 child element			
+			this.$el = this.$el.children();
+			this.setElement(this.$el);
+		}
+	});
+
+	return {
+		KfPageLayoutView: KfPageLayoutView,
+		DisplayPayLinkModalView: DisplayPayLinkModalView,
+		DiagnoseListView: DiagnoseListView,
+		DiagnoseListItemView: DiagnoseListItemView,
+		DoctorAuditListView: DoctorAuditListView,
+		DoctorAuditListItemView: DoctorAuditListItemView,
+		SharingAuditListView: SharingListView,
+		SharingAuditListItemView: SharingListItemView,
+		GratitudeAuditListView: GratitudeListView,
+		GratitudeAuditListItemView: GratitudeListItemView
+
+	}
+});
+define('entities/kefuEntity',["backbone", "marionette", "config/base/constant", "utils/reqcmd"], function(Backbone, Marionette, Constant, ReqCmd) {
+	// body...
+	
+	var DiagnoseModel = Backbone.Model.extend({
+		//urlRoot: Constant+'/locale',
+	});
+
+	var DiagnoseCollection = Backbone.Collection.extend({
+		model: DiagnoseModel,
+		success: function(data, textStatus, jqXHR) {
+			// body...
+			console.dir(data);
+		},
+		onError: function(data) {
+			// body...
+			console.dir(data);
+		}
+	});
+
+
+	var DiagnoseWithAmountModel = Backbone.Model.extend({
+		success: function(data, textStatus, jqXHR) {
+			// body...
+			console.dir(data);
+		},
+		onError: function(data) {
+			// body...
+			console.dir(data);
+		},
+		parse: function(resp) {
+			// body...
+			console.dir(resp.data);
+			return resp.data
+		}
+	});
+
+
+	var DoctorAuditModel = Backbone.Model.extend({
+		//urlRoot: Constant+'/locale',
+	});
+
+	var DoctorAuditModelCollection = Backbone.Collection.extend({
+		model: DoctorAuditModel,
+		success: function(data, textStatus, jqXHR) {
+			// body...
+			console.dir(data);
+		},
+		onError: function(data) {
+			// body...
+			console.dir(data);
+		}
+	});
+
+
+	var DoctorAuditWithAmountModel = Backbone.Model.extend({
+		success: function(data, textStatus, jqXHR) {
+			// body...
+			console.dir(data);
+		},
+		onError: function(data) {
+			// body...
+			console.dir(data);
+		},
+		parse: function(resp) {
+			// body...
+			console.dir(resp.data);
+			return resp.data
+		}
+	});
+
+
+	//for sharing
+	var SharingAuditModel = Backbone.Model.extend({
+		//urlRoot: Constant+'/locale',
+	});
+
+	var SharingAuditModelCollection = Backbone.Collection.extend({
+		model: SharingAuditModel,
+		success: function(data, textStatus, jqXHR) {
+			// body...
+			console.dir(data);
+		},
+		onError: function(data) {
+			// body...
+			console.dir(data);
+		}
+	});
+
+
+	var SharingAuditWithAmountModel = Backbone.Model.extend({
+		success: function(data, textStatus, jqXHR) {
+			// body...
+			console.dir(data);
+		},
+		onError: function(data) {
+			// body...
+			console.dir(data);
+		},
+		parse: function(resp) {
+			// body...
+			console.dir(resp.data);
+			return resp.data
+		}
+	});
+	//gratitude 
+	var GratitudeAuditModel = Backbone.Model.extend({
+		//urlRoot: Constant+'/locale',
+	});
+
+	var GratitudeAuditModelCollection = Backbone.Collection.extend({
+		model: GratitudeAuditModel,
+		success: function(data, textStatus, jqXHR) {
+			// body...
+			console.dir(data);
+		},
+		onError: function(data) {
+			// body...
+			console.dir(data);
+		}
+	});
+
+
+	var GratitudeAuditWithAmountModel = Backbone.Model.extend({
+		success: function(data, textStatus, jqXHR) {
+			// body...
+			console.dir(data);
+		},
+		onError: function(data) {
+			// body...
+			console.dir(data);
+		},
+		parse: function(resp) {
+			// body...
+			console.dir(resp.data);
+			return resp.data
+		}
+	});
+
+	var API = {
+		getDiagnoseWithAmount: function(params, model) {
+			if (!params) {
+				params = {};
+			}
+			if (typeof params === 'object') {
+				params = $.param(params);
+			}
+			var diagnosemodel;
+
+			if (model) {
+				diagnosemodel = model;
+				diagnosemodel.clear();
+
+			} else {
+				diagnosemodel = new DiagnoseWithAmountModel();
+				diagnosemodel.url = "/diagnose/list/needpay";
+			}
+
+			diagnosemodel.fetch({
+				success: function() {
+					console.log("fetch success");
+					ReqCmd.reqres.request('kefuEntity:getDiagnoseWithAmount:fetch');
+				},
+				data: params
+			});
+
+			return diagnosemodel
+		},
+		getDoctorAuditWithAmount: function(params, model) {
+			if (!params) {
+				params = {};
+			}
+			if (typeof params === 'object') {
+				params = $.param(params);
+			}
+			var doctormodel;
+
+			if (model) {
+				doctormodel = model;
+				doctormodel.clear();
+
+			} else {
+				doctormodel = new DoctorAuditWithAmountModel();
+				doctormodel.url = "/doctor/draftList";
+			}
+
+			doctormodel.fetch({
+				success: function() {
+					console.log("fetch success");
+					ReqCmd.reqres.request('kefuEntity:getDoctorAuditWithAmount:fetch');
+				},
+				data: params
+			});
+
+			return doctormodel
+
+		},
+		getSharingAuditWithAmount: function(params, model) {
+			if (!params) {
+				params = {};
+			}
+			if (typeof params === 'object') {
+				params = $.param(params);
+			}
+			var sharingmodel;
+
+			if (model) {
+				sharingmodel = model;
+				sharingmodel.clear();
+
+			} else {
+				sharingmodel = new SharingAuditWithAmountModel();
+				sharingmodel.url = "/diagnoseComment/draftList.json";
+			}
+
+			sharingmodel.fetch({
+				success: function() {
+					console.log("fetch success");
+					ReqCmd.reqres.request('kefuEntity:getSharingAuditWithAmount:fetch');
+				},
+				data: params
+			});
+
+			return sharingmodel
+
+		},
+		getGratitudeAuditWithAmount: function(params, model) {
+			if (!params) {
+				params = {};
+			}
+			if (typeof params === 'object') {
+				params = $.param(params);
+			}
+			var gratitudemodel;
+
+			if (model) {
+				gratitudemodel = model;
+				gratitudemodel.clear();
+
+			} else {
+				gratitudemodel = new GratitudeAuditWithAmountModel();
+				gratitudemodel.url = "/gratitude/draft/list";
+			}
+
+			gratitudemodel.fetch({
+				success: function() {
+					console.log("fetch success");
+					ReqCmd.reqres.request('kefuEntity:getGratitudeAuditWithAmount:fetch');
+				},
+				data: params
+			});
+
+			return gratitudemodel
+
+		}
+
+
+
+	};
+
+	return {
+		API: API,
+		DiagnoseCollection: DiagnoseCollection,
+		DoctorAuditModelCollection: DoctorAuditModelCollection,
+		SharingAuditModelCollection:SharingAuditModelCollection,
+		GratitudeAuditModelCollection:GratitudeAuditModelCollection
+
+	}
 
 });
+define('entities/commonEntity',["backbone", "marionette", "config/base/constant", "utils/reqcmd"], function(Backbone, Marionette, Constant, ReqCmd) {
+	// body...
+	
+	var SelectModel = Backbone.Model.extend({
+		//urlRoot: Constant+'/locale',
+	});
+
+	var SelectCollection = Backbone.Collection.extend({
+		model: SelectModel,
+		success: function(data, textStatus, jqXHR) {
+			// body...
+			console.dir(data);
+		},
+		onError: function(data) {
+			// body...
+			console.dir(data);
+		},
+		parse: function(resp) {
+			// body...
+			console.dir(resp.data);
+			return resp.data
+		}
+	});
+
+
+	var API = {
+		getSelectCollection: function(params, name) {
+			if (!params) {
+				params = {};
+			}
+			if (typeof params === 'object') {
+				params = $.param(params);
+			}
+			
+			var	selectCollection = new SelectCollection();
+				selectCollection.url = "/"+name+"/list";
+			
+			selectCollection.fetch({
+				success: function() {
+					console.log("fetch success");
+					// ReqCmd.reqres.request('commonEntity:getSelectCollection:fetch');
+				},
+				data: params
+			});
+
+			return selectCollection
+		}
+
+
+	};
+
+	return {
+		API: API
+	}
+
+});
+define('admin/kefu/kf_controller',['lodash', 'config/base/constant', 'config/controllers/_base_controller',
+    'admin/kefu/kf_view', 'modal/modal_view', 'common/common_view', 'utils/reqcmd', 'entities/kefuEntity', 'entities/commonEntity'
+],
+    function(Lodash, CONSTANT, BaseController, View, ModalView, CommonView, ReqCmd, KefuEntity, CommonEntity) {
+        // body...
+        
+        var KfController = BaseController.extend({
+            initialize: function() {
+
+                this.layoutView = this.getKfPageLayoutView();
+                this.appInstance = require('app');
+
+                //data for select list
+                this.hospitalList = CommonEntity.API.getSelectCollection({}, 'hospital');
+                this.skillList = CommonEntity.API.getSelectCollection({}, 'skill');
+                this.departmentList = CommonEntity.API.getSelectCollection({}, 'department');
+
+
+
+                this.show(this.layoutView, {
+                    name: "kefuPageLayoutView",
+                    //as bindAll this,so don't need that
+                    instance: this
+                });
+
+                //instance is this controller instance
+                ReqCmd.commands.setHandler("kefuPageLayoutView:attached", Lodash.bind(function(instance) {
+                    console.log("kefuPageLayoutView attached end");
+                    this.layoutView.attachEndHandler();
+                    this.diagnoseModel = KefuEntity.API.getDiagnoseWithAmount();
+                    this.doctorAuditModel = KefuEntity.API.getDoctorAuditWithAmount();
+                    this.gratitudeAuditModel = KefuEntity.API.getGratitudeAuditWithAmount();
+                    this.sharingAuditModel = KefuEntity.API.getSharingAuditWithAmount();
+
+
+                }, this));
+
+                //for diagnose audit view
+                ReqCmd.reqres.setHandler("kefuEntity:getDiagnoseWithAmount:fetch", Lodash.bind(function(instance) {
+                    if (this.diagnoseCollection) {
+                        this.diagnoseCollection.reset(this.diagnoseModel.get('list'));
+                        // this.diagnoseListView.render();
+
+                    } else {
+                        this.diagnoseCollection = new KefuEntity.DiagnoseCollection(this.diagnoseModel.get('list'));
+                        this.diagnoseListView = this.getDiagnoseListView(this.diagnoseModel, this.diagnoseCollection);
+                        this.show(this.diagnoseListView, {
+                            client: true,
+                            region: this.layoutView.diagnoseRegion
+                        });
+                    }
+
+                }, this));
+
+                //confirm pay
+                ReqCmd.commands.setHandler("DiagnoseListItemView:payLinkHandler", Lodash.bind(function(diagnoseId) {
+                    if (diagnoseId) {
+                        var that = this;
+                        var url = "/diagnose/"+ diagnoseId +"/callStatus";
+                        $.ajax({
+                            url: url,
+                            dataType: 'json',
+                            type: 'POST',
+                            success: function(data) {
+                                if (data.status != 0) {
+                                    this.onError(data);
+
+                                } else {
+                                    Messenger().post({
+                                        message: '成功完成联系',
+                                        type: 'success',
+                                        showCloseButton: true
+                                    });
+                                    var params = {};
+                                    KefuEntity.API.getDiagnoseWithAmount(params, that.diagnoseModel);
+
+                                }
+                            },
+                            onError: function(res) {
+                                if (res.status == 2) {
+                                    window.location.replace('/loginPage')
+
+                                } else if (res.status == 4) {
+                                    window.location.replace('/error')
+
+                                }
+                                if (typeof res.msg !== 'undefined') {
+                                    Messenger().post({
+                                        message: "错误信息:" + res.msg,
+                                        type: 'error',
+                                        showCloseButton: true
+                                    });
+                                }
+
+                            }
+                        });
+
+                    }
+
+
+                }, this));
+
+                //delete diagnose
+                ReqCmd.commands.setHandler("DiagnoseListItemView:deleteHandler", Lodash.bind(function(diagnoseId) {
+                    if (diagnoseId) {
+                        var that = this;
+                        var ModalModel = Backbone.Model.extend({});
+                        var modalModel = new ModalModel();
+                        modalModel.set("content", "删除这个诊断");
+                        var modalView = new ModalView.ConfirmModalView({
+                            model: modalModel,
+                            callback: function() {
+                                var url = "/diagnose/statuschange";
+                                var params = {
+                                    diagnoseId: diagnoseId,
+                                    //1 means delete
+                                    status: 1
+                                }
+                                $.ajax({
+                                    url: url,
+                                    data: params,
+                                    dataType: 'json',
+                                    type: 'POST',
+                                    success: function(data) {
+                                        if (data.status != 0) {
+                                            this.onError(data);
+
+                                        } else {
+                                            Messenger().post({
+                                                message: '删除诊断成功',
+                                                type: 'success',
+                                                showCloseButton: true
+                                            });
+                                            that.appInstance.modalRegion.close();
+
+                                        }
+                                    },
+                                    onError: function(res) {
+                                        if (res.status == 2) {
+                                            window.location.replace('/loginPage')
+
+                                        } else if (res.status == 4) {
+                                            window.location.replace('/error')
+
+                                        }
+                                        if (typeof res.msg !== 'undefined') {
+                                            Messenger().post({
+                                                message: "错误信息:" + res.msg,
+                                                type: 'error',
+                                                showCloseButton: true
+                                            });
+                                        }
+
+                                    }
+                                });
+                            },
+                            callbackContext: that
+                        });
+                        this.appInstance.modalRegion.show(modalView);
+
+
+                    }
+
+
+                }, this));
+
+                //doctor audit
+                ReqCmd.reqres.setHandler("kefuEntity:getDoctorAuditWithAmount:fetch", Lodash.bind(function(instance) {
+                    if (this.doctorAuditCollection) {
+                        this.doctorAuditCollection.reset(this.doctorAuditModel.get('list'));
+                        // this.diagnoseListView.render();
+
+                    } else {
+                        this.doctorAuditCollection = new KefuEntity.DoctorAuditModelCollection(this.doctorAuditModel.get('list'));
+                        this.doctorAuditListView = this.getDoctorAuditListView(this.doctorAuditModel, this.doctorAuditCollection);
+                        this.show(this.doctorAuditListView, {
+                            client: true,
+                            region: this.layoutView.doctorAuditRegion
+                        });
+                    }
+
+                }, this));
+
+
+                //confirm audit
+                ReqCmd.commands.setHandler("DoctorAuditListItemView:confirmHandler", Lodash.bind(function(userId) {
+
+                    if (userId) {
+                        var ModalModel = Backbone.Model.extend({});
+                        var modalModel = new ModalModel();
+                        modalModel.set("userId", userId);
+                        var modalView = new ModalView.UpdateDoctorInfo({
+                            model: modalModel
+                        });
+                        this.appInstance.modalRegion.show(modalView);
+                    }
+
+                }, this));
+
+                //delete doctor audit
+                ReqCmd.commands.setHandler("DoctorAuditListItemView:deleteHandler", Lodash.bind(function(userId) {
+                    if (userId) {
+                        var that = this;
+                        var ModalModel = Backbone.Model.extend({});
+                        var modalModel = new ModalModel();
+                        modalModel.set("content", "删除医生注册请求");
+                        var modalView = new ModalView.ConfirmModalView({
+                            model: modalModel,
+                            callback: function() {
+                                var url = "/doctor/statuschange";
+                                var params = {
+                                    userId: userId,
+                                    //1 means delete
+                                    status: 1
+                                }
+                                $.ajax({
+                                    url: url,
+                                    data: params,
+                                    dataType: 'json',
+                                    type: 'POST',
+                                    success: function(data) {
+                                        if (data.status != 0) {
+                                            this.onError(data);
+
+                                        } else {
+                                            Messenger().post({
+                                                message: '删除医生注册申请成功',
+                                                type: 'success',
+                                                showCloseButton: true
+                                            });
+                                            that.appInstance.modalRegion.close();
+
+                                        }
+                                    },
+                                    onError: function(res) {
+                                        if (res.status == 2) {
+                                            window.location.replace('/loginPage')
+
+                                        } else if (res.status == 4) {
+                                            window.location.replace('/error')
+
+                                        }
+                                        if (typeof res.msg !== 'undefined') {
+                                            Messenger().post({
+                                                message: "错误信息:" + res.msg,
+                                                type: 'error',
+                                                showCloseButton: true
+                                            });
+                                        }
+
+                                    }
+                                });
+                            },
+                            callbackContext: that
+                        });
+                        this.appInstance.modalRegion.show(modalView);
+
+
+                    }
+
+
+                }, this));
+
+
+                //inject hospital list,skill list for update doctor modal
+                ReqCmd.reqres.setHandler("UpdateDoctorInfo:onShow", Lodash.bind(function() {
+                    console.log("UpdateDoctorInfo:onShow");
+                    this.getSelectView(this.hospitalList, '#hospitalSelect').render();
+                    this.getSelectView(this.skillList, '#skillSelect').render();
+                    this.getSelectView(this.departmentList, '#departmentSelect').render();
+
+                }, this));
+
+
+                //update doctor info submit
+                ReqCmd.commands.setHandler("UpdateDoctorInfo:submitHandler", Lodash.bind(function(params) {
+                    if (params) {
+                        var that = this;
+                        var url = "/doctor/updateinfo";
+                        $.ajax({
+                            url: url,
+                            data: params,
+                            dataType: 'json',
+                            type: 'POST',
+                            success: function(data) {
+                                if (data.status != 0) {
+                                    this.onError(data);
+
+                                } else {
+                                    Messenger().post({
+                                        message: '成功注册医生',
+                                        type: 'success',
+                                        showCloseButton: true
+                                    });
+                                    that.appInstance.modalRegion.close();
+                                    var params = {};
+                                    KefuEntity.API.getDoctorAuditWithAmount(params, that.doctorAuditModel);
+
+                                }
+                            },
+                            onError: function(res) {
+                                if (res.status == 2) {
+                                    window.location.replace('/loginPage')
+
+                                } else if (res.status == 4) {
+                                    window.location.replace('/error')
+
+                                }
+                                if (typeof res.msg !== 'undefined') {
+                                    Messenger().post({
+                                        message: "错误信息:" + res.msg,
+                                        type: 'error',
+                                        showCloseButton: true
+                                    });
+                                }
+
+                            }
+                        });
+
+                    }
+
+                }, this));
+
+
+
+                //for sharing
+                ReqCmd.reqres.setHandler("kefuEntity:getSharingAuditWithAmount:fetch", Lodash.bind(function(instance) {
+                    if (this.sharingAuditCollection) {
+                        this.sharingAuditCollection.reset(this.sharingAuditModel.get('list'));
+                        // this.diagnoseListView.render();
+
+                    } else {
+                        this.sharingAuditCollection = new KefuEntity.SharingAuditModelCollection(this.sharingAuditModel.get('list'));
+                        this.sharingListView = this.getSharingAuditListView(this.sharingAuditModel, this.sharingAuditCollection);
+                        this.show(this.sharingListView, {
+                            client: true,
+                            region: this.layoutView.sharingAuditRegion
+                        });
+                    }
+
+                }, this));
+
+                //confirm
+                ReqCmd.commands.setHandler("SharingListItemView:acceptLinkHandler", Lodash.bind(function(sharingId) {
+                    if (sharingId) {
+                        var that = this;
+                        var url = "/diagnosecomment/statuschange";
+                        var params = {
+                            id:sharingId,
+                            status:0
+                        }
+                        $.ajax({
+                            url: url,
+                            data: params,
+                            dataType: 'json',
+                            type: 'POST',
+                            success: function(data) {
+                                if (data.status != 0) {
+                                    this.onError(data);
+
+                                } else {
+                                    Messenger().post({
+                                        message: '成功审核分享',
+                                        type: 'success',
+                                        showCloseButton: true
+                                    });
+
+                                    KefuEntity.API.getSharingAuditWithAmount({}, that.sharingAuditModel);
+
+                                }
+                            },
+                            onError: function(res) {
+                                if (res.status == 2) {
+                                    window.location.replace('/loginPage')
+
+                                } else if (res.status == 4) {
+                                    window.location.replace('/error')
+
+                                }
+                                if (typeof res.msg !== 'undefined') {
+                                    Messenger().post({
+                                        message: "错误信息:" + res.msg,
+                                        type: 'error',
+                                        showCloseButton: true
+                                    });
+                                }
+
+                            }
+                        });
+
+                    }
+
+
+                }, this));
+
+                //delete
+                ReqCmd.commands.setHandler("SharingListItemView:deleteHandler", Lodash.bind(function(sharingId) {
+                    if (sharingId) {
+                        var that = this;
+                        var ModalModel = Backbone.Model.extend({});
+                        var modalModel = new ModalModel();
+                        modalModel.set("content", "删除这个分享");
+                        var modalView = new ModalView.ConfirmModalView({
+                            model: modalModel,
+                            callback: function() {
+                                var url = "/diagnosecomment/statuschange";
+                                var params = {
+                                    id: sharingId,
+                                    //1 means delete
+                                    status: 1
+                                }
+                                $.ajax({
+                                    url: url,
+                                    data: params,
+                                    dataType: 'json',
+                                    type: 'POST',
+                                    success: function(data) {
+                                        if (data.status != 0) {
+                                            this.onError(data);
+
+                                        } else {
+                                            Messenger().post({
+                                                message: '删除分享成功',
+                                                type: 'success',
+                                                showCloseButton: true
+                                            });
+                                            that.appInstance.modalRegion.close();
+
+                                        }
+                                    },
+                                    onError: function(res) {
+                                        if (res.status == 2) {
+                                            window.location.replace('/loginPage')
+
+                                        } else if (res.status == 4) {
+                                            window.location.replace('/error')
+
+                                        }
+                                        if (typeof res.msg !== 'undefined') {
+                                            Messenger().post({
+                                                message: "错误信息:" + res.msg,
+                                                type: 'error',
+                                                showCloseButton: true
+                                            });
+                                        }
+
+                                    }
+                                });
+                            },
+                            callbackContext: that
+                        });
+                        this.appInstance.modalRegion.show(modalView);
+
+
+                    }
+
+
+                }, this));
+
+                //gratitude view
+                ReqCmd.reqres.setHandler("kefuEntity:getGratitudeAuditWithAmount:fetch", Lodash.bind(function(instance) {
+                    if (this.gratitudeAuditCollection) {
+                        this.gratitudeAuditCollection.reset(this.gratitudeAuditModel.get('list'));
+                        // this.diagnoseListView.render();
+
+                    } else {
+                        this.gratitudeAuditCollection = new KefuEntity.GratitudeAuditModelCollection(this.gratitudeAuditModel.get('list'));
+                        this.gratitudeListView = this.getGratitudeAuditListView(this.gratitudeAuditModel, this.gratitudeAuditCollection);
+                        this.show(this.gratitudeListView, {
+                            client: true,
+                            region: this.layoutView.gratitudeAuditRegion
+                        });
+                    }
+
+                }, this));
+
+                //confirm
+                ReqCmd.commands.setHandler("GratitudeListItemView:acceptLinkHandler", Lodash.bind(function(gratitudeId) {
+                    if (gratitudeId) {
+                        var that = this;
+                        var url = "/gratitude/changestatus";
+                        var params = {
+                            id:gratitudeId,
+                            status:0
+                        }
+                        $.ajax({
+                            url: url,
+                            data: params,
+                            dataType: 'json',
+                            type: 'POST',
+                            success: function(data) {
+                                if (data.status != 0) {
+                                    this.onError(data);
+
+                                } else {
+                                    Messenger().post({
+                                        message: '成功审核感谢信',
+                                        type: 'success',
+                                        showCloseButton: true
+                                    });
+
+                                    KefuEntity.API.getGratitudeAuditWithAmount({}, that.gratitudeAuditModel);
+
+                                }
+                            },
+                            onError: function(res) {
+                                if (res.status == 2) {
+                                    window.location.replace('/loginPage')
+
+                                } else if (res.status == 4) {
+                                    window.location.replace('/error')
+
+                                }
+                                if (typeof res.msg !== 'undefined') {
+                                    Messenger().post({
+                                        message: "错误信息:" + res.msg,
+                                        type: 'error',
+                                        showCloseButton: true
+                                    });
+                                }
+
+                            }
+                        });
+
+                    }
+
+
+                }, this));
+
+                //delete
+                ReqCmd.commands.setHandler("GratitudeListItemView:deleteHandler", Lodash.bind(function(gratitudeId) {
+                    if (gratitudeId) {
+                        var that = this;
+                        var ModalModel = Backbone.Model.extend({});
+                        var modalModel = new ModalModel();
+                        modalModel.set("content", "删除这个感谢信");
+                        var modalView = new ModalView.ConfirmModalView({
+                            model: modalModel,
+                            callback: function() {
+                                var url = "/gratitude/changestatus";
+                                var params = {
+                                    id: gratitudeId,
+                                    //1 means delete
+                                    status: 1
+                                }
+                                $.ajax({
+                                    url: url,
+                                    data: params,
+                                    dataType: 'json',
+                                    type: 'POST',
+                                    success: function(data) {
+                                        if (data.status != 0) {
+                                            this.onError(data);
+
+                                        } else {
+                                            Messenger().post({
+                                                message: '删除感谢信成功',
+                                                type: 'success',
+                                                showCloseButton: true
+                                            });
+                                            that.appInstance.modalRegion.close();
+
+                                        }
+                                    },
+                                    onError: function(res) {
+                                        if (res.status == 2) {
+                                            window.location.replace('/loginPage')
+
+                                        } else if (res.status == 4) {
+                                            window.location.replace('/error')
+
+                                        }
+                                        if (typeof res.msg !== 'undefined') {
+                                            Messenger().post({
+                                                message: "错误信息:" + res.msg,
+                                                type: 'error',
+                                                showCloseButton: true
+                                            });
+                                        }
+
+                                    }
+                                });
+                            },
+                            callbackContext: that
+                        });
+                        this.appInstance.modalRegion.show(modalView);
+
+
+                    }
+
+
+                }, this));
+
+            },
+            getKfPageLayoutView: function() {
+                return new View.KfPageLayoutView();
+            },
+            getDisplayPayLinkModalView: function(model) {
+                return new View.DisplayPayLinkModalView({
+                    model: model
+                });
+            },
+            getDiagnoseListView: function(model, collection) {
+                var itemView = View.DiagnoseListItemView;
+                return new View.DiagnoseListView({
+                    model: model,
+                    itemView: itemView,
+                    collection: collection
+                })
+
+            },
+            getDoctorAuditListView: function(model, collection) {
+                var itemView = View.DoctorAuditListItemView;
+                return new View.DoctorAuditListView({
+                    model: model,
+                    itemView: itemView,
+                    collection: collection
+                })
+            },
+            getSharingAuditListView: function(model, collection) {
+                var itemView = View.SharingAuditListItemView;
+                return new View.SharingAuditListView({
+                    model: model,
+                    itemView: itemView,
+                    collection: collection
+                })
+            },
+            getGratitudeAuditListView: function(model, collection) {
+                var itemView = View.GratitudeAuditListItemView;
+                return new View.GratitudeAuditListView({
+                    model: model,
+                    itemView: itemView,
+                    collection: collection
+                })
+            },
+            getSelectView: function(collection, el) {
+                return new CommonView.SelectCollectionView({
+                    collection: collection,
+                    itemView: CommonView.SelectItemView,
+                    el: el
+                })
+            }
+
+        });
+
+        return KfController;
+
+    });
 define('admin/admin_app',['admin/fenzhen/fz_controller','admin/kefu/kf_controller'], function(FzController,KfController) {
 	// body...
 	
@@ -30949,293 +38856,996 @@ define('login/loginpage_app',['login/show/show_controller'], function(ShowContro
 	}
 
 });
-define('hospitalUserPage/show/show_view',['utils/reqcmd', 'lodash', 'marionette', 'templates','patienthome/show/show_view','dust', 'dustMarionette', "bootstrap",'bootstrap.select'], function(ReqCmd, Lodash, Marionette, Templates,PatientHomeShowView) {
-	// body...
-	
-	var HospitalUserPageView = Marionette.Layout.extend({
-		initialize: function() {
-			console.log("init HospitalUserPageView");
-			this.bindUIElements();
-		},
-		regions: {
-			"allDiagnoseTable": "#submitted-diagnose-tbody",
-			"unfinishDiagnoseTable": "#notsubmit-diagnose-tbody"
-		},
-		el: "#hospital-user-content",
-		ui: {
-			"allDiagnoseForm": "#submitted-diagnose-wrapper form",
-			"allDiagnoseSearchBtn": "#submitted-diagnose-wrapper .submit-btn",
-		},
-		events: {
-			"click @ui.allDiagnoseSearchBtn": "allDiagnoseSearch"
-
-		},
-		attachEndHandler: function() {
-			$('#hospitalUserTab a').click(function(e) {
-				e.preventDefault();
-				$(this).tab('show');
-			});
-
-			$("select").not('.multiselect').selectpicker({
-				style: 'btn-sm btn-primary',
-				title: "没有选中"
-			});
-
-			var $datepickerSelector = $("#startDateinput,#endDateinput");
-			$datepickerSelector.each(function() {
-				$(this).datepicker({
-					showOtherMonths: true,
-					selectOtherMonths: true,
-				}).prev('.btn').on('click', function(e) {
-					e && e.preventDefault();
-					$(this).focus();
-				});
-				$.extend($.datepicker, {
-					_checkOffset: function(inst, offset, isFixed) {
-						return offset
-					}
-				});
-
-				// Now let's align datepicker with the prepend button
-				$(this).datepicker('widget').css({
-					'margin-left': -$(this).prev('.input-group-btn').find('.btn').outerWidth()
-				});
-
-			});
-
-			this.initUnFinishDiagnoseView();
-			this.initAllDiagnoseView();
-
-		},
-		initUnFinishDiagnoseView: function() {
-			// var params = this.ui.allDiagnoseForm.serialize();
-			ReqCmd.commands.execute("initUnFinishDiagnoseView:HospitalUserPageView");
-
-		},
-		initAllDiagnoseView: function() {
-			var params = this.ui.allDiagnoseForm.serialize();
-			ReqCmd.commands.execute("initAllDiagnoseView:HospitalUserPageView", params);
-
-		},
-		allDiagnoseSearch: function(e) {
-			e.preventDefault();
-			this.initAllDiagnoseView();
-
-		}
-
-	});
-
-
-
-	var HospitalUserAllDiagnoseCollectionView = Marionette.CollectionView.extend({
-		initialize: function() {},
-		onRender: function() {
-			console.log("HospitalUserAllDiagnoseCollectionView render");
-
-
-		},
-		onShow: function() {
-			console.log("HospitalUserAllDiagnoseCollectionView onShow");
-			//init the modal onshow
-		},
-		el: "#submitted-diagnose-tbody"
-	});
-
-	var HospitalUserAllDiagnoseItemView = Marionette.ItemView.extend({
-		template: "hospitalUserSubmittedDiagnoseItem",
-		initialize: function() {
-			console.log("HospitalUserAllDiagnoseItemView init");
-			this.listenTo(this.model, 'sync', this.render, this);
-
-
-		},
-		onRender: function() {
-			console.log("HospitalUserAllDiagnoseItemView render");
-			// get rid of that pesky wrapping-div
-			// assumes 1 child element			
-			this.$el = this.$el.children();
-			this.setElement(this.$el);
-
-		},
-		ui: {
-		},
-		events: {
-		}
-	});
-
-	var HospitalUserUnfinishDiagnoseCollectionView = Marionette.CollectionView.extend({
-		initialize: function() {
-			this.listenTo(this.collection, 'sync', this.render, this);
-			this.appInstance = require('app');
-		},
-		onRender: function() {
-			console.log("HospitalUserUnfinishDiagnoseCollectionView render");
-			// this.$el = this.$el.children();
-			// this.setElement(this.$el);
-		},
-		onShow: function() {
-			console.log("HospitalUserUnfinishDiagnoseCollectionView onShow");
-			//init the modal onshow
-		},
-		el: "#notsubmit-diagnose-tbody",
-		itemViewOptions: function() {
-			return {
-				parentsInstance: this
-			};
-		}
-
-	});
-
-	var HospitalUserUnfinishDiagnoseItemView = Marionette.ItemView.extend({
+define('hospitalUserPage/show/show_view',['utils/reqcmd', 'lodash', 'marionette', 'templates', 'ladda-bootstrap', 'jquery.uploader.main',
+		'patienthome/show/show_view','modal/modal_view' ,'dust', 'dustMarionette', "bootstrap", 'bootstrap.select', 'jquery-ui'
+	],
+	function(ReqCmd, Lodash, Marionette, Templates, ladda, FileUploaderMain, PatientHomeShowView, ModalView) {
+		// body...
 		
-		template: "hospitalUserDiagnoseItem",
-		initialize: function(options) {
-			console.log("HospitalUserUnfinishDiagnoseItemView init");
-			this.listenTo(this.model, 'sync', this.render, this);
-			this.parentsInstance = options.parentsInstance;
+		var HospitalUserPageView = Marionette.Layout.extend({
+			initialize: function() {
+				console.log("init HospitalUserPageView");
+				this.bindUIElements();
+			},
+			regions: {
+				"allDiagnoseTable": "#submitted-diagnose-tbody",
+				"unfinishDiagnoseTable": "#notsubmit-diagnose-tbody",
+				"fileUploadRegion": "#file-management-region"
+			},
+			el: "#hospital-user-content",
+			ui: {
+				"allDiagnoseForm": "#submitted-diagnose-wrapper form",
+				"allDiagnoseSearchBtn": "#submitted-diagnose-wrapper .submit-btn",
+			},
+			events: {
+				"click @ui.allDiagnoseSearchBtn": "allDiagnoseSearch"
 
-
-
-		},
-		onRender: function() {
-			console.log("HospitalUserUnfinishDiagnoseItemView render");
-			// get rid of that pesky wrapping-div
-			// assumes 1 child element			
-			this.$el = this.$el.children();
-			this.setElement(this.$el);
-
-		},
-		ui: {
-			"deleteLinks":".rm-diagnose-link"
-		},
-		events: {
-			"click @ui.deleteLinks": "deleteDiagnose"
-
-		},
-		deleteDiagnose: function(e) {
-			e.preventDefault();
-			var $link = $(e.target);
-			if ($link.is('.rm-diagnose-link')) {
-				console.log("rm-diagnose-link click");
-				var model = this.model;
-				var deleteDiagnoseModalView = new PatientHomeShowView.DeleteDiagnoseModalView({
-					model: model
+			},
+			attachEndHandler: function() {
+				$('#hospitalUserTab a').click(function(e) {
+					e.preventDefault();
+					$(this).tab('show');
 				});
 
-				this.parentsInstance.appInstance.modalRegion.show(deleteDiagnoseModalView);
+				$("select").not('.multiselect').selectpicker({
+					style: 'btn-sm btn-primary',
+					title: "没有选中"
+				});
+
+				var $datepickerSelector = $("#startDateinput,#endDateinput");
+				$datepickerSelector.each(function() {
+					$(this).datepicker({
+						showOtherMonths: true,
+						selectOtherMonths: true,
+					}).prev('.btn').on('click', function(e) {
+						e && e.preventDefault();
+						$(this).focus();
+					});
+					$.extend($.datepicker, {
+						_checkOffset: function(inst, offset, isFixed) {
+							return offset
+						}
+					});
+
+					// Now let's align datepicker with the prepend button
+					$(this).datepicker('widget').css({
+						'margin-left': -$(this).prev('.input-group-btn').find('.btn').outerWidth()
+					});
+
+				});
+
+				this.initUnFinishDiagnoseView();
+				this.initAllDiagnoseView();
+				$('body').show();
+
+			},
+			initUnFinishDiagnoseView: function() {
+				// var params = this.ui.allDiagnoseForm.serialize();
+				ReqCmd.commands.execute("initUnFinishDiagnoseView:HospitalUserPageView");
+
+			},
+			initAllDiagnoseView: function() {
+				var params = this.ui.allDiagnoseForm.serialize();
+				ReqCmd.commands.execute("initAllDiagnoseView:HospitalUserPageView", params);
+
+			},
+			allDiagnoseSearch: function(e) {
+				e.preventDefault();
+				this.initAllDiagnoseView();
 
 			}
 
+		});
+
+
+
+		var HospitalUserAllDiagnoseCollectionView = Marionette.CollectionView.extend({
+			initialize: function() {},
+			onRender: function() {
+				console.log("HospitalUserAllDiagnoseCollectionView render");
+
+
+			},
+			onShow: function() {
+				console.log("HospitalUserAllDiagnoseCollectionView onShow");
+				//init the modal onshow
+			},
+			el: "#submitted-diagnose-tbody"
+		});
+
+		var HospitalUserAllDiagnoseItemView = Marionette.ItemView.extend({
+			template: "hospitalUserSubmittedDiagnoseItem",
+			initialize: function() {
+				console.log("HospitalUserAllDiagnoseItemView init");
+				this.listenTo(this.model, 'sync', this.render, this);
+
+
+			},
+			onRender: function() {
+				console.log("HospitalUserAllDiagnoseItemView render");
+				// get rid of that pesky wrapping-div
+				// assumes 1 child element			
+				this.$el = this.$el.children();
+				this.setElement(this.$el);
+
+			},
+			ui: {},
+			events: {}
+		});
+
+		var HospitalUserUnfinishDiagnoseCollectionView = Marionette.CollectionView.extend({
+			initialize: function() {
+				this.listenTo(this.collection, 'sync', this.render, this);
+				this.appInstance = require('app');
+			},
+			onRender: function() {
+				console.log("HospitalUserUnfinishDiagnoseCollectionView render");
+				// this.$el = this.$el.children();
+				// this.setElement(this.$el);
+			},
+			onShow: function() {
+				console.log("HospitalUserUnfinishDiagnoseCollectionView onShow");
+				//init the modal onshow
+				ReqCmd.reqres.request("HospitalUserUnfinishDiagnoseCollectionView:onShow");
+			},
+			el: "#notsubmit-diagnose-tbody",
+			itemViewOptions: function() {
+				return {
+					parentsInstance: this
+				};
+			}
+
+		});
+
+		var HospitalUserUnfinishDiagnoseItemView = Marionette.ItemView.extend({
+
+			template: "hospitalUserDiagnoseItem",
+			initialize: function(options) {
+				console.log("HospitalUserUnfinishDiagnoseItemView init");
+				this.listenTo(this.model, 'sync', this.render, this);
+				this.parentsInstance = options.parentsInstance;
+
+
+
+			},
+			onRender: function() {
+				console.log("HospitalUserUnfinishDiagnoseItemView render");
+				// get rid of that pesky wrapping-div
+				// assumes 1 child element			
+				this.$el = this.$el.children();
+				this.setElement(this.$el);
+
+			},
+			ui: {
+				"deleteLinks": ".rm-diagnose-link",
+				"detailLinks":".detail-diagnose-link"
+			},
+			events: {
+				"click @ui.deleteLinks": "deleteDiagnose",
+				"click @ui.detailLinks": "detailDiagnose"
+
+			},
+			deleteDiagnose: function(e) {
+				e.preventDefault();
+				var $link = $(e.target);
+				if ($link.is('.rm-diagnose-link')) {
+					console.log("rm-diagnose-link click");
+					var model = this.model;
+					var deleteDiagnoseModalView = new PatientHomeShowView.DeleteDiagnoseModalView({
+						model: model
+					});
+
+					this.parentsInstance.appInstance.modalRegion.show(deleteDiagnoseModalView);
+
+				}
+
+			},
+			detailDiagnose: function(e) {
+				e.preventDefault();
+				var $link = $(e.target);
+				if ($link.is('.detail-diagnose-link')) {
+					console.log("detail-diagnose-link click");
+					var model = this.model;
+					var params = "diagnoseId=" + model.get('id');
+
+					ReqCmd.commands.execute("HospitalUserUnfinishDiagnoseItemView:detailDiagnose", params);
+
+					
+
+
+				}
+
+			}
+
+		});
+
+		var FileUploadListView = Marionette.CollectionView.extend({
+			initialize: function() {
+				this.listenTo(this.collection, 'sync', this.render, this);
+				this.appInstance = require('app');
+			},
+			onRender: function() {
+				console.log("FileUploadListView render");
+				// this.$el = this.$el.children();
+				// this.setElement(this.$el);
+			},
+			onShow: function() {
+				console.log("FileUploadListView onShow");
+				//init the modal onshow
+			},
+			el: "#file-management-wrapper",
+			itemViewOptions: function() {
+				return {
+					parentsInstance: this
+				};
+			}
+
+		});
+
+		var FileUploadItemView = Marionette.ItemView.extend({
+			template: "hospitalUserFileUpload",
+			initialize: function(options) {
+				console.log("FileUploadItemView init");
+				this.listenTo(this.model, 'sync', this.render, this);
+				this.parentsInstance = options.parentsInstance;
+				this.diagnoseId = this.model.get("id");
+
+			},
+			onRender: function() {
+				console.log("FileUploadItemView render");
+				// get rid of that pesky wrapping-div
+				// assumes 1 child element			
+				this.$el = this.$el.children();
+				this.setElement(this.$el);
+
+			},
+			onDomRefresh: function() {
+				//console.log($('.dicom-file-upload'));
+				var that = this;
+				this.$el.find('.dicom-file-upload').fileupload({
+					disableImageResize: false,
+					maxFileSize: 200000000,
+					// acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+					maxNumberOfFiles: 1,
+					acceptFileTypes: /(\.|\/)(zip|jpe?g|png|rar)$/i,
+					// locale: FileUploaderMain.zhCNLocale,
+
+					// Uncomment the following to send cross-domain cookies:
+					//xhrFields: {withCredentials: true},
+					messages:FileUploaderMain.message,
+
+					url: '/file/upload',
+					uploadTemplateId: FileUploaderMain.uploadTemplateStr,
+					downloadTemplateId: FileUploaderMain.downloadTemplateStr
+
+				}).bind('fileuploadsubmit', function(e, data) {
+					data.formData = {
+						diagnoseId: that.diagnoseId,
+						type: 0
+					};
+					var fileUploadingModalView = new ModalView.FileUploadingModalView({});
+
+					that.parentsInstance.appInstance.modalRegion.show(fileUploadingModalView);
+
+
+				})
+				.bind('fileuploadalways', function(e, data) {
+					that.parentsInstance.appInstance.modalRegion.close();
+
+				});
+				this.$el.find('.medical-report-fileupload').fileupload({
+					disableImageResize: false,
+					maxFileSize: 200000000,
+					// acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+					maxNumberOfFiles: 5,
+					acceptFileTypes: /(\.|\/)(zip|jpe?g|png|rar)$/i,
+					// locale:FileUploaderMain.zhCNLocale,
+					messages:FileUploaderMain.message,
+
+					// Uncomment the following to send cross-domain cookies:
+					//xhrFields: {withCredentials: true},
+					url: '/file/upload',
+					uploadTemplateId: FileUploaderMain.uploadTemplateStr,
+					downloadTemplateId: FileUploaderMain.downloadTemplateStr
+
+				}).bind('fileuploadsubmit', function(e, data) {
+					data.formData = {
+						diagnoseId: that.diagnoseId,
+						type: 1
+					};
+					var fileUploadingModalView = new ModalView.FileUploadingModalView({});
+
+					that.parentsInstance.appInstance.modalRegion.show(fileUploadingModalView);
+
+				})
+				.bind('fileuploadalways', function(e, data) {
+					that.parentsInstance.appInstance.modalRegion.close();
+
+				});
+			},
+			ui: {
+				"reuploadBtn": '.edit-file-wrapper .btn',
+				"applyBtn": '.apply-btn',
+
+			},
+			events: {
+				'click @ui.reuploadBtn': "reuploadFile",
+				"click @ui.applyBtn": "applySubmit"
+
+			},
+			onShow: function() {},
+			reuploadFile: function(e) {
+				e.preventDefault();
+				//1 means other file , 0 means dicom file  
+				var $target = $(e.target);
+				var type = $target.data('type');
+				var data = {
+					diagnoseId: this.diagnoseId,
+					type: type
+				}
+				var url = "/file/disable";
+				var l = ladda.create(e.target);
+				l.start();
+				$.ajax({
+					url: url,
+					dataType: 'json',
+					type: 'POST',
+					data: data,
+					success: function(data) {
+						if (data.status != 0) {
+							this.onError(data);
+
+						} else {
+							Messenger().post({
+								message: '重新提交成功',
+								type: 'success',
+								showCloseButton: true
+							});
+							var $editWrapper = $target.closest('.edit-file-wrapper');
+							var $newWrapper = $editWrapper.siblings('.new-file-wrapper');
+							$editWrapper.hide();
+							$newWrapper.show();
+							console.log("reupload file");
+
+						}
+					},
+					onError: function(res) {
+						//var error = jQuery.parseJSON(data);
+						if (res.status == 2) {
+							window.location.replace('/loginPage')
+
+						} else if (res.status == 4) {
+							window.location.replace('/error')
+
+						}
+						if (typeof res.msg !== 'undefined') {
+							Messenger().post({
+								message: "错误信息:" + res.msg,
+								type: 'error',
+								showCloseButton: true
+							});
+						}
+
+					},
+					complete: function(status, request) {
+						l.stop();
+					}
+				});
+
+
+			},
+			applySubmit: function(e) {
+				var diagnoseId = this.diagnoseId;
+				var that = this;
+				var $target = $(e.target);
+				var $parent = $target.closest('.file-upload-item');
+				console.log("apply submit");
+				var applySubmitUrl = "/diagnose/" + diagnoseId + "/toNeedPay";
+				var l = ladda.create(e.target);
+				l.start();
+				
+				var fileIds = '';
+
+				var $fileIds = $parent.find('.file-link');
+				$fileIds.each(function(index, element) {
+					var tempIdStr = $(element).data('fileid');
+					if (typeof tempIdStr !== 'undefined' && tempIdStr != 'undefined' && tempIdStr) {
+						fileIds += "&fileIds=" + tempIdStr;
+					}
+				});
+
+				var $downloadFileLinks = $parent.find('.downloadFileLink');
+				$downloadFileLinks.each(function(index, element) {
+					var tempIdStr = $(element).data('fileid');
+					if (typeof tempIdStr !== 'undefined' && tempIdStr != 'undefined' && tempIdStr) {
+						fileIds += "&fileIds=" + tempIdStr;
+					}
+				});
+				$.ajax({
+					url: applySubmitUrl,
+					dataType: 'json',
+					type: 'POST',
+					data: fileIds,
+					success: function(data) {
+						if (data.status != 0) {
+							this.onError(data);
+
+						} else {
+							Messenger().post({
+								message: '文件已经提交成功',
+								type: 'success',
+								showCloseButton: true
+							});
+							that.$el.hide();
+
+						}
+					},
+					onError: function(res) {
+						//var error = jQuery.parseJSON(data);
+						if (res.status == 2) {
+							window.location.replace('/loginPage')
+
+						} else if (res.status == 4) {
+							window.location.replace('/error')
+
+						}
+						if (typeof res.msg !== 'undefined') {
+							Messenger().post({
+								message: "错误信息:" + res.msg,
+								type: 'error',
+								showCloseButton: true
+							});
+						}
+
+					},
+					complete: function(status, request) {
+						l.stop();
+					}
+				});
+
+			}
+
+		})
+
+		return {
+			HospitalUserPageView: HospitalUserPageView,
+			HospitalUserAllDiagnoseCollectionView: HospitalUserAllDiagnoseCollectionView,
+			HospitalUserAllDiagnoseItemView: HospitalUserAllDiagnoseItemView,
+			HospitalUserUnfinishDiagnoseCollectionView: HospitalUserUnfinishDiagnoseCollectionView,
+			HospitalUserUnfinishDiagnoseItemView: HospitalUserUnfinishDiagnoseItemView,
+			FileUploadListView: FileUploadListView,
+			FileUploadItemView: FileUploadItemView
 		}
+	});
+define('hospitalUserPage/show/show_controller',['lodash', 'config/base/constant', 'config/controllers/_base_controller',
+		'hospitalUserPage/show/show_view', 'utils/reqcmd', 'entities/diagnoseEntity','modal/modal_view'
+	],
+	function(Lodash, CONSTANT, BaseController, View, ReqCmd, DiagnoseEntity,ModalView) {
+		// body...
+		
+		var ShowController = BaseController.extend({
+			initialize: function() {
+				//render file upload view after unfinish collection on show
+
+				this.appInstance = require('app');
+
+				ReqCmd.reqres.setHandler("HospitalUserUnfinishDiagnoseCollectionView:onShow", Lodash.bind(function() {
+					if (this.unfinishDiagnoseCollection) {
+						this.fileUploadListView = this.getFileUploadListView(this.unfinishDiagnoseCollection);
+						this.show(this.fileUploadListView, {
+							region: this.layoutView.fileUploadRegion,
+							client: true
+						});
+					}
+				}, this));
+
+				this.layoutView = this.getHospitalUserPageView();
+
+				this.show(this.layoutView, {
+					name: "hospitalUserPageView",
+					//as bindAll this,so don't need that
+					instance: this
+				});
+
+
+
+				//instance is this controller instance
+				ReqCmd.commands.setHandler("hospitalUserPageView:attached", Lodash.bind(function(instance) {
+					console.log("attached end");
+					this.layoutView.attachEndHandler();
+				}, this));
+
+
+
+				ReqCmd.commands.setHandler("initAllDiagnoseView:HospitalUserPageView", Lodash.bind(function(params) {
+					console.log("initAllDiagnoseView,params:" + params);
+					if (this.allDiagnoseCollection) {
+						DiagnoseEntity.API.getHospitalUserAllDiagnose(params, this.allDiagnoseCollection);
+
+					} else {
+						this.allDiagnoseCollection = DiagnoseEntity.API.getHospitalUserAllDiagnose(params);
+
+					}
+					// this.allDiagnoseCollection = DiagnoseEntity.API.getAdminAllDiagnose(params);
+
+					if (this.allDiagnoseCollectionView) {
+						this.allDiagnoseCollectionView.collection = this.allDiagnoseCollection;
+					} else {
+						this.allDiagnoseCollectionView = this.getAllDiagnoseCollectionView(this.allDiagnoseCollection);
+
+					}
+					// this.allDiagnoseCollectionView = this.getAllDiagnoseCollectionView(this.allDiagnoseCollection);
+
+					this.show(this.allDiagnoseCollectionView, {
+						region: this.layoutView.allDiagnoseTable,
+						client: true
+					});
+
+				}, this));
+
+				ReqCmd.commands.setHandler("initUnFinishDiagnoseView:HospitalUserPageView", Lodash.bind(function() {
+					// console.log("initMyDiagnoseView,params:" + params);
+					if (this.unfinishDiagnoseCollection) {
+						DiagnoseEntity.API.getHospitalUserUnfinishDiagnose(this.unfinishDiagnoseCollection);
+
+					} else {
+						this.unfinishDiagnoseCollection = DiagnoseEntity.API.getHospitalUserUnfinishDiagnose();
+
+					}
+					// this.myDiagnoseCollection = DiagnoseEntity.API.getAdminMyDiagnose(params);
+
+					if (this.unfinishDiagnoseCollectionView) {
+						this.unfinishDiagnoseCollectionView.collection = this.unfinishDiagnoseCollection;
+					} else {
+						this.unfinishDiagnoseCollectionView = this.getUnfinishDiagnoseCollectionView(this.unfinishDiagnoseCollection);
+					}
+					// this.myDiagnoseCollectionView = this.getMyDiagnoseCollectionView(this.myDiagnoseCollection);
+					this.show(this.unfinishDiagnoseCollectionView, {
+						region: this.layoutView.unfinishDiagnoseTable,
+						client: true
+					});
+
+				}, this));
+
+
+				//apply submit the upload files
+				ReqCmd.commands.setHandler("FileUploadItemView:applySubmit", Lodash.bind(function($el, diagnoseId) {
+
+
+				}, this));
+
+
+				//unfinish item click show detail
+				ReqCmd.commands.setHandler("HospitalUserUnfinishDiagnoseItemView:detailDiagnose", Lodash.bind(function($el, params) {
+					var diagnosePatientDetailModel = DiagnoseEntity.API.getDiagnosePatientDetail(params);
+					var diagnoseLogsView = new ModalView.DiagnoseLogsView({
+						model:diagnosePatientDetailModel
+					});
+
+					this.appInstance.modalRegion.show(diagnoseLogsView);
+
+				}, this));
+
+
+				console.log('follow controller init end');
+
+
+
+			},
+			getHospitalUserPageView: function(model) {
+				var view = new View.HospitalUserPageView();
+				return view;
+			},
+			getAllDiagnoseCollectionView: function(collection) {
+				var view = new View.HospitalUserAllDiagnoseCollectionView({
+					collection: collection,
+					itemView: View.HospitalUserAllDiagnoseItemView
+				})
+				return view;
+			},
+			getUnfinishDiagnoseCollectionView: function(collection) {
+				var view = new View.HospitalUserUnfinishDiagnoseCollectionView({
+					collection: collection,
+					itemView: View.HospitalUserUnfinishDiagnoseItemView
+				})
+				return view;
+			},
+			getFileUploadListView: function(collection) {
+				var view = new View.FileUploadListView({
+					collection: collection,
+					itemView: View.FileUploadItemView
+				})
+				return view;
+			}
+
+		});
+
+		return ShowController;
 
 	});
-
-
+define('hospitalUserPage/hospitaluser_app',['hospitalUserPage/show/show_controller'], function(ShowController) {
+	// body...
+	
 	return {
-		HospitalUserPageView: HospitalUserPageView,
-		HospitalUserAllDiagnoseCollectionView:HospitalUserAllDiagnoseCollectionView,
-		HospitalUserAllDiagnoseItemView:HospitalUserAllDiagnoseItemView,
-		HospitalUserUnfinishDiagnoseCollectionView:HospitalUserUnfinishDiagnoseCollectionView,
-		HospitalUserUnfinishDiagnoseItemView:HospitalUserUnfinishDiagnoseItemView
+		API: {
+			show: function() {
+
+				return new ShowController();
+			}
+		}
 	}
+
 });
-define('hospitalUserPage/show/show_controller',['lodash', 'config/base/constant', 'config/controllers/_base_controller', 'hospitalUserPage/show/show_view', 'utils/reqcmd','entities/diagnoseEntity'], function(Lodash, CONSTANT, BaseController, View, ReqCmd,DiagnoseEntity) {
+define('forgetPwd/patient/show_view',['utils/reqcmd', 'lodash', 'marionette', 'templates', 'ladda-bootstrap', 'login/login_app',
+        'dust', 'dustMarionette', "bootstrap"],
+    function (ReqCmd, Lodash, Marionette, Templates, ladda, LoginApp) {
+        
+        var ForgetPwdPageLayoutView = Marionette.Layout.extend({
+            initialize: function () {
+                console.log("ForgetPwdPageLayoutView init");
+                this.AppInstance = require('app');
+                this.bindUIElements();
+            },
+            el: "#forgetPwdContent",
+            ui: {
+                "submitPwdBtn": "#submitPwdBtn",
+                "mobileNumberInput": "#mobileNumber",
+                "verifyCodeInput": "#verifyCode",
+                "getVerifyCodeBtn": "#getVerifyCodeBtn"
+            },
+            events: {
+                "click @ui.submitPwdBtn": "submitPassword",
+                "blur @ui.mobileNumberInput": "getMobileNumber",
+                "click @ui.getVerifyCodeBtn": "getVerifyCode"
+            },
+
+            getMobileNumber: function (e) {
+                if ($('#mobileNumForm').valid()) {
+                    document.getElementById("nextBtn").disabled = false;
+                    var mobileNum = this.ui.mobileNumberInput.val();
+                    this.mobileNumber = mobileNum;
+                    console.log(mobileNum);
+                }
+                else {
+                    document.getElementById("nextBtn").disabled = true;
+                }
+            },
+
+            attachEndHandler: function () {
+
+                $('body').show();
+
+                console.log("attachEndHandler");
+                var that = this;
+
+                $('#mobileSteps').psteps({
+                    traverse_titles: 'visited',
+                    steps_width_percentage: false,
+                    content_headings: true,
+                    step_names: false,
+                    check_marks: false,
+                    validate_errors: false,
+                    validate_next_step: true,
+                    ignore_errors_on_next: true,
+                    ignore_errors_on_submit: true,
+                    content_headings_after: '.before-heading',
+                    validation_rule: function () {
+                        return true
+                    },
+                    steps_onload: function () {
+                        var cur_step = $(this);
+                        console.log(cur_step);
+                        if (cur_step.hasClass('pstep1')) {
+                            console.log("verify mobile number")
+                            document.getElementById("nextBtn").disabled = true
+                        }
+                        if (cur_step.hasClass('pstep2')) {
+                            document.getElementById("nextBtn").disabled = true;
+                            console.log(that.mobileNumber);
+                            that.getVerifyCode();
+                        }
+                        if (cur_step.hasClass('pstep3')) {
+                            console.log(that.mobileNumber);
+                        }
+                    },
+                    ajaxDefer: function () {
+                        var cur_step = $(this);
+                        if (cur_step.hasClass('pstep2')) {
+                            var l = ladda.create(document.querySelector('#nextBtn'));
+                            l.start();
+                            var verifyCode = $('#verifyCode').val();
+                            var params = {
+                                mobile: that.mobileNumber,
+                                verifyCode: verifyCode
+                            }
+                            return $.ajax({
+                                dataType: 'JSON',
+                                type: 'POST',
+                                data: params,
+                                url: "/user/mobile/update/" + that.mobileNumber,
+                                success: function (data) {
+                                    if (data.status != 0) {
+                                        this.onError(data);
+
+                                    } else {
+                                        Messenger().post({
+                                            message: 'Success verify',
+                                            type: 'success',
+                                            showCloseButton: true
+                                        });
+                                    }
+                                },
+                                onError: function (res) {
+                                    // this.resetForm();
+                                    //var error = jQuery.parseJSON(data);
+                                    if (res.status == 1) {
+                                        alert("验证码输入错误，请重新输入。")
+                                    }
+                                    if (res.status == 2) {
+                                        window.location.replace('/loginPage')
+
+                                    } else if (res.status == 4) {
+                                        window.location.replace('/error')
+
+                                    }
+                                    if (typeof res.msg !== 'undefined') {
+                                        Messenger().post({
+                                            message: "错误信息:" + res.msg,
+                                            type: 'error',
+                                            showCloseButton: true
+                                        });
+                                    }
+
+                                },
+                                complete: function () {
+                                    l.stop();
+                                }
+                            });
+
+                        } else if (cur_step.hasClass('pstep1')) {
+                            var l = ladda.create(document.querySelector('#nextBtn'));
+                            l.start();
+                            var phonenumber = $('#mobileNumber').val();
+
+                            return $.ajax({
+                                dataType: 'JSON',
+                                type: 'GET',
+                                url: "/user/mobile/VerifyPhone/" + phonenumber,
+                                success: function (data) {
+                                    if (data.status != 0) {
+                                        this.onError(data);
+
+                                    } else {
+                                        Messenger().post({
+                                            message: 'Success verify',
+                                            type: 'success',
+                                            showCloseButton: true
+                                        });
+                                    }
+                                },
+                                onError: function (res) {
+                                    //this.resetForm();
+                                    //var error = jQuery.parseJSON(data);
+                                    //$('#mobileNumber').val('');
+                                    if (res.status == 1) {
+
+                                        alert("手机号: " + that.mobileNumber + " 未注册，请确认并重新输入。")
+
+                                    }
+
+                                    if (typeof res.msg !== 'undefined') {
+                                        Messenger().post({
+                                            message: "错误信息:" + res.msg,
+                                            type: 'error',
+                                            showCloseButton: true
+                                        });
+                                    }
+
+                                },
+                                complete: function () {
+                                    l.stop();
+                                }
+                            });
+
+
+                        } else {
+                            var dtd = $.Deferred();
+                            dtd.resolve();
+                            return dtd.promise();
+                        }
+                    }
+                });
+
+                $('#patient-user-password-form').validate({
+                    rules: {
+                        newPasswd: {
+                            required: true,
+                            minlength: 8
+                        },
+                        newPasswd_confirm: {
+                            required: true,
+                            equalTo: "#newPasswordInput"
+                        }
+
+                    },
+                    ignore: [],
+                    highlight: function (element) {
+                        $(element).closest('.form-group').addClass('has-error');
+                    },
+                    unhighlight: function (element) {
+                        $(element).closest('.form-group').removeClass('has-error');
+                    },
+                    errorElement: 'span',
+                    errorClass: 'help-block',
+                    errorPlacement: function (error, element) {
+                        if (element.is(":hidden")) {
+                            element.next().parent().append(error);
+                        } else if (element.parent('.input-group').length) {
+                            error.insertAfter(element.parent());
+                        } else {
+                            error.insertAfter(element);
+                        }
+                    }
+                });
+
+                $('#mobileNumForm').validate({
+                    rules: {
+                        mobileNum: {
+                            required: true,
+                            number: true,
+                            minlength: 11,
+                            maxlength: 11
+                        }
+
+                    },
+                    ignore: [],
+                    highlight: function (element) {
+                        $(element).closest('.form-group').addClass('has-error');
+                    },
+                    unhighlight: function (element) {
+                        $(element).closest('.form-group').removeClass('has-error');
+                    },
+                    errorElement: 'span',
+                    errorClass: 'help-block',
+                    errorPlacement: function (error, element) {
+                        if (element.is(":hidden")) {
+                            element.next().parent().append(error);
+                        } else if (element.parent('.input-group').length) {
+                            error.insertAfter(element.parent());
+                        } else {
+                            error.insertAfter(element);
+                        }
+                    }
+                });
+            },
+
+            submitPassword: function (e) {
+                e.preventDefault();
+                if ($('#patient-user-password-form').valid()) {
+                    var that = this;
+                    var l = ladda.create(e.target);
+                    l.start();
+                    var url = "/account/resetPasswd/" + that.mobileNumber;
+                    var data = $('#patient-user-password-form').serialize();
+                    $.ajax({
+                        type: 'POST',
+                        dataType: 'JSON',
+                        data: data,
+                        url: url,
+                        success: function (data, status, request) {
+                            console.log('success');
+                            if (data.status != 0) {
+                                this.onError(data);
+
+                            } else {
+                                Messenger().post({
+                                    message: "密码重置成功",
+                                    type: 'success',
+                                    showCloseButton: true
+                                });
+                                window.location.replace('/homepage');
+                            }
+
+                        },
+                        onError: function (res) {
+                            if (res.status == 2) {
+                                window.location.replace('/loginPage')
+
+                            } else if (res.status == 4) {
+                                window.location.replace('/error')
+
+                            }
+                            if (typeof res.msg !== 'undefined') {
+                                Messenger().post({
+                                    message: "错误信息:" + res.msg,
+                                    type: 'error',
+                                    showCloseButton: true
+                                });
+                            }
+                        },
+                        complete: function (status, request) {
+                            l.stop();
+                        }
+                    });
+                }
+            },
+
+            getVerifyCode: function () {
+                console.log(this.mobileNumber)
+                var url = "/user/mobile/VerifyCode/" + this.mobileNumber;
+                var that = this;
+                $('#getVerifyCodeBtn').countDown({});
+                var params = {
+                    mobile: this.mobileNumber
+                }
+                $.ajax({
+                    type: 'POST',
+                    dataType: 'JSON',
+                    contentType: 'application/json',
+                    url: url,
+                    success: function (data, status, request) {
+                        console.log('success');
+                        document.getElementById("nextBtn").disabled = false;
+
+                        //if (!(data.errorDescription && data.errorCode)) {
+                        if (data.status == 0) {
+                            Messenger().post({
+                                message: "获取验证码成功",
+                                type: 'success',
+                                showCloseButton: true
+                            });
+
+                        } else {
+                            this.onError(data);
+                        }
+                    },
+                    onError: function (res) {
+
+                        if (typeof res.errorDescription !== 'undefined') {
+                            Messenger().post({
+                                message: "%ERROR_MESSAGE:" + res.errorDescription,
+                                type: 'error',
+                                showCloseButton: true
+                            });
+                        }
+                    }
+
+                });
+                return true;
+
+            }
+        });
+
+        return {
+            ForgetPwdPageLayoutView: ForgetPwdPageLayoutView
+        }
+
+    });
+define('forgetPwd/patient/show_controller',['lodash', 'config/base/constant', 'config/controllers/_base_controller', 'forgetPwd/patient/show_view', 'utils/reqcmd'], function(Lodash, CONSTANT, BaseController, View, ReqCmd) {
 	// body...
 	
 	var ShowController = BaseController.extend({
 		initialize: function() {
 
-			this.layoutView = this.getHospitalUserPageView();
+			this.layoutView = this.getForgetPwdPageLayoutView();
 
 			this.show(this.layoutView, {
-				name: "hospitalUserPageView",
+				name: "forgetPwdPageLayoutView",
 				//as bindAll this,so don't need that
 				instance: this
 			});
 
 			//instance is this controller instance
-			ReqCmd.commands.setHandler("hospitalUserPageView:attached", Lodash.bind(function(instance) {
+			ReqCmd.commands.setHandler("forgetPwdPageLayoutView:attached", Lodash.bind(function(instance) {
 				console.log("attached end");
 				this.layoutView.attachEndHandler();
-			}, this));
-
-
-
-
-			ReqCmd.commands.setHandler("initAllDiagnoseView:HospitalUserPageView", Lodash.bind(function(params) {
-				console.log("initAllDiagnoseView,params:" + params);
-				if (this.allDiagnoseCollection) {
-					DiagnoseEntity.API.getHospitalUserAllDiagnose(params, this.allDiagnoseCollection);
-
-				} else {
-					this.allDiagnoseCollection = DiagnoseEntity.API.getHospitalUserAllDiagnose(params);
-
-				}
-				// this.allDiagnoseCollection = DiagnoseEntity.API.getAdminAllDiagnose(params);
-
-				if (this.allDiagnoseCollectionView) {
-					this.allDiagnoseCollectionView.collection = this.allDiagnoseCollection;
-				} else {
-					this.allDiagnoseCollectionView = this.getAllDiagnoseCollectionView(this.allDiagnoseCollection);
-
-				}
-				// this.allDiagnoseCollectionView = this.getAllDiagnoseCollectionView(this.allDiagnoseCollection);
-
-				this.show(this.allDiagnoseCollectionView, {
-					region: this.layoutView.allDiagnoseTable,
-					client: true
-				});
-
-			}, this));
-
-			ReqCmd.commands.setHandler("initUnFinishDiagnoseView:HospitalUserPageView", Lodash.bind(function() {
-				// console.log("initMyDiagnoseView,params:" + params);
-				if (this.unfinishDiagnoseCollection) {
-					DiagnoseEntity.API.getHospitalUserUnfinishDiagnose(this.unfinishDiagnoseCollection);
-
-				} else {
-					this.unfinishDiagnoseCollection = DiagnoseEntity.API.getHospitalUserUnfinishDiagnose();
-
-				}
-				// this.myDiagnoseCollection = DiagnoseEntity.API.getAdminMyDiagnose(params);
-
-				if (this.unfinishDiagnoseCollectionView) {
-					this.unfinishDiagnoseCollectionView.collection = this.unfinishDiagnoseCollection;
-				} else {
-					this.unfinishDiagnoseCollectionView = this.getUnfinishDiagnoseCollectionView(this.unfinishDiagnoseCollection);
-				}
-				// this.myDiagnoseCollectionView = this.getMyDiagnoseCollectionView(this.myDiagnoseCollection);
-				this.show(this.unfinishDiagnoseCollectionView, {
-					region: this.layoutView.unfinishDiagnoseTable,
-					client: true
-				});
-
-			}, this));
-
-
-
+			},this));
+			
 			console.log('follow controller init end');
 
-
-
 		},
-		getHospitalUserPageView: function(model) {
-			var view = new View.HospitalUserPageView();
-			return view;
-		},
-		getAllDiagnoseCollectionView: function(collection) {
-			var view = new View.HospitalUserAllDiagnoseCollectionView({
-				collection: collection,
-				itemView: View.HospitalUserAllDiagnoseItemView
-			})
-			return view;
-		},
-		getUnfinishDiagnoseCollectionView: function(collection) {
-			var view = new View.HospitalUserUnfinishDiagnoseCollectionView({
-				collection: collection,
-				itemView: View.HospitalUserUnfinishDiagnoseItemView
-			})
-			return view;
+		getForgetPwdPageLayoutView: function() {
+			return new View.ForgetPwdPageLayoutView();
 		}
 
 	});
@@ -31243,7 +39853,7 @@ define('hospitalUserPage/show/show_controller',['lodash', 'config/base/constant'
 	return ShowController;
 
 });
-define('hospitalUserPage/hospitaluser_app',['hospitalUserPage/show/show_controller'], function(ShowController) {
+define('forgetPwd/forgetPwd_app',['forgetPwd/patient/show_controller'], function(ShowController) {
 	// body...
 	
 	return {
@@ -31289,9 +39899,11 @@ define('config/marionette/modalRegion',['utils/reqcmd', 'lodash', 'marionette','
 define('app',["backbone", "marionette", "utils/reqcmd", "config/base/auth",
 	'homepage/homepage_app','diagnose/diagnose_app','register/register_app',
 	'doctorhome/doctor_home_app','patienthome/patient_home_app',
-	'report/report_app','doctorList/doctorList_app','doctorSite/doctorSite_app','admin/admin_app','login/loginpage_app','hospitalUserPage/hospitaluser_app','config/marionette/modalRegion'], 
+	'report/report_app','doctorList/doctorList_app','doctorSite/doctorSite_app','admin/admin_app',
+	'login/loginpage_app','hospitalUserPage/hospitaluser_app','forgetPwd/forgetPwd_app','config/marionette/modalRegion'], 
 	function(Backbone, Marionette, ReqCmd, Auth, HomePageApp,DiagnoseApp,
-		RegisterApp,DoctorHomeApp,PatientHomeApp,ReportApp,DoctorListApp,DoctorSiteApp,AdminApp,LoginPageApp,HospitalUserApp,ModalRegionModule) {
+		RegisterApp,DoctorHomeApp,PatientHomeApp,ReportApp,DoctorListApp,
+		DoctorSiteApp,AdminApp,LoginPageApp,HospitalUserApp,ForgetPwdApp,ModalRegionModule) {
 		
 		var App = new Marionette.Application();
 		App.addRegions({
@@ -31337,11 +39949,13 @@ define('app',["backbone", "marionette", "utils/reqcmd", "config/base/auth",
 				AdminApp.API.fenzhen();
 			} else if(location.indexOf("admin/kefu") != -1){
 				AdminApp.API.kefu();
-			} else if(location.indexOf("login") != -1){
+			} else if(location.indexOf("loginPage") != -1){
 				LoginPageApp.API.show();
 			} else if(location.indexOf("hospital/user") != -1){
 				HospitalUserApp.API.show();
-			} 
+			} else if(location.indexOf("forgetPwd") != -1){
+				ForgetPwdApp.API.show();
+			}
 			else {
 				console.log("do not init");
 			}
@@ -31379,6 +39993,8 @@ require.config({
     'backbone.wreqr' : 'lib/backbone.wreqr/lib/amd/backbone.wreqr.min',
     'backbone.eventbinder' : 'lib/backbone.eventBinder/lib/amd/backbone.eventBinder.min',
     'backbone.babysitter' : 'lib/backbone.babysitter/lib/amd/backbone.babysitter.min',
+    'backbone.localStorage':'lib/backbone.localStorage/backbone.localStorage-min',
+
     //"underscore.string": 'lib/underscore.string/lib/underscore.string',
     //need to find non-amd version , or the global varaible maybe duplicate with jquery2 ($ and jQuery)
     //jquery110  : 'lib/jquery-110/jquery.min',
@@ -31388,6 +40004,10 @@ require.config({
     //bootstrapValidation : 'lib/jqBootstrapValidation',
     //jquery valicate
     'jquery.validate' : 'lib/jquery.validate',
+     //jquery serializeJSON
+    'jquery.serializejson':'lib/jquery.serializeJSON/jquery.serializejson.min',
+    //jquery select image
+    'jquery.imgareaselect':'lib/imgareaselect/jquery.imgareaselect.dev',
     //for jquery file uploader
     'jquery.uploader.main': 'lib/jquery-uploader/_main',
     'load-image': 'lib/blueimp-load-image/js/load-image',
@@ -31399,6 +40019,7 @@ require.config({
     'jquery.fileupload-process':'lib/jquery-uploader/jquery.fileupload-process',
     'jquery.fileupload':'lib/jquery-uploader/jquery.fileupload',
     // 'jquery.iframe-transport':'lib/jquery-uploader/jquery.iframe-transport',
+    'jquery.psteps':'utils/jquery.psteps',
     'jquery.ui.widget':'lib/jquery-uploader/jquery.ui.widget',
     'load-image-exif':'lib/blueimp-load-image/js/load-image-exif',
     'load-image-ios':'lib/blueimp-load-image/js/load-image-ios',
@@ -31417,6 +40038,8 @@ require.config({
     //messager box
     'messenger':'lib/messenger/build/js/messenger',
     'messenger-theme-future':'lib/messenger/build/js/messenger-theme-future',
+    'messenger-theme-flat':'lib/messenger/build/js/messenger-theme-flat',
+
 
     //flat ui
     'bootstrap.select':'lib/flatui/bootstrap-select',
@@ -31450,7 +40073,18 @@ require.config({
 
     //crypto-js
     'crypto-sha256':'lib/CryptoJS v3.1.2/components/sha256-min',
-    'crypto-core':'lib/CryptoJS v3.1.2/components/core-min'
+    'crypto-core':'lib/CryptoJS v3.1.2/components/core-min',
+    //uploadify
+    'jquery.uploadify':'lib/uploadify/jquery.uploadify.min',
+    
+    //bootstrap datepicker
+    'bootstrap-select':'lib/bootstrap-select/bootstrap-select.min',
+    'bootstrap-datepicker':'lib/bootstrap-datepicker/js/bootstrap-datepicker',
+    'bootstrap-datepicker.zh-CN':'lib/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN',
+    //jquery.placeholder --used for if brower doesn't support placeholder,not use
+    //'jquery.placeholder':'lib/jquery.placeholder/jquery.placeholder.min',
+    //jquery-placeholder --used for if brower doesn't support placeholder
+    'jquery-placeholder':'lib/jquery-placeholder/jquery.placeholder'
 
     // 'jquery.xdr-transport':'lib/jquery-uploader/jquery.xdr-transport'
   },
@@ -31509,6 +40143,9 @@ require.config({
     'messenger-theme-future':{
       deps:['messenger']
     },
+    'messenger-theme-flat':{
+      deps:['messenger']
+    },
     'jquery-ui':{
       deps:['jquery']
     },
@@ -31547,6 +40184,33 @@ require.config({
     },
     'crypto-sha256':{
       deps:['crypto-core']
+    },
+     'jquery.uploadify':{
+      deps:['jquery']
+    },
+    'bootstrap-datepicker':{
+      deps:['jquery','bootstrap']
+    },
+    'bootstrap-datepicker.zh-CN':{
+      deps:['bootstrap-datepicker']
+    },
+    'jquery-placeholder':{
+      deps:['jquery']
+    },
+    'spin-jquery':{
+      deps:['spin','jquery']
+    },
+    'backbone.localStorage':{
+      deps:['backbone']
+    },
+    'jquery.serializejson':{
+      deps:['jquery']
+    },
+    'jquery.imgareaselect':{
+      deps:['jquery']
+    },
+    'jquery.psteps':{
+      deps:['jquery']
     }
         
 

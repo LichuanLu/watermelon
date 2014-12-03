@@ -46,6 +46,10 @@ body {
 .mb5{
 	margin-bottom: 5px;
 }
+
+.mb20{
+	margin-bottom: 20px;
+}
 .nowrap{
 	white-space: nowrap;
 }
@@ -377,9 +381,6 @@ margin-top: 20px;
 	padding-right: 18px;
 }
 
-.mt10{
-	margin-top: 10px;
-}
 
 .multiselect{
 		/* background: transparent; */
@@ -570,7 +571,38 @@ body .container{
 
 
 
+.ezd_diagnose_logs_field{
+	max-height: 300px;
+	overflow-y: scroll;
 
+	.record-text{
+		margin-bottom: 10px;
+		.content-text{
+			margin: 0 10px;
+
+		}
+	}
+	.comments{
+		position: relative;
+		padding-bottom: 20px;
+		.popover{
+			margin-left: 50px;
+			position: relative; 
+			display: block;
+			width: auto;
+			background-color: @brand-warning;
+			.arrow{
+				border-right-color: @brand-warning;
+			}
+		}
+		.des-text{
+			color:#666666;
+			position: absolute;
+			left: 275px;
+			font-size: 12px;
+		}
+	}
+}
 
 
 #header-region{

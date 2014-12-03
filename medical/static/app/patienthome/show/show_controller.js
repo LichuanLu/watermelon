@@ -226,6 +226,18 @@ define(['lodash', 'config/base/constant', 'config/controllers/_base_controller',
 					};
 					this.consultFilterModel.set("filter", 0);
 					this.getConsultCollection(params);
+
+					//for test , 应该先读取数据
+					if (this.contentView.phoneContentRegion) {
+
+						var phoneview = this.getPhoneConsultListView();
+						this.show(phoneview, {
+							region: this.contentView.phoneContentRegion,
+							client: true
+						});
+					}
+
+
 				}, this));
 
 
@@ -238,6 +250,12 @@ define(['lodash', 'config/base/constant', 'config/controllers/_base_controller',
 				ReqCmd.commands.setHandler("ConsultListView:searchConsult", Lodash.bind(function(params, filterValue) {
 					this.consultFilterModel.set("filter", filterValue);
 					this.getConsultCollection(params);
+				}, this));
+
+
+				//search consult
+				ReqCmd.commands.setHandler("PhoneConsultListView:searchConsult", Lodash.bind(function(params, filterValue) {
+					console.log("PhoneConsultListView:searchConsult handler start");
 				}, this));
 
 				//click 查看 from consult list item
@@ -444,6 +462,18 @@ define(['lodash', 'config/base/constant', 'config/controllers/_base_controller',
 					this.appInstance.modalRegion.show(modalView);
 				}, this));
 
+				//click add phone consult
+				ReqCmd.commands.setHandler("PhoneConsultDetailListView:addConsult", Lodash.bind(function() {
+					console.log("PhoneConsultDetailListView:addConsult handler start");
+					// var ModalModel = Backbone.Model.extend({});
+					// var modalModel = new ModalModel();
+					// modalModel.set("hasDiagnose", true);
+					// var modalView = new ModalView.CreateConsultView({
+					// 	model: modalModel
+					// });
+					// this.appInstance.modalRegion.show(modalView);
+				}, this));
+
 
 
 				console.log('show controller init end');
@@ -566,6 +596,14 @@ define(['lodash', 'config/base/constant', 'config/controllers/_base_controller',
 					model: model
 				})
 			},
+			getPhoneConsultListView: function(model, collection) {
+				return new View.PhoneConsultListView({
+					// model: model,
+					// collection: collection,
+					itemView: View.PhoneConsultListItemView
+				})
+			},
+
 			getSelectView: function(collection, el) {
 				return new CommonView.SelectCollectionView({
 					collection: collection,

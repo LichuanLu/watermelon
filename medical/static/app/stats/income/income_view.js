@@ -10,7 +10,6 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'ladda-bootstrap', 
 		},
 		template: "incomeLayout",
 		ui: {
-
 		},
 		regions: {
 			"summaryRegion": "#summaryRegionContent",
@@ -19,6 +18,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'ladda-bootstrap', 
 		events: {},
 		onRender: function() {},
 		onShow: function() {
+			console.log('IncomeLayoutView on show');
 			ReqCmd.reqres.request("IncomeLayoutView:onshow");
 		}
 	});
@@ -27,16 +27,17 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'ladda-bootstrap', 
 		template: "incomeSummary",
 		initialize: function(options) {
 			console.log("SummaryView init");
+			this.listenTo(this.model, 'change', this.render, this);
+
 		},
 		ui: {
 			"applyPayBtn": "#applyPayBtn"
 		},
 		events: {
-			"click @ui.applyPayBtn": "checkDetail"
+			"click @ui.applyPayBtn": "applyPayAction"
 		},
-		checkDetail: function(e) {
-			var model = this.model;
-			ReqCmd.commands.execute("ConsultListItemView:checkDetail", model);
+		applyPayAction: function(e) {
+
 		},
 		onRender: function() {
 			// get rid of that pesky wrapping-div

@@ -615,8 +615,7 @@ app.configure(function() {
         type: "未读消息",
         createTime: "2013-12-12 13:00",
         content: "您有一条新的诊断申请。诊断号：34556 ｜ 诊断类型：MR ｜ 诊断部位：头部，颈部 ｜ 患者：李响"
-      },
-      {
+      }, {
         id: 2,
         url: "",
         title: "诊断申请",
@@ -950,6 +949,33 @@ app.configure(function() {
         time: "2013-02-04",
         title: "分诊医生 李1响 需要就诊人更新申请信息",
 
+      },
+      {
+        time: "2013-02-04",
+        title: "分诊医生 李1响 需要就诊人更新申请信息",
+
+      },
+      {
+        time: "2013-02-04",
+        title: "分诊医生 李1响 需要就诊人更新申请信息",
+
+      },{
+        time: "2013-02-04",
+        title: "分诊医生 李1响 需要就诊人更新申请信息",
+
+      },
+      {
+        time: "2013-02-04",
+        title: "分诊医生 李1响 需要就诊人更新申请信息",
+
+      },{
+        time: "2013-02-04",
+        title: "分诊医生 李1响 需要就诊人更新申请信息",
+
+      },{
+        time: "2013-02-04",
+        title: "分诊医生 李1响 需要就诊人更新申请信息",
+
       }]
     };
     res.send({
@@ -971,12 +997,12 @@ app.configure(function() {
       positionName: "头部，颈部，胸部",
       status: "分诊中",
       hispital: "西安西京医院2",
-      statusId: "7",
+      statusId: "4",
       hasDicom: true,
       dicomFileName: "test",
       dicomUrl: "test",
       hasDoc: true,
-      docUrl:["test1","test2"]
+      docUrl: ["test1", "test2"]
     }, {
       id: 2,
       diagnosenumber: '35433',
@@ -988,7 +1014,23 @@ app.configure(function() {
       hispital: "西安西京医院2",
       statusId: "1",
       hasDicom: false,
-      hasDoc:false
+      hasDoc: false
+    },
+    {
+      id: 3,
+      diagnosenumber: '35444',
+      doctorName: '张名1',
+      patientName: "李冰1",
+      date: "2014-11-29",
+      positionName: "头部，颈部，胸部",
+      status: "需要更新",
+      hispital: "西安西京医院2",
+      statusId: "7",
+      hasDicom: true,
+      dicomFileName: "test",
+      dicomUrl: "test",
+      hasDoc: true,
+      docUrl: ["test1", "test2"]
     }];
 
 
@@ -1282,7 +1324,7 @@ app.configure(function() {
     console.log(req.query);
     if (req.query.type == 1) {
       var list = [{
-        userId:3,
+        userId: 3,
         doctorId: 4,
         username: '殷红',
         identityPhone: '029-2323232'
@@ -1290,12 +1332,12 @@ app.configure(function() {
 
     } else {
       var list = [{
-        userId:3,
+        userId: 3,
         doctorId: 4,
         username: '殷红',
         identityPhone: '029-2323232'
       }, {
-        userId:2,
+        userId: 2,
         doctorId: 5,
         username: '殷红2',
         identityPhone: '029-8823232'
@@ -1347,7 +1389,7 @@ app.configure(function() {
     });
   });
 
-  
+
 
   app.get('/diagnoseComment/draftList.json', function(req, res) {
     console.log(req.query);
@@ -1355,11 +1397,11 @@ app.configure(function() {
     var list = [{
       id: 4,
       content: '感谢感谢感谢感谢感谢感谢。感谢感谢感谢感谢感谢感谢。',
-      scoreName:"满意",
+      scoreName: "满意",
       createTime: '2014-05-24'
     }, {
       id: 5,
-       scoreName:"非常满意",
+      scoreName: "非常满意",
       content: '感谢感谢感谢感谢感谢感谢。',
       createTime: '2014-05-22'
     }];
@@ -1374,6 +1416,22 @@ app.configure(function() {
     });
   });
 
+
+  app.get('/stats/summary', function(req, res) {
+    var data = {
+      ongoing : 345.00 ,
+      payable: 245.00,
+      paid: 100.00,
+      lastMonthRevenue: 200.00 
+    }
+
+    res.send({
+      status: 0,
+      msg: "",
+      data: data
+    });
+  });
+
   app.post('/consult/add', function(req, res) {
     console.dir(req.body);
     res.send({
@@ -1384,87 +1442,87 @@ app.configure(function() {
   });
 
 
-//consult
+  //consult
   app.get('/user/:userId/consultList', function(req, res) {
     console.log(req.query);
     console.log(req.params.userId);
-    if(!req.query.source_id){
+    if (!req.query.source_id) {
       var data = [{
-        id:1,
-        userId:12,
-        doctorId:14,
-        title:"肩周炎怎么办",
-        doctorName:"张伟平",
-        doctorTitle:"主任医师",
-        userName:"tester",
-        content:"后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。",
-        updateTime:"2014-08-30",
-        createTime:"2014-07-30",
+        id: 1,
+        userId: 12,
+        doctorId: 14,
+        title: "肩周炎怎么办",
+        doctorName: "张伟平",
+        doctorTitle: "主任医师",
+        userName: "tester",
+        content: "后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。",
+        updateTime: "2014-08-30",
+        createTime: "2014-07-30",
         status: 0,
-        parent_id:456,
-        source_id:"",
-        amount:6,
-        type:0,
-        diagnoseId:1234
-      },{
-        id:5,
-        userId:12,
-        doctorId:15,
-        title:"肩周炎怎么办啊",
-        doctorName:"张伟平",
-        doctorTitle:"主任医师",
-        userName:"tester",
-        content:"后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。",
-        updateTime:"2014-08-31",
-        createTime:"2014-07-31",
+        parent_id: 456,
+        source_id: "",
+        amount: 6,
+        type: 0,
+        diagnoseId: 1234
+      }, {
+        id: 5,
+        userId: 12,
+        doctorId: 15,
+        title: "肩周炎怎么办啊",
+        doctorName: "张伟平",
+        doctorTitle: "主任医师",
+        userName: "tester",
+        content: "后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。",
+        updateTime: "2014-08-31",
+        createTime: "2014-07-31",
         status: 1,
-        parent_id:426,
-        source_id:"",
-        amount:6,
-        type:0,
-        diagnoseId:""
+        parent_id: 426,
+        source_id: "",
+        amount: 6,
+        type: 0,
+        diagnoseId: ""
 
       }];
 
-    }else{
+    } else {
       var data = [{
-        id:4,
-        userId:12,
-        doctorId:14,
-        doctorName:"张伟平",
-        userName:"tester",
-        title:"肩周炎怎么办",
-        doctorTitle:"主任医师",
-        avartarUrl:"/static/assets/image/young-m.png",
-        content:"怎么办啊？",
-        updateTime:"2014-08-30",
-        createTime:"2014-07-30",
+        id: 4,
+        userId: 12,
+        doctorId: 14,
+        doctorName: "张伟平",
+        userName: "tester",
+        title: "肩周炎怎么办",
+        doctorTitle: "主任医师",
+        avartarUrl: "/static/assets/image/young-m.png",
+        content: "怎么办啊？",
+        updateTime: "2014-08-30",
+        createTime: "2014-07-30",
         status: 0,
-        parent_id:456,
-        source_id:1,
-        type:0,
-        diagnoseId:""
-      },{
-        id:5,
-        userId:12,
-        doctorId:15,
-        doctorName:"张伟平",
-        userName:"tester",
-        title:"肩周炎怎么办",
-        doctorTitle:"主任医师",
-        avartarUrl:"/static/assets/image/young-m.png",
-        content:"可以去医院检查",
-        updateTime:"2014-08-31",
-        createTime:"2014-07-31",
+        parent_id: 456,
+        source_id: 1,
+        type: 0,
+        diagnoseId: ""
+      }, {
+        id: 5,
+        userId: 12,
+        doctorId: 15,
+        doctorName: "张伟平",
+        userName: "tester",
+        title: "肩周炎怎么办",
+        doctorTitle: "主任医师",
+        avartarUrl: "/static/assets/image/young-m.png",
+        content: "可以去医院检查",
+        updateTime: "2014-08-31",
+        createTime: "2014-07-31",
         status: 0,
-        parent_id:426,
-        source_id:1,
-        type:1,
-        diagnoseId:1234
+        parent_id: 426,
+        source_id: 1,
+        type: 1,
+        diagnoseId: 1234
       }];
 
     }
-    
+
 
 
     res.send({
@@ -1473,8 +1531,6 @@ app.configure(function() {
       data: data
     });
   });
-
-
 
 
 
@@ -1482,83 +1538,83 @@ app.configure(function() {
   app.get('/doctor/:doctorId/consultList', function(req, res) {
     console.log(req.query);
     console.log(req.params.doctorId);
-    if(!req.query.source_id){
+    if (!req.query.source_id) {
       var data = [{
-        id:1,
-        userId:12,
-        doctorId:14,
-        title:"肩周炎怎么办",
-        doctorName:"张伟平",
-        doctorTitle:"主任医师",
-        userName:"tester",
-        content:"后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。",
-        updateTime:"2014-08-30",
-        createTime:"2014-07-30",
+        id: 1,
+        userId: 12,
+        doctorId: 14,
+        title: "肩周炎怎么办",
+        doctorName: "张伟平",
+        doctorTitle: "主任医师",
+        userName: "tester",
+        content: "后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。",
+        updateTime: "2014-08-30",
+        createTime: "2014-07-30",
         status: 0,
-        parent_id:456,
-        source_id:"",
-        amount:6,
-        type:0,
-        diagnoseId:1234
-      },{
-        id:5,
-        userId:12,
-        doctorId:15,
-        title:"肩周炎怎么办啊",
-        doctorName:"张伟平",
-        doctorTitle:"主任医师",
-        userName:"tester",
-        content:"后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。",
-        updateTime:"2014-08-31",
-        createTime:"2014-07-31",
+        parent_id: 456,
+        source_id: "",
+        amount: 6,
+        type: 0,
+        diagnoseId: 1234
+      }, {
+        id: 5,
+        userId: 12,
+        doctorId: 15,
+        title: "肩周炎怎么办啊",
+        doctorName: "张伟平",
+        doctorTitle: "主任医师",
+        userName: "tester",
+        content: "后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。后背酸痛，怎么办。",
+        updateTime: "2014-08-31",
+        createTime: "2014-07-31",
         status: 1,
-        parent_id:426,
-        source_id:"",
-        amount:6,
-        type:0,
-        diagnoseId:""
+        parent_id: 426,
+        source_id: "",
+        amount: 6,
+        type: 0,
+        diagnoseId: ""
 
       }];
 
-    }else{
+    } else {
       var data = [{
-        id:4,
-        userId:12,
-        doctorId:14,
-        doctorName:"张伟平",
-        userName:"tester",
-        title:"肩周炎怎么办",
-        doctorTitle:"主任医师",
-        avartarUrl:"/static/assets/image/young-m.png",
-        content:"怎么办啊？",
-        updateTime:"2014-08-30",
-        createTime:"2014-07-30",
+        id: 4,
+        userId: 12,
+        doctorId: 14,
+        doctorName: "张伟平",
+        userName: "tester",
+        title: "肩周炎怎么办",
+        doctorTitle: "主任医师",
+        avartarUrl: "/static/assets/image/young-m.png",
+        content: "怎么办啊？",
+        updateTime: "2014-08-30",
+        createTime: "2014-07-30",
         status: 0,
-        parent_id:456,
-        source_id:1,
-        type:0,
-        diagnoseId:""
-      },{
-        id:5,
-        userId:12,
-        doctorId:15,
-        doctorName:"张伟平",
-        userName:"tester",
-        title:"肩周炎怎么办",
-        doctorTitle:"主任医师",
-        avartarUrl:"/static/assets/image/young-m.png",
-        content:"可以去医院检查",
-        updateTime:"2014-08-31",
-        createTime:"2014-07-31",
+        parent_id: 456,
+        source_id: 1,
+        type: 0,
+        diagnoseId: ""
+      }, {
+        id: 5,
+        userId: 12,
+        doctorId: 15,
+        doctorName: "张伟平",
+        userName: "tester",
+        title: "肩周炎怎么办",
+        doctorTitle: "主任医师",
+        avartarUrl: "/static/assets/image/young-m.png",
+        content: "可以去医院检查",
+        updateTime: "2014-08-31",
+        createTime: "2014-07-31",
         status: 0,
-        parent_id:426,
-        source_id:1,
-        type:1,
-        diagnoseId:1234
+        parent_id: 426,
+        source_id: 1,
+        type: 1,
+        diagnoseId: 1234
       }];
 
     }
-    
+
 
 
     res.send({
@@ -1568,7 +1624,7 @@ app.configure(function() {
     });
   });
 
-  
+
   app.post('/diagnose/:diagnoseId/status', function(req, res) {
     console.dir(req.params.diagnoseId);
     res.send({
@@ -1597,12 +1653,6 @@ app.configure(function() {
   });
 
 
- 
-
-
-
-
-  
 
   http.createServer(app).listen(app.get('port'), function() {
     console.log("Express server listening on port " + app.get('port'));

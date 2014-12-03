@@ -46,7 +46,7 @@ module.exports = function(grunt) {
         },
         release:{
           options:{
-              out:"static/dist/release/js/yizhenduan-release.js",
+              out:"static/dist/release/js/yizhenduan-release-<%= grunt.template.today('dd-mm-yyyy') %>.js",
               mainConfigFile: "static/app/main.js",
               include : 'main',
               logLevel: 0,

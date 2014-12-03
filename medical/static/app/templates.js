@@ -60,6 +60,10 @@ define(function(require) {
 		consultDetailList:require('doctorhome/templates/consultDetailList'),
 		consultDetailItem:require('doctorhome/templates/consultDetailItem'),
 		consultDiagnose:require('doctorhome/templates/consultDiagnose'),
+		phoneConsultList:require('patienthome/templates/phoneConsultList'),
+		phoneConsultListItem:require('patienthome/templates/phoneConsultListItem'),
+
+
 
 		doctorDetailItem:require('doctorList/templates/doctorDetailItem'),
 		doctorDetailList:require('doctorList/templates/doctorDetailList'),
@@ -76,6 +80,7 @@ define(function(require) {
 		mobileBindModal:require('modal/templates/mobileBindModal'),
 		confirmModal:require('modal/templates/confirmModal'),
 		createConsultViewModal:require("modal/templates/createConsultViewModal"),
+		diagnoseLogsModal:require("modal/templates/diagnoseLogsModal"),
 
 
 		//kefu view
@@ -93,7 +98,11 @@ define(function(require) {
 		fileUploadingModal:require('modal/templates/fileUploadingModal'),
 		//common view
 		selectItemView:require('common/templates/selectItemView'),
-		diagnoseSelectItemView:require('common/templates/diagnoseSelectItemView')
+		diagnoseSelectItemView:require('common/templates/diagnoseSelectItemView'),
+
+		//stats view
+		incomeLayout:require('stats/templates/incomeLayout'),
+		incomeSummary:require('stats/templates/incomeSummary')
 
 		
 

@@ -1,0 +1,15 @@
+<tr>
+	<td>
+		{seriesNumber}
+	</td>
+	<td>
+		{consultTime}
+	</td>
+	<td class="nowrap">{cash}</td>
+	<td class="nowrap">
+		{statusText}
+	</td>
+	<td class="action-group nowrap">
+		<a class="check-link" href="javascript:void(0);">查看</a>
+	</td>
+</tr>

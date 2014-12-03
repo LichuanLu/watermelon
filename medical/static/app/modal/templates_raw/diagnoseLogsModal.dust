@@ -1,0 +1,35 @@
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close fui-cross" data-dismiss="modal" aria-hidden="true"></button>
+            <h4 class="modal-title">诊断状态历史记录</h4>
+        </div>
+        <div class="modal-body">
+        	<div class="ezd_diagnose_logs_field">
+	           {#actions}
+					<div class="record-text">
+						<span class="fui-play"></span>
+						<span class="content-text">{title}</span>
+						<span class="time">{time}</span>
+					</div>
+					{@if cond="'{comments}'.length"}
+					<div class="comments">
+						<div class="popover right">
+							<div class="arrow"></div>
+							<div class="popover-content">
+								<p>{comments}</p>
+							</div>
+						</div>
+						<span class="des-text">医生 {name} 留言</span>
+
+					</div>
+					{/if}
+				{/actions}
+			</div>
+        </div>
+        <div class="modal-footer">
+            <button name="cancel" data-dismiss="modal" class="btn btn-default">关闭</button>
+        </div>
+    </div>
+</div>
+

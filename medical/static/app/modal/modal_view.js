@@ -11,11 +11,11 @@ define(['config/base/constant', 'utils/reqcmd', 'lodash', 'marionette', 'templat
 		},
 		ui: {
 			"mobileNumberInput": "#mobileNumber",
-			"getVerifyCodeBtn":"#getVerifyCodeBtn"
+			"getVerifyCodeBtn": "#getVerifyCodeBtn"
 		},
 		events: {
 			"blur @ui.mobileNumberInput": "mobileNumberChange",
-			"click @ui.getVerifyCodeBtn":"getVerifyCode"
+			"click @ui.getVerifyCodeBtn": "getVerifyCode"
 		},
 		mobileNumberChange: function(e) {
 			var mobileNum = this.ui.mobileNumberInput.val();
@@ -74,7 +74,7 @@ define(['config/base/constant', 'utils/reqcmd', 'lodash', 'marionette', 'templat
 						var verifyCode = $('#verifyCode').val();
 						var params = {
 							mobile: that.mobileNumber,
-							verifyCode:verifyCode
+							verifyCode: verifyCode
 						}
 						return $.ajax({
 							url: "/user/mobile/update",
@@ -341,10 +341,10 @@ define(['config/base/constant', 'utils/reqcmd', 'lodash', 'marionette', 'templat
 								$("#ferret").one('load', function() { //Set something to run when it finishes loading
 									//remove this line to enable cut image feature
 									that.successCutCallBack = function() {
-										ReqCmd.commands.execute('ImageAreaSelectModalView:submitCut:success', objvalue.item.filename);
-									}
-									//uncomment this to enable cut image feature
-									//that.successCutCallBack = that.initCutImage(objvalue.item.filename, 100, 100, 123); //Fade it in when loaded
+											ReqCmd.commands.execute('ImageAreaSelectModalView:submitCut:success', objvalue.item.filename);
+										}
+										//uncomment this to enable cut image feature
+										//that.successCutCallBack = that.initCutImage(objvalue.item.filename, 100, 100, 123); //Fade it in when loaded
 								});
 
 							}
@@ -588,7 +588,7 @@ define(['config/base/constant', 'utils/reqcmd', 'lodash', 'marionette', 'templat
 		template: "fileUploadingModal",
 		initialize: function(options) {
 			console.log("FileUploadingModalView init");
-			
+
 		},
 		onRender: function() {
 			console.log("FileUploadingModalView render");
@@ -598,10 +598,8 @@ define(['config/base/constant', 'utils/reqcmd', 'lodash', 'marionette', 'templat
 			this.setElement(this.$el);
 		},
 		onShow: function() {},
-		ui: {
-		},
-		events: {
-		}
+		ui: {},
+		events: {}
 
 	});
 
@@ -711,6 +709,26 @@ define(['config/base/constant', 'utils/reqcmd', 'lodash', 'marionette', 'templat
 	});
 
 
+	var DiagnoseLogsView = Marionette.ItemView.extend({
+		template: "diagnoseLogsModal",
+		initialize: function(options) {
+			console.log("DiagnoseLogsView init");
+			this.model.on('change', this.render);
+
+		},
+		onRender: function() {
+			console.log("DiagnoseLogsView render");
+			// get rid of that pesky wrapping-div
+			// assumes 1 child element			
+			this.$el = this.$el.children();
+			this.setElement(this.$el);
+		},
+		onShow: function() {
+
+		}
+	});
+
+
 
 	return {
 		ImageAreaSelectModalView: ImageAreaSelectModalView,
@@ -719,6 +737,7 @@ define(['config/base/constant', 'utils/reqcmd', 'lodash', 'marionette', 'templat
 		ConfirmModalView: ConfirmModalView,
 		UpdateDoctorInfo: UpdateDoctorInfo,
 		CreateConsultView: CreateConsultView,
-		FileUploadingModalView:FileUploadingModalView
+		FileUploadingModalView: FileUploadingModalView,
+		DiagnoseLogsView: DiagnoseLogsView
 	}
 });

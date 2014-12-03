@@ -86,7 +86,7 @@
 			<ul id="carousel" class="elastislide-list">
 				<li data-preview="/static/assets/image/9.jpg">
 					<a href="#">
-						<img src="/static/assets/image/9.jpg" alt="image01" />
+						<img src="http://static.ezhenduan.com/static/avatar/yinhong-xj.png" alt="image01" />
 						<div class="doctor-des">
 							<h6>任志强 <span>副主任医师</span></h6>
 							<p class="hospital">西安西京医院</p>
@@ -95,9 +95,9 @@
 						</div>
 					</a>
 				</li>
-				<li data-preview="/static/assets/image/8.jpg">
+				<li data-preview="/static/assets/image/huanyi-xj.jpg">
 					<a href="#">
-						<img src="/static/assets/image/9-small.jpg" alt="image02" />
+						<img src="/static/assets/image/huanyi-xj.jpg" alt="image02" />
 						<div class="doctor-des">
 							<h6>任志强2 <span>副主任医师2</span></h6>
 							<p class="hospital">西安西京医院2</p>
@@ -106,9 +106,9 @@
 						</div>
 					</a>
 				</li>
-				<li data-preview="/static/assets/image/7.jpg">
+				<li data-preview="/static/assets/image/zhangjinsong-xj.jpg">
 					<a href="#">
-						<img src="/static/assets/image/9-small.jpg" alt="image03" />
+						<img src="/static/assets/image/zhangjinsong-xj.jpg" alt="image03" />
 						<div class="doctor-des">
 							<h6>任志强3 <span>副主任医师3</span></h6>
 							<p class="hospital">西安西京医院3</p>
@@ -117,9 +117,9 @@
 						</div>
 					</a>
 				</li>
-				<li data-preview="/static/assets/image/6.jpg">
+				<li data-preview="/static/assets/image/sunlijun-xj.jpg">
 					<a href="#">
-						<img src="/static/assets/image/9-small.jpg" alt="image04" />
+						<img src="/static/assets/image/sunlijun-xj.jpg" alt="image04" />
 						<div class="doctor-des">
 							<h6>任志强4 <span>副主任医师4</span></h6>
 							<p class="hospital">西安西京医院4</p>

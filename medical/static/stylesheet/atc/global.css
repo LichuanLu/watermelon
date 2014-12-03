@@ -115,6 +115,9 @@ body {
 .mb5 {
   margin-bottom: 5px;
 }
+.mb20 {
+  margin-bottom: 20px;
+}
 .nowrap {
   white-space: nowrap;
 }
@@ -371,9 +374,6 @@ p.help-block {
   font-size: 13px;
   padding-right: 18px;
 }
-.mt10 {
-  margin-top: 10px;
-}
 .multiselect {
   /* background: transparent; */
   width: auto !important;
@@ -510,6 +510,36 @@ body .container.full-width-page .main-block {
 .main-block #breadcrumb-inside .breadcrumb li,
 .main-block #breadcrumb-inside .breadcrumb li:after {
   color: #666666;
+}
+.ezd_diagnose_logs_field {
+  max-height: 300px;
+  overflow-y: scroll;
+}
+.ezd_diagnose_logs_field .record-text {
+  margin-bottom: 10px;
+}
+.ezd_diagnose_logs_field .record-text .content-text {
+  margin: 0 10px;
+}
+.ezd_diagnose_logs_field .comments {
+  position: relative;
+  padding-bottom: 20px;
+}
+.ezd_diagnose_logs_field .comments .popover {
+  margin-left: 50px;
+  position: relative;
+  display: block;
+  width: auto;
+  background-color: #f1c40f;
+}
+.ezd_diagnose_logs_field .comments .popover .arrow {
+  border-right-color: #f1c40f;
+}
+.ezd_diagnose_logs_field .comments .des-text {
+  color: #666666;
+  position: absolute;
+  left: 275px;
+  font-size: 12px;
 }
 #header-region {
   background-color: #ffffff;

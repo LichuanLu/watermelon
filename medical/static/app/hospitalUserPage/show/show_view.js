@@ -159,10 +159,12 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'ladda-bootstrap', 
 
 			},
 			ui: {
-				"deleteLinks": ".rm-diagnose-link"
+				"deleteLinks": ".rm-diagnose-link",
+				"detailLinks":".detail-diagnose-link"
 			},
 			events: {
-				"click @ui.deleteLinks": "deleteDiagnose"
+				"click @ui.deleteLinks": "deleteDiagnose",
+				"click @ui.detailLinks": "detailDiagnose"
 
 			},
 			deleteDiagnose: function(e) {
@@ -176,6 +178,22 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'ladda-bootstrap', 
 					});
 
 					this.parentsInstance.appInstance.modalRegion.show(deleteDiagnoseModalView);
+
+				}
+
+			},
+			detailDiagnose: function(e) {
+				e.preventDefault();
+				var $link = $(e.target);
+				if ($link.is('.detail-diagnose-link')) {
+					console.log("detail-diagnose-link click");
+					var model = this.model;
+					var params = "diagnoseId=" + model.get('id');
+
+					ReqCmd.commands.execute("HospitalUserUnfinishDiagnoseItemView:detailDiagnose", params);
+
+					
+
 
 				}
 

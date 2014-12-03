@@ -1,10 +1,10 @@
 define(['lodash', 'config/base/constant', 'config/controllers/_base_controller',
 		'doctorhome/show/show_view', 'utils/reqcmd', 'entities/diagnoseEntity',
-		'entities/messageEntity', 'entities/consultEntity', 'entities/userInfoEntity',
-		'message/show/show_view', 'common/common_view', 'modal/modal_view'
+		'entities/messageEntity', 'entities/consultEntity', 'entities/userInfoEntity','entities/incomeEntity',
+		'message/show/show_view', 'common/common_view', 'modal/modal_view', 'stats/income/income_view'
 	],
 	function(Lodash, CONSTANT, BaseController, View, ReqCmd, DiagnoseEntity, MessageEntity, ConsultEntity,
-		UserInfoEntity, MessageView, CommonView, ModalView) {
+		UserInfoEntity,IncomeEntity , MessageView, CommonView, ModalView, IncomeView) {
 		// body...
 		"use strict";
 		var ShowController = BaseController.extend({
@@ -413,6 +413,22 @@ define(['lodash', 'config/base/constant', 'config/controllers/_base_controller',
 				}, this));
 
 
+				//FOR STATS INCOME FEATURE
+				ReqCmd.reqres.setHandler("IncomeLayoutView:onshow", Lodash.bind(function(diagnoseId, params) {
+					if(this.contentView.summaryRegion){
+						this.incomeSummaryModel = IncomeEntity.API.getIncomeSummary();
+						var view = new IncomeView.SummaryView({
+							model:this.incomeSummaryModel
+						})
+						this.show(view,{
+							region:this.contentView.summaryRegion,
+							client:true
+						});
+					}
+				}, this));
+
+
+
 			},
 
 			getRollbackModalView: function(model) {
@@ -462,6 +478,8 @@ define(['lodash', 'config/base/constant', 'config/controllers/_base_controller',
 					this.contentView = this.getMessageLayoutView();
 				} else if (viewName === 'consultLink') {
 					this.contentView = this.getConsultLayoutView();
+				} else if (viewName === 'statisticLink') {
+					this.contentView = this.getIncomeLayoutView();
 				}
 
 				// var that = this;
@@ -539,6 +557,11 @@ define(['lodash', 'config/base/constant', 'config/controllers/_base_controller',
 					itemView: CommonView.DiagnoseSelectItemView,
 					el: el
 				})
+			},
+			getIncomeLayoutView: function() {
+				return new IncomeView.IncomeLayoutView({
+
+				});
 			}
 
 		});
