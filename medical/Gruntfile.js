@@ -89,7 +89,7 @@ module.exports = function(grunt) {
       css:{
         // src: ['static/stylesheet/**/*.css'],
         src: ['static/stylesheet/lib/flat-ui.css','static/stylesheet/atc/*.css'],
-        dest: 'static/stylesheet/atc/yizhenduan-debug-full.css'
+        dest: "static/stylesheet/atc/yizhenduan-debug-full-<%= grunt.template.today('dd-mm-yyyy') %>.css"
       }
     },
     cssmin: {
