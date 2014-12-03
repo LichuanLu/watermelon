@@ -435,6 +435,8 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'ladda-bootstrap', 
 					url = '/doctor/report/update';
 
 				}
+				var l = ladda.create(e.target);
+				l.start();
 				var that = this;
 				$.ajax({
 					url: url,
@@ -476,6 +478,9 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'ladda-bootstrap', 
 							});
 						}
 
+					},
+					complete: function(status, request) {
+						l.stop();
 					}
 				});
 
