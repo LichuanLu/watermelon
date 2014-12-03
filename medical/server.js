@@ -1000,9 +1000,9 @@ app.configure(function() {
       statusId: "4",
       hasDicom: true,
       dicomFileName: "test",
-      dicomUrl: "test",
+      dicomUrl: {"url": "http://solidmedicaltest.oss-cn-hangzhou.aliyuncs.com/57_6ce2c380d283231d8f17ccb2c4592430.jpg", "id": 13, "name": "WP_000087.jpg", "size": "259745"},
       hasDoc: true,
-      docUrl: ["test1", "test2"]
+      docUrl: [{"url": "http://solidmedicaltest.oss-cn-hangzhou.aliyuncs.com/57_6ce2c380d283231d8f17ccb2c4592430.jpg", "id": 13, "name": "WP_000087.jpg", "size": "259745"},{"url": "http://solidmedicaltest.oss-cn-hangzhou.aliyuncs.com/57_6ce2c380d283231d8f17ccb2c4592430.jpg", "id": 13, "name": "WP_000087.jpg", "size": "259745"} ]
     }, {
       id: 2,
       diagnosenumber: '35433',

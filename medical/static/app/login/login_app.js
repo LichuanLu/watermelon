@@ -32,7 +32,7 @@ define(['ladda-bootstrap', 'crypto-sha256'], function(ladda) {
 							console.log("msg:" + data.msg);
 							this.reLocation(data.msg);
 							Messenger().post({
-								message: 'SUCCESS. Product import started. Check back periodically.',
+								message: '登录成功。',
 								type: 'success',
 								showCloseButton: true
 							});
