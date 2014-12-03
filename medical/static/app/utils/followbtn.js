@@ -18,13 +18,11 @@ define([], function() {
 
 
 			$this.hover(function(e) {
-				console.log("hover in");
 				if ($this.is('.following')){
 					$atext.text('取消收藏');
 				}
 
 			}, function(e) {
-				console.log("hover out");
 				if ($this.is('.following')){
 					$atext.text('已收藏');
 

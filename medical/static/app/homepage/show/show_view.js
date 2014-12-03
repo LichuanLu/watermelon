@@ -37,11 +37,11 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'login/login_app',
 					that.changeInfo(el,pos);
 
 				},
-				// onHover: function(el, pos, evt) {
-				// 	that.changeImage(el, pos);
-				// 	//evt.preventDefault();
-				// 	that.changeInfo(el,pos);
-				// }
+				onHover: function(el, pos, evt) {
+					// that.changeImage(el, pos);
+					evt.preventDefault();
+					// that.changeInfo(el,pos);
+				}
 			});
 			//console.dir(myCarousel);
 			//init flatui

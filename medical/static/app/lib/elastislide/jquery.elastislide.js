@@ -377,7 +377,7 @@
 			};
 
 			this._setItemsSize();
-			this.options.orientation === 'horizontal' ? this.$el.css('max-height', this.imgSize.height + 50) : this.$el.css('height', this.options.minItems * this.imgSize.height);
+			this.options.orientation === 'horizontal' ? this.$el.css('max-height', this.imgSize.height + 60) : this.$el.css('height', this.options.minItems * this.imgSize.height);
 
 			// add the controls
 			this._addControls();
@@ -435,7 +435,7 @@
 			this.$items.css({
 				'width': w + '%',
 				'max-width': this.imgSize.width + 10,
-				'max-height': this.imgSize.height + 50
+				'max-height': this.imgSize.height + 60
 			});
 
 			if (this.options.orientation === 'vertical') {
