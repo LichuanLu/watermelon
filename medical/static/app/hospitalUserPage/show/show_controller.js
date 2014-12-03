@@ -97,7 +97,7 @@ define(['lodash', 'config/base/constant', 'config/controllers/_base_controller',
 
 
 				//unfinish item click show detail
-				ReqCmd.commands.setHandler("HospitalUserUnfinishDiagnoseItemView:detailDiagnose", Lodash.bind(function($el, params) {
+				ReqCmd.commands.setHandler("HospitalUserUnfinishDiagnoseItemView:detailDiagnose", Lodash.bind(function(params) {
 					var diagnosePatientDetailModel = DiagnoseEntity.API.getDiagnosePatientDetail(params);
 					var diagnoseLogsView = new ModalView.DiagnoseLogsView({
 						model:diagnosePatientDetailModel
