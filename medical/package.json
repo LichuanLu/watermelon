@@ -8,6 +8,7 @@
     "dustjs-helpers": "latest",
     "dustjs-linkedin": "latest",
     "express": "3.x",
+    "rjs-build-analysis": "0.0.3",
     "sleep": "^1.1.8",
     "watch": "latest"
   },

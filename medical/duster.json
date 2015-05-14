@@ -1,4 +1,10 @@
-{
+[{
   "raw_dir": "/static/app/hospitalUserPage/templates_raw",
   "pre_dir": "/static/app/hospitalUserPage/templates"
-}
+},{
+  "raw_dir": "/static/app/doctorList/templates_raw",
+  "pre_dir": "/static/app/doctorList/templates"
+},{
+  "raw_dir": "/static/app/doctorHome/templates_raw",
+  "pre_dir": "/static/app/doctorHome/templates"
+}]

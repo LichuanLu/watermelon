@@ -451,7 +451,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'jquery.uploader.ma
 						} else {
 							that.refreshForm(data);
 							Messenger().post({
-								message: 'SUCCESS. Product import started. Check back periodically.',
+								message: '保存成功',
 								type: 'success',
 								showCloseButton: true
 							});

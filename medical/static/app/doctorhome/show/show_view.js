@@ -824,7 +824,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'ladda-bootstrap', 
 
 						} else {
 							Messenger().post({
-								message: 'SUCCESS. Product import started. Check back periodically.',
+								message: '成功发起咨询',
 								type: 'success',
 								showCloseButton: true
 							});

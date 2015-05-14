@@ -42,7 +42,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'login/login_app','
 							// this.reLocation(data.msg);
 							$('#register-doctor-warning-modal').modal('show');
 							Messenger().post({
-								message: 'SUCCESS. Product import started. Check back periodically.',
+								message: '注册成功',
 								type: 'success',
 								showCloseButton: true
 							});

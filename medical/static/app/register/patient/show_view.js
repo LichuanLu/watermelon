@@ -44,7 +44,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates','login/login_app','d
 							console.log("msg:"+data.msg);
 							this.reLocation(data.msg);
 							Messenger().post({
-								message: 'SUCCESS. Product import started. Check back periodically.',
+								message: '注册成功',
 								type: 'success',
 								showCloseButton: true
 							});

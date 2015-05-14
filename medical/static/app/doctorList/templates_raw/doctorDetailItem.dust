@@ -24,7 +24,7 @@
 		<div class="exp-comment">
 
 			<p class="number">{diagnoseNumber}</p>
-			<p>诊断量</p>
+			<p>咨询量</p>
 			
 		</div>
 		<img alt="" src="/static/assets/Icons/SVG/retina.svg"></img>
@@ -38,6 +38,6 @@
 	</div>
 </div>
 <div class="col-md-2 doctor-action">
-	<a class="btn btn-primary btn-sm apply-btn" href="/applyDiagnose?doctorid={id}" target="_blank">请求诊断</a>
+	<a class="btn btn-primary btn-sm apply-btn" href="/applyDiagnose?doctorid={id}" target="_blank">请求咨询</a>
 </div>
 </li>

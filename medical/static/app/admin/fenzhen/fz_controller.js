@@ -136,6 +136,8 @@ define(['lodash', 'config/base/constant', 'config/controllers/_base_controller',
 
 							} else {
 								that.appInstance.modalRegion.close();
+								ReqCmd.reqres.request('NewDiagnoseLayoutView:closeRegion');
+
 								Messenger().post({
 									message: 'SUCCESS.Roll back.',
 									type: 'success',

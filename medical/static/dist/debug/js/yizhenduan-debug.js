@@ -14948,7 +14948,7 @@ define("doctorList/templates/doctorDetailItem", function(){});
 (function(){dust.register("doctorDetailList",body_0);function body_0(chk,ctx){return chk.write("<div id=\"doctor-detail-list-wrapper\" class=\"\"><ul class=\"result-list stylenone\"></ul></div><ul class=\"pagination-plain\"><li class=\"previous\"><a href=\"#\">向前</a></li>").helper("pager",ctx,{},{"first":"1","current":body_1,"last":body_2}).write("<li class=\"next\"><a href=\"#\">向后</a></li></ul>");}function body_1(chk,ctx){return chk.reference(ctx.get(["currentPage"], false),ctx,"h");}function body_2(chk,ctx){return chk.reference(ctx.get(["pageNumber"], false),ctx,"h");}return body_0;})();
 define("doctorList/templates/doctorDetailList", function(){});
 
-(function(){dust.register("hospitalUserDiagnoseItem",body_0);function body_0(chk,ctx){return chk.write("<tr><td>").reference(ctx.get(["diagnosenumber"], false),ctx,"h").write("</td><td>").reference(ctx.get(["date"], false),ctx,"h").write("</td><td>").reference(ctx.get(["doctorName"], false),ctx,"h").write("</td><td>").reference(ctx.get(["patientName"], false),ctx,"h").write("</td><td>").reference(ctx.get(["positionName"], false),ctx,"h").write("</td><td>").reference(ctx.get(["status"], false),ctx,"h").write("</td>").helper("if",ctx,{"else":body_1,"block":body_2},{"cond":body_3}).helper("if",ctx,{"else":body_4,"block":body_5},{"cond":body_7}).write("<td class=\"action-group\"><a id=\"submit-diagnose-link\" href=\"/applyDiagnose?diagnoseid=").reference(ctx.get(["id"], false),ctx,"h").write("&type=1&edit=true\" target=\"_blank\" class=\"\">修改</a>").helper("if",ctx,{"else":body_8,"block":body_9},{"cond":body_10}).write("</td></tr>");}function body_1(chk,ctx){return chk.write("<td class=\"dicom-file-group\">等待上传</td>");}function body_2(chk,ctx){return chk.write("<td class=\"dicom-file-group\"><a href=\"").reference(ctx.get(["dicomUrl"], false),ctx,"h").write("\" class=\"\">Dicom文件</a></td>");}function body_3(chk,ctx){return chk.write("'").reference(ctx.get(["hasDicom"], false),ctx,"h").write("' == 'true'");}function body_4(chk,ctx){return chk.write("<td class=\"doc-file-group\">等待上传</td>");}function body_5(chk,ctx){return chk.write("<td class=\"doc-file-group\">").section(ctx.get(["docUrl"], false),ctx,{"block":body_6},null).write("</td>");}function body_6(chk,ctx){return chk.write("<a href=\"").reference(ctx.getPath(true, []),ctx,"h").write("\" target=\"_blank\">文件").helper("math",ctx,{},{"key":ctx.get(["$idx"], false),"method":"add","operand":"1"}).write("</a>\n");}function body_7(chk,ctx){return chk.write("'").reference(ctx.get(["hasDoc"], false),ctx,"h").write("' == 'true'");}function body_8(chk,ctx){return chk.write("<a class=\"rm-diagnose-link\" href=\"#\" class=\"\">撤销</a>");}function body_9(chk,ctx){return chk.write("<a class=\"detail-diagnose-link\" href=\"#\" class=\"\">详细</a>");}function body_10(chk,ctx){return chk.write("'").reference(ctx.get(["statusId"], false),ctx,"h").write("' == '7'");}return body_0;})();
+(function(){dust.register("hospitalUserDiagnoseItem",body_0);function body_0(chk,ctx){return chk.write("<tr><td>").reference(ctx.get(["diagnosenumber"], false),ctx,"h").write("</td><td>").reference(ctx.get(["date"], false),ctx,"h").write("</td><td>").reference(ctx.get(["doctorName"], false),ctx,"h").write("</td><td>").reference(ctx.get(["patientName"], false),ctx,"h").write("</td><td>").reference(ctx.get(["positionName"], false),ctx,"h").write("</td><td>").reference(ctx.get(["status"], false),ctx,"h").write("</td>").helper("if",ctx,{"else":body_1,"block":body_2},{"cond":body_3}).helper("if",ctx,{"else":body_4,"block":body_5},{"cond":body_7}).write("<td class=\"action-group\"><a id=\"submit-diagnose-link\" href=\"/applyDiagnose?diagnoseid=").reference(ctx.get(["id"], false),ctx,"h").write("&type=1&edit=true\" target=\"_blank\" class=\"\">修改</a>").helper("if",ctx,{"else":body_8,"block":body_9},{"cond":body_10}).write("</td></tr>");}function body_1(chk,ctx){return chk.write("<td class=\"dicom-file-group\">等待上传</td>");}function body_2(chk,ctx){return chk.write("<td class=\"dicom-file-group\"><a href=\"").reference(ctx.getPath(false, ["dicomUrl","url"]),ctx,"h").write("\" class=\"\">Dicom文件</a></td>");}function body_3(chk,ctx){return chk.write("'").reference(ctx.get(["hasDicom"], false),ctx,"h").write("' == 'true'");}function body_4(chk,ctx){return chk.write("<td class=\"doc-file-group\">等待上传</td>");}function body_5(chk,ctx){return chk.write("<td class=\"doc-file-group\">").section(ctx.get(["docUrl"], false),ctx,{"block":body_6},null).write("</td>");}function body_6(chk,ctx){return chk.write("<a href=\"").reference(ctx.get(["url"], false),ctx,"h").write("\" target=\"_blank\">文件").helper("math",ctx,{},{"key":ctx.get(["$idx"], false),"method":"add","operand":"1"}).write("</a>\n");}function body_7(chk,ctx){return chk.write("'").reference(ctx.get(["hasDoc"], false),ctx,"h").write("' == 'true'");}function body_8(chk,ctx){return chk.write("<a class=\"rm-diagnose-link\" href=\"#\" class=\"\">撤销</a>");}function body_9(chk,ctx){return chk.write("<a class=\"detail-diagnose-link\" href=\"#\" class=\"\">详细</a>");}function body_10(chk,ctx){return chk.write("'").reference(ctx.get(["statusId"], false),ctx,"h").write("' == '7'");}return body_0;})();
 define("hospitalUserPage/templates/hospitalUserDiagnoseItem", function(){});
 
 (function(){dust.register("hospitalUserSubmittedDiagnoseItem",body_0);function body_0(chk,ctx){return chk.write("<tr><td>").reference(ctx.get(["diagnosenumber"], false),ctx,"h").write("</td><td>").reference(ctx.get(["date"], false),ctx,"h").write("</td><td>").reference(ctx.get(["doctorName"], false),ctx,"h").write("</td><td>").reference(ctx.get(["hispital"], false),ctx,"h").write("</td><td>").reference(ctx.get(["patientName"], false),ctx,"h").write("</td><td>").reference(ctx.get(["positionName"], false),ctx,"h").write("</td><td>").reference(ctx.get(["status"], false),ctx,"h").write("</td><td class=\"action-group\">").helper("if",ctx,{"block":body_1},{"cond":body_2}).write("</td></tr>");}function body_1(chk,ctx){return chk.write("<a href=\"/diagnose/").reference(ctx.get(["id"], false),ctx,"h").write("/pdf\" target=\"_blank\">查看报告</a><a href=\"").reference(ctx.get(["reportUrl"], false),ctx,"h").write("\" target=\"_blank\">下载</a>");}function body_2(chk,ctx){return chk.write("'").reference(ctx.get(["statusId"], false),ctx,"h").write("' == '6'");}return body_0;})();
@@ -15200,7 +15200,7 @@ define('login/login_app',['ladda-bootstrap', 'crypto-sha256'], function(ladda) {
 							console.log("msg:" + data.msg);
 							this.reLocation(data.msg);
 							Messenger().post({
-								message: 'SUCCESS. Product import started. Check back periodically.',
+								message: '登录成功。',
 								type: 'success',
 								showCloseButton: true
 							});
@@ -16472,7 +16472,7 @@ define("jquerypp.custom", ["jquery"], function(){});
 			};
 
 			this._setItemsSize();
-			this.options.orientation === 'horizontal' ? this.$el.css('max-height', this.imgSize.height + 50) : this.$el.css('height', this.options.minItems * this.imgSize.height);
+			this.options.orientation === 'horizontal' ? this.$el.css('max-height', this.imgSize.height + 60) : this.$el.css('height', this.options.minItems * this.imgSize.height);
 
 			// add the controls
 			this._addControls();
@@ -16530,7 +16530,7 @@ define("jquerypp.custom", ["jquery"], function(){});
 			this.$items.css({
 				'width': w + '%',
 				'max-width': this.imgSize.width + 10,
-				'max-height': this.imgSize.height + 50
+				'max-height': this.imgSize.height + 60
 			});
 
 			if (this.options.orientation === 'vertical') {
@@ -17048,11 +17048,11 @@ define('homepage/show/show_view',['utils/reqcmd', 'lodash', 'marionette', 'templ
 					that.changeInfo(el,pos);
 
 				},
-				// onHover: function(el, pos, evt) {
-				// 	that.changeImage(el, pos);
-				// 	//evt.preventDefault();
-				// 	that.changeInfo(el,pos);
-				// }
+				onHover: function(el, pos, evt) {
+					// that.changeImage(el, pos);
+					evt.preventDefault();
+					// that.changeInfo(el,pos);
+				}
 			});
 			//console.dir(myCarousel);
 			//init flatui
@@ -30911,7 +30911,7 @@ define('diagnose/apply/apply_view',['utils/reqcmd', 'lodash', 'marionette', 'tem
 						} else {
 							that.refreshForm(data);
 							Messenger().post({
-								message: 'SUCCESS. Product import started. Check back periodically.',
+								message: '保存成功',
 								type: 'success',
 								showCloseButton: true
 							});
@@ -31739,7 +31739,7 @@ define('register/patient/show_view',['utils/reqcmd', 'lodash', 'marionette', 'te
 							console.log("msg:"+data.msg);
 							this.reLocation(data.msg);
 							Messenger().post({
-								message: 'SUCCESS. Product import started. Check back periodically.',
+								message: '注册成功',
 								type: 'success',
 								showCloseButton: true
 							});
@@ -31888,7 +31888,7 @@ define('register/doctor/show_view',['utils/reqcmd', 'lodash', 'marionette', 'tem
 							// this.reLocation(data.msg);
 							$('#register-doctor-warning-modal').modal('show');
 							Messenger().post({
-								message: 'SUCCESS. Product import started. Check back periodically.',
+								message: '注册成功',
 								type: 'success',
 								showCloseButton: true
 							});
@@ -32866,6 +32866,8 @@ define('doctorhome/show/show_view',['utils/reqcmd', 'lodash', 'marionette', 'tem
 					url = '/doctor/report/update';
 
 				}
+				var l = ladda.create(e.target);
+				l.start();
 				var that = this;
 				$.ajax({
 					url: url,
@@ -32907,6 +32909,9 @@ define('doctorhome/show/show_view',['utils/reqcmd', 'lodash', 'marionette', 'tem
 							});
 						}
 
+					},
+					complete: function(status, request) {
+						l.stop();
 					}
 				});
 
@@ -33250,7 +33255,7 @@ define('doctorhome/show/show_view',['utils/reqcmd', 'lodash', 'marionette', 'tem
 
 						} else {
 							Messenger().post({
-								message: 'SUCCESS. Product import started. Check back periodically.',
+								message: '成功发起咨询',
 								type: 'success',
 								showCloseButton: true
 							});
@@ -34797,6 +34802,7 @@ define('doctorhome/show/show_controller',['lodash', 'config/base/constant', 'con
 
 								} else {
 									that.appInstance.modalRegion.close();
+									ReqCmd.reqres.request('NewDiagnoseLayoutView:closeRegion');
 									Messenger().post({
 										message: '诊断已经成功打回',
 										type: 'success',
@@ -36775,13 +36781,11 @@ define('utils/followbtn',[], function() {
 
 
 			$this.hover(function(e) {
-				console.log("hover in");
 				if ($this.is('.following')){
 					$atext.text('取消收藏');
 				}
 
 			}, function(e) {
-				console.log("hover out");
 				if ($this.is('.following')){
 					$atext.text('已收藏');
 
@@ -37380,6 +37384,8 @@ define('admin/fenzhen/fz_controller',['lodash', 'config/base/constant', 'config/
 
 							} else {
 								that.appInstance.modalRegion.close();
+								ReqCmd.reqres.request('NewDiagnoseLayoutView:closeRegion');
+
 								Messenger().post({
 									message: 'SUCCESS.Roll back.',
 									type: 'success',
@@ -39416,7 +39422,7 @@ define('hospitalUserPage/show/show_controller',['lodash', 'config/base/constant'
 
 
 				//unfinish item click show detail
-				ReqCmd.commands.setHandler("HospitalUserUnfinishDiagnoseItemView:detailDiagnose", Lodash.bind(function($el, params) {
+				ReqCmd.commands.setHandler("HospitalUserUnfinishDiagnoseItemView:detailDiagnose", Lodash.bind(function(params) {
 					var diagnosePatientDetailModel = DiagnoseEntity.API.getDiagnosePatientDetail(params);
 					var diagnoseLogsView = new ModalView.DiagnoseLogsView({
 						model:diagnosePatientDetailModel
