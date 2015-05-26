@@ -53,6 +53,10 @@
 				<a href="{dicomUrl}" target="_blank">点击下载</a>
 			</div>
 			<div>
+				<span class="head">云Pacs：</span>
+				<a href="javascript:void(0);" id="cloud-pacs-link">查看DICOM</a>
+			</div>
+			<div>
 				<span class="head">曾就诊医院：</span>
 				<a href="/hospital/{hospitalId}">{hospitalHistory}</a>
 			</div>

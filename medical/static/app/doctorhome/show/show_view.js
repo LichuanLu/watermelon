@@ -1,7 +1,7 @@
-define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'ladda-bootstrap', 'modal/modal_view', 'dust',
+define(['utils/reqcmd', 'lodash', 'marionette', 'templates','config/base/constant','ladda-bootstrap', 'modal/modal_view', 'dust',
 	'dustMarionette', "bootstrap", 'bootstrap.select', 'bootstrap-treeview',
 	'flat_ui_custom', 'config/validator/config'
-], function(ReqCmd, Lodash, Marionette, Templates, ladda, ModalView) {
+], function(ReqCmd, Lodash, Marionette, Templates,Constant,ladda, ModalView) {
 	"use strict";
 	var DoctorHomePageLayoutView = Marionette.Layout.extend({
 		initialize: function() {
@@ -387,16 +387,59 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'ladda-bootstrap', 
 			"closeLink": ".close-link",
 			"submitDiagnoseBtn": '.submit-btn',
 			"techDesTextArea": "#techDes",
-			"rollbackLink": "#rollback-link"
+			"rollbackLink": "#rollback-link",
+			"cloudPacsLink": "#cloud-pacs-link"
 		},
 		events: {
 			"click @ui.loadTemplateBtn": "loadTemplate",
 			"click @ui.closeLink": "closeRegion",
 			"click @ui.submitDiagnoseBtn": "submitDiagnose",
-			"click @ui.rollbackLink": "rollbackDiagnose"
+			"click @ui.rollbackLink": "rollbackDiagnose",
+			"click @ui.cloudPacsLink": "linkToCloudPacs"
 		},
 		editFormHandler: function(e) {
 
+		},
+		linkToCloudPacs: function(e) {
+			e.preventDefault();
+			var patientId = this.model.get("patientId");
+			if (!patientId) {
+				window.location.replace('/error');
+				return;
+			}
+			$.ajax({
+				url: '/diagnose/pacsCookie/' + patientId,
+				dataType: 'json',
+				type: 'GET',
+				success: function(data) {
+					if (data.status != 0) {
+						this.onError(data);
+
+					} else {
+						var cookie = data.data.cookie ,
+						pacsURL = Constant.PACS_SERVER_ADDRESS + "?testid=" + cookie;
+						window.open(pacsURL,'_blank');
+					}
+				},
+				onError: function(res) {
+					//var error = jQuery.parseJSON(data);
+					if (res.status == 2) {
+						window.location.replace('/loginPage');
+
+					} else if (res.status == 4) {
+						window.location.replace('/error');
+
+					}
+					if (typeof res.msg !== 'undefined') {
+						Messenger().post({
+							message: "错误信息:" + res.msg,
+							type: 'error',
+							showCloseButton: true
+						});
+					}
+
+				}
+			});
 		},
 		rollbackDiagnose: function(e) {
 			e.preventDefault();
@@ -773,7 +816,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'ladda-bootstrap', 
 			$('#tree').treeview({
 				data: treedata,
 				enableLinks: false
-				// showBorder:false
+					// showBorder:false
 			});
 		}
 	});
@@ -858,7 +901,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates', 'ladda-bootstrap', 
 		closeRegion: function(e) {
 			e.preventDefault();
 			this.closeRegionAction();
-			
+
 		},
 		closeRegionAction: function() {
 			ReqCmd.reqres.request("NewDiagnoseLayoutView:closeRegion");

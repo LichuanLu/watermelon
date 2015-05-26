@@ -308,12 +308,11 @@ define(["backbone", "marionette", "config/base/constant", "utils/reqcmd"], funct
 
 			return diagnoseModel
 		}
-
 	};
 
 	return {
 		API: API,
-		DiagnoseCollection:DiagnoseCollection
+		DiagnoseCollection: DiagnoseCollection
 	}
 
 });

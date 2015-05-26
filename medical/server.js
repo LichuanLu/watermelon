@@ -794,6 +794,7 @@ app.configure(function() {
     console.dir(req.query);
     var data = {
       id: 1,
+      patientId: 12,
       patientName: "李冰1",
       gender: "男",
       birthDate: "1985-06-24",
@@ -1615,6 +1616,21 @@ app.configure(function() {
 
     }
 
+
+
+    res.send({
+      status: 0,
+      msg: "",
+      data: data
+    });
+  });
+
+  app.get('/diagnose/pacsCookie/:patientId', function(req, res) {
+    console.log(req.params.patientId);
+    
+    var data = {
+       cookie: 'testCookie'
+    }
 
 
     res.send({
