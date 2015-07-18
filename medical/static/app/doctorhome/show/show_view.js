@@ -377,6 +377,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates','config/base/constan
 			this.treedata = {};
 			this.selectedTemplateNode = "";
 			// this.bindUIElements();
+			this.patientIdCopy = "";
 		},
 		template: "newDiagnoseLayout",
 		ui: {
@@ -397,14 +398,13 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates','config/base/constan
 			"click @ui.rollbackLink": "rollbackDiagnose",
 			"click @ui.cloudPacsLink": "linkToCloudPacs"
 		},
-		editFormHandler: function(e) {
-
-		},
-		linkToCloudPacs: function(e) {
-			e.preventDefault();
+		//set src to Iframe of this page , in order to hack link to remote pacs server
+		//pacs server will link to current patient
+		connectToRemotePacs: function(){
 			var patientId = this.model.get("patientId");
-			if (!patientId) {
-				window.location.replace('/error');
+			var that = this;
+			console.log("NewDiagnoseLayoutView model patientId:" + patientId);
+			if(!patientId || this.patientIdCopy === patientId){
 				return;
 			}
 			$.ajax({
@@ -416,9 +416,15 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates','config/base/constan
 						this.onError(data);
 
 					} else {
-						var cookie = data.data.cookie ,
-						pacsURL = Constant.PACS_SERVER_ADDRESS + "?testid=" + cookie;
-						window.open(pacsURL,'_blank');
+						var cookie = data.data.cookie;
+						var pacsIframeURL = Constant.PACS_SERVER_ADDRESS + "?testid=" + cookie;
+						var $pacsIframe = $('#pacsLoginIframe');
+						if($pacsIframe){
+							$pacsIframe.attr('src', pacsIframeURL);
+							that.patientIdCopy = patientId;
+						}else{
+							console.log("Error get pacs Iframe , cannot link to pacs correctly !!!!");
+						}
 					}
 				},
 				onError: function(res) {
@@ -440,6 +446,16 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates','config/base/constan
 
 				}
 			});
+
+		},
+		editFormHandler: function(e) {
+
+		},
+		linkToCloudPacs: function(e) {
+			e.preventDefault();
+			var pacsURL = Constant.PACS_SERVER_ROOT;
+			window.open(pacsURL,'_blank');
+			
 		},
 		rollbackDiagnose: function(e) {
 			e.preventDefault();
@@ -532,7 +548,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates','config/base/constan
 
 		},
 		onRender: function() {
-
+			this.connectToRemotePacs();
 		},
 		closeRegion: function(e) {
 			e.preventDefault();
