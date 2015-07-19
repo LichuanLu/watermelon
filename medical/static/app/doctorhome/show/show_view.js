@@ -453,13 +453,13 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates','config/base/constan
 		},
 		linkToCloudPacs: function(e) {
 			e.preventDefault();
-			var patientId = this.model.get("patientId");
+			var pacsPatientId = this.model.get("pacsPatientId");
 			var that = this;
-			console.log("NewDiagnoseLayoutView model patientId:" + patientId);
-			if(!patientId){
+			console.log("NewDiagnoseLayoutView model pacsPatientId:" + pacsPatientId);
+			if(!pacsPatientId){
 				return;
 			}
-			var pacsURL = Constant.PACS_SERVER_ROOT +'?patientID=' + patientId + '&' + Constant.PACS_STUDY_UUID;
+			var pacsURL = Constant.PACS_SERVER_ROOT +'?patientID=' + pacsPatientId + '&' + Constant.PACS_STUDY_UUID;
 			window.open(pacsURL,'_blank');
 			
 		},
