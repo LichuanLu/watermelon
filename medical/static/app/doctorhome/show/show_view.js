@@ -456,7 +456,7 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates','config/base/constan
 			var patientId = this.model.get("patientId");
 			var that = this;
 			console.log("NewDiagnoseLayoutView model patientId:" + patientId);
-			if(!patientId || this.patientIdCopy === patientId){
+			if(!patientId){
 				return;
 			}
 			var pacsURL = Constant.PACS_SERVER_ROOT +'?patientID=' + patientId + '&' + Constant.PACS_STUDY_UUID;
