@@ -453,7 +453,13 @@ define(['utils/reqcmd', 'lodash', 'marionette', 'templates','config/base/constan
 		},
 		linkToCloudPacs: function(e) {
 			e.preventDefault();
-			var pacsURL = Constant.PACS_SERVER_ROOT;
+			var patientId = this.model.get("patientId");
+			var that = this;
+			console.log("NewDiagnoseLayoutView model patientId:" + patientId);
+			if(!patientId || this.patientIdCopy === patientId){
+				return;
+			}
+			var pacsURL = Constant.PACS_SERVER_ROOT +'?patientID=' + patientId + '&' + Constant.PACS_STUDY_UUID;
 			window.open(pacsURL,'_blank');
 			
 		},
